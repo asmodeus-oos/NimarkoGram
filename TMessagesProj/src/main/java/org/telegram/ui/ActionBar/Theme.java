@@ -4857,10 +4857,6 @@ public class Theme {
         };
     }
 
-    public static Drawable createSimpleSelectorRoundRectDrawable(int rad, int defaultColor, int pressedColor) {
-        return createSimpleSelectorRoundRectDrawable(rad, defaultColor, pressedColor, pressedColor);
-    }
-
     public static Drawable createSimpleSelectorRoundRectDrawable(int rad, int defaultColor, int pressedColor, int maskColor) {
         return createSimpleSelectorRoundRectDrawable(rad, rad, rad, rad, defaultColor, pressedColor, maskColor);
     }
