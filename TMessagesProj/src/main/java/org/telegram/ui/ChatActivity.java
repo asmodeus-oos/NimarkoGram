@@ -32470,29 +32470,22 @@ public class ChatActivity extends BaseFragment implements
             Rect backgroundPaddings = new Rect();
             Drawable shadowDrawable = getParentActivity().getResources().getDrawable(R.drawable.popup_fixed_alert4).mutate();
             shadowDrawable.getPadding(backgroundPaddings);
-            popupLayout.setBackgroundColor(getThemedColor(Theme.key_actionBarDefaultSubmenuBackground));
             scrimBlur3Factory.setLiquidGlassEffectAllowed(
                     LiteMode.isEnabled(LiteMode.FLAG_LIQUID_GLASS));
-            if (telegramPlusMessageMenu) {
-                BlurredBackgroundDrawable glassBackground = scrimBlur3Factory
-                        .create(popupLayout, true)
-                        .setColorProvider(BlurredBackgroundProviderImpl.modernMessageMenuBackground(
-                                themeDelegate, telegramPlusGlassBlur))
-                        .setRadius(dp(16))
-                        .setThickness(dp(6))
-                        .setPadding(dp(8))
-                        .setHasPadding(true);
-                glassBackground.setIntensity(0.86f);
-                popupLayout.setPopupBackgroundDrawable(glassBackground);
-            }
+            BlurredBackgroundDrawable glassBackground = scrimBlur3Factory
+                    .create(popupLayout, true)
+                    .setColorProvider(BlurredBackgroundProviderImpl.modernMessageMenuBackground(
+                            themeDelegate, telegramPlusGlassBlur))
+                    .setRadius(dp(16))
+                    .setThickness(dp(6))
+                    .setPadding(dp(8))
+                    .setHasPadding(true);
+            glassBackground.setIntensity(0.86f);
+            popupLayout.setPopupBackgroundDrawable(glassBackground);
+            popupLayout.setBackground(null);
             MessageSeenView messageSeenView = null;
 
             updateScrimSourceBitmap();
-
-            popupLayout.setBackground(scrimBlur3Factory.create(popupLayout, true)
-                .setColorProvider(BlurredBackgroundProviderImpl.messageMenuBackground(resourceProvider))
-                .setRadius(dp(16))
-                .setPadding(dp(8)));
 
             boolean addGap = false;
 
@@ -34143,26 +34136,17 @@ public class ChatActivity extends BaseFragment implements
                 int desiredVisibleY;
                 boolean placeVisibleCardAbove = false;
                 if (popupVisibleHeight <= spaceBelow) {
-                    // Upper and middle messages: keep the actions immediately
-                    // under the pressed bubble instead of detaching them at the
-                    // bottom edge of the screen.
                     desiredVisibleY = bubbleBottom + gap;
+                    placeVisibleCardAbove = false;
                 } else if (popupVisibleHeight <= spaceAbove) {
-                    // Messages near the input panel use the symmetric placement.
                     desiredVisibleY = bubbleTop - gap - popupVisibleHeight;
                     placeVisibleCardAbove = true;
+                } else if (spaceBelow >= spaceAbove) {
+                    desiredVisibleY = Math.min(bubbleBottom + gap, viewportBottom - popupVisibleHeight);
+                    placeVisibleCardAbove = false;
                 } else {
-                    // When neither side can hold the whole card, preserve the
-                    // user's spatial context: centre the visible card around
-                    // the actual press point instead of pinning it to the top or
-                    // bottom edge. Clamp only as much as the screen requires.
-                    int pressY = telegramPlusAnchorLocation[1]
-                            + Utilities.clamp(Math.round(y), v.getHeight(), 0);
-                    int maxVisibleY = Math.max(viewportTop,
-                            viewportBottom - popupVisibleHeight);
-                    desiredVisibleY = Utilities.clamp(
-                            pressY - popupVisibleHeight / 2,
-                            maxVisibleY, viewportTop);
+                    desiredVisibleY = Math.max(viewportTop, bubbleTop - gap - popupVisibleHeight);
+                    placeVisibleCardAbove = true;
                 }
 
                 // PopupSwipeBackLayout reserves the tallest drill-down page

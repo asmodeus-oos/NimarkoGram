@@ -20800,6 +20800,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             Theme.chat_msgTextCodePaint.setColor(getThemedColor(Theme.key_chat_messageTextOut));
             Theme.chat_msgTextCode2Paint.setColor(getThemedColor(Theme.key_chat_messageTextOut));
             Theme.chat_msgTextCode3Paint.setColor(getThemedColor(Theme.key_chat_messageTextOut));
+            Theme.chat_quoteTextPaint.setColor(getThemedColor(Theme.key_chat_messageTextOut));
+            Theme.chat_replyTextPaint.setColor(getThemedColor(Theme.key_chat_outReplyMessageText));
+            if (Theme.chat_replyTextPaint.getColor() == 0 || (Theme.isCurrentThemeDark() && (Theme.chat_replyTextPaint.getColor() & 0xffffff) == 0)) {
+                Theme.chat_replyTextPaint.setColor(Theme.chat_msgTextPaint.getColor());
+            }
             Theme.chat_msgGameTextPaint.linkColor =
             Theme.chat_replyTextPaint.linkColor =
             Theme.chat_quoteTextPaint.linkColor =
@@ -20813,6 +20818,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             Theme.chat_msgTextCodePaint.setColor(getThemedColor(Theme.key_chat_messageTextIn));
             Theme.chat_msgTextCode2Paint.setColor(getThemedColor(Theme.key_chat_messageTextIn));
             Theme.chat_msgTextCode3Paint.setColor(getThemedColor(Theme.key_chat_messageTextIn));
+            Theme.chat_quoteTextPaint.setColor(getThemedColor(Theme.key_chat_messageTextIn));
+            Theme.chat_replyTextPaint.setColor(getThemedColor(Theme.key_chat_inReplyMessageText));
+            if (Theme.chat_replyTextPaint.getColor() == 0 || (Theme.isCurrentThemeDark() && (Theme.chat_replyTextPaint.getColor() & 0xffffff) == 0)) {
+                Theme.chat_replyTextPaint.setColor(Theme.chat_msgTextPaint.getColor());
+            }
             Theme.chat_msgGameTextPaint.linkColor =
             Theme.chat_replyTextPaint.linkColor =
             Theme.chat_quoteTextPaint.linkColor =
@@ -23547,9 +23557,16 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         Theme.chat_replyTextPaint.linkColor = Theme.chat_replyTextPaint.getColor();
                     } else {
                         float blendPressed = replyPressedT;
+                        int defaultTextColor = getThemedColor(Theme.key_chat_messageTextOut);
                         int color = getThemedColor(Theme.key_chat_outReplyMessageText);
+                        if (color == 0 || (Theme.isCurrentThemeDark() && (color & 0xffffff) == 0)) {
+                            color = defaultTextColor;
+                        }
                         if (!currentMessageObject.forceAvatar && !(currentMessageObject.hasValidReplyMessageObject() && (currentMessageObject.replyMessageObject.contentType != 1 && currentMessageObject.replyMessageObject.type == MessageObject.TYPE_TEXT || !TextUtils.isEmpty(currentMessageObject.replyMessageObject.caption)) && !(MessageObject.getMedia(currentMessageObject.replyMessageObject.messageOwner) instanceof TLRPC.TL_messageMediaGame || MessageObject.getMedia(currentMessageObject.replyMessageObject.messageOwner) instanceof TLRPC.TL_messageMediaInvoice || MessageObject.getMedia(currentMessageObject.replyMessageObject.messageOwner) instanceof TLRPC.TL_messageMediaPoll) || hasReplyQuote)) {
                             color = getThemedColor(isDrawSelectionBackground() ? Theme.key_chat_outReplyMediaMessageSelectedText : Theme.key_chat_outReplyMediaMessageText);
+                            if (color == 0 || (Theme.isCurrentThemeDark() && (color & 0xffffff) == 0)) {
+                                color = defaultTextColor;
+                            }
                             blendPressed = .6f + (blendPressed * .4f);
                         }
                         Theme.chat_replyTextPaint.setColor(ColorUtils.blendARGB(color, Theme.adaptHue(color, Theme.chat_replyNamePaint.getColor()), blendPressed));
@@ -23561,9 +23578,16 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         Theme.chat_replyTextPaint.linkColor = Theme.chat_replyTextPaint.getColor();
                     } else {
                         float blendPressed = replyPressedT;
+                        int defaultTextColor = getThemedColor(Theme.key_chat_messageTextIn);
                         int color = getThemedColor(Theme.key_chat_inReplyMessageText);
+                        if (color == 0 || (Theme.isCurrentThemeDark() && (color & 0xffffff) == 0)) {
+                            color = defaultTextColor;
+                        }
                         if (!currentMessageObject.forceAvatar && !(currentMessageObject.hasValidReplyMessageObject() && (currentMessageObject.replyMessageObject.contentType != 1 && currentMessageObject.replyMessageObject.type == MessageObject.TYPE_TEXT || !TextUtils.isEmpty(currentMessageObject.replyMessageObject.caption)) && !(MessageObject.getMedia(currentMessageObject.replyMessageObject.messageOwner) instanceof TLRPC.TL_messageMediaGame || MessageObject.getMedia(currentMessageObject.replyMessageObject.messageOwner) instanceof TLRPC.TL_messageMediaInvoice) || hasReplyQuote)) {
                             color = getThemedColor(isDrawSelectionBackground() ? Theme.key_chat_inReplyMediaMessageSelectedText : Theme.key_chat_inReplyMediaMessageText);
+                            if (color == 0 || (Theme.isCurrentThemeDark() && (color & 0xffffff) == 0)) {
+                                color = defaultTextColor;
+                            }
                             blendPressed = .6f + (blendPressed * .4f);
                         }
                         Theme.chat_replyTextPaint.setColor(ColorUtils.blendARGB(color, Theme.adaptHue(color, Theme.chat_replyNamePaint.getColor()), blendPressed));
@@ -23571,8 +23595,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                 }
             }
-            Theme.chat_quoteTextPaint.setColor(Theme.chat_replyTextPaint.getColor());
-            Theme.chat_quoteTextPaint.linkColor = Theme.chat_replyTextPaint.linkColor;
+            Theme.chat_quoteTextPaint.setColor(getThemedColor(currentMessageObject.isOutOwner() ? Theme.key_chat_messageTextOut : Theme.key_chat_messageTextIn));
+            Theme.chat_quoteTextPaint.linkColor = getThemedColor(currentMessageObject.isOutOwner() ? Theme.key_chat_messageLinkOut : Theme.key_chat_messageLinkIn);
             int offset = dp(10);
             forwardNameX = replyStartX - replyTextOffset + offset + (needReplyImage ? offset + dp(25) : 0);
             if ((currentPosition == null || currentPosition.minY == 0 && currentPosition.minX == 0) && !(enterTransitionInProgress && !currentMessageObject.isVoice())) {
