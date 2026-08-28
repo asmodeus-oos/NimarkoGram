@@ -371,7 +371,13 @@ chaquopy {
                     "/opt/nimarko-python-3.11.14/bin/python3.11"
             ].find { file(it).canExecute() }
         }
-        buildPython(nimarkoBuildPython ?: "python3.11")
+        if (nimarkoBuildPython) {
+            buildPython nimarkoBuildPython
+        } else if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+            buildPython "py", "-3.11"
+        } else {
+            buildPython "python3.11"
+        }
         pip {
             // Higher build-number ARM64 wheels compiled with
             // -Wl,-z,max-page-size=16384. For ARMv7, pip ignores these
