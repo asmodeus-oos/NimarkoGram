@@ -396,7 +396,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         rowsUpdatePosted = false;
         AndroidUtilities.cancelRunOnUIThread(rowsUpdateRunnable);
         super.onFragmentDestroy();
-        AndroidUtilities.cancelRunOnUIThread(ownBypassPingPoll);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxyChangedByRotation);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxyCheckDone);

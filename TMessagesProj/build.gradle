@@ -222,6 +222,30 @@ android {
 
 
     defaultConfig {
+        def rawApiId = rootProject.ext.privateConfig('TELEGRAM_API_ID', '4')
+        def telegramApiId = rawApiId.isInteger() ? rawApiId.toInteger() : 4
+        def configString = { String value ->
+            return '"' + (value ?: "").replace('\\', '\\\\').replace('"', '\\"') + '"'
+        }
+        def privateValue = { String key, String fallback = "" ->
+            return rootProject.ext.privateConfig(key, fallback)
+        }
+
+        buildConfigField "int", "TELEGRAM_API_ID", String.valueOf(telegramApiId)
+        buildConfigField "String", "TELEGRAM_API_HASH", configString(privateValue('TELEGRAM_API_HASH', '014b35b6184100b085b0d0572f9b5103'))
+        buildConfigField "String", "GOOGLE_AUTH_CLIENT_ID", configString(privateValue('GOOGLE_AUTH_CLIENT_ID'))
+        buildConfigField "String", "GOOGLE_SAFETYNET_KEY", configString(privateValue('GOOGLE_SAFETYNET_KEY'))
+        buildConfigField "String", "HUAWEI_APP_ID", configString(privateValue('HUAWEI_APP_ID'))
+        buildConfigField "String", "NIMARKO_UPDATE_ENDPOINT", configString(privateValue('NIMARKO_UPDATE_ENDPOINT'))
+        buildConfigField "String", "NIMARKO_MEDIA_API_URL", configString(privateValue('NIMARKO_MEDIA_API_URL', 'https://api.nimarkogram.app'))
+        buildConfigField "String", "NIMARKO_API_BASE_URL", configString(privateValue('NIMARKO_API_BASE_URL', 'https://api.nimarkogram.app'))
+        buildConfigField "String", "NIMARKO_BANNER_API_URL", configString(privateValue('NIMARKO_BANNER_API_URL', 'https://api.nimarkogram.app'))
+        buildConfigField "String", "NIMARKO_BANNER_PLACEHOLDER_URL", configString(privateValue('NIMARKO_BANNER_PLACEHOLDER_URL'))
+        buildConfigField "String", "NIMARKO_INFOCARD_RATES_URL", configString(privateValue('NIMARKO_INFOCARD_RATES_URL'))
+        buildConfigField "String", "NIMARKO_ASIA_RELAY_HOST", configString(privateValue('NIMARKO_ASIA_RELAY_HOST'))
+        buildConfigField "String", "NIMARKO_SUPPORT_URL", configString(privateValue('NIMARKO_SUPPORT_URL'))
+        buildConfigField "String", "NIMARKO_TRUSTED_PLUGIN_IDS", configString(privateValue('NIMARKO_TRUSTED_PLUGIN_IDS'))
+
         // NimarkoGram: lowered to 23 so apksigner verifies v1 (>=24 spec
         // skips v1 entirely → Play Protect treated APK as "modern-only"
         // and hard-blocked on Android 16). Chaquopy minSdk note was a
