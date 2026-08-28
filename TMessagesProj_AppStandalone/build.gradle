@@ -180,10 +180,7 @@ android {
     }
 }
 
-// NimarkoGram: dedicated Firebase project for app.nimarkogram.messenger
-// (project_id=nimarkogram-3a6f7) — the google-services.json next to this
-// build.gradle holds the matching client config. Without this plugin enabled
-// the FirebaseApp wouldn't initialise at runtime and FCM tokens never get
-// registered → push notifications silently never arrive in background. See
-// also the same JSON copied into TMessagesProj/ so the base manifest resolves.
-apply plugin: 'com.google.gms.google-services'
+if (file('google-services.json').isFile()) {
+    apply plugin: 'com.google.gms.google-services'
+}
+
