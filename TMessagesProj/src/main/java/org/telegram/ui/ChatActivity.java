@@ -32465,24 +32465,21 @@ public class ChatActivity extends BaseFragment implements
                 flags |= ActionBarPopupWindow.ActionBarPopupWindowLayout.FLAG_DONT_USE_SCROLLVIEW;
             }
 
-            ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity(), R.drawable.popup_fixed_alert4, themeDelegate, flags);
+            ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity(), 0, themeDelegate, flags);
+            popupLayout.setPadding(dp(8), dp(8), dp(8), dp(8));
             popupLayout.setMinimumWidth(AndroidUtilities.dp(200));
-            Rect backgroundPaddings = new Rect();
-            Drawable shadowDrawable = getParentActivity().getResources().getDrawable(R.drawable.popup_fixed_alert4).mutate();
-            shadowDrawable.getPadding(backgroundPaddings);
+            Rect backgroundPaddings = new Rect(dp(8), dp(8), dp(8), dp(8));
             scrimBlur3Factory.setLiquidGlassEffectAllowed(
                     LiteMode.isEnabled(LiteMode.FLAG_LIQUID_GLASS));
             BlurredBackgroundDrawable glassBackground = scrimBlur3Factory
                     .create(popupLayout, true)
-                    .setColorProvider(BlurredBackgroundProviderImpl.modernMessageMenuBackground(
-                            themeDelegate, telegramPlusGlassBlur))
+                    .setColorProvider(BlurredBackgroundProviderImpl.messageMenuBackground(resourceProvider))
                     .setRadius(dp(16))
                     .setThickness(dp(6))
                     .setPadding(dp(8))
                     .setHasPadding(true);
             glassBackground.setIntensity(0.86f);
-            popupLayout.setPopupBackgroundDrawable(glassBackground);
-            popupLayout.setBackground(null);
+            popupLayout.setBackground(glassBackground);
             MessageSeenView messageSeenView = null;
 
             updateScrimSourceBitmap();
