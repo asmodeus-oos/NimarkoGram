@@ -1,8 +1,5 @@
-plugins {
-    id 'com.android.application'
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
-}
+apply plugin: 'com.android.application'
+
 
 repositories {
     mavenCentral()
@@ -188,3 +185,9 @@ android {
         checkReleaseBuilds false
     }
 }
+
+if (file('google-services.json').isFile()) {
+    apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.firebase.crashlytics'
+}
+
