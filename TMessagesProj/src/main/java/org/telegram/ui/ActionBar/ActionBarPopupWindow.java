@@ -9,6 +9,7 @@
 package org.telegram.ui.ActionBar;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
+import org.telegram.messenger.SharedConfig;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
