@@ -892,9 +892,20 @@ public class ActionBarPopupWindow extends PopupWindow {
         Context context = getContentView().getContext();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
-        p.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        p.dimAmount = amount;
-        wm.updateViewLayout(container, p);
+        if (p != null) {
+            p.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            p.dimAmount = amount;
+            if (android.os.Build.VERSION.SDK_INT >= 31 && SharedConfig.chatBlurEnabled()) {
+                try {
+                    p.setBlurBehindRadius(AndroidUtilities.dp(24));
+                } catch (Throwable ignore) {
+                }
+            }
+            try {
+                wm.updateViewLayout(container, p);
+            } catch (Throwable ignore) {
+            }
+        }
     }
 
     public void setFocusableFlag(boolean enable) {

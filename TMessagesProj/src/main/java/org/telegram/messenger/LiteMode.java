@@ -55,8 +55,10 @@ public class LiteMode {
         FLAG_ANIMATED_EMOJI_REACTIONS_PREMIUM |
         FLAG_AUTOPLAY_GIFS |
         FLAG_CHAT_THANOS |
+        FLAG_CHAT_BLUR |
+        FLAG_LIQUID_GLASS |
         FLAG_PARTICLES
-    ); // 198684
+    );
     public static int PRESET_MEDIUM = (
         FLAGS_ANIMATED_STICKERS |
         FLAG_ANIMATED_EMOJI_KEYBOARD_PREMIUM |
@@ -67,8 +69,10 @@ public class LiteMode {
         FLAG_AUTOPLAY_VIDEOS |
         FLAG_AUTOPLAY_GIFS |
         FLAG_CHAT_THANOS |
+        FLAG_CHAT_BLUR |
+        FLAG_LIQUID_GLASS |
         FLAG_PARTICLES
-    ); // 204383
+    );
     public static int PRESET_HIGH = (
         FLAGS_ANIMATED_STICKERS |
         FLAGS_ANIMATED_EMOJI |
@@ -76,13 +80,14 @@ public class LiteMode {
         FLAG_CHAT_FORUM_TWOCOLUMN |
         FLAG_CHAT_SPOILER |
         FLAG_CHAT_BLUR |
+        FLAG_LIQUID_GLASS |
         FLAG_CHAT_SCALE |
         FLAG_CHAT_THANOS |
         FLAG_CALLS_ANIMATIONS |
         FLAG_AUTOPLAY_VIDEOS |
         FLAG_AUTOPLAY_GIFS |
         FLAG_PARTICLES
-    ); // 262143
+    );
     public static int PRESET_POWER_SAVER = 0;
 
     private static int BATTERY_LOW = 10;
@@ -277,7 +282,8 @@ public class LiteMode {
         }
 
         int prevValue = value;
-        value = preferences.getInt("lite_mode6", defaultValue);
+        defaultValue |= FLAG_CHAT_BLUR | FLAG_LIQUID_GLASS;
+        value = preferences.getInt("lite_mode6", defaultValue) | FLAG_CHAT_BLUR | FLAG_LIQUID_GLASS;
         if (loaded) {
             onFlagsUpdate(prevValue, value);
         }

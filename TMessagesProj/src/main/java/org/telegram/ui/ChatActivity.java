@@ -32074,9 +32074,7 @@ public class ChatActivity extends BaseFragment implements
         }
         final boolean telegramPlusMessageMenu =
                 app.nimarkogram.messenger.ui.MessageMenuTelegramPlus.isEnabled(ordinaryTap);
-        final boolean telegramPlusGlassBlur = telegramPlusMessageMenu
-                && SharedConfig.getDevicePerformanceClass() != SharedConfig.PERFORMANCE_CLASS_LOW
-                && BlurredBackgroundProviderImpl.checkBlurEnabled(currentAccount, themeDelegate);
+        final boolean telegramPlusGlassBlur = true;
         if (chatActivityEnterView != null) {
             chatActivityEnterView.hideHints();
         }
@@ -34281,20 +34279,8 @@ public class ChatActivity extends BaseFragment implements
                 showMenu.run();
             }
             chatListView.stopScroll();
-            chatLayoutManager.setCanScrollVertically(false);
-            if (telegramPlusMessageMenu) {
-                // Telegram Plus is a presentation of the native popup, not a
-                // second rendering mode for the selected message. Lifting a
-                // ChatMessageCell into the scrim duplicates its draw pass and
-                // breaks live round-video surfaces, grouped-message avatars and
-                // clipping near the ActionBar. Keep the real cell in the list
-                // and dim/blur the complete chat as one continuous scene.
-                setScrimView(null);
-                dimBehindView(0.14f, telegramPlusGlassBlur, true,
-                        scrimPopupContainerLayout);
-            } else {
-                dimBehindView(v, telegramPlusGlassBlur, true);
-            }
+            setScrimView(v);
+            dimBehindView(v, true, true);
             hideHints(false);
             if (topUndoView != null) {
                 topUndoView.hide(true, 1);
