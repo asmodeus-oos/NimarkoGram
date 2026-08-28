@@ -320,7 +320,7 @@ public class CustomEmojiReactionsWindow {
         this.selectAnimatedEmojiDialog.searchBox.setUseCustomBackground();
         this.blurredBackgroundDrawable = backgroundFactory.create(containerView, true)
             .setColorProvider(backgroundColorProvider)
-            .setRadius(dp(12))
+            .setRadius(dp(16))
             .setPadding(dp(8));
     }
 

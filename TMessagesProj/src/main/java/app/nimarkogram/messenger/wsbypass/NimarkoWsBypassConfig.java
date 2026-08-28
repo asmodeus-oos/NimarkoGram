@@ -31,15 +31,10 @@ public final class NimarkoWsBypassConfig {
         return prefs().edit();
     }
 
-    public static boolean enabled = loadEnabledWithSentinel();
+    public static boolean enabled = false;
 
     private static boolean loadEnabledWithSentinel() {
-        SharedPreferences p = prefs();
-        if (!p.getBoolean("configured", false)) {
-            p.edit().putBoolean("configured", true).putBoolean("enabled", true).apply();
-            return true;
-        }
-        return p.getBoolean("enabled", true);
+        return false;
     }
 
     public static void setEnabled(boolean v) {

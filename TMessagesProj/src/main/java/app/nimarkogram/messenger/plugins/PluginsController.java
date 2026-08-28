@@ -2631,14 +2631,6 @@ public class PluginsController implements PluginsHooks {
                     .show();
             return;
         }
-        
-        if (app.nimarkogram.messenger.wsbypass.WsBypassCore.isWsBypassPluginFile(file)) {
-            BulletinFactory.of(baseFragment)
-                    .createSimpleBulletin(R.raw.info,
-                            AndroidUtilities.replaceTags(LocaleController.getString(R.string.NM_WSBypassBuiltIn)))
-                    .show();
-            return;
-        }
         if (!NimarkoConfig.pluginsEngine) {
             BulletinFactory.of(baseFragment).createSimpleBulletin(R.raw.error, AndroidUtilities.replaceTags(LocaleController.formatString(R.string.PluginNotEnabled, file.getName())), LocaleController.getString(R.string.Enable), 2750, () -> baseFragment.presentFragment(new PluginsActivity())).show();
             return;

@@ -294,13 +294,7 @@ public class FileLoadOperation {
         int boost = app.nimarkogram.messenger.NimarkoConfig.downloadSpeedBoost;
         boolean telegramRequestsLargeChunks = preloadPrefixSize > 0
                 || MessagesController.getInstance(currentAccount).getfileExperimentalParams;
-        try {
-            wsBypassDownloadProfile =
-                    app.nimarkogram.messenger.wsbypass.NimarkoWsBypassController
-                            .getInstance().isRunning();
-        } catch (Throwable ignored) {
-            wsBypassDownloadProfile = false;
-        }
+        wsBypassDownloadProfile = false;
         app.nimarkogram.messenger.DownloadSpeedPolicy.Profile profile =
                 app.nimarkogram.messenger.DownloadSpeedPolicy.resolve(
                         boost, telegramRequestsLargeChunks, wsBypassDownloadProfile);

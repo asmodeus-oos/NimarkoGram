@@ -1233,16 +1233,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         ConnectionsManager.getInstance(currentAccount).setAppPaused(true, false);
         UserConfig.selectedAccount = account;
         UserConfig.getInstance(0).saveConfig(false);
-        // NimarkoGram: the new account may live on a different DC (e.g. RU DC2 <-> asian DC5), so re-decide
-        // the relay region for the process-global bypass rather than keeping the previous account's pick.
-        app.nimarkogram.messenger.wsbypass.RelayRegion.invalidate();
-        // Keep both independently-issued relay credentials warm for the newly selected account. The calls are
-        // single-flight and no-op while their existing credential is still fresh.
-        AndroidUtilities.runOnUIThread(() ->
-                app.nimarkogram.messenger.wsbypass.WsRelayAuth.prefetchAsync(account), 500);
-        AndroidUtilities.runOnUIThread(() ->
-                app.nimarkogram.messenger.wsbypass.voip.VoipRelayAuth.prefetchAsync(account), 1000);
-
         checkCurrentAccount();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.activeAccountChanged, account);
         // NimarkoGram: refetch the new account's banner status now (selectedAccount already committed above),
@@ -7260,9 +7250,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         // LaunchActivity resumes; gating this callback used to leave the singleton permanently
         // paused even after the feature became enabled.
         try { app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onAppResume(); } catch (Throwable ignore) {}
-        // NimarkoGram: clear ws-bypass fail/blacklist backoff and restart a dead listener after a
-        // network change (Wi-Fi<->cellular/doze/VPN). This is the only caller of onAppResume().
-        try { app.nimarkogram.messenger.wsbypass.NimarkoWsBypassController.getInstance().onAppResume(); } catch (Throwable ignore) {}
         MessagesController.getInstance(currentAccount).sortDialogsAfterResume();
         showLanguageAlert(false);
         Utilities.stageQueue.postRunnable(() -> {

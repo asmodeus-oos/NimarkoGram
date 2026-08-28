@@ -122,7 +122,8 @@ public class BotAdView extends FrameLayout {
     }
 
     public void set(ChatActivity chatActivity, MessageObject messageObject, Runnable onRemoveListener, Runnable onCloseListener) {
-        if (messageObject == null) return;
+        setVisibility(View.GONE);
+        if (true) return;
 
         CharSequence channel = messageObject.sponsoredTitle;
         channel = Emoji.replaceEmoji(channel, titleView.getPaint().getFontMetricsInt(), false);

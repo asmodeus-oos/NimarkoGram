@@ -4768,6 +4768,16 @@ public class Theme {
         return new BaseCell.RippleDrawableSafe(colorStateList, defaultDrawable, pressedDrawable);
     }
 
+    public static Drawable createSimpleSelectorRoundRectDrawable(int rad, int defaultColor, int pressedColor) {
+        ShapeDrawable defaultDrawable = createRoundRectDrawable(rad, defaultColor);
+        ShapeDrawable pressedDrawable = createRoundRectDrawable(rad, 0xffffffff);
+        ColorStateList colorStateList = new ColorStateList(
+                new int[][]{StateSet.WILD_CARD},
+                new int[]{pressedColor}
+        );
+        return new BaseCell.RippleDrawableSafe(colorStateList, defaultDrawable, pressedDrawable);
+    }
+
     public static ShapeDrawable createRoundRectDrawable(int rad, int defaultColor) {
         ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{rad, rad, rad, rad, rad, rad, rad, rad}, null, null));
         defaultDrawable.getPaint().setColor(defaultColor);

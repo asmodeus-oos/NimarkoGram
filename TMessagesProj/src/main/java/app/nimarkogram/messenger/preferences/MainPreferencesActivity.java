@@ -8,7 +8,6 @@ import android.widget.EditText;
 import app.nimarkogram.messenger.plugins.PluginsController;
 import app.nimarkogram.messenger.plugins.ui.PluginsActivity;
 import app.nimarkogram.messenger.utils.AppRestartHelper;
-import app.nimarkogram.messenger.wsbypass.preferences.WsBypassPreferencesActivity;
 
 import java.util.ArrayList;
 
@@ -127,8 +126,6 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
         arrayList.add(UItem.asHeader(LocaleController.getString(R.string.NM_SettingsSectionPrivacyNetwork)));
         arrayList.add(category(ID_PRIVACY, IconBackgroundColors.GREEN,
                 R.drawable.msg_secret_solar, R.string.NM_Cat_Privacy, R.string.NM_SettingsSummaryPrivacy, "nimarko_privacy"));
-        arrayList.add(category(ID_WSBYPASS, IconBackgroundColors.BLUE_DEEP,
-                R.drawable.msg_satellite_solar, R.string.NM_WSB_Title, R.string.NM_SettingsSummaryBypass, "nimarko_wsbypass"));
         arrayList.add(UItem.asShadow(null));
 
         arrayList.add(UItem.asHeader(LocaleController.getString(R.string.NM_SettingsSectionFeatures)));
@@ -225,9 +222,6 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
             case NimarkoSettingsSearchIndex.SCREEN_BANNERS:
                 fragment = new BannerPreferencesActivity().openAtSetting(entry.itemId);
                 break;
-            case NimarkoSettingsSearchIndex.SCREEN_BYPASS:
-                fragment = new WsBypassPreferencesActivity().openAtSetting(entry.itemId);
-                break;
             case NimarkoSettingsSearchIndex.SCREEN_TEXT_ANIMATION:
                 fragment = new NimarkoTextAnimPreferencesActivity().openAtSetting(entry.itemId);
                 break;
@@ -315,9 +309,6 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
                 break;
             case ID_BANNERS:
                 presentFragment(new BannerPreferencesActivity());
-                break;
-            case ID_WSBYPASS:
-                presentFragment(new WsBypassPreferencesActivity());
                 break;
             case ID_PILLSTACK:
                 presentFragment(new app.nimarkogram.messenger.infocards.preferences.InfoCardsPreferencesActivity());

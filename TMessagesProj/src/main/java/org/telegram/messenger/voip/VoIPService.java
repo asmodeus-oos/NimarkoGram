@@ -779,10 +779,6 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		if (currentAccount == -1) {
 			throw new IllegalStateException("No account specified when starting VoIP service");
 		}
-		if (NimarkoWsBypassConfig.enabled && VoipBypassConfig.isVoipBypassEnabled()) {
-			
-			app.nimarkogram.messenger.wsbypass.voip.VoipRelayAuth.prefetchAsync(currentAccount);
-		}
 		classGuid = ConnectionsManager.generateClassGuid();
 		long userID = intent.getLongExtra("user_id", 0);
 		long chatID = intent.getLongExtra("chat_id", 0);
@@ -3505,15 +3501,13 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 			final double initializationTimeout = messagesController.callConnectTimeout / 1000.0;
 			final double receiveTimeout = messagesController.callPacketTimeout / 1000.0;
 				final int voipDataSaving = convertDataSavingMode(preferences.getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault()));
-				final boolean useVoipBypass = NimarkoWsBypassConfig.enabled && VoipBypassConfig.isVoipBypassEnabled()
-						&& !app.nimarkogram.messenger.wsbypass.NimarkoWsBypassController.getInstance().blockedByVpn();
 				final Instance.ServerConfig serverConfig = Instance.getGlobalServerConfig();
 			final boolean enableAec = !(sysAecAvailable && serverConfig.useSystemAec);
 			final boolean enableNs = !(sysNsAvailable && serverConfig.useSystemNs);
 			final String logFilePath = BuildVars.DEBUG_VERSION ? VoIPHelper.getLogFilePath("voip" + privateCall.id) : VoIPHelper.getLogFilePath("" + privateCall.id, false);
 			final String statsLogFilePath = VoIPHelper.getLogFilePath("" + privateCall.id, true);
 				final Instance.Config config = new Instance.Config(initializationTimeout, receiveTimeout, voipDataSaving,
-						privateCall.p2p_allowed && !useVoipBypass, enableAec, enableNs, true, false,
+						privateCall.p2p_allowed, enableAec, enableNs, true, false,
 						serverConfig.enableStunMarking, logFilePath, statsLogFilePath,
 						privateCall.protocol.max_layer, privateCall.custom_parameters == null ? "" : privateCall.custom_parameters.data);
 			lastLogFilePath = logFilePath;
@@ -3523,54 +3517,14 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 			final boolean forceTcp = preferences.getBoolean("dbg_force_tcp_in_calls", false);
 			final int endpointType = forceTcp ? Instance.ENDPOINT_TYPE_TCP_RELAY : Instance.ENDPOINT_TYPE_UDP_RELAY;
 
-			final boolean nmIsVideoCall = privateCall != null && privateCall.video;
-			VoipBypassCore.dlog("buildEndpoints: video=" + nmIsVideoCall + " p2p=" + privateCall.p2p_allowed
-					+ " connections=" + privateCall.connections.size() + " useVoipBypass=" + useVoipBypass);
-
 			final Instance.Endpoint[] endpoints = new Instance.Endpoint[privateCall.connections.size()];
 			ArrayList<Long> reflectorIds = new ArrayList<>();
-				
-			final long nmRelayDeadline = android.os.SystemClock.elapsedRealtime() + 600;
+
 			for (int i = 0; i < endpoints.length; i++) {
 				final TLRPC.PhoneConnection connection = privateCall.connections.get(i);
 				String ip = connection.ip;
 				int port = connection.port;
 				String ipv6 = connection.ipv6;
-
-				final boolean nmIsWebrtc = connection instanceof TLRPC.TL_phoneConnectionWebrtc;
-				final boolean nmIsReflector = connection instanceof TLRPC.TL_phoneConnection;
-				boolean nmRelayed = false;
-
-					if (useVoipBypass) {
-						String relayTarget = VoipBypassConfig.relayProtocolTarget(ip);
-						if (relayTarget == null) relayTarget = VoipBypassConfig.relayProtocolTarget(ipv6);
-						boolean isTelegramIp = relayTarget != null;
-					
-						if (!forceTcp && !connection.tcp && isTelegramIp) {
-						VoipBypassCore.RelayEndpoint relay = VoipBypassCore.getInstance().allocateRelay(relayTarget, connection.port,
-								currentAccount, (int) (nmRelayDeadline - android.os.SystemClock.elapsedRealtime()));
-						if (relay != null) {
-							if (relay.host.indexOf(':') >= 0) {
-								ip = "";
-								ipv6 = relay.host;
-							} else {
-								ip = relay.host;
-								ipv6 = "";
-							}
-							port = relay.port;
-							nmRelayed = true;
-						}
-					}
-						
-						if (!nmRelayed) {
-							ip = "";
-							ipv6 = "";
-							port = 0;
-						}
-					}
-
-				VoipBypassCore.dlog("  endpoint[" + i + "] type=" + (nmIsWebrtc ? "WEBRTC(turn=" + connection.turn + ",stun=" + connection.stun + ")" : nmIsReflector ? "REFLECTOR" : "OTHER")
-						+ " " + connection.ip + ":" + connection.port + " tcp=" + connection.tcp + " video=" + nmIsVideoCall + " relayed=" + nmRelayed);
 
 				endpoints[i] = new Instance.Endpoint(connection instanceof TLRPC.TL_phoneConnectionWebrtc, connection.id, ip, ipv6, port, endpointType, connection.peer_tag, connection.turn, connection.stun, connection.username, connection.password, connection.tcp);
 				if (connection instanceof TLRPC.TL_phoneConnection) {

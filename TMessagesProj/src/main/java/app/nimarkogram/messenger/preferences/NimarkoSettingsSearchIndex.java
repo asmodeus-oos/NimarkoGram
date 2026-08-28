@@ -150,8 +150,6 @@ final class NimarkoSettingsSearchIndex {
                 R.drawable.msg_download_solar);
         page(entries, guid, SCREEN_BANNERS, R.string.NM_BAN_Title, R.string.NM_SettingsSummaryBanners,
                 R.drawable.msg_photos_solar);
-        page(entries, guid, SCREEN_BYPASS, R.string.NM_WSB_Title, R.string.NM_SettingsSummaryBypass,
-                R.drawable.msg_satellite_solar);
         page(entries, guid, SCREEN_TEXT_ANIMATION, R.string.NM_TA_Title, R.string.NM_SettingsSummaryTextAnimation,
                 R.drawable.msg_edit_solar);
         page(entries, guid, SCREEN_INFO_CARDS, R.string.NM_CARDS_Title, R.string.NM_SettingsSummaryInfoCards,
@@ -427,15 +425,6 @@ final class NimarkoSettingsSearchIndex {
                 108, R.string.NM_BAN_AvatarBanner);
         row(entries, guid, SCREEN_BANNERS, 109, R.string.NM_BAN_LiteMode, R.string.NM_BAN_LiteModeHint,
                 R.drawable.msg_photos_solar, R.string.NM_BAN_Title, R.string.NM_SettingsSectionDisplay);
-        rows(entries, guid, SCREEN_BYPASS, R.drawable.msg_satellite_solar,
-                R.string.NM_WSB_Title, R.string.NM_SettingsSectionConnection,
-                200, R.string.NM_WSB_Enable,
-                201, R.string.NM_WSB_StatusTitle,
-                202, R.string.NM_WSB_OpenProxySettings);
-        rows(entries, guid, SCREEN_BYPASS, R.drawable.msg_satellite_solar,
-                R.string.NM_WSB_Title, R.string.NM_WSB_MiscHeader,
-                204, R.string.NM_WSB_VoIP_Enable,
-                205, R.string.NM_WSB_SuspendOnVpn);
         rows(entries, guid, SCREEN_INFO_CARDS, R.drawable.msg_search_solar,
                 R.string.NM_CARDS_Title, R.string.NM_CARDS_GeneralHeader,
                 100, R.string.NM_CARDS_Enable,
@@ -604,7 +593,6 @@ final class NimarkoSettingsSearchIndex {
         if (owner instanceof BannerPreferencesActivity) return SCREEN_BANNERS;
         if (owner instanceof DebugPreferencesActivity) return SCREEN_ADVANCED;
         if (owner instanceof RecentEmojisStickersPreferencesActivity) return SCREEN_RECENT;
-        if (owner instanceof app.nimarkogram.messenger.wsbypass.preferences.WsBypassPreferencesActivity) return SCREEN_BYPASS;
         if (owner instanceof app.nimarkogram.messenger.infocards.preferences.InfoCardsPreferencesActivity) return SCREEN_INFO_CARDS;
         return 0;
     }

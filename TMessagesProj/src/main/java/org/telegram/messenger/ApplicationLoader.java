@@ -278,21 +278,6 @@ public class ApplicationLoader extends Application {
         try {
             Utilities.globalQueue.postRunnable(org.telegram.ui.CastSync::preload);
         } catch (Throwable ignored) {}
-        try { app.nimarkogram.messenger.wsbypass.NimarkoVpnDetector.start(); } catch (Throwable ignored) {}
-        try { app.nimarkogram.messenger.wsbypass.NimarkoWsBypassController.getInstance().ensureStartedSync(); } catch (Throwable ignored) {}
-        try {
-            if (app.nimarkogram.messenger.wsbypass.NimarkoWsBypassConfig.enabled
-                    && app.nimarkogram.messenger.wsbypass.voip.VoipBypassConfig.isVoipBypassEnabled()) {
-                AndroidUtilities.runOnUIThread(() ->
-                        app.nimarkogram.messenger.wsbypass.voip.VoipRelayAuth.prefetchAsync(UserConfig.selectedAccount), 4000);
-            }
-        } catch (Throwable ignored) {}
-        try {
-            if (app.nimarkogram.messenger.wsbypass.NimarkoWsBypassConfig.enabled) {
-                AndroidUtilities.runOnUIThread(() ->
-                        app.nimarkogram.messenger.wsbypass.WsRelayAuth.prefetchAsync(UserConfig.selectedAccount), 4500);
-            }
-        } catch (Throwable ignored) {}
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
             UserConfig.getInstance(a).loadConfig();
             MessagesController.getInstance(a);
@@ -307,13 +292,6 @@ public class ApplicationLoader extends Application {
                 SendMessagesHelper.getInstance(a).checkUnsentMessages();
             }
         }
-
-        try {
-            if (app.nimarkogram.messenger.wsbypass.NimarkoWsBypassController.getInstance().blockedByVpn()) {
-                app.nimarkogram.messenger.wsbypass.ProxyApplier.suspendForVpn(
-                        app.nimarkogram.messenger.wsbypass.WsBypassCore.LOCAL_PROXY_HOST);
-            }
-        } catch (Throwable ignored) {}
 
         ApplicationLoader app = (ApplicationLoader) ApplicationLoader.applicationContext;
         app.initPushServices();

@@ -23,24 +23,37 @@ half4 srcOver(half4 src, half4 dst) {
 }
 
 half4 main(in float2 fragCoord) {
-  half2 p = fragCoord - center;
+  half2 p = half2(fragCoord) - half2(center);
   half sd = sdfRect(p, radius);
-  half2 uv = fragCoord;
-  if (sd < 0.0) {
-    half sdX = sdfRect(p + half2(1.0, 0.0), radius);
-    half sdY = sdfRect(p + half2(0.0, 1.0), radius);
 
-    half n_cos = max(thickness + sd, 0.0) / thickness;
-    half n_cos2 = n_cos * n_cos;
-    half n_sin = sqrt(1.0 - n_cos2);
-    half3 normal = normalize(half3((sdX - sd) * n_cos, (sdY - sd) * n_cos, n_sin));
-
-    half3 refract_vec = refract(half3(0.0, 0.0, -1.0), normal, 1.0 / refract_index);
-    half h = sd < -thickness ? thickness : sqrt(sd * (-2.0 * thickness - sd));
-    half refract_length = (h + 8.0 * thickness) / -refract_vec.z;
-
-    uv += refract_vec.xy * refract_length * refract_intensity;
+  // Fast path for outer region or flat interior: single texture sample, minimal GPU cost
+  if (sd > 0.0 || sd < -thickness) {
+    return srcOver(half4(foreground_color_premultiplied), img.eval(fragCoord));
   }
 
-  return srcOver(half4(foreground_color_premultiplied), img.eval(uv));
+  // Curved refractive bevel rim (realistic liquid glass)
+  half sdX = sdfRect(p + half2(1.0, 0.0), radius);
+  half sdY = sdfRect(p + half2(0.0, 1.0), radius);
+
+  half edgeFactor = clamp(-sd / max(thickness, 1.0), 0.0, 1.0);
+  half n_z = sqrt(clamp(1.0 - (1.0 - edgeFactor) * (1.0 - edgeFactor), 0.01, 1.0));
+  half3 normal = normalize(half3((sdX - sd), (sdY - sd), n_z * 1.4));
+
+  half3 refract_vec = refract(half3(0.0, 0.0, -1.0), normal, 1.0 / max(refract_index, 1.0));
+  half refract_length = thickness * 2.0 * (1.0 - edgeFactor);
+  half2 offset = refract_vec.xy * refract_length * refract_intensity;
+
+  // Prismatic chromatic dispersion along refraction bevel
+  half r = img.eval(fragCoord + offset * 1.025).r;
+  half4 gSample = img.eval(fragCoord + offset);
+  half b = img.eval(fragCoord + offset * 0.975).b;
+  half4 glassSample = half4(r, gSample.g, b, gSample.a);
+
+  // Subtle top specular highlight and Fresnel sheen
+  half3 lightDir = half3(0.0, -0.7071, 0.7071);
+  half spec = pow(max(dot(normal, lightDir), 0.0), 4.0) * 0.28;
+  half fresnel = pow(1.0 - normal.z, 3.0) * 0.18;
+  glassSample.rgb += half3(spec + fresnel);
+
+  return srcOver(half4(foreground_color_premultiplied), glassSample);
 }

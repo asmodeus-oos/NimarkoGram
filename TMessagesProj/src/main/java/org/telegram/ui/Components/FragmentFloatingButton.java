@@ -91,8 +91,14 @@ public class FragmentFloatingButton extends FrameLayout implements FactorAnimato
         setAnimatedVisibility(progressView, 0);
 
         ScaleStateListAnimator.apply(this);
+        setOutlineProvider(new android.view.ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, android.graphics.Outline outline) {
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), dp(16));
+            }
+        });
+        setClipToOutline(true);
         if (!isSubButton) {
-            setOutlineProvider(ViewOutlineProviderImpl.BOUNDS_OVAL);
             setTranslationZ(dpf2(0.5f));
         }
 
@@ -117,7 +123,7 @@ public class FragmentFloatingButton extends FrameLayout implements FactorAnimato
             iBlur3Background = iBlur3SourceColor.createDrawable();
             iBlur3Background.setColorProvider(iBlur3ColorProviderTabs);
             iBlur3Background.setStrokeWidth(dpf2(0.4f), dpf2(0.4f));
-            iBlur3Background.setRadius(dp(18));
+            iBlur3Background.setRadius(dp(16));
             iBlur3Background.setPadding(dp(5.66f));
         }
 
@@ -179,13 +185,13 @@ public class FragmentFloatingButton extends FrameLayout implements FactorAnimato
             iBlur3Background.updateColors();
             invalidate();
 
-            int rad = dp(18);
+            int rad = dp(16);
             int pressedColor = Theme.getColor(Theme.key_listSelector, resourcesProvider);
             setBackground(Theme.createInsetRoundRectDrawable(pressedColor, rad, dp(6)));
         } else {
             imageView.setColorFilter(Theme.getColor(iconColorKey, resourcesProvider), PorterDuff.Mode.SRC_IN);
             progressView.setProgressColor(Theme.getColor(iconColorKey, resourcesProvider));
-            setBackground(Theme.createSimpleSelectorCircleDrawable(dp(48),
+            setBackground(Theme.createSimpleSelectorRoundRectDrawable(dp(16),
                 Theme.getColor(backgroundColorKey, resourcesProvider),
                 Theme.getColor(pressedBackgroundColorKey, resourcesProvider)
             ));

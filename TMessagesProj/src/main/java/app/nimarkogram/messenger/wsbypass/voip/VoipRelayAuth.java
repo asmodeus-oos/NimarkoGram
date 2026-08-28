@@ -60,7 +60,7 @@ public final class VoipRelayAuth {
     private static final Object authGenerationLock = new Object();
 
     public static boolean isAuthAllowed() {
-        return VoipBypassConfig.isVoipRelayRequiredFresh();
+        return false;
     }
 
     public static void cancelPendingAuth() {

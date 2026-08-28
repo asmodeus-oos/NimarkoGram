@@ -71,8 +71,7 @@ public final class WsRelayAuth {
     private static final Object authGenerationLock = new Object();
 
     public static boolean isAuthAllowed() {
-        return app.nimarkogram.messenger.wsbypass.voip.VoipBypassConfig
-                .isDataBypassRequiredFresh();
+        return false;
     }
 
     public static void cancelPendingAuth() {

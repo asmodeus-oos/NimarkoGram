@@ -88,27 +88,30 @@ public class BlurredBackgroundProviderImpl {
         return new BlurredBackgroundProviderBuilder(resourcesProvider)
                 .setBackgroundColor((r, isDark) -> {
                     if (!LiteMode.isEnabled(LiteMode.FLAG_CHAT_BLUR)) {
-                        return Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground);
+                        return Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground, r);
                     }
-                    return Theme.multAlpha(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground), isDark ? 0.85f : 0.825f);
+                    final float alpha = LiteMode.isEnabled(LiteMode.FLAG_LIQUID_GLASS) ? (isDark ? 0.78f : 0.74f) : (isDark ? 0.85f : 0.825f);
+                    return Theme.multAlpha(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground, r), alpha);
                 })
-                .setStrokeColorTop(0x44FFFFFF, 0)
-                .setStrokeColorBottom(0x22FFFFFF, 0)
-                .setShadowColor(0x38000000, 0)
-                .setShadowLayer(dpf2(3.5f), 0, 0)
-                .setStrokeWidth(dpf2(2 / 3f), dpf2(2 / 3f))
+                .setStrokeColorTop(0x55FFFFFF, 0x22FFFFFF)
+                .setStrokeColorBottom(0x18FFFFFF, 0x0CFFFFFF)
+                .setShadowColor(0x38000000, 0x08FFFFFF)
+                .setShadowLayer(dpf2(4f), 0, dpf2(1f))
+                .setStrokeWidth(dpf2(0.5f), dpf2(0.5f))
                 .build();
     }
 
     public static BlurredBackgroundProvider scrimMenuBackground(Theme.ResourcesProvider resourcesProvider) {
         return new BlurredBackgroundProviderBuilder(resourcesProvider)
-            .setBackgroundColor((r, isDark) ->
-                Theme.multAlpha(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground), isDark ? 0.85f : 0.825f))
-            .setStrokeColorTop(0x44FFFFFF, 0)
-            .setStrokeColorBottom(0x22FFFFFF, 0)
-            .setShadowColor(0x26000000, 0)
-            .setShadowLayer(dpf2(4f), 0, 0)
-            .setStrokeWidth(dpf2(2 / 3f), dpf2(2 / 3f))
+            .setBackgroundColor((r, isDark) -> {
+                final float alpha = LiteMode.isEnabled(LiteMode.FLAG_LIQUID_GLASS) ? (isDark ? 0.78f : 0.74f) : (isDark ? 0.85f : 0.825f);
+                return Theme.multAlpha(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground, r), alpha);
+            })
+            .setStrokeColorTop(0x55FFFFFF, 0x22FFFFFF)
+            .setStrokeColorBottom(0x18FFFFFF, 0x0CFFFFFF)
+            .setShadowColor(0x28000000, 0x06FFFFFF)
+            .setShadowLayer(dpf2(4f), 0, dpf2(1f))
+            .setStrokeWidth(dpf2(0.5f), dpf2(0.5f))
             .build();
     }
 
