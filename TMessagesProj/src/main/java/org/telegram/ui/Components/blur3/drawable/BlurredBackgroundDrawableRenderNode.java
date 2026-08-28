@@ -139,11 +139,19 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
             }
         }
         if (strokeColorTop != 0) {
+            paintStrokeTop.setColor(strokeColorTop);
+            if (liquidGlassEffect != null) {
+                paintStrokeTop.setAlpha((int) (Color.alpha(strokeColorTop) * 0.5f));
+            }
             drawStroke(c, 0, 0, boundProps.boundsWithPadding.width(),
                     boundProps.boundsWithPadding.height(), boundProps.radii,
                     boundProps.strokeWidthTop, true, paintStrokeTop);
         }
         if (strokeColorBottom != 0) {
+            paintStrokeBottom.setColor(strokeColorBottom);
+            if (liquidGlassEffect != null) {
+                paintStrokeBottom.setAlpha((int) (Color.alpha(strokeColorBottom) * 0.5f));
+            }
             drawStroke(c, 0, 0, boundProps.boundsWithPadding.width(),
                     boundProps.boundsWithPadding.height(), boundProps.radii,
                     boundProps.strokeWidthBottom, false, paintStrokeBottom);
@@ -151,6 +159,9 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
         
         if (strokeColorFull != 0) {
             paintStrokeTop.setColor(strokeColorFull);
+            if (liquidGlassEffect != null) {
+                paintStrokeTop.setAlpha((int) (Color.alpha(strokeColorFull) * 0.5f));
+            }
             drawStroke(c, 0, 0, boundProps.boundsWithPadding.width(),
                     boundProps.boundsWithPadding.height(), boundProps.radii,
                     boundProps.strokeWidthTop, true, paintStrokeTop);
