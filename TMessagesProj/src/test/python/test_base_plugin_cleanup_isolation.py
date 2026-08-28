@@ -80,9 +80,9 @@ class BasePluginCleanupIsolationTest(unittest.TestCase):
 
         module_names = (
             'app',
-            'app.nimarkogram',
-            'app.nimarkogram.messenger',
-            'app.nimarkogram.messenger.plugins',
+            'app.nebulagram',
+            'app.nebulagram.messenger',
+            'app.nebulagram.messenger.plugins',
         )
         cls.previous_modules = {
             name: sys.modules.get(name) for name in module_names

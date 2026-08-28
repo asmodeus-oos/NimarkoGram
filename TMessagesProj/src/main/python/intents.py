@@ -24,7 +24,7 @@ from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 
 from android_utils import log
-from app.nimarkogram.messenger.plugins.intents import IntentsController
+from app.nebulagram.messenger.plugins.intents import IntentsController
 from plugin_runtime import (
     capture_callback_owner,
     is_callback_allowed,
@@ -147,7 +147,7 @@ class _IntentsManager:
                 if not result['registered']:
                     self._handlers.pop(handler_id, None)
         try:
-            from app.nimarkogram.messenger.plugins import PluginsController
+            from app.nebulagram.messenger.plugins import PluginsController
             accepted = PluginsController.getInstance().runPluginRuntimePythonMutation(plugin_id, commit)
         except Exception:
             accepted = False
@@ -212,7 +212,7 @@ class _IntentsManager:
                 committed['value'] = True
         try:
             controller = __import__(
-                'app.nimarkogram.messenger.plugins', fromlist=['PluginsController']
+                'app.nebulagram.messenger.plugins', fromlist=['PluginsController']
             ).PluginsController.getInstance()
             if not controller.runPluginRuntimePythonMutation(plugin_id, commit):
                 if committed['value']:
@@ -241,7 +241,7 @@ class _IntentsManager:
         if not module_name:
             return None
         try:
-            from app.nimarkogram.messenger.plugins import PluginsController
+            from app.nebulagram.messenger.plugins import PluginsController
             for pid in PluginsController.getInstance().plugins.keySet().toArray():
                 if str(pid) == str(module_name):
                     return str(pid)
@@ -349,7 +349,7 @@ class _IntentsManager:
         if token is not None:
             return is_callback_allowed(token)
         try:
-            from app.nimarkogram.messenger.plugins import PluginsController
+            from app.nebulagram.messenger.plugins import PluginsController
             return PluginsController.getInstance().isPluginActive(owner)
         except Exception:
             return False

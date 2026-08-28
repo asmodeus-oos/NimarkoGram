@@ -1,6 +1,6 @@
-# Building NimarkoGram
+# Building NebulaGram
 
-This guide builds the standalone NimarkoGram APK from a clean checkout.
+This guide builds the standalone NebulaGram APK from a clean checkout.
 
 ## Toolchain
 
@@ -18,8 +18,8 @@ Android Studio may install the Android SDK, NDK and CMake components. The reposi
 Clone with submodules:
 
 ```bash
-git clone --recursive https://github.com/Ettacent/NimarkoGram.git
-cd NimarkoGram
+git clone --recursive https://github.com/Ettacent/NebulaGram.git
+cd NebulaGram
 ```
 
 If the repository was cloned without `--recursive`, initialize the submodules separately:
@@ -69,12 +69,12 @@ TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk
 
 ## Native hook runtime
 
-The repository pins Pine as a Git submodule. NimarkoGram-specific changes are stored in `patches/pine-nimarkogram.patch`, while the matching ARM binaries used by the application are tracked in `TMessagesProj/jni`.
+The repository pins Pine as a Git submodule. NebulaGram-specific changes are stored in `patches/pine-nebulagram.patch`, while the matching ARM binaries used by the application are tracked in `TMessagesProj/jni`.
 
 To inspect the patch against a clean Pine checkout:
 
 ```bash
-git -C third_party/pine apply --check ../../patches/pine-nimarkogram.patch
+git -C third_party/pine apply --check ../../patches/pine-nebulagram.patch
 ```
 
 ## Troubleshooting

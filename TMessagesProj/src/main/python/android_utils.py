@@ -1,8 +1,8 @@
 from typing import Any
 from android.os import Looper
 from org.telegram.messenger import AndroidUtilities
-from app.nimarkogram.messenger.utils import AppUtils
-from app.nimarkogram.messenger.plugins.ui import PluginViewListener
+from app.nebulagram.messenger.utils import AppUtils
+from app.nebulagram.messenger.plugins.ui import PluginViewListener
 from plugin_runtime import (
     capture_callback_owner,
     make_runnable,

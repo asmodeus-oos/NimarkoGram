@@ -501,7 +501,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 super.invalidate(l, t, r, b);
             }
         };
-        avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(64, chatType == ChatObject.CHAT_TYPE_FORUM));
+        avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(64, chatType == ChatObject.CHAT_TYPE_FORUM));
         avatarDrawable.setInfo(5, null, null);
         avatarImage.setImageDrawable(avatarDrawable);
         avatarImage.setContentDescription(getString(R.string.ChoosePhoto));

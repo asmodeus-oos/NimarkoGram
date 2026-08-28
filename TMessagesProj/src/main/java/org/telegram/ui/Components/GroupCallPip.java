@@ -129,7 +129,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                         }
                         AndroidUtilities.runOnUIThread(micRunnable, 90);
                         
-                        if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                        if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                             try {
                                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                             } catch (Exception ignore) {}
@@ -258,7 +258,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                             if (VoIPService.getSharedInstance() != null) {
                                 VoIPService.getSharedInstance().setMicMute(true, false, false);
                                 
-                                if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                                if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                     try {
                                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                     } catch (Exception ignored) {}
@@ -890,7 +890,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                 deleteIcon.setCustomEndFrame(prepare ? 33 : 0);
                 iconView.playAnimation();
             }
-            if (prepare && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (prepare && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 
                 try {
                     button.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);

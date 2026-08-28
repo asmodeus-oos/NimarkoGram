@@ -522,7 +522,7 @@ public class ContentPreviewViewer {
                     y += AndroidUtilities.dp(24) - moveY;
                     popupWindow.showAtLocation(containerView, 0, (int) ((containerView.getMeasuredWidth() - previewMenu.getMeasuredWidth()) / 2f), y);
 
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                         } catch (Exception ignored) {}
@@ -697,7 +697,7 @@ public class ContentPreviewViewer {
                     showUnlockPremiumView();
                     menuVisible = true;
                     containerView.invalidate();
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                         } catch (Exception ignored) {}
@@ -875,7 +875,7 @@ public class ContentPreviewViewer {
                 }
                 popupWindow.showAtLocation(containerView, 0, (int) ((containerView.getMeasuredWidth() - previewMenu.getMeasuredWidth()) / 2f), y);
 
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                     try {
                         containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     } catch (Exception ignored) {}

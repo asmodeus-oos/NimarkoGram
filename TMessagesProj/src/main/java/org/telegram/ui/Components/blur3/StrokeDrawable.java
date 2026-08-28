@@ -51,7 +51,7 @@ public class StrokeDrawable extends Drawable {
     public void updateColors() {
         if (colorProvider == null) return;
 
-        if (app.nimarkogram.messenger.NimarkoConfig.glareOnElements) {
+        if (app.nebulagram.messenger.NebulaConfig.glareOnElements) {
             strokeColorTop = Theme.multAlpha(colorProvider.getStrokeColorTop(), alpha);
             strokeColorBottom = Theme.multAlpha(colorProvider.getStrokeColorBottom(), alpha);
         } else {

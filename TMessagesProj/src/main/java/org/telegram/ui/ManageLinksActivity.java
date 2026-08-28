@@ -664,7 +664,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
             if ((position >= linksStartRow && position < linksEndRow) || (position >= revokedLinksStartRow && position < revokedLinksEndRow)) {
                 LinkCell cell = (LinkCell) view;
                 cell.optionsView.callOnClick();
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                     try {
                         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     } catch (Exception ignored) {}

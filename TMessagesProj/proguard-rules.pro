@@ -1,22 +1,22 @@
-## NimarkoGram: mvel2 references javax.script (not on Android). Don't warn.
+## NebulaGram: mvel2 references javax.script (not on Android). Don't warn.
 -dontwarn javax.script.**
 -dontwarn org.mvel2.jsr223.**
-## NimarkoGram: keep MVEL — reflectively constructed expressions
+## NebulaGram: keep MVEL — reflectively constructed expressions
 -keep class org.mvel2.** { *; }
 -dontwarn org.mvel2.**
 ## Keep ported extera classes (synthetic R8-style names with reflection callers).
--keep class app.nimarkogram.messenger.** { *; }
+-keep class app.nebulagram.messenger.** { *; }
 -keep class okhttp3.internal.url._UrlKt { *; }
-## NimarkoGram: keep the Xposed bridge — invoked exclusively from Python via
+## NebulaGram: keep the Xposed bridge — invoked exclusively from Python via
 ## Chaquopy reflection, so R8/D8 will otherwise inline/elide it. Without this
-## hooks silently no-op (no NimarkoBanner draw, no profile decoration, etc).
+## hooks silently no-op (no NebulaBanner draw, no profile decoration, etc).
 -keep class de.robv.android.xposed.** { *; }
 -keepclassmembers class de.robv.android.xposed.** { *; }
-## NimarkoGram: keep Pine ART hook entry points — JNI-reachable and reflection
+## NebulaGram: keep Pine ART hook entry points — JNI-reachable and reflection
 ## targets from Java/Python.
 -keep class top.canyie.pine.** { *; }
 -keepclassmembers class top.canyie.pine.** { *; }
-## NimarkoGram: keep Chaquopy bridge surface used by python entry points.
+## NebulaGram: keep Chaquopy bridge surface used by python entry points.
 -keep class com.chaquo.python.** { *; }
 
 ## v10.5 RESTORE BROAD KEEP: the v10.4 "surgical" approach (only 5 hand-picked
@@ -66,7 +66,7 @@
 # Plugin compatibility: Python plugins (Chaquopy) import and Pine-hook ARBITRARY org.telegram classes by
 # their ORIGINAL names (e.g. `from org.telegram.tgnet.tl import TL_account`, hook `ChatActivityEnterView`).
 # R8 can't see these reflection-style uses, so without a broad keep it strips/renames classes a plugin needs
-# (nimarkoprivacy broke with "No module named 'org'" after R8 minified away org.telegram.tgnet.tl.TL_account
+# (nebulaprivacy broke with "No module named 'org'" after R8 minified away org.telegram.tgnet.tl.TL_account
 # once 12.9.0 dropped its last Java reference). Keep the whole tree un-shrunk and un-renamed so practically
 # every plugin's imports/hooks resolve. (Subsumes the specific tgnet keeps above; kept for clarity.)
 -keep class org.telegram.** { *; }

@@ -2,7 +2,7 @@ package com.exteragram.messenger.plugins.models;
 
 import com.chaquo.python.PyObject;
 
-public class SwitchSetting extends app.nimarkogram.messenger.plugins.models.SwitchSetting {
+public class SwitchSetting extends app.nebulagram.messenger.plugins.models.SwitchSetting {
     public SwitchSetting(String key, String text, boolean defaultValue, String subtext, String icon,
                          PyObject onChangeCallback, PyObject onLongClickCallback, String linkAlias) {
         super(key, text, defaultValue, subtext, icon, onChangeCallback, onLongClickCallback, linkAlias);

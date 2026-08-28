@@ -136,7 +136,7 @@ public class BackDrawable extends Drawable {
         if (!alwaysClose && arrowRotation == 0) {
             packAlpha = 1f - Math.min(1f, currentRotation / 0.35f);
             if (packAlpha > 0.001f) {
-                packBmp = app.nimarkogram.messenger.icons.NimarkoIconResources.activeBackArrowBitmap();
+                packBmp = app.nebulagram.messenger.icons.NebulaIconResources.activeBackArrowBitmap();
                 if (packBmp == null || packBmp.isRecycled()) {
                     packBmp = null;
                     packAlpha = 0f;

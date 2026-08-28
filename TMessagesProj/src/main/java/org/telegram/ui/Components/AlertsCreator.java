@@ -2013,7 +2013,7 @@ public class AlertsCreator {
         avatarDrawable.setTextSize(dp(12));
 
         BackupImageView imageView = new BackupImageView(context);
-        imageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(40));
+        imageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(40));
         frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
 
         TextView textView = new TextView(context);
@@ -2099,7 +2099,7 @@ public class AlertsCreator {
         avatarDrawable.setTextSize(dp(18));
 
         BackupImageView imageView = new BackupImageView(context);
-        imageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(40));
+        imageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(40));
         frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
 
         SimpleTextView textView = new SimpleTextView(context);
@@ -2220,7 +2220,7 @@ public class AlertsCreator {
         avatarDrawable.setTextSize(dp(18));
 
         BackupImageView imageView = new BackupImageView(context);
-        imageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(40));
+        imageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(40));
         frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
 
         SimpleTextView titleView = new SimpleTextView(context);
@@ -2869,7 +2869,7 @@ public class AlertsCreator {
                 }
             }
         }
-        builder.setPositiveButton(actionText, (dialogInterface, i) -> app.nimarkogram.messenger.utils.CGCompat.runOrAskBeforeDestructive(fragment.getParentActivity(), fragment.getCurrentAccount(), () -> {
+        builder.setPositiveButton(actionText, (dialogInterface, i) -> app.nebulagram.messenger.utils.CGCompat.runOrAskBeforeDestructive(fragment.getParentActivity(), fragment.getCurrentAccount(), () -> {
             if (!clearingCache && !second && !secret) {
                 if (UserObject.isUserSelf(user)) {
                     createClearOrDeleteDialogAlert(fragment, clear, true, chat, user, false, checkDeleteForAll, deleteForAll[0], canDeleteHistory, onProcessRunnable, resourcesProvider);
@@ -3069,7 +3069,7 @@ public class AlertsCreator {
         String actionText = canDeleteHistory ? LocaleController.getString("Delete", R.string.Delete)
                 : canClearCacheCount != 0 ? LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache)
                 : LocaleController.getString("ClearHistory", R.string.ClearHistory);
-        builder.setPositiveButton(actionText, (dialogInterface, i) -> app.nimarkogram.messenger.utils.CGCompat.runOrAskBeforeDestructive(fragment.getParentActivity(), fragment.getCurrentAccount(), () -> {
+        builder.setPositiveButton(actionText, (dialogInterface, i) -> app.nebulagram.messenger.utils.CGCompat.runOrAskBeforeDestructive(fragment.getParentActivity(), fragment.getCurrentAccount(), () -> {
             if (onProcessRunnable != null) {
                 onProcessRunnable.run(deleteForAll[0]);
             }
@@ -3182,7 +3182,7 @@ public class AlertsCreator {
         if (chat != null && canDeleteHistory && ChatObject.isPublic(chat) && !ChatObject.isChannelAndNotMegaGroup(chat)) {
             deleteText = LocaleController.getString(R.string.ClearForAll);
         }
-        builder.setPositiveButton(deleteText, (dialogInterface, i) -> app.nimarkogram.messenger.utils.CGCompat.runOrAskBeforeDestructive(fragment.getParentActivity(), fragment.getCurrentAccount(), () -> {
+        builder.setPositiveButton(deleteText, (dialogInterface, i) -> app.nebulagram.messenger.utils.CGCompat.runOrAskBeforeDestructive(fragment.getParentActivity(), fragment.getCurrentAccount(), () -> {
             onProcessRunnable.run(deleteForAll[0]);
         }));
         builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
@@ -3232,7 +3232,7 @@ public class AlertsCreator {
         avatarDrawable.setInfo(fragment.getCurrentAccount(), user);
 
         BackupImageView imageView = new BackupImageView(context);
-        imageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(40));
+        imageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(40));
         imageView.setForUserOrChat(user, avatarDrawable);
         frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
 
@@ -7248,7 +7248,7 @@ public class AlertsCreator {
         frameLayout.addView(pin, LayoutHelper.createFrame(60, 82, Gravity.CENTER, 0, 0, 0, 0));
 
         BackupImageView imageView = new BackupImageView(activity);
-        imageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(52));
+        imageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(52));
         imageView.setForUserOrChat(selfUser, new AvatarDrawable(selfUser));
         frameLayout.addView(imageView, LayoutHelper.createFrame(52, 52, Gravity.CENTER, 0, 0, 0, 11));
 
@@ -7735,7 +7735,7 @@ public class AlertsCreator {
         void didPressedNewCard();
     }
 
-    /** NimarkoGram: re-entrancy guard for the biometric-before-delete prompt. */
+    /** NebulaGram: re-entrancy guard for the biometric-before-delete prompt. */
     private static boolean nmDeleteAlertBypassBiometric = false;
 
     public static void createDeleteMessagesAlert(BaseFragment fragment, TLRPC.User user, TLRPC.Chat chat, TLRPC.EncryptedChat encryptedChat, TLRPC.ChatFull chatInfo, long mergeDialogId, MessageObject selectedMessage, SparseArray<MessageObject>[] selectedMessages, MessageObject.GroupedMessages selectedGroup, int topicId, int mode, TLRPC.ChannelParticipant[] channelParticipants, Runnable onDelete, Runnable hideDim, Theme.ResourcesProvider resourcesProvider) {
@@ -7749,12 +7749,12 @@ public class AlertsCreator {
         if (activity == null) {
             return;
         }
-        // NimarkoGram: require authentication before showing the delete dialog.
+        // NebulaGram: require authentication before showing the delete dialog.
         // The centralized gate fails closed if no configured authenticator or
         // usable Activity exists, or if constructing/showing the prompt throws.
         if (!nmDeleteAlertBypassBiometric
-                && app.nimarkogram.messenger.NimarkoConfig.askPasscodeBeforeDelete) {
-            app.nimarkogram.messenger.utils.CGCompat.runOrAskBeforeDestructive(activity, fragment.getCurrentAccount(), () -> {
+                && app.nebulagram.messenger.NebulaConfig.askPasscodeBeforeDelete) {
+            app.nebulagram.messenger.utils.CGCompat.runOrAskBeforeDestructive(activity, fragment.getCurrentAccount(), () -> {
                 nmDeleteAlertBypassBiometric = true;
                 try {
                     createDeleteMessagesAlert(fragment, user, chat, encryptedChat, chatInfo, mergeDialogId,
@@ -7927,9 +7927,9 @@ public class AlertsCreator {
             }
         }
 
-        // NimarkoGram (CG parity): default the delete-for-all checkbox to the user's
+        // NebulaGram (CG parity): default the delete-for-all checkbox to the user's
         // saved preference so they don't have to re-check it each time.
-        final boolean[] deleteForAll = {app.nimarkogram.messenger.NimarkoConfig.deleteForAll};
+        final boolean[] deleteForAll = {app.nebulagram.messenger.NebulaConfig.deleteForAll};
         boolean canRevokeInbox = user != null && MessagesController.getInstance(currentAccount).canRevokePmInbox;
         int revokeTimeLimit;
         if (user != null) {
@@ -8072,8 +8072,8 @@ public class AlertsCreator {
                     cell.setText(LocaleController.getString(R.string.DeleteMessagesOption), "", false, false);
                 }
                 cell.setPadding(LocaleController.isRTL ? dp(16) : dp(8), 0, LocaleController.isRTL ? dp(8) : dp(16), 0);
-                // NimarkoGram: optionally pre-check the "delete for all" box.
-                if (app.nimarkogram.messenger.NimarkoConfig.deleteForAll) {
+                // NebulaGram: optionally pre-check the "delete for all" box.
+                if (app.nebulagram.messenger.NebulaConfig.deleteForAll) {
                     deleteForAll[0] = true;
                     cell.setChecked(true, false);
                 }
@@ -8128,18 +8128,18 @@ public class AlertsCreator {
                 FrameLayout frameLayout = new FrameLayout(activity);
                 CheckBoxCell cell = new CheckBoxCell(activity, 1, resourcesProvider);
                 cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                // NimarkoGram (CG parity): show the checkbox pre-checked when the user
+                // NebulaGram (CG parity): show the checkbox pre-checked when the user
                 // has opted into "delete for all" by default.
                 if (canDeleteInbox) {
-                    cell.setText(LocaleController.formatString("DeleteMessagesOptionAlso", R.string.DeleteMessagesOptionAlso, UserObject.getFirstName(user)), "", app.nimarkogram.messenger.NimarkoConfig.deleteForAll, false);
+                    cell.setText(LocaleController.formatString("DeleteMessagesOptionAlso", R.string.DeleteMessagesOptionAlso, UserObject.getFirstName(user)), "", app.nebulagram.messenger.NebulaConfig.deleteForAll, false);
                 } else if (chat != null && (hasNotOut || myMessagesCount == count)) {
-                    cell.setText(LocaleController.getString(R.string.DeleteForAll), "", app.nimarkogram.messenger.NimarkoConfig.deleteForAll, false);
+                    cell.setText(LocaleController.getString(R.string.DeleteForAll), "", app.nebulagram.messenger.NebulaConfig.deleteForAll, false);
                 } else {
                     cell.setText(LocaleController.getString(R.string.DeleteMessagesOption), "", false, false);
                 }
                 cell.setPadding(LocaleController.isRTL ? dp(16) : dp(8), 0, LocaleController.isRTL ? dp(8) : dp(16), 0);
-                // NimarkoGram: optionally pre-check the "delete for all" box.
-                if (app.nimarkogram.messenger.NimarkoConfig.deleteForAll) {
+                // NebulaGram: optionally pre-check the "delete for all" box.
+                if (app.nebulagram.messenger.NebulaConfig.deleteForAll) {
                     deleteForAll[0] = true;
                     cell.setChecked(true, false);
                 }

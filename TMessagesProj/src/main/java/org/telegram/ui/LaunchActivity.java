@@ -442,14 +442,14 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
         flagSecureReason = new FlagSecureReason(getWindow(), () ->
                 SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture
-                        || isNimarkoProtectedScreenVisible());
+                        || isNebulaProtectedScreenVisible());
         flagSecureReason.attach();
 
         super.onCreate(savedInstanceState);
-        // NimarkoGram: the launch animation is an AnimatedVectorDrawable (splash_plane_avd) wired as the
+        // NebulaGram: the launch animation is an AnimatedVectorDrawable (splash_plane_avd) wired as the
         // system windowSplashScreenAnimatedIcon — the OS auto-plays it on the splash (like official
         // Telegram), so no custom exit-listener / overlay is needed here (which previously caused the swap).
-        // NimarkoGram: pin the window to sRGB (default colour mode). Some ROMs (e.g. the reported
+        // NebulaGram: pin the window to sRGB (default colour mode). Some ROMs (e.g. the reported
         // PHY110 / "Android 36") auto-promote the window to wide colour gamut when a wide-gamut surface
         // such as the Stories camera attaches; their TextView.onDraw then calls Paint.setColor(long) with a
         // sign-extended int colour and crashes in ColorSpace.get ("Invalid ID: 30"). Forcing the default
@@ -459,8 +459,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 getWindow().setColorMode(android.content.pm.ActivityInfo.COLOR_MODE_DEFAULT);
             } catch (Throwable ignore) {}
         }
-        // NimarkoGram (CG parity): force edge-to-edge layout when the experimental flag is on.
-        if (app.nimarkogram.messenger.NimarkoConfig.edgeToEdgeMode) {
+        // NebulaGram (CG parity): force edge-to-edge layout when the experimental flag is on.
+        if (app.nebulagram.messenger.NebulaConfig.edgeToEdgeMode) {
             try {
                 androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
             } catch (Throwable ignored) {}
@@ -728,9 +728,9 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            // NimarkoGram: subscribe to overlay changes so Monet themes refresh when the
+            // NebulaGram: subscribe to overlay changes so Monet themes refresh when the
             // user changes wallpaper / dynamic-colour source. Matches CG MonetHelper flow.
-            app.nimarkogram.messenger.utils.ui.MonetHelper.registerReceiver(this);
+            app.nebulagram.messenger.utils.ui.MonetHelper.registerReceiver(this);
             getWindow().getDecorView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                         @Override
                         public void onViewAttachedToWindow(View v) {
@@ -758,9 +758,9 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         BackupAgent.requestBackup();
 
         RestrictedLanguagesSelectActivity.checkRestrictedLanguages(false);
-        // NimarkoGram: optionally disable Android 14 predictive-back gesture by registering
+        // NebulaGram: optionally disable Android 14 predictive-back gesture by registering
         // a plain back-invoked callback (no animation) instead of the OnBackAnimationCallback.
-        if (Build.VERSION.SDK_INT >= 34 && app.nimarkogram.messenger.NimarkoConfig.predictiveBack) {
+        if (Build.VERSION.SDK_INT >= 34 && app.nebulagram.messenger.NebulaConfig.predictiveBack) {
             if (onBackAnimationCallback == null) {
                 onBackAnimationCallback =  new OnBackAnimationCallback() {
                     private AnimationNotificationsLocker locker = new AnimationNotificationsLocker();
@@ -1235,9 +1235,9 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         UserConfig.getInstance(0).saveConfig(false);
         checkCurrentAccount();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.activeAccountChanged, account);
-        // NimarkoGram: refetch the new account's banner status now (selectedAccount already committed above),
+        // NebulaGram: refetch the new account's banner status now (selectedAccount already committed above),
         // otherwise B's own server banner stays hidden until the 5-min status loop tick.
-        try { app.nimarkogram.messenger.banners.NimarkoBannerController.getInstance().onAccountSwitched(); } catch (Throwable ignored) {}
+        try { app.nebulagram.messenger.banners.NebulaBannerController.getInstance().onAccountSwitched(); } catch (Throwable ignored) {}
         if (AndroidUtilities.isTablet()) {
             layersActionBarLayout.removeAllFragments();
             rightActionBarLayout.removeAllFragments();
@@ -1261,8 +1261,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         // be resolved normally while the finite set continues warming in the
         // global queue.
         Resources switchResources = getResources();
-        if (switchResources instanceof app.nimarkogram.messenger.icons.NimarkoIconResources) {
-            ((app.nimarkogram.messenger.icons.NimarkoIconResources) switchResources)
+        if (switchResources instanceof app.nebulagram.messenger.icons.NebulaIconResources) {
+            ((app.nebulagram.messenger.icons.NebulaIconResources) switchResources)
                     .prewarmFolderIconsAsync();
         }
         MainTabsActivity mainTabsActivity = dialogsActivityProvider.provide(null);
@@ -1569,7 +1569,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         if (UserSelectorBottomSheet.handleIntent(intent, progress)) {
             return true;
         }
-        // NimarkoGram: tapping the OTA download notification opens the app on the update sheet (progress /
+        // NebulaGram: tapping the OTA download notification opens the app on the update sheet (progress /
         // install / cancel) so the user never has to force-kill to retry. Doesn't consume the intent.
         if (intent != null && intent.getBooleanExtra("nm_open_update", false)) {
             intent.removeExtra("nm_open_update");
@@ -1579,10 +1579,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     // lastUpdate is a process-lifetime static; after a low-memory kill it's null even
                     // though the notification (and its persisted Update fields) survived. Rehydrate it
                     // from prefs so the deep-link still opens the sheet instead of doing nothing.
-                    app.nimarkogram.messenger.updater.NimarkoUpdater.Update update =
-                            app.nimarkogram.messenger.updater.NimarkoUpdater.getOrRestoreLastUpdate();
+                    app.nebulagram.messenger.updater.NebulaUpdater.Update update =
+                            app.nebulagram.messenger.updater.NebulaUpdater.getOrRestoreLastUpdate();
                     if (last != null && update != null) {
-                        app.nimarkogram.messenger.updater.NimarkoUpdaterSheet.showAlert(last, true, update);
+                        app.nebulagram.messenger.updater.NebulaUpdaterSheet.showAlert(last, true, update);
                     }
                 } catch (Throwable ignore) {}
             }, 350);
@@ -1590,7 +1590,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         if (AndroidUtilities.handleProxyIntent(this, intent, true)) {
             return true;
         }
-        if (app.nimarkogram.messenger.plugins.intents.IntentsController.getInstance().dispatchIntent(intent)) {
+        if (app.nebulagram.messenger.plugins.intents.IntentsController.getInstance().dispatchIntent(intent)) {
             return true;
         }
         if (intent == null || !Intent.ACTION_MAIN.equals(intent.getAction())) {
@@ -2709,15 +2709,15 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                         }
                                     } else if (
                                             url.startsWith("tg:restart") || url.startsWith("tg://restart") || url.startsWith("tg:reboot") || url.startsWith("tg://reboot") ||
-                                            url.startsWith("tg://nimarko_")
+                                            url.startsWith("tg://nebula_")
                                     ) {
                                         // NG port of CG DeeplinkHelper dispatch (Cherrygram-main/.../core/helpers/DeeplinkHelper.java).
                                         // CG-server endpoints (donate / support / about / updater / username-limits / stars / premium)
                                         // intentionally dropped — NG has no remote backend or premium flavour, so those slugs would
-                                        // dead-end. Settings nav + restart are kept and "cg_" was renamed to "nimarko_".
+                                        // dead-end. Settings nav + restart are kept and "cg_" was renamed to "nebula_".
                                         url = url.replace("tg://", "//t.me/").replace("tg:", "//t.me/");
                                         data = Uri.parse(url);
-                                        app.nimarkogram.messenger.utils.NimarkoDeeplinkHelper.processDeepLink(data, getSafeLastFragment(), fragment -> {
+                                        app.nebulagram.messenger.utils.NebulaDeeplinkHelper.processDeepLink(data, getSafeLastFragment(), fragment -> {
                                             AndroidUtilities.runOnUIThread(() -> presentFragment(fragment, false, false));
                                             if (AndroidUtilities.isTablet()) {
                                                 actionBarLayout.showLastFragment();
@@ -3112,21 +3112,21 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         // NG-SECURITY: gate push deeplink → locked user chat behind biometric prompt.
                         BaseFragment bf = mainFragmentsStack.isEmpty() ? null : mainFragmentsStack.get(mainFragmentsStack.size() - 1);
                         if (bf != null && bf.getParentActivity() != null
-                                && app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+                                && app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                                 .shouldRequireBiometrics(push_user_id, 0L, 0L, intentAccount[0])
                         ) {
                             final int _ngAcc = intentAccount[0];
                             final long _ngUid = push_user_id;
-                            if (app.nimarkogram.messenger.security.NimarkoBiometricPrompt.isRecentlyVerified(_ngAcc, _ngUid, 0L, 0)) {
+                            if (app.nebulagram.messenger.security.NebulaBiometricPrompt.isRecentlyVerified(_ngAcc, _ngUid, 0L, 0)) {
                                 if (bf.presentFragment(new INavigationLayout.NavigationParams(fragment).setNoAnimation(true))) {
                                     LaunchActivity.dismissAllWeb();
                                 }
                             } else {
-                                app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(bf.getParentActivity(), _ngAcc, () -> {
+                                app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(bf.getParentActivity(), _ngAcc, () -> {
                                     if (!isNavigationRequestCurrent(_ngAcc, intentNavigationGeneration)) {
                                         return;
                                     }
-                                    app.nimarkogram.messenger.security.NimarkoBiometricPrompt.markVerified(_ngAcc, _ngUid, 0L, 0);
+                                    app.nebulagram.messenger.security.NebulaBiometricPrompt.markVerified(_ngAcc, _ngUid, 0L, 0);
                                     if (bf.presentFragment(new INavigationLayout.NavigationParams(fragment).setNoAnimation(true))) {
                                         LaunchActivity.dismissAllWeb();
                                     }
@@ -3178,21 +3178,21 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     // NG-SECURITY: gate push deeplink → locked group/channel chat behind biometric prompt.
                     BaseFragment bf = mainFragmentsStack.isEmpty() ? null : mainFragmentsStack.get(mainFragmentsStack.size() - 1);
                     if (bf != null && bf.getParentActivity() != null
-                            && app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isChatLocked(intentAccount[0], -Math.abs(push_chat_id))
-                            && app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.shouldRequireBiometricsToOpenChats()
+                            && app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isChatLocked(intentAccount[0], -Math.abs(push_chat_id))
+                            && app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.shouldRequireBiometricsToOpenChats()
                     ) {
                         final int _ngAcc = intentAccount[0];
                         final long _ngCid = push_chat_id;
-                        if (app.nimarkogram.messenger.security.NimarkoBiometricPrompt.isRecentlyVerified(_ngAcc, 0L, _ngCid, 0)) {
+                        if (app.nebulagram.messenger.security.NebulaBiometricPrompt.isRecentlyVerified(_ngAcc, 0L, _ngCid, 0)) {
                             if (bf.presentFragment(new INavigationLayout.NavigationParams(fragment).setNoAnimation(true))) {
                                 LaunchActivity.dismissAllWeb();
                             }
                         } else {
-                            app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(bf.getParentActivity(), _ngAcc, () -> {
+                            app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(bf.getParentActivity(), _ngAcc, () -> {
                                 if (!isNavigationRequestCurrent(_ngAcc, intentNavigationGeneration)) {
                                     return;
                                 }
-                                app.nimarkogram.messenger.security.NimarkoBiometricPrompt.markVerified(_ngAcc, 0L, _ngCid, 0);
+                                app.nebulagram.messenger.security.NebulaBiometricPrompt.markVerified(_ngAcc, 0L, _ngCid, 0);
                                 if (bf.presentFragment(new INavigationLayout.NavigationParams(fragment).setNoAnimation(true))) {
                                     LaunchActivity.dismissAllWeb();
                                 }
@@ -3213,21 +3213,21 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 // NG-SECURITY: gate push deeplink → encrypted-chat behind biometric prompt.
                 BaseFragment bf = mainFragmentsStack.isEmpty() ? null : mainFragmentsStack.get(mainFragmentsStack.size() - 1);
                 if (bf != null && bf.getParentActivity() != null
-                        && app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isEncryptedChat(push_enc_id, intentAccount[0])
-                        && app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.shouldRequireBiometricsToOpenEncryptedChats()
+                        && app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isEncryptedChat(push_enc_id, intentAccount[0])
+                        && app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.shouldRequireBiometricsToOpenEncryptedChats()
                 ) {
                     final int _ngAcc = intentAccount[0];
                     final int _ngEnc = push_enc_id;
-                    if (app.nimarkogram.messenger.security.NimarkoBiometricPrompt.isRecentlyVerified(_ngAcc, 0L, 0L, _ngEnc)) {
+                    if (app.nebulagram.messenger.security.NebulaBiometricPrompt.isRecentlyVerified(_ngAcc, 0L, 0L, _ngEnc)) {
                         if (bf.presentFragment(new INavigationLayout.NavigationParams(fragment).setNoAnimation(true))) {
                             LaunchActivity.dismissAllWeb();
                         }
                     } else {
-                        app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(bf.getParentActivity(), _ngAcc, () -> {
+                        app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(bf.getParentActivity(), _ngAcc, () -> {
                             if (!isNavigationRequestCurrent(_ngAcc, intentNavigationGeneration)) {
                                 return;
                             }
-                            app.nimarkogram.messenger.security.NimarkoBiometricPrompt.markVerified(_ngAcc, 0L, 0L, _ngEnc);
+                            app.nebulagram.messenger.security.NebulaBiometricPrompt.markVerified(_ngAcc, 0L, 0L, _ngEnc);
                             if (bf.presentFragment(new INavigationLayout.NavigationParams(fragment).setNoAnimation(true))) {
                                 LaunchActivity.dismissAllWeb();
                             }
@@ -6942,19 +6942,19 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     @Override
     protected void onPause() {
         super.onPause();
-        // NimarkoGram plugin engine event hook.
+        // NebulaGram plugin engine event hook.
         try {
-            app.nimarkogram.messenger.plugins.PluginsController.getInstance()
-                    .executeOnAppEvent(app.nimarkogram.messenger.plugins.PluginsConstants.APP_PAUSE);
+            app.nebulagram.messenger.plugins.PluginsController.getInstance()
+                    .executeOnAppEvent(app.nebulagram.messenger.plugins.PluginsConstants.APP_PAUSE);
         } catch (Throwable ignored) {}
-        // NimarkoGram: extend "Auto pause video" to MediaController-driven
+        // NebulaGram: extend "Auto pause video" to MediaController-driven
         // playback — voice messages + round videos. Telegram keeps these
         // playing under MusicPlayerService when the app is backgrounded,
         // which surprises users who toggled "Auto pause video" expecting
         // everything video-ish to stop. Music intentionally excluded so
         // the upstream foreground-service music UX stays intact.
         try {
-            if (app.nimarkogram.messenger.NimarkoConfig.autoPauseVideo) {
+            if (app.nebulagram.messenger.NebulaConfig.autoPauseVideo) {
                 MediaController mc = MediaController.getInstance();
                 MessageObject mo = mc.getPlayingMessageObject();
                 if (mo != null && !mc.isMessagePaused()
@@ -6967,11 +6967,11 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         pipActivityHandler.onPause();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4096);
         ApplicationLoader.mainInterfacePaused = true;
-        // NimarkoGram: pause the banner video/blur worker when the app backgrounds — onAppPause had NO caller,
+        // NebulaGram: pause the banner video/blur worker when the app backgrounds — onAppPause had NO caller,
         // so a video banner kept ExoPlayer decoding + the blur worker grabbing bitmaps while backgrounded.
         // ALWAYS invoke (null/no-op safe) regardless of the feature toggle, so a banner that was live when
         // the user switched the feature OFF still gets paused on background instead of leaking.
-        try { app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onAppPause(); } catch (Throwable ignore) {}
+        try { app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onAppPause(); } catch (Throwable ignore) {}
         int account = currentAccount;
         Utilities.stageQueue.postRunnable(() -> {
             ApplicationLoader.mainInterfacePausedStageQueue = true;
@@ -7033,15 +7033,15 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     @Override
     protected void onStop() {
         super.onStop();
-        // NimarkoGram SECURITY (H1): clear all biometric "recently verified" tokens when the app is
+        // NebulaGram SECURITY (H1): clear all biometric "recently verified" tokens when the app is
         // genuinely no longer visible (onStop, NOT onPause — onPause fires on transient excursions like the
         // photo picker / share sheet and would wrongly wipe the configurable locked-chats TTL grace). So
         // locked chats / archive / delete re-prompt after real backgrounding while in-session grace survives.
-        try { app.nimarkogram.messenger.security.NimarkoBiometricPrompt.onAppBackgrounded(); } catch (Throwable ignore) {}
-        // NimarkoGram plugin engine event hook.
+        try { app.nebulagram.messenger.security.NebulaBiometricPrompt.onAppBackgrounded(); } catch (Throwable ignore) {}
+        // NebulaGram plugin engine event hook.
         try {
-            app.nimarkogram.messenger.plugins.PluginsController.getInstance()
-                    .executeOnAppEvent(app.nimarkogram.messenger.plugins.PluginsConstants.APP_STOP);
+            app.nebulagram.messenger.plugins.PluginsController.getInstance()
+                    .executeOnAppEvent(app.nebulagram.messenger.plugins.PluginsConstants.APP_STOP);
         } catch (Throwable ignored) {}
         isStarted = false;
         pipActivityHandler.onStop();
@@ -7109,7 +7109,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         navigationRequestGeneration.incrementAndGet();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             // Match the registration in onCreate above.
-            app.nimarkogram.messenger.utils.ui.MonetHelper.unregisterReceiver(this);
+            app.nebulagram.messenger.utils.ui.MonetHelper.unregisterReceiver(this);
         }
         isActive = false;
         activeInstanceCount--;
@@ -7222,16 +7222,16 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     protected void onResume() {
         super.onResume();
         if (flagSecureReason != null) flagSecureReason.invalidate();
-        // NimarkoGram plugin engine event hook.
+        // NebulaGram plugin engine event hook.
         try {
-            app.nimarkogram.messenger.plugins.PluginsController.getInstance()
-                    .executeOnAppEvent(app.nimarkogram.messenger.plugins.PluginsConstants.APP_RESUME);
+            app.nebulagram.messenger.plugins.PluginsController.getInstance()
+                    .executeOnAppEvent(app.nebulagram.messenger.plugins.PluginsConstants.APP_RESUME);
         } catch (Throwable ignored) {}
         isResumed = true;
-        // NimarkoGram: OTA auto-check once per launch (gated on "Check on launch").
+        // NebulaGram: OTA auto-check once per launch (gated on "Check on launch").
         try {
             AndroidUtilities.runOnUIThread(() ->
-                    app.nimarkogram.messenger.updater.NimarkoUpdater.checkOnLaunch(LaunchActivity.getLastFragment()), 2500);
+                    app.nebulagram.messenger.updater.NebulaUpdater.checkOnLaunch(LaunchActivity.getLastFragment()), 2500);
         } catch (Throwable ignored) {}
         pipActivityHandler.onResume();
         if (onResumeStaticCallback != null) {
@@ -7249,7 +7249,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         // Keep pause/resume delivery symmetrical. The banner setting can still be loading while
         // LaunchActivity resumes; gating this callback used to leave the singleton permanently
         // paused even after the feature became enabled.
-        try { app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onAppResume(); } catch (Throwable ignore) {}
+        try { app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onAppResume(); } catch (Throwable ignore) {}
         MessagesController.getInstance(currentAccount).sortDialogsAfterResume();
         showLanguageAlert(false);
         Utilities.stageQueue.postRunnable(() -> {
@@ -7331,7 +7331,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         //}
     }
 
-    private boolean isNimarkoProtectedScreenVisible() {
+    private boolean isNebulaProtectedScreenVisible() {
         try {
             BaseFragment fragment = actionBarLayout != null ? actionBarLayout.getLastFragment() : null;
             if (fragment instanceof ChatActivity) {
@@ -7341,10 +7341,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 long chatId = args.getLong("chat_id", 0L);
                 int encId = args.getInt("enc_id", 0);
                 int account = fragment.getCurrentAccount();
-                return app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+                return app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                         .shouldRequireBiometrics(userId, chatId, encId, account);
             }
-            if (fragment instanceof DialogsActivity && app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenArchive) {
+            if (fragment instanceof DialogsActivity && app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenArchive) {
                 Bundle args = fragment.getArguments();
                 return args != null && args.getInt("folderId", 0) == 1;
             }
@@ -7352,7 +7352,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         return false;
     }
 
-    public static void invalidateNimarkoSecureFlag() {
+    public static void invalidateNebulaSecureFlag() {
         LaunchActivity activity = instance;
         if (activity != null && activity.flagSecureReason != null) activity.flagSecureReason.invalidate();
     }
@@ -8758,11 +8758,11 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         showVoiceChatTooltip(mute ? UndoView.ACTION_VOIP_SOUND_MUTED : UndoView.ACTION_VOIP_SOUND_UNMUTED);
                     }
                 }
-            } else if (app.nimarkogram.messenger.NimarkoConfig.playVideoOnVolume
+            } else if (app.nebulagram.messenger.NebulaConfig.playVideoOnVolume
                     && !mainFragmentsStack.isEmpty()
                     && (!PhotoViewer.hasInstance() || !PhotoViewer.getInstance().isVisible())
                     && event.getRepeatCount() == 0) {
-                // NimarkoGram (CG parity): when playVideoOnVolume is enabled,
+                // NebulaGram (CG parity): when playVideoOnVolume is enabled,
                 // pressing a volume key while the focused chat has a visible
                 // inline video should start playing it instead of just changing
                 // the stream volume. Mirrors CG LaunchActivity#dispatchKeyEvent.
@@ -9465,17 +9465,17 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     // ------------------------------------------------------------------
-    // NimarkoGram icon-pack runtime (ported from CG LaunchActivity)
+    // NebulaGram icon-pack runtime (ported from CG LaunchActivity)
     //
     // Activity#getResources() is the single chokepoint through which every
     // Telegram subsystem (Theme, ActionBar, custom drawables, vector fillers)
-    // loads its bitmaps. By returning a NimarkoIconResources wrapper we get
+    // loads its bitmaps. By returning a NebulaIconResources wrapper we get
     // automatic Solar-icon swapping with zero per-call-site edits.
     // ------------------------------------------------------------------
     // C12: volatile + double-checked locking. getResources() is called from background threads (drawable
     // loads, inflaters), and a non-volatile check-then-act let two threads each construct a wrapper and
     // publish half-initialised state. Publish exactly one instance under nmIconResourcesLock.
-    private volatile app.nimarkogram.messenger.icons.NimarkoIconResources nmIconResources = null;
+    private volatile app.nebulagram.messenger.icons.NebulaIconResources nmIconResources = null;
     private volatile AssetManager nmIconAssetManager = null;
     private final Object nmIconResourcesLock = new Object();
     private final java.util.concurrent.atomic.AtomicLong nmIconReloadGeneration =
@@ -9484,12 +9484,12 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     @Override
     public Resources getResources() {
         Resources base = super.getResources();
-        app.nimarkogram.messenger.icons.NimarkoIconResources local = nmIconResources;
+        app.nebulagram.messenger.icons.NebulaIconResources local = nmIconResources;
         if (local == null || nmIconAssetManager != base.getAssets()) {
             synchronized (nmIconResourcesLock) {
                 local = nmIconResources;
                 if (local == null || nmIconAssetManager != base.getAssets()) {
-                    local = new app.nimarkogram.messenger.icons.NimarkoIconResources(base);
+                    local = new app.nebulagram.messenger.icons.NebulaIconResources(base);
                     nmIconResources = local;
                     nmIconAssetManager = base.getAssets();
                 }
@@ -9500,7 +9500,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     /** Called by {@code AppearancePreferencesActivity} after the user flips icon packs. */
     public void reloadResources() {
-        final app.nimarkogram.messenger.icons.NimarkoIconResources resources = nmIconResources;
+        final app.nebulagram.messenger.icons.NebulaIconResources resources = nmIconResources;
         if (resources == null) {
             return;
         }

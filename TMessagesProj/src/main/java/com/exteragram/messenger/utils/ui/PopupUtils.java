@@ -17,11 +17,11 @@ public final class PopupUtils {
         void onClick(int which);
     }
 
-    private static app.nimarkogram.messenger.utils.ui.PopupUtils.OnItemClickListener adapt(final OnItemClickListener listener) {
+    private static app.nebulagram.messenger.utils.ui.PopupUtils.OnItemClickListener adapt(final OnItemClickListener listener) {
         if (listener == null) {
             return null;
         }
-        return new app.nimarkogram.messenger.utils.ui.PopupUtils.OnItemClickListener() {
+        return new app.nebulagram.messenger.utils.ui.PopupUtils.OnItemClickListener() {
             @Override
             public void onClick(int which) {
                 listener.onClick(which);
@@ -30,30 +30,30 @@ public final class PopupUtils {
     }
 
     public static void showDialog(CharSequence[] items, int[] icons, String title, int selected, Context context, OnItemClickListener listener, Theme.ResourcesProvider resourcesProvider, boolean useRadio) {
-        app.nimarkogram.messenger.utils.ui.PopupUtils.showDialog(items, icons, title, selected, context, adapt(listener), resourcesProvider, useRadio);
+        app.nebulagram.messenger.utils.ui.PopupUtils.showDialog(items, icons, title, selected, context, adapt(listener), resourcesProvider, useRadio);
     }
 
     public static void showDialog(CharSequence[] items, int[] icons, String title, int selected, Context context, OnItemClickListener listener) {
-        app.nimarkogram.messenger.utils.ui.PopupUtils.showDialog(items, icons, title, selected, context, adapt(listener));
+        app.nebulagram.messenger.utils.ui.PopupUtils.showDialog(items, icons, title, selected, context, adapt(listener));
     }
 
     public static void showDialog(CharSequence[] items, String title, int selected, Context context, OnItemClickListener listener) {
-        app.nimarkogram.messenger.utils.ui.PopupUtils.showDialog(items, title, selected, context, adapt(listener));
+        app.nebulagram.messenger.utils.ui.PopupUtils.showDialog(items, title, selected, context, adapt(listener));
     }
 
     public static void showDialogWithoutRadio(ArrayList<? extends CharSequence> items, String title, Context context, OnItemClickListener listener) {
-        app.nimarkogram.messenger.utils.ui.PopupUtils.showDialogWithoutRadio(items, title, context, adapt(listener));
+        app.nebulagram.messenger.utils.ui.PopupUtils.showDialogWithoutRadio(items, title, context, adapt(listener));
     }
 
     public static int measureMaxWidth(TextPaint paint, CharSequence[] items) {
-        return app.nimarkogram.messenger.utils.ui.PopupUtils.measureMaxWidth(paint, items);
+        return app.nebulagram.messenger.utils.ui.PopupUtils.measureMaxWidth(paint, items);
     }
 
     public static int measureWidth(TextPaint paint, CharSequence text) {
-        return app.nimarkogram.messenger.utils.ui.PopupUtils.measureWidth(paint, text);
+        return app.nebulagram.messenger.utils.ui.PopupUtils.measureWidth(paint, text);
     }
 
     public static int clampToView(int desiredWidth, View host) {
-        return app.nimarkogram.messenger.utils.ui.PopupUtils.clampToView(desiredWidth, host);
+        return app.nebulagram.messenger.utils.ui.PopupUtils.clampToView(desiredWidth, host);
     }
 }

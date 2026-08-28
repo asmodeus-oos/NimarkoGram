@@ -2,7 +2,7 @@ package com.exteragram.messenger.plugins.models;
 
 import com.chaquo.python.PyObject;
 
-public class TextSetting extends app.nimarkogram.messenger.plugins.models.TextSetting {
+public class TextSetting extends app.nebulagram.messenger.plugins.models.TextSetting {
     public String subtext;
 
     public TextSetting(String text, String subtext, String icon, boolean accent, boolean red,

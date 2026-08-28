@@ -90,7 +90,7 @@ public class PlayingGameDrawable extends StatusDrawable {
         paint.setColor(Theme.getColor(isDialogScreen ? Theme.key_chats_actionMessage : Theme.key_chat_status, resourcesProvider));
         
         float ngOffsetX = 0;
-        if (app.nimarkogram.messenger.NimarkoConfig.centerChatTitle && useCenteredOverride) {
+        if (app.nebulagram.messenger.NebulaConfig.centerChatTitle && useCenteredOverride) {
             ngOffsetX = getBounds().centerX() - AndroidUtilities.dp(10);
         }
         rect.set(ngOffsetX, y, ngOffsetX + size, y + size);
@@ -150,7 +150,7 @@ public class PlayingGameDrawable extends StatusDrawable {
 
     @Override
     public int getIntrinsicWidth() {
-        return AndroidUtilities.dp(app.nimarkogram.messenger.NimarkoConfig.centerChatTitle && useCenteredOverride ? 16 : 20);
+        return AndroidUtilities.dp(app.nebulagram.messenger.NebulaConfig.centerChatTitle && useCenteredOverride ? 16 : 20);
     }
 
     @Override

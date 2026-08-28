@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 // Opt-in size-audit build. Keep the production path unchanged until the
 // resulting resource/R8 reports have been reviewed for plugin compatibility.
-def nimarkoCompactStandalone = project.hasProperty('ngCompactStandalone')
+def nebulaCompactStandalone = project.hasProperty('ngCompactStandalone')
 
 repositories {
     mavenCentral()
@@ -79,8 +79,8 @@ android {
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.debug
-            // NimarkoGram: ".web" suffix dropped permanently from vc6934.
-            // Clean package 'app.nimarkogram.messenger' (the ".web" suffix
+            // NebulaGram: ".web" suffix dropped permanently from vc6934.
+            // Clean package 'app.nebulagram.messenger' (the ".web" suffix
             // was a hybrid-app malware pattern signal for Play Protect's
             // package classifier in mid-2026 — contributing to hard-blocks).
             minifyEnabled false
@@ -93,25 +93,25 @@ android {
             debuggable false
             jniDebuggable false
             signingConfig signingConfigs.release
-            // NimarkoGram: ".web" suffix dropped (see comment in debug block).
+            // NebulaGram: ".web" suffix dropped (see comment in debug block).
             // The normal standalone artifact remains plugins-friendly. Passing
             // -PngCompactStandalone enables an isolated, measurable experiment
             // with app-level R8 and resource shrinking; it is never implicit.
-            minifyEnabled nimarkoCompactStandalone
-            shrinkResources nimarkoCompactStandalone
+            minifyEnabled nebulaCompactStandalone
+            shrinkResources nebulaCompactStandalone
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), '../TMessagesProj/proguard-rules.pro'
             ndk.debugSymbolLevel = 'FULL'
         }
     }
 
-    // NimarkoGram: rebrand the published applicationId for this variant only.
+    // NebulaGram: rebrand the published applicationId for this variant only.
     // Upstream TG namespace ('org.telegram.messenger') stays intact for compatibility
     // (TG core references it everywhere — renaming the whole package is out of scope).
     // Final ids (no ".web" suffix anymore — see buildTypes comments):
-    //   debug      -> app.nimarkogram.messenger
-    //   standalone -> app.nimarkogram.messenger
-    defaultConfig.applicationId = 'app.nimarkogram.messenger'
+    //   debug      -> app.nebulagram.messenger
+    //   standalone -> app.nebulagram.messenger
+    defaultConfig.applicationId = 'app.nebulagram.messenger'
 
     sourceSets.debug {
         manifest.srcFile '../TMessagesProj/config/release/AndroidManifest_standalone.xml'

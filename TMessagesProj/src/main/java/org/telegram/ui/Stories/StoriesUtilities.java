@@ -192,7 +192,7 @@ public class StoriesUtilities {
         }
         params.showProgress = showProgress;
         
-        if (app.nimarkogram.messenger.NimarkoConfig.hideStories || params.currentState == STATE_EMPTY && params.progressToSate == 1f) {
+        if (app.nebulagram.messenger.NebulaConfig.hideStories || params.currentState == STATE_EMPTY && params.progressToSate == 1f) {
             avatarImage.setImageCoords(params.originalAvatarRect);
             canvas.save();
             canvas.scale(scale, scale, params.originalAvatarRect.centerX(), params.originalAvatarRect.centerY());
@@ -1291,15 +1291,15 @@ public class StoriesUtilities {
         public float avatarSizeDp;
 
         public void updateRingCorners(RectF ringRect, boolean isForum) {
-            if (app.nimarkogram.messenger.NimarkoConfig.avatarCorners >= app.nimarkogram.messenger.NimarkoConfig.AVATAR_CORNERS_MAX) {
+            if (app.nebulagram.messenger.NebulaConfig.avatarCorners >= app.nebulagram.messenger.NebulaConfig.AVATAR_CORNERS_MAX) {
                 ringRounded = false;
                 ringCornerRadius = 0;
                 return;
             }
             float ringDp = ringRect.width() / org.telegram.messenger.AndroidUtilities.density;
             int r = isForum
-                    ? app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(ringDp, true)
-                    : app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(ringDp, false);
+                    ? app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(ringDp, true)
+                    : app.nebulagram.messenger.NebulaConfig.getAvatarCorners(ringDp, false);
             ringCornerRadius = r;
             
             ringRounded = r < ringRect.width() / 2f;
@@ -1356,7 +1356,7 @@ public class StoriesUtilities {
 
         public boolean checkOnTouchEvent(MotionEvent event, View view) {
             
-            if (app.nimarkogram.messenger.NimarkoConfig.hideStories) return false;
+            if (app.nebulagram.messenger.NebulaConfig.hideStories) return false;
             child = view;
             StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
             if (event.getAction() == MotionEvent.ACTION_DOWN && originalAvatarRect.contains(event.getX(), event.getY())) {
@@ -1645,7 +1645,7 @@ public class StoriesUtilities {
 
         public void setColor(MessagesController.PeerColor peerColor, boolean animated) {
             
-            if (peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor) {
+            if (peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor) {
                 setColors(
                     peerColor.getStoryColor1(Theme.isCurrentThemeDark()),
                     peerColor.getStoryColor2(Theme.isCurrentThemeDark()),

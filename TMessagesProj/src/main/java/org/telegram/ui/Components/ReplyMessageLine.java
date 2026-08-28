@@ -200,8 +200,8 @@ public class ReplyMessageLine {
         backgroundColor = Theme.multAlpha(nameColor, 0.10f);
         emojiDocumentId = p.background_emoji_id;
         stickerDocumentId = p.gift_emoji_id;
-        // NimarkoGram (CG parity): the user can opt out of background emoji on reply lines.
-        if (emojiDocumentId != 0 && emoji == null && parentView != null && app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji) {
+        // NebulaGram (CG parity): the user can opt out of background emoji on reply lines.
+        if (emojiDocumentId != 0 && emoji == null && parentView != null && app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji) {
             emoji = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(parentView, false, dp(20), AnimatedEmojiDrawable.CACHE_TYPE_ALERT_PREVIEW_STATIC);
             if (parentView instanceof ChatMessageCell ? ((ChatMessageCell) parentView).isCellAttachedToWindow() : parentView.isAttachedToWindow()) {
                 emoji.attach();
@@ -262,9 +262,9 @@ public class ReplyMessageLine {
             if (uid != 0) {
                 user = MessagesController.getInstance(messageObject.currentAccount).getUser(uid);
             }
-            // NimarkoGram (CG parity): collectible-color resolution is opt-in via
+            // NebulaGram (CG parity): collectible-color resolution is opt-in via
             // replyCustomColors / replyBackgroundEmoji to keep reply lines neutral.
-            if (!(messageObject.isOutOwner() || type == TYPE_CODE) && user != null && user.color instanceof TLRPC.TL_peerColorCollectible && (app.nimarkogram.messenger.NimarkoConfig.replyCustomColors || app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji)) {
+            if (!(messageObject.isOutOwner() || type == TYPE_CODE) && user != null && user.color instanceof TLRPC.TL_peerColorCollectible && (app.nebulagram.messenger.NebulaConfig.replyCustomColors || app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji)) {
                 return resolveCollectionColor(messageObject, (TLRPC.TL_peerColorCollectible) user.color, resourcesProvider);
             }
             if (user != null) {
@@ -293,30 +293,30 @@ public class ReplyMessageLine {
                 }
             } else if (messageObject.messageOwner != null && messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.from_id != null) {
                 long dialogId = DialogObject.getPeerDialogId(messageObject.messageOwner.fwd_from.from_id);
-                // NimarkoGram (CG parity): replyCustomColors gates the per-peer color
+                // NebulaGram (CG parity): replyCustomColors gates the per-peer color
                 // tint on forwarded-from reply previews; replyBackgroundEmoji gates the
                 // background emoji glyph baked into the same line.
                 if (dialogId < 0) {
                     TLRPC.Chat chat = MessagesController.getInstance(messageObject.currentAccount).getChat(-dialogId);
-                    if (!(messageObject.isOutOwner() || type == TYPE_CODE) && chat != null && chat.color instanceof TLRPC.TL_peerColorCollectible && (app.nimarkogram.messenger.NimarkoConfig.replyCustomColors || app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji)) {
+                    if (!(messageObject.isOutOwner() || type == TYPE_CODE) && chat != null && chat.color instanceof TLRPC.TL_peerColorCollectible && (app.nebulagram.messenger.NebulaConfig.replyCustomColors || app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji)) {
                         return resolveCollectionColor(messageObject, (TLRPC.TL_peerColorCollectible) chat.color, resourcesProvider);
                     }
                     if (chat != null) {
-                        colorId = app.nimarkogram.messenger.NimarkoConfig.replyCustomColors ? ChatObject.getColorId(chat) : 0;
+                        colorId = app.nebulagram.messenger.NebulaConfig.replyCustomColors ? ChatObject.getColorId(chat) : 0;
                     }
                     if (type == TYPE_LINK) {
-                        emojiDocumentId = app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji ? ChatObject.getEmojiId(chat) : 0;
+                        emojiDocumentId = app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji ? ChatObject.getEmojiId(chat) : 0;
                     }
                 } else {
                     TLRPC.User user = MessagesController.getInstance(messageObject.currentAccount).getUser(dialogId);
-                    if (!(messageObject.isOutOwner() || type == TYPE_CODE) && user != null && user.color instanceof TLRPC.TL_peerColorCollectible && (app.nimarkogram.messenger.NimarkoConfig.replyCustomColors || app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji)) {
+                    if (!(messageObject.isOutOwner() || type == TYPE_CODE) && user != null && user.color instanceof TLRPC.TL_peerColorCollectible && (app.nebulagram.messenger.NebulaConfig.replyCustomColors || app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji)) {
                         return resolveCollectionColor(messageObject, (TLRPC.TL_peerColorCollectible) user.color, resourcesProvider);
                     }
                     if (user != null) {
-                        colorId = app.nimarkogram.messenger.NimarkoConfig.replyCustomColors ? UserObject.getColorId(user) : 0;
+                        colorId = app.nebulagram.messenger.NebulaConfig.replyCustomColors ? UserObject.getColorId(user) : 0;
                     }
                     if (type == TYPE_LINK) {
-                        emojiDocumentId = app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji ? UserObject.getEmojiId(user) : 0;
+                        emojiDocumentId = app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji ? UserObject.getEmojiId(user) : 0;
                     }
                 }
             } else if (DialogObject.isEncryptedDialog(messageObject.getDialogId()) && currentUser != null) {
@@ -385,30 +385,30 @@ public class ReplyMessageLine {
             } else if (DialogObject.isEncryptedDialog(messageObject.replyMessageObject.getDialogId())) {
                 TLRPC.User user = messageObject.replyMessageObject.isOutOwner() ? UserConfig.getInstance(messageObject.replyMessageObject.currentAccount).getCurrentUser() : currentUser;
                 if (user != null) {
-                    colorId = app.nimarkogram.messenger.NimarkoConfig.replyCustomColors ? UserObject.getColorId(user) : 0;
-                    emojiDocumentId = app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji ? UserObject.getEmojiId(user) : 0;
+                    colorId = app.nebulagram.messenger.NebulaConfig.replyCustomColors ? UserObject.getColorId(user) : 0;
+                    emojiDocumentId = app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji ? UserObject.getEmojiId(user) : 0;
                 } else {
                     colorId = 0;
                 }
             } else if (messageObject.replyMessageObject.isFromUser()) {
                 TLRPC.User user = MessagesController.getInstance(messageObject.currentAccount).getUser(messageObject.replyMessageObject.messageOwner.from_id.user_id);
-                if (!(messageObject.isOutOwner() || type == TYPE_CODE) && user != null && user.color instanceof TLRPC.TL_peerColorCollectible && (app.nimarkogram.messenger.NimarkoConfig.replyCustomColors || app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji)) {
+                if (!(messageObject.isOutOwner() || type == TYPE_CODE) && user != null && user.color instanceof TLRPC.TL_peerColorCollectible && (app.nebulagram.messenger.NebulaConfig.replyCustomColors || app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji)) {
                     return resolveCollectionColor(messageObject, (TLRPC.TL_peerColorCollectible) user.color, resourcesProvider);
                 }
                 if (user != null) {
-                    colorId = app.nimarkogram.messenger.NimarkoConfig.replyCustomColors ? UserObject.getColorId(user) : 0;
-                    emojiDocumentId = app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji ? UserObject.getEmojiId(user) : 0;
+                    colorId = app.nebulagram.messenger.NebulaConfig.replyCustomColors ? UserObject.getColorId(user) : 0;
+                    emojiDocumentId = app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji ? UserObject.getEmojiId(user) : 0;
                 } else {
                     colorId = 0;
                 }
             } else if (messageObject.replyMessageObject.isFromChannel()) {
                 TLRPC.Chat chat = MessagesController.getInstance(messageObject.currentAccount).getChat(messageObject.replyMessageObject.messageOwner.from_id.channel_id);
-                if (!(messageObject.isOutOwner() || type == TYPE_CODE) && chat != null && chat.color instanceof TLRPC.TL_peerColorCollectible && (app.nimarkogram.messenger.NimarkoConfig.replyCustomColors || app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji)) {
+                if (!(messageObject.isOutOwner() || type == TYPE_CODE) && chat != null && chat.color instanceof TLRPC.TL_peerColorCollectible && (app.nebulagram.messenger.NebulaConfig.replyCustomColors || app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji)) {
                     return resolveCollectionColor(messageObject, (TLRPC.TL_peerColorCollectible) chat.color, resourcesProvider);
                 }
                 if (chat != null) {
-                    colorId = app.nimarkogram.messenger.NimarkoConfig.replyCustomColors ? ChatObject.getColorId(chat) : 0;
-                    emojiDocumentId = app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji ? ChatObject.getEmojiId(chat) : 0;
+                    colorId = app.nebulagram.messenger.NebulaConfig.replyCustomColors ? ChatObject.getColorId(chat) : 0;
+                    emojiDocumentId = app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji ? ChatObject.getEmojiId(chat) : 0;
                 } else {
                     colorId = 0;
                 }
@@ -416,7 +416,7 @@ public class ReplyMessageLine {
                 colorId = 0;
             }
             resolveColor(messageObject.replyMessageObject, colorId, resourcesProvider);
-            backgroundColor = app.nimarkogram.messenger.NimarkoConfig.replyBackground ? Theme.multAlpha(color1, 0.10f) : Color.TRANSPARENT;
+            backgroundColor = app.nebulagram.messenger.NebulaConfig.replyBackground ? Theme.multAlpha(color1, 0.10f) : Color.TRANSPARENT;
             nameColor = color1;
         } else {
             hasColor2 = false;
@@ -451,7 +451,7 @@ public class ReplyMessageLine {
         if ((type == TYPE_REPLY || type == TYPE_LINK || type == TYPE_CONTACT) && messageObject != null && messageObject.overrideLinkEmoji != -1) {
             emojiDocumentId = messageObject.overrideLinkEmoji;
         }
-        if (emojiDocumentId != 0 && emoji == null && parentView != null && app.nimarkogram.messenger.NimarkoConfig.replyBackgroundEmoji) {
+        if (emojiDocumentId != 0 && emoji == null && parentView != null && app.nebulagram.messenger.NebulaConfig.replyBackgroundEmoji) {
             emoji = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(parentView, false, dp(20), AnimatedEmojiDrawable.CACHE_TYPE_ALERT_PREVIEW_STATIC);
             if (parentView instanceof ChatMessageCell ? ((ChatMessageCell) parentView).isCellAttachedToWindow() : parentView.isAttachedToWindow()) {
                 emoji.attach();

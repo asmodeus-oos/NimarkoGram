@@ -12,14 +12,14 @@ public class ApiBadgeSource {
 
     public final ConcurrentHashMap<Long, BadgeEntry> cache = new BridgeCacheMap();
 
-    private final app.nimarkogram.messenger.badges.ApiBadgeSource real;
+    private final app.nebulagram.messenger.badges.ApiBadgeSource real;
 
-    public ApiBadgeSource(app.nimarkogram.messenger.badges.ApiBadgeSource real) {
+    public ApiBadgeSource(app.nebulagram.messenger.badges.ApiBadgeSource real) {
         this.real = real;
     }
 
     public ApiBadgeSource() {
-        this(app.nimarkogram.messenger.badges.BadgesController.getInstance().apiBadgeSource);
+        this(app.nebulagram.messenger.badges.BadgesController.getInstance().apiBadgeSource);
     }
 
     public void forceNotify() {
@@ -50,7 +50,7 @@ public class ApiBadgeSource {
 
         @Override
         public BadgeEntry put(Long key, BadgeEntry value) {
-            app.nimarkogram.messenger.badges.BadgeEntry prev =
+            app.nebulagram.messenger.badges.BadgeEntry prev =
                     real.cache.put(key, value != null ? value.toReal() : null);
             return BadgeEntry.fromReal(prev);
         }
@@ -67,17 +67,17 @@ public class ApiBadgeSource {
 
         @Override
         public Set<Map.Entry<Long, BadgeEntry>> entrySet() {
-            final Set<Map.Entry<Long, app.nimarkogram.messenger.badges.BadgeEntry>> backing =
+            final Set<Map.Entry<Long, app.nebulagram.messenger.badges.BadgeEntry>> backing =
                     real.cache.entrySet();
             return new AbstractSet<Map.Entry<Long, BadgeEntry>>() {
                 @Override
                 public Iterator<Map.Entry<Long, BadgeEntry>> iterator() {
-                    final Iterator<Map.Entry<Long, app.nimarkogram.messenger.badges.BadgeEntry>> it =
+                    final Iterator<Map.Entry<Long, app.nebulagram.messenger.badges.BadgeEntry>> it =
                             backing.iterator();
                     return new Iterator<Map.Entry<Long, BadgeEntry>>() {
                         @Override public boolean hasNext() { return it.hasNext(); }
                         @Override public Map.Entry<Long, BadgeEntry> next() {
-                            final Map.Entry<Long, app.nimarkogram.messenger.badges.BadgeEntry> e = it.next();
+                            final Map.Entry<Long, app.nebulagram.messenger.badges.BadgeEntry> e = it.next();
                             return new AbstractMap.SimpleEntry<>(e.getKey(), BadgeEntry.fromReal(e.getValue()));
                         }
                         @Override public void remove() { it.remove(); }
@@ -94,10 +94,10 @@ public class ApiBadgeSource {
 
         @Override
         public Collection<BadgeEntry> values() {
-            final Collection<app.nimarkogram.messenger.badges.BadgeEntry> backing = real.cache.values();
+            final Collection<app.nebulagram.messenger.badges.BadgeEntry> backing = real.cache.values();
             return new java.util.AbstractCollection<BadgeEntry>() {
                 @Override public Iterator<BadgeEntry> iterator() {
-                    final Iterator<app.nimarkogram.messenger.badges.BadgeEntry> it = backing.iterator();
+                    final Iterator<app.nebulagram.messenger.badges.BadgeEntry> it = backing.iterator();
                     return new Iterator<BadgeEntry>() {
                         @Override public boolean hasNext() { return it.hasNext(); }
                         @Override public BadgeEntry next() { return BadgeEntry.fromReal(it.next()); }

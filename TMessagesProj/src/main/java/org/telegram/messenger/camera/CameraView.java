@@ -98,7 +98,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
 @SuppressLint("NewApi")
-public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView implements TextureView.SurfaceTextureListener, CameraController.ICameraView, CameraController.ErrorCallback  {
+public class CameraView extends app.nebulagram.messenger.camera.BaseCameraView implements TextureView.SurfaceTextureListener, CameraController.ICameraView, CameraController.ErrorCallback  {
 
     public boolean WRITE_TO_FILE_IN_BACKGROUND = false;
 
@@ -122,8 +122,8 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
     private int focusAreaSize;
     private Drawable thumbDrawable;
 
-    private boolean useCamera2 = app.nimarkogram.messenger.NimarkoConfig.cameraType == app.nimarkogram.messenger.camera.CameraXUtils.CAMERA_2;
-    private boolean useCameraX = app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX();
+    private boolean useCamera2 = app.nebulagram.messenger.NebulaConfig.cameraType == app.nebulagram.messenger.camera.CameraXUtils.CAMERA_2;
+    private boolean useCameraX = app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX();
     private final CameraSessionWrapper[] cameraSession = new CameraSessionWrapper[2];
     private CameraSessionWrapper cameraSessionRecording;
 
@@ -153,16 +153,16 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
     private final int[] nmCameraXOpenGeneration = new int[2];
     private static final int NM_CAMERA2_MAX_OPEN_RETRIES = 2;
     private final Object nmCameraXCloseLock = new Object();
-    private final ArrayList<app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession>
+    private final ArrayList<app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession>
             nmClosingCameraXSessions = new ArrayList<>(2);
     private final ArrayList<Runnable> nmCameraXCloseWaiters = new ArrayList<>(1);
     private static final long NM_CAMERAX_INITIAL_WIDE_TIMEOUT_MS = 1450L;
-    private volatile app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession
+    private volatile app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession
             nmCameraXInitialWideWaitSession;
     private volatile long nmCameraXInitialWideWaitStartedMs;
 
     private Size getCameraXStoryCaptureSize() {
-        int shortSide = app.nimarkogram.messenger.NimarkoConfig.cameraResolution;
+        int shortSide = app.nebulagram.messenger.NebulaConfig.cameraResolution;
         if (shortSide <= 0) shortSide = 720;
         shortSide = Math.max(240, Math.min(shortSide, 2160));
         int longSide = Math.round(shortSide * 16f / 9f);
@@ -179,7 +179,7 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
             }
             return;
         }
-        final app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession cameraXSession =
+        final app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession cameraXSession =
                 session.cameraXSession;
         if (cameraXSession == null) {
             session.destroy(async, before, after);
@@ -210,7 +210,7 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
     }
 
     private void nmOnCameraXSessionClosed(
-            app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession session) {
+            app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession session) {
         ArrayList<Runnable> waiters = null;
         synchronized (nmCameraXCloseLock) {
             if (!nmClosingCameraXSessions.remove(session)
@@ -244,7 +244,7 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
     }
 
     private void nmSetCameraXInitialWideWait(
-            app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession session,
+            app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession session,
             boolean wait) {
         nmCameraXInitialWideWaitSession = wait ? session : null;
         nmCameraXInitialWideWaitStartedMs = wait
@@ -252,7 +252,7 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
     }
 
     private void nmClearCameraXInitialWideWait(
-            app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession session) {
+            app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession session) {
         if (session == null || nmCameraXInitialWideWaitSession == session) {
             nmCameraXInitialWideWaitSession = null;
             nmCameraXInitialWideWaitStartedMs = 0L;
@@ -261,14 +261,14 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
 
     private boolean nmShouldHoldCameraXStoryInitialWideFrame(
             CameraSessionWrapper session, boolean primaryFrameUpdated) {
-        final app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession waitingSession =
+        final app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession waitingSession =
                 nmCameraXInitialWideWaitSession;
         if (waitingSession == null || session == null
                 || session.cameraXSession != waitingSession) {
             return false;
         }
         if (!useCameraX || !isStory || dual || isFrontface
-                || !app.nimarkogram.messenger.NimarkoConfig.startFromUltraWideCam) {
+                || !app.nebulagram.messenger.NebulaConfig.startFromUltraWideCam) {
             nmClearCameraXInitialWideWait(waitingSession);
             return false;
         }
@@ -983,7 +983,7 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
                 if (SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW) {
                     photoMaxWidth = 1280;
                     photoMaxHeight = 960;
-                } else if (app.nimarkogram.messenger.NimarkoConfig.largePhotos) {
+                } else if (app.nebulagram.messenger.NebulaConfig.largePhotos) {
                     photoMaxWidth = 2560;
                     photoMaxHeight = 1920;
                 } else {
@@ -998,7 +998,7 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
                 if (SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW) {
                     photoMaxWidth = 1280;
                     photoMaxHeight = 960;
-                } else if (app.nimarkogram.messenger.NimarkoConfig.largePhotos && !isStory) {
+                } else if (app.nebulagram.messenger.NebulaConfig.largePhotos && !isStory) {
                     photoMaxWidth = 2560;
                     photoMaxHeight = 1440;
                 } else {
@@ -2665,7 +2665,7 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
                 FileLog.d("CameraView " + "create camera"+(useCamera2 ? "2" : "")+" session " + i);
             }
 
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                     "CameraView create slot=" + i + " useCX=" + useCameraX
                             + " useCamera2=" + useCamera2 + " story=" + isStory
                             + " dual=" + dual + " front=" + isFrontface
@@ -2678,18 +2678,18 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
                 final Size cameraXTarget = isStory ? getCameraXStoryCaptureSize() : previewSize[slot];
                 final int targetWidth = cameraXTarget != null ? cameraXTarget.getWidth() : 1280;
                 final int targetHeight = cameraXTarget != null ? cameraXTarget.getHeight() : 720;
-                if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+                if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                         "CameraView CX target slot=" + slot + " generation=" + generation
                                 + " target=" + targetWidth + "x" + targetHeight);
-                final app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession[] holder =
-                        new app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession[1];
-                holder[0] = new app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession(
+                final app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession[] holder =
+                        new app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession[1];
+                holder[0] = new app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession(
                         getContext(), surfaceTexture, slot == 0 ? isFrontface : !isFrontface,
                         targetWidth, targetHeight, true, dual, isStory,
-                        new app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession.Callback() {
+                        new app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession.Callback() {
                             @Override
                             public void onReady(int width, int height) {
-                                if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+                                if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                                         "CameraView CX ready slot=" + slot + " generation="
                                                 + generation + " size=" + width + "x" + height);
                                 if (generation != nmCameraXOpenGeneration[slot]
@@ -2719,7 +2719,7 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
                             @Override
                             public void onFailure(Throwable error) {
                                 nmClearCameraXInitialWideWait(holder[0]);
-                                if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+                                if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                                         "CameraView CX FAILED slot=" + slot + " generation="
                                                 + generation, error);
                                 AndroidUtilities.runOnUIThread(() -> {
@@ -2751,7 +2751,7 @@ public class CameraView extends app.nimarkogram.messenger.camera.BaseCameraView 
                 if (slot == 0) {
                     nmSetCameraXInitialWideWait(holder[0], isStory && !dual
                             && !isFrontface
-                            && app.nimarkogram.messenger.NimarkoConfig.startFromUltraWideCam);
+                            && app.nebulagram.messenger.NebulaConfig.startFromUltraWideCam);
                 }
                 cameraSession[slot] = CameraSessionWrapper.of(holder[0]);
                 cameraThread.setCurrentSession(cameraSession[slot], slot);

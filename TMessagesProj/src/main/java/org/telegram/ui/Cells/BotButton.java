@@ -17,7 +17,7 @@ import android.view.animation.OvershootInterpolator;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 
-import app.nimarkogram.messenger.utils.ui.MonetHelper;
+import app.nebulagram.messenger.utils.ui.MonetHelper;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BotInlineKeyboard;

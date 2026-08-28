@@ -89,9 +89,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private boolean useProxyForCalls;
 
     private int rowCount;
-    private int nimarkoVpnRow;
-    private int nimarkoVlessRow;
-    private int nimarkoVpnInfoRow;
+    private int nebulaVpnRow;
+    private int nebulaVlessRow;
+    private int nebulaVpnInfoRow;
     @Keep
     private int useProxyRow;
     private int useProxyShadowRow;
@@ -718,9 +718,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
     private void updateRowsInternal(boolean notify) {
         rowCount = 0;
-        nimarkoVpnRow = -1;
-        nimarkoVlessRow = -1;
-        nimarkoVpnInfoRow = -1;
+        nebulaVpnRow = -1;
+        nebulaVlessRow = -1;
+        nebulaVpnInfoRow = -1;
         useProxyRow = rowCount++;
         if (useProxySettings && SharedConfig.currentProxy != null && SharedConfig.proxyList.size() > 1 && IS_PROXY_ROTATION_AVAILABLE) {
             rotationRow = rowCount++;

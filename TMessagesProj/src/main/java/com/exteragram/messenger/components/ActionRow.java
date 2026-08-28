@@ -6,9 +6,9 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.List;
 
-public class ActionRow extends app.nimarkogram.messenger.components.ActionRow {
+public class ActionRow extends app.nebulagram.messenger.components.ActionRow {
     public ActionRow(Context context, Theme.ResourcesProvider resourcesProvider,
-                     List<app.nimarkogram.messenger.components.ActionRow.ActionItem> items) {
+                     List<app.nebulagram.messenger.components.ActionRow.ActionItem> items) {
         super(context, resourcesProvider, items);
     }
 }

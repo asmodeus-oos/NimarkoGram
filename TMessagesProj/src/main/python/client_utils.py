@@ -13,7 +13,7 @@ from org.telegram.ui import LaunchActivity
 from android_utils import R as Runnable
 from android_utils import log, run_on_ui_thread
 from plugin_runtime import capture_callback_owner, make_interface_proxy
-from app.nimarkogram.messenger.plugins.utils import (
+from app.nebulagram.messenger.plugins.utils import (
     PythonNotificationDelegate,
     PythonRequestDelegate,
 )
@@ -293,9 +293,9 @@ def send_document(peer: int, file_path: str, caption: str='',
     try:
         _sd_exists = os.path.exists(file_path) if file_path else False
         _sd_size = os.path.getsize(file_path) if file_path and _sd_exists else 0
-        log(f"nimarko-py: send_document called peer={peer} file_path={file_path} exists={_sd_exists} size={_sd_size}")
+        log(f"nebula-py: send_document called peer={peer} file_path={file_path} exists={_sd_exists} size={_sd_size}")
     except Exception as _e:
-        log(f"nimarko-py: send_document called peer={peer} file_path={file_path} (stat err={_e})")
+        log(f"nebula-py: send_document called peer={peer} file_path={file_path} (stat err={_e})")
     document = _prepare_document(file_path, account=account)
     if not document:
         log(f'Failed to prepare document for {file_path}')
@@ -403,7 +403,7 @@ class _NotificationCenterDelegateMeta(type):
         if token is None:
             raise RuntimeError(
                 'NotificationCenterDelegate requires a plugin runtime')
-        target._nimarko_runtime_token = token
+        target._nebula_runtime_token = token
         return make_interface_proxy(
             target,
             (NotificationCenter.NotificationCenterDelegate,),

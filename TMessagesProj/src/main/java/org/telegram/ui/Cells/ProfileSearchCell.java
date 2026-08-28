@@ -138,7 +138,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
     private StaticLayout statusLayout;
     private AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable botVerificationDrawable;
     private AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable statusDrawable;
-    private app.nimarkogram.messenger.api.dto.BadgeDTO currentNimarkoBadge;
+    private app.nebulagram.messenger.api.dto.BadgeDTO currentNebulaBadge;
     public StoriesUtilities.AvatarStoryParams avatarStoryParams = new StoriesUtilities.AvatarStoryParams(false);
 
     private final RectF adBounds = new RectF();
@@ -159,7 +159,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         this.resourcesProvider = resourcesProvider;
 
         avatarImage = new ImageReceiver(this);
-        avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(46));
+        avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(46));
         avatarDrawable = new AvatarDrawable();
 
         checkBox = new CheckBox2(context, 21, resourcesProvider);
@@ -216,7 +216,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
     }
 
     private boolean shouldAllowEmojiStatus() {
-        return allowEmojiStatus && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses;
+        return allowEmojiStatus && !app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses;
     }
     public void setData(Object object, TLRPC.EncryptedChat ec, CharSequence n, CharSequence s, boolean needCount, boolean saved) {
         currentName = n;
@@ -471,7 +471,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             nameLockTop = dp(21);
             drawCheck = user.verified;
             
-            drawPremium = !savedMessages && MessagesController.getInstance(currentAccount).isPremiumUser(user) && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses;
+            drawPremium = !savedMessages && MessagesController.getInstance(currentAccount).isPremiumUser(user) && !app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses;
             updateStatus(drawCheck, user, null, false);
         } else if (contact != null) {
             dialog_id = 0;
@@ -795,15 +795,15 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
 
     public void updateStatus(boolean verified, TLRPC.User user, TLRPC.Chat chat, boolean animated) {
         statusDrawable.center = LocaleController.isRTL;
-        currentNimarkoBadge = null;
+        currentNebulaBadge = null;
         final boolean showStatus = shouldAllowEmojiStatus();
         
-        app.nimarkogram.messenger.api.dto.BadgeDTO nimarkoBadge = null;
+        app.nebulagram.messenger.api.dto.BadgeDTO nebulaBadge = null;
         if (showStatus && !savedMessages) {
             try {
                 org.telegram.tgnet.TLObject badgeTarget = user != null ? user : chat;
-                nimarkoBadge = app.nimarkogram.messenger.badges.BadgesController.getInstance().i(badgeTarget);
-                if (nimarkoBadge != null && nimarkoBadge.getDocumentId() == 0L) nimarkoBadge = null;
+                nebulaBadge = app.nebulagram.messenger.badges.BadgesController.getInstance().i(badgeTarget);
+                if (nebulaBadge != null && nebulaBadge.getDocumentId() == 0L) nebulaBadge = null;
             } catch (Throwable ignored) {}
         }
         
@@ -818,9 +818,9 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         } else if (showStatus && chat != null && !savedMessages && DialogObject.getEmojiStatusDocumentId(chat.emoji_status) != 0) {
             statusDrawable.set(DialogObject.getEmojiStatusDocumentId(chat.emoji_status), animated);
             statusDrawable.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
-        } else if (nimarkoBadge != null) {
-            currentNimarkoBadge = nimarkoBadge;
-            statusDrawable.set(nimarkoBadge.getDocumentId(), animated);
+        } else if (nebulaBadge != null) {
+            currentNebulaBadge = nebulaBadge;
+            statusDrawable.set(nebulaBadge.getDocumentId(), animated);
             statusDrawable.setParticles(true, animated);
             statusDrawable.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
         } else if (showStatus && user != null && !savedMessages && MessagesController.getInstance(currentAccount).isPremiumUser(user)) {
@@ -891,7 +891,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             avatarImage.setImage(null, null, avatarDrawable, null, null, 0);
         }
 
-        avatarImage.setRoundRadius(ChatObject.isCommunity(chat) ? DrawableUtils.getCommunityCardDrawableRadius(dp(46)) : chat != null && chat.monoforum ? 0 : rectangularAvatar ? dp(10) : app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(46, chat != null && chat.forum));
+        avatarImage.setRoundRadius(ChatObject.isCommunity(chat) ? DrawableUtils.getCommunityCardDrawableRadius(dp(46)) : chat != null && chat.monoforum ? 0 : rectangularAvatar ? dp(10) : app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(46, chat != null && chat.forum));
         if (mask != 0) {
             boolean continueUpdate = false;
             if ((mask & MessagesController.UPDATE_MASK_AVATAR) != 0 && user != null || (mask & MessagesController.UPDATE_MASK_CHAT_AVATAR) != 0 && chat != null) {
@@ -1163,8 +1163,8 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         if (drawCheck) {
             builder.append(", ").append(getString(R.string.AccDescrVerified)).append("\n");
         }
-        if (currentNimarkoBadge != null) {
-            CharSequence badgeLabel = app.nimarkogram.messenger.badges.BadgeUi.accessibilityLabel(currentNimarkoBadge);
+        if (currentNebulaBadge != null) {
+            CharSequence badgeLabel = app.nebulagram.messenger.badges.BadgeUi.accessibilityLabel(currentNebulaBadge);
             builder.append(", ").append(badgeLabel);
             info.addAction(new AccessibilityNodeInfo.AccessibilityAction(
                     R.id.acc_action_badge_info, badgeLabel));
@@ -1185,8 +1185,8 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
 
     @Override
     public boolean performAccessibilityAction(int action, Bundle arguments) {
-        if (action == R.id.acc_action_badge_info && currentNimarkoBadge != null) {
-            app.nimarkogram.messenger.badges.BadgeUi.showBulletin(currentAccount, currentNimarkoBadge);
+        if (action == R.id.acc_action_badge_info && currentNebulaBadge != null) {
+            app.nebulagram.messenger.badges.BadgeUi.showBulletin(currentAccount, currentNebulaBadge);
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
             return true;
         }

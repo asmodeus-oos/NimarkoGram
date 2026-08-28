@@ -5,7 +5,7 @@ import android.content.Context;
 import org.telegram.ui.ActionBar.Theme;
 
 public class PluginCell
-        extends app.nimarkogram.messenger.plugins.ui.components.PluginCell {
+        extends app.nebulagram.messenger.plugins.ui.components.PluginCell {
 
     public PluginCell(Context context) {
         super(context);

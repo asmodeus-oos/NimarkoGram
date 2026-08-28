@@ -397,9 +397,9 @@
                 android:theme="@style/Theme.TMessages.TransparentWithAlerts"/>
 
         <activity
-            android:name="app.nimarkogram.messenger.utils.AppRestartHelper$Trampoline"
+            android:name="app.nebulagram.messenger.utils.AppRestartHelper$Trampoline"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:process=":nimarko_restart"
+            android:process=":nebula_restart"
             android:exported="false"
             android:excludeFromRecents="true"/>
 
@@ -570,8 +570,8 @@
             </intent-filter>
         </receiver>
 
-        <!-- NimarkoGram: handles the OTA download notification's "Cancel" action button. -->
-        <receiver android:name="app.nimarkogram.messenger.updater.NimarkoUpdaterReceiver" android:enabled="true" android:exported="false" />
+        <!-- NebulaGram: handles the OTA download notification's "Cancel" action button. -->
+        <receiver android:name="app.nebulagram.messenger.updater.NebulaUpdaterReceiver" android:enabled="true" android:exported="false" />
 
         <receiver android:name=".RefererReceiver" android:exported="true" android:permission="android.permission.INSTALL_PACKAGES">
             <intent-filter>
@@ -609,7 +609,7 @@
 
         <!-- NG sleep timer receiver (CG-port wave 28) -->
         <receiver
-            android:name="app.nimarkogram.messenger.utils.SleepHelper"
+            android:name="app.nebulagram.messenger.utils.SleepHelper"
             android:enabled="true"
             android:exported="false" />
 

@@ -3,7 +3,7 @@ import unittest
 
 REPO = pathlib.Path(__file__).resolve().parents[4]
 TEMPLATES = (
-    REPO / 'TMessagesProj/src/main/java/app/nimarkogram/messenger/plugins/'
+    REPO / 'TMessagesProj/src/main/java/app/nebulagram/messenger/plugins/'
     'ui/components/templates'
 )
 

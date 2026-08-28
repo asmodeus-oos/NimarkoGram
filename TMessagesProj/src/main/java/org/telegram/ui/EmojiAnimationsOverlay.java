@@ -493,8 +493,8 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
     }
 
     public boolean onTapItem(ChatMessageCell view, ChatActivity chatActivity, boolean userTapped) {
-        // NimarkoGram: respect "Disable premium-sticker animation".
-        if (app.nimarkogram.messenger.NimarkoConfig.disablePremStickAnim) {
+        // NebulaGram: respect "Disable premium-sticker animation".
+        if (app.nebulagram.messenger.NebulaConfig.disablePremStickAnim) {
             return false;
         }
         if (chatActivity.isSecretChat() || view.getMessageObject() == null || view.getMessageObject().getId() < 0) {

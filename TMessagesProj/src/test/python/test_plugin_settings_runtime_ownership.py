@@ -2,7 +2,7 @@ import pathlib
 import unittest
 
 REPO = pathlib.Path(__file__).resolve().parents[4]
-JAVA = REPO / "TMessagesProj/src/main/java/app/nimarkogram/messenger/plugins"
+JAVA = REPO / "TMessagesProj/src/main/java/app/nebulagram/messenger/plugins"
 
 def read(relative_path):
     return (JAVA / relative_path).read_text()
@@ -60,9 +60,9 @@ class PluginSettingsRuntimeOwnershipTest(unittest.TestCase):
         self.assertGreaterEqual(
             custom.count("if (v.getParent() != null)"), 2)
         self.assertIn(
-            '"nimarko: attached plugin custom "', custom)
+            '"nebula: attached plugin custom "', custom)
         self.assertIn(
-            '"nimarko: bind_view attached a "', custom)
+            '"nebula: bind_view attached a "', custom)
         self.assertNotIn(
             "((android.view.ViewGroup) pluginView.getParent())"
             ".removeView(pluginView)",

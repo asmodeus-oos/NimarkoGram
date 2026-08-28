@@ -201,8 +201,8 @@ public class FragmentFloatingButton extends FrameLayout implements FactorAnimato
     public static final int SIZE = 48;
 
     private static int rightMarginAlignedWithSearchButton(int defaultMargin) {
-        if (app.nimarkogram.messenger.NimarkoConfig.showMainTabs
-                && app.nimarkogram.messenger.NimarkoConfig.showSearchInTabs) {
+        if (app.nebulagram.messenger.NebulaConfig.showMainTabs
+                && app.nebulagram.messenger.NebulaConfig.showSearchInTabs) {
             return 14;
         }
         return defaultMargin;

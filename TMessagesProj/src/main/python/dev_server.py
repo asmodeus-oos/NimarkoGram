@@ -8,7 +8,7 @@ import tempfile
 import threading
 from typing import Dict, Any, Optional
 import traceback
-from app.nimarkogram.messenger.plugins import PluginsController, Plugin
+from app.nebulagram.messenger.plugins import PluginsController, Plugin
 from org.telegram.messenger import FileLoader
 from android_utils import log
 from base_plugin import BasePlugin, AppEvent

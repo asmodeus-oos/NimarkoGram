@@ -2059,8 +2059,8 @@ public class ViewPagerFixed extends FrameLayout {
                             indicatorX = (int) AndroidUtilities.lerp(lastDrawnIndicatorX, indicatorX, indicatorProgress2);
                             indicatorWidth = (int) AndroidUtilities.lerp(lastDrawnIndicatorW, indicatorWidth, indicatorProgress2);
                         }
-                        // NimarkoGram (CG parity): hollow stroke variant for the bubble-style selector.
-                        if (app.nimarkogram.messenger.NimarkoConfig.tabStyleStroke) {
+                        // NebulaGram (CG parity): hollow stroke variant for the bubble-style selector.
+                        if (app.nebulagram.messenger.NebulaConfig.tabStyleStroke) {
                             selectorDrawable.setStroke(AndroidUtilities.dp(1), Theme.getColor(activeTextColorKey, resourcesProvider));
                             selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey), 50));
                         }
@@ -2072,7 +2072,7 @@ public class ViewPagerFixed extends FrameLayout {
                                 (int) (indicatorX - dp(TAB_INTERNAL_PADDING) - add), y,
                                 (int) (indicatorX + indicatorWidth + dp(TAB_INTERNAL_PADDING) + add),
                                 y + dp(28));
-                            if (!app.nimarkogram.messenger.NimarkoConfig.tabStyleStroke) selectorDrawable.setAlpha(31);
+                            if (!app.nebulagram.messenger.NebulaConfig.tabStyleStroke) selectorDrawable.setAlpha(31);
                             selectorDrawable.draw(canvas);
                         } else {
                             selectorDrawable.setBounds(indicatorX, (int) (height - AndroidUtilities.dpr(4) + hideProgress * AndroidUtilities.dpr(4)), indicatorX + indicatorWidth, (int) (height + hideProgress * AndroidUtilities.dpr(4)));

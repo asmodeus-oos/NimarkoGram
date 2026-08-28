@@ -367,8 +367,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private Long emojiStatusGiftId;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[] emojiStatusDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[2];
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[] botVerificationDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[2];
-    // NimarkoGram: extera-style badge slot, one per a-index (collapsed/expanded)
-    private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[] nimarkoBadgeDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[2];
+    // NebulaGram: extera-style badge slot, one per a-index (collapsed/expanded)
+    private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[] nebulaBadgeDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable[2];
     private final Drawable[] verifiedCheckDrawable = new Drawable[2];
     private final CrossfadeDrawable[] verifiedCrossfadeDrawable = new CrossfadeDrawable[2];
     private final CrossfadeDrawable[] premiumCrossfadeDrawable = new CrossfadeDrawable[2];
@@ -514,10 +514,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     // Snapshot the banner viewport during a backward profile morph. Reusing
     // shrinking extraHeight re-centered the crop on every frame and made the
     // banner visibly pan upward over the returning chat/forum.
-    private boolean nimarkoBannerExitTransition;
-    private float nimarkoBannerExitExtraHeight;
-    private int nimarkoBannerExitY1;
-    private float nimarkoBannerExitExpand;
+    private boolean nebulaBannerExitTransition;
+    private float nebulaBannerExitExtraHeight;
+    private int nebulaBannerExitY1;
+    private float nebulaBannerExitExpand;
 
     private int searchTransitionOffset;
     private float searchTransitionProgress;
@@ -619,19 +619,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int enable_no_forwards = 46;
     private final static int disable_no_forwards = 47;
 
-    // NimarkoGram: extra profile-menu options dispatched to
-    // NimarkoProfileActivityHelper. Kept in the 1000+ range to stay clear of
+    // NebulaGram: extra profile-menu options dispatched to
+    // NebulaProfileActivityHelper. Kept in the 1000+ range to stay clear of
     // the private constants above.
-    private final static int nm_option_restart = app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper.OPTION_RESTART;
-    private final static int nm_option_boost_channel = app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper.OPTION_BOOST_CHANNEL;
-    private final static int nm_option_get_profile_background = app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper.OPTION_GET_PROFILE_BACKGROUND;
-    private final static int nm_option_apply_profile_background = app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper.OPTION_APPLY_PROFILE_BACKGROUND;
-    private final static int nm_option_user_info = app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper.OPTION_USER_INFO;
+    private final static int nm_option_restart = app.nebulagram.messenger.utils.NebulaProfileActivityHelper.OPTION_RESTART;
+    private final static int nm_option_boost_channel = app.nebulagram.messenger.utils.NebulaProfileActivityHelper.OPTION_BOOST_CHANNEL;
+    private final static int nm_option_get_profile_background = app.nebulagram.messenger.utils.NebulaProfileActivityHelper.OPTION_GET_PROFILE_BACKGROUND;
+    private final static int nm_option_apply_profile_background = app.nebulagram.messenger.utils.NebulaProfileActivityHelper.OPTION_APPLY_PROFILE_BACKGROUND;
+    private final static int nm_option_user_info = app.nebulagram.messenger.utils.NebulaProfileActivityHelper.OPTION_USER_INFO;
 
     // C1: plugin-registered "Plugins (N)" item in the profile overflow (PROFILE_ACTION_MENU).
-    private final static int nimarko_plugins_menu = 1092;
-    private java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> nimarkoProfileMenuItems;
-    private java.util.Map<String, Object> nimarkoProfileMenuCtx;
+    private final static int nebula_plugins_menu = 1092;
+    private java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> nebulaProfileMenuItems;
+    private java.util.Map<String, Object> nebulaProfileMenuCtx;
 
     private Rect rect = new Rect();
 
@@ -647,7 +647,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int numberRow;
     public int birthdayRow;
     private int setUsernameRow;
-    private int idDcRow; // NimarkoGram: row showing user/chat ID + DC
+    private int idDcRow; // NebulaGram: row showing user/chat ID + DC
     private int bioRow;
     private int phoneSuggestionSectionRow;
     private int graceSuggestionRow;
@@ -1307,7 +1307,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         private float backgroundGradientTranslationY = Float.NaN;
 
         public void setBackgroundColorId(MessagesController.PeerColor peerColor, boolean animated) {
-            if (peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor) {
+            if (peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor) {
                 hasColorById = true;
                 color1 = peerColor.getBgColor1(Theme.isCurrentThemeDark());
                 color2 = peerColor.getBgColor2(Theme.isCurrentThemeDark());
@@ -1373,7 +1373,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (!animated) {
                 emojiFullT.force(isCollectible);
             }
-            hasEmoji = (hasEmoji || emojiId != 0 && emojiId != -1) && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundEmoji;
+            hasEmoji = (hasEmoji || emojiId != 0 && emojiId != -1) && app.nebulagram.messenger.NebulaConfig.profileBackgroundEmoji;
             invalidate();
         }
 
@@ -1434,12 +1434,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             int y1 = (int) (v * (1.0f - mediaHeaderAnimationProgress));
 
-            final float bannerExtraHeight = nimarkoBannerExitTransition
-                    ? nimarkoBannerExitExtraHeight : extraHeight;
-            final int bannerY1 = nimarkoBannerExitTransition
-                    ? nimarkoBannerExitY1 : y1;
-            final float bannerExpand = nimarkoBannerExitTransition
-                    ? nimarkoBannerExitExpand : currentExpandAnimatorValue;
+            final float bannerExtraHeight = nebulaBannerExitTransition
+                    ? nebulaBannerExitExtraHeight : extraHeight;
+            final int bannerY1 = nebulaBannerExitTransition
+                    ? nebulaBannerExitY1 : y1;
+            final float bannerExpand = nebulaBannerExitTransition
+                    ? nebulaBannerExitExpand : currentExpandAnimatorValue;
             // A cached photo banner can be ready before the first frame of the
             // profile morph.  Fade that already-decoded media with the native
             // profile transition instead of letting it appear at full opacity
@@ -1449,34 +1449,34 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             // The back arrow is handled separately below: the white profile
             // arrow and the Monet-coloured source arrow keep their own colours
             // and crossfade as two independent views.
-            final boolean nimarkoBannerOpeningTransition =
-                    !nimarkoBannerExitTransition
+            final boolean nebulaBannerOpeningTransition =
+                    !nebulaBannerExitTransition
                             && openAnimationInProgress
                             && playProfileAnimation != 0;
-            final boolean nimarkoBannerMorph =
-                    nimarkoBannerExitTransition || nimarkoBannerOpeningTransition;
-            final float nimarkoBannerTransitionAlpha = nimarkoBannerMorph
+            final boolean nebulaBannerMorph =
+                    nebulaBannerExitTransition || nebulaBannerOpeningTransition;
+            final float nebulaBannerTransitionAlpha = nebulaBannerMorph
                     ? Utilities.clamp01(avatarAnimationProgress) : 1f;
 
-            // NimarkoGram: native profile banner — decide whether to suppress the
+            // NebulaGram: native profile banner — decide whether to suppress the
             // default header background and draw a banner instead.
-            boolean nimarkoSuppress = false;
-            if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled && bannerY1 > 0) {
+            boolean nebulaSuppress = false;
+            if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled && bannerY1 > 0) {
                 try {
-                    nimarkoSuppress = app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().prepareFrame(
+                    nebulaSuppress = app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().prepareFrame(
                             TopView.this, getDialogId(), bannerExtraHeight, getMeasuredWidth(), bannerY1,
                             openAnimationInProgress, transitionAnimationInProress, searchMode,
                             bannerExpand, playProfileAnimation, hasMainTabs,
-                            nimarkoBannerExitTransition,
+                            nebulaBannerExitTransition,
                             getHeaderExtraHeight()).suppressBackground;
                 } catch (Throwable ignored) {}
             }
             float bannerForegroundForBackground = 0f;
-            if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
+            if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
                 try {
                     bannerForegroundForBackground = Utilities.clamp01(
-                            app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance()
-                                    .getForegroundProgress(getDialogId()) * nimarkoBannerTransitionAlpha);
+                            app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance()
+                                    .getForegroundProgress(getDialogId()) * nebulaBannerTransitionAlpha);
                 } catch (Throwable ignored) {}
             }
             // Keep the normal profile header fully opaque below the banner while
@@ -1486,8 +1486,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             // container. Once the banner is fully opaque the backing can be
             // skipped without a visible frame change.
             final float ngBg = 1f;
-            final boolean nimarkoSuppressBackground =
-                    nimarkoSuppress && nimarkoBannerTransitionAlpha >= 0.999f
+            final boolean nebulaSuppressBackground =
+                    nebulaSuppress && nebulaBannerTransitionAlpha >= 0.999f
                             && bannerForegroundForBackground >= 0.999f;
 
             if (y1 != 0) {
@@ -1512,9 +1512,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 // initialized by that glass pipeline. Calling drawBlurRect here
                 // would therefore add a second full-width black scrim over the
                 // correctly rendered destination.
-                // NimarkoGram: over a banner, skip the header bg paint and neutralise
+                // NebulaGram: over a banner, skip the header bg paint and neutralise
                 // the action-bar background so its theme colour doesn't strip the banner.
-                if (!nimarkoSuppressBackground) {
+                if (!nebulaSuppressBackground) {
                     paint.setColor(currentColor);
                     updateBackgroundPaint();
                 } else {
@@ -1525,14 +1525,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 // Solid currentColor backing under the (fading) gradient, so the
                 // non-opaque video texture never reveals the container bg as the
                 // premium gradient fades out.
-                if (!nimarkoSuppressBackground && (progressToGradient < 1 || ngBg < 1)) {
+                if (!nebulaSuppressBackground && (progressToGradient < 1 || ngBg < 1)) {
                     canvas.drawRect(0, 0, getMeasuredWidth(), y1, paint);
                 }
-                if (!nimarkoSuppressBackground && progressToGradient > 0 && ngBg > 0) {
+                if (!nebulaSuppressBackground && progressToGradient > 0 && ngBg > 0) {
                     backgroundPaint.setAlpha((int) (0xFF * progressToGradient * ngBg));
                     canvas.drawRect(0, 0, getMeasuredWidth(), y1, backgroundPaint);
                 }
-                if (hasEmoji && !nimarkoSuppressBackground && ngBg > 0) {
+                if (hasEmoji && !nebulaSuppressBackground && ngBg > 0) {
                     final float loadedScale = emojiLoadedT.set(isEmojiLoaded());
                     boolean shoudIgnore = openAnimationInProgress && playProfileAnimation == 2;
                     if (!shoudIgnore && loadedScale > 0 && avatarContainer != null) {
@@ -1581,27 +1581,27 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 blurBounds.set(0, y1, getMeasuredWidth(), (int) v);
                 contentView.drawBlurRect(canvas, getY(), blurBounds, paint, true);
             }
-            // NimarkoGram: draw the banner LAST, over the (now neutralised) header.
+            // NebulaGram: draw the banner LAST, over the (now neutralised) header.
             // drawImageBanner no-ops for video; applyVideoFx no-ops without video.
             float nextNgBannerForegroundProgress = 0f;
-            if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled && bannerY1 > 0) {
+            if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled && bannerY1 > 0) {
                 try {
-                    app.nimarkogram.messenger.banners.NimarkoBannerRenderer r = app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance();
+                    app.nebulagram.messenger.banners.NebulaBannerRenderer r = app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance();
                     int bannerLayer = -1;
-                    if (nimarkoBannerTransitionAlpha < 0.999f) {
+                    if (nebulaBannerTransitionAlpha < 0.999f) {
                         bannerLayer = canvas.saveLayerAlpha(0, 0, getMeasuredWidth(), bannerY1,
-                                Math.round(255 * nimarkoBannerTransitionAlpha));
+                                Math.round(255 * nebulaBannerTransitionAlpha));
                     }
                     r.drawImageBanner(canvas, getMeasuredWidth(), bannerY1, bannerExtraHeight, getDialogId());
                     if (bannerLayer >= 0) {
                         canvas.restoreToCount(bannerLayer);
                     }
                     float bannerForegroundBase;
-                    if (nimarkoBannerExitTransition) {
+                    if (nebulaBannerExitTransition) {
                         // Read the unmodified video/photo foreground first:
                         // applyProfileExitAlpha multiplies TextureView layers.
                         bannerForegroundBase = r.getForegroundProgress(getDialogId());
-                        r.applyProfileExitAlpha(getDialogId(), nimarkoBannerTransitionAlpha);
+                        r.applyProfileExitAlpha(getDialogId(), nebulaBannerTransitionAlpha);
                     } else {
                         r.applyVideoFx(bannerExtraHeight, bannerY1, bannerExpand);
                         bannerForegroundBase = r.getForegroundProgress(getDialogId());
@@ -1613,12 +1613,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     // followed another, which was visible as a colour flicker.
                     // The profile back arrow is deliberately excluded below.
                     nextNgBannerForegroundProgress =
-                            bannerForegroundBase * nimarkoBannerTransitionAlpha;
+                            bannerForegroundBase * nebulaBannerTransitionAlpha;
                 } catch (Throwable ignored) {}
             }
             boolean hadNgBannerForeground = ngBannerForegroundProgress > 0f;
             final float paintedNgBannerForegroundProgress;
-            if (nimarkoBannerMorph) {
+            if (nebulaBannerMorph) {
                 // The native profile morph is already time-based and vsync
                 // driven.  A second low-pass would lag behind the painted banner
                 // and then catch up on the last frame, recreating the flash.
@@ -1629,10 +1629,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         ngBannerForegroundProgress;
             } else {
                 paintedNgBannerForegroundProgress =
-                        smoothNimarkoBannerForeground(nextNgBannerForegroundProgress);
+                        smoothNebulaBannerForeground(nextNgBannerForegroundProgress);
             }
             if (paintedNgBannerForegroundProgress > 0f || nextNgBannerForegroundProgress > 0f || hadNgBannerForeground) {
-                applyNimarkoBannerForeground(paintedNgBannerForegroundProgress);
+                applyNebulaBannerForeground(paintedNgBannerForegroundProgress);
             }
             if (actionsView != null) {
                 actionsView.setBannerProgress(paintedNgBannerForegroundProgress);
@@ -1693,7 +1693,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
          * which finishes twice as fast. A slightly softer release prevents a
          * visible colour snap when a banner is replaced or disappears.
          */
-        private float smoothNimarkoBannerForeground(float target) {
+        private float smoothNebulaBannerForeground(float target) {
             target = Utilities.clamp01(target);
             final long now = SystemClock.uptimeMillis();
             if (ngBannerForegroundFrameTime == 0L) {
@@ -2692,10 +2692,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         cancelProfileLifecycleAnimations();
         cancelProfileTransitionIfNeeded();
         super.onFragmentDestroy();
-        // NimarkoGram: ALWAYS tear down (null/no-op safe) regardless of feature toggle —
+        // NebulaGram: ALWAYS tear down (null/no-op safe) regardless of feature toggle —
         // a profile destroyed after the feature was switched OFF must still release the
         // ExoPlayer/texture/views/blur worker instead of leaking them.
-        try { app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onProfileDestroyed(topView, getDialogId()); } catch (Throwable ignored) {}
+        try { app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onProfileDestroyed(topView, getDialogId()); } catch (Throwable ignored) {}
         if (sharedMediaLayout != null) {
             sharedMediaLayout.onDestroy();
         }
@@ -2964,10 +2964,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return;
                     }
                     finishFragment();
-                } else if (id == nimarko_plugins_menu) {
+                } else if (id == nebula_plugins_menu) {
                     // C1: open the bottom-sheet listing plugin-registered profile_action_menu items.
-                    if (nimarkoProfileMenuItems != null) {
-                        showNimarkoProfilePluginsBottomSheet(nimarkoProfileMenuItems, nimarkoProfileMenuCtx);
+                    if (nebulaProfileMenuItems != null) {
+                        showNebulaProfilePluginsBottomSheet(nebulaProfileMenuItems, nebulaProfileMenuCtx);
                     }
                 } else if (id == block_contact) {
                     onBlockContactClicked(false);
@@ -3241,39 +3241,39 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (id == set_username) {
                     presentFragment(new ChangeUsernameActivity());
                 } else if (id == nm_option_restart) {
-                    // NimarkoGram: restart the app via the helper.
-                    app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+                    // NebulaGram: restart the app via the helper.
+                    app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                             .getInstance(currentAccount)
                             .restartApp(getParentActivity());
                 } else if (id == nm_option_boost_channel) {
-                    // NimarkoGram: launch the boost-channel web sheet.
-                    app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+                    // NebulaGram: launch the boost-channel web sheet.
+                    app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                             .getInstance(currentAccount)
                             .boostChannel(getParentActivity(), getDialogId());
                 } else if (id == nm_option_get_profile_background) {
-                    // NimarkoGram: open the emoji-pack alert for the profile bg.
-                    app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+                    // NebulaGram: open the emoji-pack alert for the profile bg.
+                    app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                             .getInstance(currentAccount)
                             .getProfileBackground(ProfileActivity.this, getDialogId());
                 } else if (id == nm_option_apply_profile_background) {
-                    // NimarkoGram: copy the other user's profile bg to me.
-                    app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+                    // NebulaGram: copy the other user's profile bg to me.
+                    app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                             .getInstance(currentAccount)
                             .applyProfileBackground(ProfileActivity.this, getDialogId());
                 } else if (id == nm_option_user_info) {
-                    // NimarkoGram: minimal DC + registration-month dialog.
+                    // NebulaGram: minimal DC + registration-month dialog.
                     // CG parity: when the dialog is a chat (not a user), fall back
                     // to showRestrictionReason so the info action still surfaces
                     // useful data for channels/groups.
                     TLRPC.User userForInfo = getMessagesController().getUser(getDialogId());
                     if (userForInfo != null) {
-                        app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+                        app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                                 .getInstance(currentAccount)
                                 .showUserInfo(ProfileActivity.this, userId);
                     } else {
                         TLRPC.Chat chatForInfo = getMessagesController().getChat(-getDialogId());
                         if (chatForInfo != null) {
-                            app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+                            app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                                     .getInstance(currentAccount)
                                     .showRestrictionReason(ProfileActivity.this, chatForInfo);
                         }
@@ -3923,9 +3923,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         botVerificationDrawable[i].attach();
                     }
                 }
-                for (int i = 0; i < nimarkoBadgeDrawable.length; ++i) {
-                    if (nimarkoBadgeDrawable[i] != null) {
-                        nimarkoBadgeDrawable[i].attach();
+                for (int i = 0; i < nebulaBadgeDrawable.length; ++i) {
+                    if (nebulaBadgeDrawable[i] != null) {
+                        nebulaBadgeDrawable[i].attach();
                     }
                 }
             }
@@ -3944,9 +3944,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         botVerificationDrawable[i].detach();
                     }
                 }
-                for (int i = 0; i < nimarkoBadgeDrawable.length; ++i) {
-                    if (nimarkoBadgeDrawable[i] != null) {
-                        nimarkoBadgeDrawable[i].detach();
+                for (int i = 0; i < nebulaBadgeDrawable.length; ++i) {
+                    if (nebulaBadgeDrawable[i] != null) {
+                        nebulaBadgeDrawable[i].detach();
                     }
                 }
             }
@@ -4792,7 +4792,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             listView.stopScroll();
             if (position == idDcRow && (userId != 0 || chatId != 0)) {
-                // NimarkoGram: copy ID. Use the -100 channel/supergroup prefix
+                // NebulaGram: copy ID. Use the -100 channel/supergroup prefix
                 // only when the chat is actually a channel/supergroup; legacy
                 // basic groups use a plain -id.
                 long id;
@@ -4812,7 +4812,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     AndroidUtilities.addToClipboard(id + "");
                     BulletinFactory.of(this).createCopyBulletin(LocaleController.getString(R.string.TextCopied)).show();
                     // NG: disableVibration gate on long-press copy haptic (CG parity, ProfileActivity:4633).
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     }
                 } catch (Exception e) {
@@ -5870,7 +5870,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         };
         fallbackImage = new ImageReceiver(avatarContainer2);
-        fallbackImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(22));
+        fallbackImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(22));
         AndroidUtilities.updateViewVisibilityAnimated(avatarContainer2, true, 1f, false);
         frameLayout.addView(avatarContainer2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.START, 0, 0, 0, 0));
         avatarContainer.setPivotX(0);
@@ -6613,12 +6613,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             avatarGooey.setAlpha(1f - v);
             avatarGooey.setBlurIntensity(0f);
             avatarGooey.setGooeyEnabled(false);
-            // NimarkoGram: extera "Gooey avatar animation" disabled across
+            // NebulaGram: extera "Gooey avatar animation" disabled across
             // the board (the "drop" effect the user wanted gone).
         } else {
             avatarGooey.setPullProgress(pullUpProgress);
             avatarGooey.setBlurIntensity(Math.min((MathUtils.clamp(pullUpProgress, 0.2f, 0.7f) - 0.2f) / 0.5f, 0.75f));
-            // NimarkoGram: force-off — extera-style hide gooey/sticky animation.
+            // NebulaGram: force-off — extera-style hide gooey/sticky animation.
             avatarGooey.setGooeyEnabled(false);
         }
         if (storyView != null && playProfileAnimation != 2) {
@@ -7042,8 +7042,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         // time-fade to the live alpha so the hide (if any) resumes seamlessly, and
         // may resume writing avatarsViewPager alpha now that the pager is GONE.
         try {
-            app.nimarkogram.messenger.banners.NimarkoBannerRenderer banner =
-                app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance();
+            app.nebulagram.messenger.banners.NebulaBannerRenderer banner =
+                app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance();
             banner.setPagerOwnedByProfile(false);
             banner.setCollapseSettling(false);
         } catch (Throwable ignore) {}
@@ -7056,12 +7056,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
      * a light-theme header remains dark while a banner is loading and changes
      * smoothly to white only as the darkened media becomes visible.
      */
-    private void applyNimarkoBannerForeground(float bannerProgress) {
+    private void applyNebulaBannerForeground(float bannerProgress) {
         bannerProgress = Utilities.clamp01(bannerProgress);
         float lightProgress = 1f - (1f - Utilities.clamp01(currentExpandAnimatorValue)) * (1f - bannerProgress);
 
         if (nameTextView[1] != null) {
-            int nameColor = peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor
+            int nameColor = peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor
                     ? Color.WHITE : getThemedColor(Theme.key_profile_title);
             nameColor = ColorUtils.blendARGB(nameColor, getThemedColor(Theme.key_player_actionBarTitle), mediaHeaderAnimationProgress);
             nameTextView[1].setTextColor(ColorUtils.blendARGB(nameColor, Color.WHITE, lightProgress));
@@ -7092,7 +7092,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             mediaCounterTextView.getNextTextView().setShadowLayer(dpf2(1.25f), 0, dpf2(.5f), shadow);
         }
 
-        int actionColor = peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor
+        int actionColor = peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor
                 ? Color.WHITE : getThemedColor(Theme.key_actionBarDefaultIcon);
         actionColor = ColorUtils.blendARGB(actionColor, getThemedColor(Theme.key_actionBarActionModeDefaultIcon), mediaHeaderAnimationProgress);
         actionColor = ColorUtils.blendARGB(actionColor, Color.WHITE, lightProgress);
@@ -7127,11 +7127,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             premiumCrossfadeDrawable[1].setProgress(
                     Utilities.clamp01(currentExpandAnimatorValue));
         }
-        if (nimarkoBadgeDrawable[1] != null) {
+        if (nebulaBadgeDrawable[1] != null) {
             int badgeColor = ColorUtils.blendARGB(
                     getThemedColor(Theme.key_profile_verifiedBackground),
                     getThemedColor(Theme.key_player_actionBarTitle), mediaHeaderAnimationProgress);
-            nimarkoBadgeDrawable[1].setColor(ColorUtils.blendARGB(badgeColor, Color.WHITE, lightProgress));
+            nebulaBadgeDrawable[1].setColor(ColorUtils.blendARGB(badgeColor, Color.WHITE, lightProgress));
         }
         updateEmojiStatusDrawableColor(lightProgress);
 
@@ -7278,8 +7278,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             showStatusButton.setBackgroundColor(ColorUtils.blendARGB(Theme.multAlpha(Theme.adaptHSV(actionBarBackgroundColor, +0.18f, -0.1f), 0.5f), 0x23ffffff, currentExpandAnimatorValue));
         }
 
-        nameTextView[1].setTextColor(peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor ? Color.WHITE : ColorUtils.blendARGB(getThemedColor(Theme.key_profile_title), Color.WHITE, currentExpandAnimatorValue));
-        actionBar.setItemsColor(peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor ? Color.WHITE : ColorUtils.blendARGB(getThemedColor(Theme.key_actionBarDefaultIcon), Color.WHITE, value), false);
+        nameTextView[1].setTextColor(peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor ? Color.WHITE : ColorUtils.blendARGB(getThemedColor(Theme.key_profile_title), Color.WHITE, currentExpandAnimatorValue));
+        actionBar.setItemsColor(peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor ? Color.WHITE : ColorUtils.blendARGB(getThemedColor(Theme.key_actionBarDefaultIcon), Color.WHITE, value), false);
         actionBar.setMenuOffsetSuppressed(true);
 
         avatarImage.setForegroundAlpha(value);
@@ -7334,7 +7334,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return 0;
         }
         boolean forum = chatId != 0 && ChatObject.isForum(getMessagesController().getChat(chatId));
-        return app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(100, forum);
+        return app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(100, forum);
     }
 
     private void updateTtlIcon() {
@@ -7924,7 +7924,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 args.putInt("nearby_distance", distance);
             }
             ChatActivity chatActivity = new ChatActivity(args);
-            // NimarkoGram: CG parity — gate opening a profile→chat behind a biometric prompt when
+            // NebulaGram: CG parity — gate opening a profile→chat behind a biometric prompt when
             // the target user is in LockedChats and askBiometricsToOpenChat is enabled. Mirrors CG
             // ProfileActivity line ~6989 (isChatLocked(user.id) && shouldRequireBiometricsToOpenChats()).
             final boolean _ngHasMainTabs = hasMainTabs;
@@ -7995,17 +7995,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private void openLockedChatAfterAuthentication(long dialogId, Runnable action) {
         final long userId = dialogId > 0 ? dialogId : 0L;
         final long chatId = dialogId < 0 ? -dialogId : 0L;
-        boolean required = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+        boolean required = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                 .shouldRequireBiometrics(userId, chatId, 0L, currentAccount);
         if (!required) {
             action.run();
-        } else if (app.nimarkogram.messenger.security.NimarkoBiometricPrompt
+        } else if (app.nebulagram.messenger.security.NebulaBiometricPrompt
                 .isRecentlyVerified(currentAccount, userId, chatId, 0)) {
             action.run();
         } else if (getParentActivity() != null) {
-            app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(
+            app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(
                     getParentActivity(), currentAccount, () -> {
-                        app.nimarkogram.messenger.security.NimarkoBiometricPrompt
+                        app.nebulagram.messenger.security.NebulaBiometricPrompt
                                 .markVerified(currentAccount, userId, chatId, 0);
                         action.run();
                     }, null);
@@ -8337,7 +8337,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     android.content.ClipData clip = android.content.ClipData.newPlainText("label", text);
                     clipboard.setPrimaryClip(clip);
                     // NG: disableVibration gate on long-press copy haptic (CG parity, ProfileActivity:4643).
-                    if (view != null && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    if (view != null && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     }
                 } catch (Exception e) {
@@ -8434,9 +8434,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     });
                 }
             }
-            // NimarkoGram: append a tappable phone-number footer to the menu.
+            // NebulaGram: append a tappable phone-number footer to the menu.
             if (position == phoneRow && !TextUtils.isEmpty(user.phone)) {
-                app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+                app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                         .getInstance(currentAccount)
                         .injectPhoneNumber(ProfileActivity.this, o, user.phone);
             }
@@ -8601,7 +8601,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private void leaveChatPressed(boolean delete) {
         boolean isForum = ChatObject.isForum(currentChat);
-        // NimarkoGram: CG parity — wrap the leave/delete-chat dialog in a Runnable so it can be
+        // NebulaGram: CG parity — wrap the leave/delete-chat dialog in a Runnable so it can be
         // gated behind a biometric prompt when askPasscodeBeforeDelete is enabled. Mirrors CG
         // ProfileActivity line ~7642 (getChatsPasswordHelper().askPasscodeBeforeDelete()).
         Runnable action = () -> AlertsCreator.createClearOrDeleteDialogAlert(ProfileActivity.this, false, currentChat, null, false, isForum || delete || (currentChat != null && currentChat.creator), delete, !isForum, (param) -> {
@@ -8611,10 +8611,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             finishFragment();
             getNotificationCenter().postNotificationName(NotificationCenter.needDeleteDialog, -currentChat.id, null, currentChat, param);
         });
-        if (app.nimarkogram.messenger.NimarkoConfig.askPasscodeBeforeDelete) {
+        if (app.nebulagram.messenger.NebulaConfig.askPasscodeBeforeDelete) {
             // Fail closed if authentication cannot even be presented.
             if (getParentActivity() != null) {
-                app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(
+                app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(
                         getParentActivity(),
                         currentAccount,
                         action,
@@ -9037,15 +9037,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (extraHeight != newOffset && !transitionAnimationInProress) {
             extraHeight = newOffset;
             topView.invalidate();
-            // NimarkoGram: drive banner video audio off the scroll position directly,
+            // NebulaGram: drive banner video audio off the scroll position directly,
             // not only via TopView.onDraw. onDraw's applyVideoFx is gated behind y1>0
             // and its delta/rate throttles, so on a slow scroll the final mute frame
             // can be skipped and audio freeze at a residual volume. This runs on every
             // scroll delta AND on the post-ACTION_UP settle smoothScroll, so the volume
             // (and the hard mute on collapse) always tracks the live header height.
-            if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
+            if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
                 try {
-                    app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().applyAudioVolume(extraHeight);
+                    app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().applyAudioVolume(extraHeight);
                 } catch (Throwable ignored) {}
             }
             if (playProfileAnimation != 0) {
@@ -9569,8 +9569,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 // it HERE (not on the expand edge) is what keeps the banner from
                                 // painting the full-screen pager opaque mid-expand.
                                 try {
-                                    app.nimarkogram.messenger.banners.NimarkoBannerRenderer banner =
-                                        app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance();
+                                    app.nebulagram.messenger.banners.NebulaBannerRenderer banner =
+                                        app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance();
                                     banner.setPagerOwnedByProfile(false);
                                     banner.setCollapseSettling(false);
                                 } catch (Throwable ignore) {}
@@ -9607,7 +9607,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         // setPagerOwnedByProfile gates ONLY the pager write, so the small-avatar
                         // overlay fade the banner runs on avatarImage/container is untouched.
                         try {
-                            app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().setPagerOwnedByProfile(true);
+                            app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().setPagerOwnedByProfile(true);
                         } catch (Throwable ignore) {}
 
                         try {
@@ -9725,8 +9725,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         // snapping the avatar alpha to 0 (gate at setAvAlpha) for the settle's duration;
                         // the avatar then fades out smoothly instead of vanishing when released while small.
                         try {
-                            app.nimarkogram.messenger.banners.NimarkoBannerRenderer banner =
-                                app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance();
+                            app.nebulagram.messenger.banners.NebulaBannerRenderer banner =
+                                app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance();
                             banner.setCollapseSettling(true);
                             // Collapse owns the pager for the settle: suppress the banner's pager
                             // alpha write (line 919) until the finalizer hides it.
@@ -10212,7 +10212,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             // C1: a plugin registered/unregistered (or the engine finished loading) —
             // rebuild the profile overflow so the "Plugins (N)" item appears/relabels/
             // disappears without reopening the profile. createActionBarMenu re-adds the
-            // standard items and calls nimarkoRebuildProfilePluginsMenu at the end.
+            // standard items and calls nebulaRebuildProfilePluginsMenu at the end.
             createActionBarMenu(true);
             return;
         }
@@ -10753,9 +10753,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (sharedMediaLayout != null) {
             sharedMediaLayout.onResume();
         }
-        if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
+        if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
             try {
-                app.nimarkogram.messenger.banners.NimarkoBannerRenderer rr = app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance();
+                app.nebulagram.messenger.banners.NebulaBannerRenderer rr = app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance();
                 rr.setAvatarViews(avatarImage, avatarContainer, avatarsViewPager, storyView, giftsView, avatarGooey);
                 rr.onProfileResumed(topView, getDialogId());
             } catch (Throwable ignored) {}
@@ -10806,8 +10806,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     // cleared below.
                     isPulledDown = false;
                     try {
-                        app.nimarkogram.messenger.banners.NimarkoBannerRenderer banner =
-                            app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance();
+                        app.nebulagram.messenger.banners.NebulaBannerRenderer banner =
+                            app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance();
                         banner.setPagerOwnedByProfile(false);
                         banner.setCollapseSettling(false);
                     } catch (Throwable ignore) {}
@@ -10841,10 +10841,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             musicHeaderAnimator = null;
         }
         super.onPause();
-        // NimarkoGram: ALWAYS tear down (null/no-op safe) so toggling the feature OFF
+        // NebulaGram: ALWAYS tear down (null/no-op safe) so toggling the feature OFF
         // while a video banner is live still pauses ExoPlayer + the blur worker. Only
-        // CREATION/draw is gated on NimarkoBannerConfig.enabled, never teardown.
-        try { app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onProfilePaused(topView); } catch (Throwable ignored) {}
+        // CREATION/draw is gated on NebulaBannerConfig.enabled, never teardown.
+        try { app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onProfilePaused(topView); } catch (Throwable ignored) {}
         if (undoView != null) {
             undoView.hide(true, 0);
         }
@@ -10915,8 +10915,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     @Override
     public void onBecomeFullyHidden() {
-        // NimarkoGram: ALWAYS tear down (null/no-op safe) regardless of feature toggle.
-        try { app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onProfilePaused(topView); } catch (Throwable ignored) {}
+        // NebulaGram: ALWAYS tear down (null/no-op safe) regardless of feature toggle.
+        try { app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onProfilePaused(topView); } catch (Throwable ignored) {}
         if (undoView != null) {
             undoView.hide(true, 0);
         }
@@ -11596,17 +11596,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         final int transitionGeneration = ++profileTransitionGeneration;
         captureProfileTransitionOnlineTextState();
 
-        if (!isOpen && app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
-            nimarkoBannerExitTransition = true;
-            nimarkoBannerExitExtraHeight = extraHeight;
-            nimarkoBannerExitExpand = currentExpandAnimatorValue;
-            nimarkoBannerExitY1 = Math.max(1, Math.round(
+        if (!isOpen && app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
+            nebulaBannerExitTransition = true;
+            nebulaBannerExitExtraHeight = extraHeight;
+            nebulaBannerExitExpand = currentExpandAnimatorValue;
+            nebulaBannerExitY1 = Math.max(1, Math.round(
                     (ActionBar.getCurrentActionBarHeight()
                             + (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)
                             + extraHeight + searchTransitionOffset)
                             * (1f - mediaHeaderAnimationProgress)));
             try {
-                app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance()
+                app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance()
                         .beginProfileExit(getDialogId());
             } catch (Throwable ignored) {}
         }
@@ -12047,12 +12047,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 // presentation never inherits a partially transparent button.
                 actionBar.getBackButton().setAlpha(1f);
             }
-            if (nimarkoBannerExitTransition) {
+            if (nebulaBannerExitTransition) {
                 try {
-                    app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance()
+                    app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance()
                             .endProfileExit(getDialogId());
                 } catch (Throwable ignored) {}
-                nimarkoBannerExitTransition = false;
+                nebulaBannerExitTransition = false;
             }
             if (finalPrevCallItem != null) {
                 finalPrevCallItem.setAlpha(1f);
@@ -12575,7 +12575,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 numberSectionRow = rowCount++;
                 numberRow = rowCount++;
                 setUsernameRow = rowCount++;
-                if (app.nimarkogram.messenger.NimarkoConfig.showIDDC) {
+                if (app.nebulagram.messenger.NebulaConfig.showIDDC) {
                     idDcRow = rowCount++;
                 }
                 bioRow = rowCount++;
@@ -12653,7 +12653,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     unofficialSecurityRiskDividerRow = rowCount++;
                 }
 
-                if (app.nimarkogram.messenger.NimarkoConfig.profileChannelPreview && userInfo != null && (userInfo.flags2 & 64) != 0 && (profileChannelMessageFetcher == null || !profileChannelMessageFetcher.loaded || !profileChannelMessageFetcher.messageObjects.isEmpty())) {
+                if (app.nebulagram.messenger.NebulaConfig.profileChannelPreview && userInfo != null && (userInfo.flags2 & 64) != 0 && (profileChannelMessageFetcher == null || !profileChannelMessageFetcher.loaded || !profileChannelMessageFetcher.messageObjects.isEmpty())) {
                     final TLRPC.Chat channel = getMessagesController().getChat(userInfo.personal_channel_id);
                     if (channel != null && (ChatObject.isPublic(channel) || !ChatObject.isNotInChat(channel))) {
                         channelRow = rowCount++;
@@ -12670,17 +12670,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (user != null && username != null) {
                     usernameRow = rowCount++;
                 }
-                if (app.nimarkogram.messenger.NimarkoConfig.showIDDC) {
+                if (app.nebulagram.messenger.NebulaConfig.showIDDC) {
                     idDcRow = rowCount++;
                 }
                 if (userInfo != null) {
-                    if (userInfo.birthday != null && app.nimarkogram.messenger.NimarkoConfig.profileBirthDatePreview) {
+                    if (userInfo.birthday != null && app.nebulagram.messenger.NebulaConfig.profileBirthDatePreview) {
                         birthdayRow = rowCount++;
                     }
-                    if (userInfo.business_work_hours != null && app.nimarkogram.messenger.NimarkoConfig.profileBusinessPreview) {
+                    if (userInfo.business_work_hours != null && app.nebulagram.messenger.NebulaConfig.profileBusinessPreview) {
                         bizHoursRow = rowCount++;
                     }
-                    if (userInfo.business_location != null && app.nimarkogram.messenger.NimarkoConfig.profileBusinessPreview) {
+                    if (userInfo.business_location != null && app.nebulagram.messenger.NebulaConfig.profileBusinessPreview) {
                         bizLocationRow = rowCount++;
                     }
                     if (userInfo.note != null) {
@@ -12840,7 +12840,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             }
 
-            if (app.nimarkogram.messenger.NimarkoConfig.showIDDC) {
+            if (app.nebulagram.messenger.NebulaConfig.showIDDC) {
                 idDcRow = rowCount++;
             }
 
@@ -12864,15 +12864,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (actionsView == null) {
                         membersHeaderRow = rowCount++;
                     }
-                    // NimarkoGram: hide "Subscribers" row when adminsMembers is off.
-                    if (app.nimarkogram.messenger.NimarkoConfig.adminsMembers) {
+                    // NebulaGram: hide "Subscribers" row when adminsMembers is off.
+                    if (app.nebulagram.messenger.NebulaConfig.adminsMembers) {
                         subscribersRow = rowCount++;
                     }
                     if (chatInfo != null && chatInfo.requests_pending > 0) {
                         subscribersRequestsRow = rowCount++;
                     }
-                    // NimarkoGram: hide "Administrators" row when adminsAdministrators is off.
-                    if (app.nimarkogram.messenger.NimarkoConfig.adminsAdministrators) {
+                    // NebulaGram: hide "Administrators" row when adminsAdministrators is off.
+                    if (app.nebulagram.messenger.NebulaConfig.adminsAdministrators) {
                         administratorsRow = rowCount++;
                     }
                     if (chatInfo != null && (chatInfo.banned_count != 0 || chatInfo.kicked_count != 0)) {
@@ -13103,106 +13103,106 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         return botVerificationDrawable[a];
     }
 
-    // NimarkoGram: extera-style badge slot on the profile name. Slot 2 if free,
+    // NebulaGram: extera-style badge slot on the profile name. Slot 2 if free,
     // otherwise slot 1 (replacing premium star). Scam/verified always win.
-    private void applyNimarkoBadgeOnProfile(int a, TLRPC.User user) {
+    private void applyNebulaBadgeOnProfile(int a, TLRPC.User user) {
         try {
-            clearNimarkoBadgeSlot(a);
-            app.nimarkogram.messenger.api.dto.BadgeDTO badge =
-                    app.nimarkogram.messenger.badges.BadgesController.getInstance().i(user);
+            clearNebulaBadgeSlot(a);
+            app.nebulagram.messenger.api.dto.BadgeDTO badge =
+                    app.nebulagram.messenger.badges.BadgesController.getInstance().i(user);
             if (badge == null) {
-                if (nimarkoBadgeDrawable[a] != null) {
-                    nimarkoBadgeDrawable[a].set((Drawable) null, true);
+                if (nebulaBadgeDrawable[a] != null) {
+                    nebulaBadgeDrawable[a].set((Drawable) null, true);
                 }
-                lastNimarkoBadgeDocId[a] = 0L;
+                lastNebulaBadgeDocId[a] = 0L;
                 return;
             }
             // Track first-creation: when the drawable is brand new the swap
             // animation would play "from null → emoji" which the user reads
             // as the badge "appearing/recreating" every time the profile
             // opens. Bind without animation in that case.
-            boolean justCreated = (nimarkoBadgeDrawable[a] == null);
+            boolean justCreated = (nebulaBadgeDrawable[a] == null);
             if (justCreated) {
-                nimarkoBadgeDrawable[a] = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(
+                nebulaBadgeDrawable[a] = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(
                         nameTextView[a], AndroidUtilities.dp(24),
                         a == 0 ? AnimatedEmojiDrawable.CACHE_TYPE_EMOJI_STATUS
                                : AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD);
                 if (fragmentViewAttached) {
-                    nimarkoBadgeDrawable[a].attach();
+                    nebulaBadgeDrawable[a].attach();
                 }
             }
-            long prev = lastNimarkoBadgeDocId[a];
+            long prev = lastNebulaBadgeDocId[a];
             // Animate only on genuine doc-id swaps; never on the first set
             // (avoids the "recreate" animation when opening profile).
             boolean animate = !justCreated && prev != 0L && prev != badge.getDocumentId();
-            nimarkoBadgeDrawable[a].set(badge.getDocumentId(), animate);
-            nimarkoBadgeDrawable[a].setParticles(true, animate);
-            nimarkoBadgeDrawable[a].setColor(getThemedColor(Theme.key_profile_verifiedBackground));
-            lastNimarkoBadgeDocId[a] = badge.getDocumentId();
-            final app.nimarkogram.messenger.api.dto.BadgeDTO finalBadge = badge;
+            nebulaBadgeDrawable[a].set(badge.getDocumentId(), animate);
+            nebulaBadgeDrawable[a].setParticles(true, animate);
+            nebulaBadgeDrawable[a].setColor(getThemedColor(Theme.key_profile_verifiedBackground));
+            lastNebulaBadgeDocId[a] = badge.getDocumentId();
+            final app.nebulagram.messenger.api.dto.BadgeDTO finalBadge = badge;
             CharSequence badgeDescription = TextUtils.isEmpty(badge.getText())
                     ? LocaleController.getString(R.string.NM_ProfileBadge)
                     : LocaleController.getString(R.string.NM_ProfileBadge) + ": " + badge.getText();
-            View.OnClickListener bulletinClick = v -> showNimarkoBadgeBulletin(finalBadge);
-            placeNimarkoBadge(a, bulletinClick, badgeDescription);
+            View.OnClickListener bulletinClick = v -> showNebulaBadgeBulletin(finalBadge);
+            placeNebulaBadge(a, bulletinClick, badgeDescription);
         } catch (Throwable ignored) {}
     }
 
-    private void applyNimarkoBadgeOnChat(int a, TLRPC.Chat chat) {
+    private void applyNebulaBadgeOnChat(int a, TLRPC.Chat chat) {
         try {
-            clearNimarkoBadgeSlot(a);
-            app.nimarkogram.messenger.api.dto.BadgeDTO badge =
-                    app.nimarkogram.messenger.badges.BadgesController.getInstance().i(chat);
+            clearNebulaBadgeSlot(a);
+            app.nebulagram.messenger.api.dto.BadgeDTO badge =
+                    app.nebulagram.messenger.badges.BadgesController.getInstance().i(chat);
             if (badge == null) {
-                if (nimarkoBadgeDrawable[a] != null) {
-                    nimarkoBadgeDrawable[a].set((Drawable) null, true);
+                if (nebulaBadgeDrawable[a] != null) {
+                    nebulaBadgeDrawable[a].set((Drawable) null, true);
                 }
-                lastNimarkoBadgeDocId[a] = 0L;
+                lastNebulaBadgeDocId[a] = 0L;
                 return;
             }
-            boolean justCreated = (nimarkoBadgeDrawable[a] == null);
+            boolean justCreated = (nebulaBadgeDrawable[a] == null);
             if (justCreated) {
-                nimarkoBadgeDrawable[a] = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(
+                nebulaBadgeDrawable[a] = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(
                         nameTextView[a], AndroidUtilities.dp(24),
                         a == 0 ? AnimatedEmojiDrawable.CACHE_TYPE_EMOJI_STATUS
                                : AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD);
                 if (fragmentViewAttached) {
-                    nimarkoBadgeDrawable[a].attach();
+                    nebulaBadgeDrawable[a].attach();
                 }
             }
-            long prev = lastNimarkoBadgeDocId[a];
+            long prev = lastNebulaBadgeDocId[a];
             boolean animate = !justCreated && prev != 0L && prev != badge.getDocumentId();
-            nimarkoBadgeDrawable[a].set(badge.getDocumentId(), animate);
-            nimarkoBadgeDrawable[a].setParticles(true, animate);
-            nimarkoBadgeDrawable[a].setColor(getThemedColor(Theme.key_profile_verifiedBackground));
-            lastNimarkoBadgeDocId[a] = badge.getDocumentId();
-            final app.nimarkogram.messenger.api.dto.BadgeDTO finalBadge = badge;
+            nebulaBadgeDrawable[a].set(badge.getDocumentId(), animate);
+            nebulaBadgeDrawable[a].setParticles(true, animate);
+            nebulaBadgeDrawable[a].setColor(getThemedColor(Theme.key_profile_verifiedBackground));
+            lastNebulaBadgeDocId[a] = badge.getDocumentId();
+            final app.nebulagram.messenger.api.dto.BadgeDTO finalBadge = badge;
             CharSequence badgeDescription = TextUtils.isEmpty(badge.getText())
                     ? LocaleController.getString(R.string.NM_ProfileBadge)
                     : LocaleController.getString(R.string.NM_ProfileBadge) + ": " + badge.getText();
-            placeNimarkoBadge(a, v -> showNimarkoBadgeBulletin(finalBadge), badgeDescription);
+            placeNebulaBadge(a, v -> showNebulaBadgeBulletin(finalBadge), badgeDescription);
         } catch (Throwable ignored) {}
     }
 
     /** Keep Telegram's emoji-status drawable owned by Telegram; badges always use their own drawable. */
-    private void placeNimarkoBadge(int a, View.OnClickListener click, CharSequence description) {
+    private void placeNebulaBadge(int a, View.OnClickListener click, CharSequence description) {
         if (nameTextView[a].getRightDrawable2() == null) {
-            nameTextView[a].setRightDrawable2(nimarkoBadgeDrawable[a]);
+            nameTextView[a].setRightDrawable2(nebulaBadgeDrawable[a]);
             nameTextView[a].setRightDrawable2OnClick(click);
             nameTextView[a].setRightDrawable2ContentDescription(description);
-            lastNimarkoBadgeSlot[a] = 2;
+            lastNebulaBadgeSlot[a] = 2;
         } else {
-            nameTextView[a].setRightDrawable(nimarkoBadgeDrawable[a]);
+            nameTextView[a].setRightDrawable(nebulaBadgeDrawable[a]);
             nameTextView[a].setRightDrawableOnClick(click);
             nameTextView[a].setRightDrawableContentDescription(description);
-            lastNimarkoBadgeSlot[a] = 1;
+            lastNebulaBadgeSlot[a] = 1;
         }
     }
 
-    private void clearNimarkoBadgeSlot(int a) {
+    private void clearNebulaBadgeSlot(int a) {
         if (nameTextView[a] == null) return;
-        if (lastNimarkoBadgeSlot[a] == 1) {
-            if (nameTextView[a].getRightDrawable() == nimarkoBadgeDrawable[a]) {
+        if (lastNebulaBadgeSlot[a] == 1) {
+            if (nameTextView[a].getRightDrawable() == nebulaBadgeDrawable[a]) {
                 nameTextView[a].setRightDrawable(null);
             }
             // Clear badge semantics even if Telegram replaced the drawable in this slot first. Otherwise the
@@ -13211,22 +13211,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             nameTextView[a].setRightDrawableOnClick(null);
             nameTextView[a].setRightDrawableContentDescription(null);
         }
-        if (lastNimarkoBadgeSlot[a] == 2) {
-            if (nameTextView[a].getRightDrawable2() == nimarkoBadgeDrawable[a]) {
+        if (lastNebulaBadgeSlot[a] == 2) {
+            if (nameTextView[a].getRightDrawable2() == nebulaBadgeDrawable[a]) {
                 nameTextView[a].setRightDrawable2(null);
             }
             nameTextView[a].setRightDrawable2OnClick(null);
             nameTextView[a].setRightDrawable2ContentDescription(null);
         }
-        lastNimarkoBadgeSlot[a] = 0;
+        lastNebulaBadgeSlot[a] = 0;
     }
 
-    // NimarkoGram: remember the last badge documentId per nameTextView index
+    // NebulaGram: remember the last badge documentId per nameTextView index
     // so we can skip the swap animation when the same badge re-binds.
-    private final long[] lastNimarkoBadgeDocId = new long[2];
-    private final int[] lastNimarkoBadgeSlot = new int[2];
+    private final long[] lastNebulaBadgeDocId = new long[2];
+    private final int[] lastNebulaBadgeSlot = new int[2];
 
-    private void showNimarkoBadgeBulletin(app.nimarkogram.messenger.api.dto.BadgeDTO badge) {
+    private void showNebulaBadgeBulletin(app.nebulagram.messenger.api.dto.BadgeDTO badge) {
         try {
             if (badge == null) return;
             CharSequence rawText = badge.getText();
@@ -13268,7 +13268,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private Drawable getEmojiStatusDrawable(TLRPC.EmojiStatus emojiStatus, boolean switchable, boolean animated, int a) {
-        if (app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) return null;
+        if (app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) return null;
         if (emojiStatusDrawable[a] == null) {
             emojiStatusDrawable[a] = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(nameTextView[a], AndroidUtilities.dp(24), a == 0 ? AnimatedEmojiDrawable.CACHE_TYPE_EMOJI_STATUS : AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD);
             if (fragmentViewAttached) {
@@ -13316,7 +13316,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private void updateEmojiStatusDrawableColor(float progress) {
         for (int a = 0; a < 2; ++a) {
             final int fromColor;
-            if (peerColor != null && a == 1 && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor) {
+            if (peerColor != null && a == 1 && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor) {
                 fromColor = ColorUtils.blendARGB(peerColor.getStoryColor1(Theme.isCurrentThemeDark()), 0xFFFFFFFF, 0.25f);
             } else {
                 fromColor = AndroidUtilities.getOffsetColor(getThemedColor(Theme.key_profile_verifiedBackground), getThemedColor(Theme.key_player_actionBarTitle), mediaHeaderAnimationProgress, 1.0f);
@@ -13548,8 +13548,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             } else {
                 isOnline[0] = false;
-                // NimarkoGram: when premium status emoji is hidden, append " | TG Premium" so user is still marked as premium.
-                String tgPremium = getMessagesController().isPremiumUser(user) && app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses ? " | TG Premium" : "";
+                // NebulaGram: when premium status emoji is hidden, append " | TG Premium" so user is still marked as premium.
+                String tgPremium = getMessagesController().isPremiumUser(user) && app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses ? " | TG Premium" : "";
                 newString2 = LocaleController.formatUserStatus(currentAccount, user, isOnline, shortStatus ? new boolean[1] : null) + tgPremium;
                 hiddenStatusButton = user != null && !isOnline[0] && !getUserConfig().isPremium() && user.status != null && (user.status instanceof TLRPC.TL_userStatusRecently || user.status instanceof TLRPC.TL_userStatusLastMonth || user.status instanceof TLRPC.TL_userStatusLastWeek) && user.status.by_me;
                 if (onlineTextView[1] != null && !mediaHeaderVisible) {
@@ -13631,7 +13631,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         rightIconIsPremium = false;
                         nameTextView[a].setRightDrawable(getEmojiStatusDrawable(user.emoji_status, false, false, a));
                         nameTextViewRightDrawableContentDescription = LocaleController.getString(R.string.AccDescrPremium);
-                    } else if (getMessagesController().isPremiumUser(user) && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) {
+                    } else if (getMessagesController().isPremiumUser(user) && !app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) {
                         rightIconIsStatus = false;
                         rightIconIsPremium = true;
                         if (emojiStatusDrawable[a] != null) {
@@ -13640,7 +13640,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                         // The stock Premium star is 14dp wide. Wrapping it in
                         // the 24dp emoji-status container leaves an invisible
-                        // 10dp tail and makes the following Nimarko badge look
+                        // 10dp tail and makes the following Nebula badge look
                         // detached from the star.
                         nameTextView[a].setRightDrawable(getPremiumCrossfadeDrawable(a));
                         nameTextViewRightDrawableContentDescription = LocaleController.getString(R.string.AccDescrPremium);
@@ -13648,7 +13648,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         nameTextView[a].setRightDrawable(null);
                         nameTextViewRightDrawableContentDescription = null;
                     }
-                    applyNimarkoBadgeOnProfile(a, user);
+                    applyNebulaBadgeOnProfile(a, user);
                 } else if (a == 1) {
                     if (user.scam || user.fake) {
                         nameTextView[a].setRightDrawable2(getScamDrawable(user.scam ? 0 : 1));
@@ -13661,7 +13661,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         rightIconIsStatus = true;
                         rightIconIsPremium = false;
                         nameTextView[a].setRightDrawable(getEmojiStatusDrawable(user.emoji_status, true, true, a));
-                    } else if (getMessagesController().isPremiumUser(user) && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) {
+                    } else if (getMessagesController().isPremiumUser(user) && !app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) {
                         rightIconIsStatus = false;
                         rightIconIsPremium = true;
                         if (emojiStatusDrawable[a] != null) {
@@ -13672,7 +13672,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else {
                         nameTextView[a].setRightDrawable(null);
                     }
-                    applyNimarkoBadgeOnProfile(a, user);
+                    applyNebulaBadgeOnProfile(a, user);
                 }
                 if (leftIcon == null && currentEncryptedChat == null && user.bot_verification_icon != 0) {
                     nameTextView[a].setLeftDrawableOutside(true);
@@ -13685,13 +13685,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     nameTextView[a].setRightDrawableOutside(true);
                 }
                 if (user.self && getMessagesController().isPremiumUser(user)
-                        && nameTextView[a].getRightDrawable() != nimarkoBadgeDrawable[a]) {
+                        && nameTextView[a].getRightDrawable() != nebulaBadgeDrawable[a]) {
                     nameTextView[a].setRightDrawableOnClick(v -> {
                         showStatusSelect();
                     });
                 }
                 if (!user.self && getMessagesController().isPremiumUser(user)
-                        && nameTextView[a].getRightDrawable() != nimarkoBadgeDrawable[a]) {
+                        && nameTextView[a].getRightDrawable() != nebulaBadgeDrawable[a]) {
                     final SimpleTextView textView = nameTextView[a];
                     nameTextView[a].setRightDrawableOnClick(v -> {
                         if (user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible) {
@@ -14001,9 +14001,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else {
                     nameTextView[a].setLeftDrawable(null);
                 }
-                // NimarkoGram: badge on channel/group profile (the chat branch
-                // previously didn't get an applyNimarkoBadge call).
-                applyNimarkoBadgeOnChat(a, chat);
+                // NebulaGram: badge on channel/group profile (the chat branch
+                // previously didn't get an applyNebulaBadge call).
+                applyNebulaBadgeOnChat(a, chat);
                 if (a == 0 && onlineTextOverride != null) {
                     onlineTextView[a].setText(onlineTextOverride);
                 } else {
@@ -14144,7 +14144,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             showStatusButton.setBackgroundColor(ColorUtils.blendARGB(Theme.multAlpha(Theme.adaptHSV(actionBarBackgroundColor, +0.18f, -0.1f), 0.5f), 0x23ffffff, currentExpandAnimatorValue));
         }
         if (actionBar != null) {
-            actionBar.setItemsColor(ColorUtils.blendARGB(peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor ? Color.WHITE : getThemedColor(Theme.key_actionBarDefaultIcon), getThemedColor(Theme.key_actionBarActionModeDefaultIcon), mediaHeaderAnimationProgress), false);
+            actionBar.setItemsColor(ColorUtils.blendARGB(peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor ? Color.WHITE : getThemedColor(Theme.key_actionBarDefaultIcon), getThemedColor(Theme.key_actionBarActionModeDefaultIcon), mediaHeaderAnimationProgress), false);
             actionBar.setItemsBackgroundColor(ColorUtils.blendARGB(peerColor != null ? Theme.ACTION_BAR_WHITE_SELECTOR_COLOR : peerColor != null ? 0x20ffffff : getThemedColor(Theme.key_avatar_actionBarSelectorBlue), getThemedColor(Theme.key_actionBarActionModeDefaultSelector), mediaHeaderAnimationProgress), false);
         }
         if (verifiedDrawable[1] != null) {
@@ -14158,7 +14158,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             verifiedCheckDrawable[1].setColorFilter(AndroidUtilities.getOffsetColor(color1, color2, mediaHeaderAnimationProgress, 1.0f), PorterDuff.Mode.MULTIPLY);
         }
         if (nameTextView[1] != null) {
-            nameTextView[1].setTextColor(ColorUtils.blendARGB(ColorUtils.blendARGB(peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor ? Color.WHITE : getThemedColor(Theme.key_profile_title), getThemedColor(Theme.key_player_actionBarTitle), mediaHeaderAnimationProgress), Color.WHITE, currentExpandAnimatorValue));
+            nameTextView[1].setTextColor(ColorUtils.blendARGB(ColorUtils.blendARGB(peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor ? Color.WHITE : getThemedColor(Theme.key_profile_title), getThemedColor(Theme.key_player_actionBarTitle), mediaHeaderAnimationProgress), Color.WHITE, currentExpandAnimatorValue));
         }
         if (autoDeletePopupWrapper != null && autoDeletePopupWrapper.textView != null) {
             autoDeletePopupWrapper.textView.invalidate();
@@ -14220,7 +14220,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private int applyPeerColor(int color, boolean actionBar, Boolean online) {
         if (!actionBar && isSettings()) return color;
-        if (peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor) {
+        if (peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor) {
             if (!actionBar) {
                 int index = adaptedColors.indexOfKey(color);
                 if (index < 0) {
@@ -14380,8 +14380,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     otherItem.addSubItem(add_shortcut, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));
                 }
             }
-            // NimarkoGram: inject "get/apply profile bg" + "user info" entries.
-            app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+            // NebulaGram: inject "get/apply profile bg" + "user info" entries.
+            app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                     .getInstance(currentAccount)
                     .injectProfileMenu(otherItem, user, currentEncryptedChat, isBot);
         } else if (chatId != 0) {
@@ -14448,10 +14448,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                     }
                 } else {
-                    // NimarkoGram: "Boost channel" entry on broadcast channel profiles.
+                    // NebulaGram: "Boost channel" entry on broadcast channel profiles.
                     // (upstream 12.7.3 moved the channel_stories entry to the canPostStories /
                     //  canEditStories block above, so it is no longer re-added here.)
-                    app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+                    app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                             .getInstance(currentAccount)
                             .injectBoostChannel(otherItem);
                     if (ChatObject.isPublic(chat)) {
@@ -14510,12 +14510,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 otherItem.addSubItem(leave_group, R.drawable.msg_leave, LocaleController.getString(R.string.DeleteAndExit));
                 leaveAction = true;
             }
-            // NimarkoGram (CG parity): add the OPTION_USER_INFO entry for chat /
+            // NebulaGram (CG parity): add the OPTION_USER_INFO entry for chat /
             // channel profiles too. ProfileActivity#onItemClick already falls back
-            // to NimarkoProfileActivityHelper.showRestrictionReason when the
+            // to NebulaProfileActivityHelper.showRestrictionReason when the
             // open dialog is a chat, so the dispatch path is complete once the
             // menu row exists.
-            app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+            app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                     .getInstance(currentAccount)
                     .injectChatInfo(otherItem);
         }
@@ -14538,8 +14538,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         if (selfUser && !myProfile) {
             otherItem.addSubItem(logout, R.drawable.msg_leave, LocaleController.getString(R.string.LogOut));
-            // NimarkoGram: "Restart" entry on the self profile.
-            app.nimarkogram.messenger.utils.NimarkoProfileActivityHelper
+            // NebulaGram: "Restart" entry on the self profile.
+            app.nebulagram.messenger.utils.NebulaProfileActivityHelper
                     .getInstance(currentAccount)
                     .injectRestart(otherItem);
         }
@@ -14649,38 +14649,38 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         // C1: (re)inject the plugin-registered "Plugins (N)" entry. createActionBarMenu
         // calls otherItem.removeAllSubItems() at the top, so this must run on every
         // rebuild as well as on pluginMenuItemsUpdated.
-        nimarkoRebuildProfilePluginsMenu();
+        nebulaRebuildProfilePluginsMenu();
         updateStoriesViewBounds(false);
     }
 
-    /** NimarkoGram (C1): (re)build the "Plugins (N)" item in the profile three-dots
-     *  overflow (PROFILE_ACTION_MENU). Mirrors ChatActivity.nimarkoRebuildChatPluginsMenu.
+    /** NebulaGram (C1): (re)build the "Plugins (N)" item in the profile three-dots
+     *  overflow (PROFILE_ACTION_MENU). Mirrors ChatActivity.nebulaRebuildChatPluginsMenu.
      *  Shows ONLY when a plugin actually registered a profile_action_menu item; dedupes
      *  by stable plugin identity; relabels the "(N)" count live; pulls the row when the
      *  last item unregisters. Crash-safe. */
-    private void nimarkoRebuildProfilePluginsMenu() {
+    private void nebulaRebuildProfilePluginsMenu() {
         try {
             if (otherItem == null) return;
-            final java.util.Map<String, Object> nimarkoCtx = new java.util.HashMap<>();
-            nimarkoCtx.put("fragment", "ProfileActivity");
-            nimarkoCtx.put("dialog_id", dialogId);
-            nimarkoCtx.put("account", currentAccount);
+            final java.util.Map<String, Object> nebulaCtx = new java.util.HashMap<>();
+            nebulaCtx.put("fragment", "ProfileActivity");
+            nebulaCtx.put("dialog_id", dialogId);
+            nebulaCtx.put("account", currentAccount);
             TLRPC.User user = userId != 0 ? getMessagesController().getUser(userId) : null;
-            if (user != null) nimarkoCtx.put("user", user);
-            if (currentChat != null) nimarkoCtx.put("chat", currentChat);
-            nimarkoCtx.put("userId", userId);
-            nimarkoCtx.put("chatId", chatId);
-            nimarkoCtx.put("is_user", userId != 0);
-            nimarkoCtx.put("is_group", currentChat != null && !ChatObject.isChannel(currentChat));
-            nimarkoCtx.put("is_channel", currentChat != null && ChatObject.isChannel(currentChat) && !currentChat.megagroup);
+            if (user != null) nebulaCtx.put("user", user);
+            if (currentChat != null) nebulaCtx.put("chat", currentChat);
+            nebulaCtx.put("userId", userId);
+            nebulaCtx.put("chatId", chatId);
+            nebulaCtx.put("is_user", userId != 0);
+            nebulaCtx.put("is_group", currentChat != null && !ChatObject.isChannel(currentChat));
+            nebulaCtx.put("is_channel", currentChat != null && ChatObject.isChannel(currentChat) && !currentChat.megagroup);
 
-            java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> items =
-                    app.nimarkogram.messenger.plugins.PluginsController.getInstance()
-                            .getMenuItemsForLocation("profile_action_menu", nimarkoCtx);
-            final java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> unique = new java.util.ArrayList<>();
+            java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> items =
+                    app.nebulagram.messenger.plugins.PluginsController.getInstance()
+                            .getMenuItemsForLocation("profile_action_menu", nebulaCtx);
+            final java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> unique = new java.util.ArrayList<>();
             if (items != null) {
                 final java.util.Set<String> seen = new java.util.HashSet<>();
-                for (app.nimarkogram.messenger.plugins.hooks.MenuItemRecord rec : items) {
+                for (app.nebulagram.messenger.plugins.hooks.MenuItemRecord rec : items) {
                     if (rec == null || android.text.TextUtils.isEmpty(rec.text)) continue;
                     // dedupe by stable plugin identity (pluginId:itemId), not the visible label
                     if (!seen.add(rec.pluginId + ":" + rec.itemId)) continue;
@@ -14688,41 +14688,41 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             }
             if (!unique.isEmpty()) {
-                nimarkoProfileMenuItems = unique;
-                nimarkoProfileMenuCtx = nimarkoCtx;
+                nebulaProfileMenuItems = unique;
+                nebulaProfileMenuCtx = nebulaCtx;
                 final CharSequence label = LocaleController.getString(R.string.Plugins) + " (" + unique.size() + ")";
                 // otherItem.removeAllSubItems() in createActionBarMenu cleared any prior
                 // copy, so just add a fresh row here (createActionBarMenu re-runs on every
                 // pluginMenuItemsUpdated too).
-                if (!otherItem.hasSubItem(nimarko_plugins_menu)) {
-                    otherItem.addSubItem(nimarko_plugins_menu, R.drawable.msg_plugins, label);
+                if (!otherItem.hasSubItem(nebula_plugins_menu)) {
+                    otherItem.addSubItem(nebula_plugins_menu, R.drawable.msg_plugins, label);
                 } else {
-                    otherItem.showSubItem(nimarko_plugins_menu);
+                    otherItem.showSubItem(nebula_plugins_menu);
                 }
             } else {
-                nimarkoProfileMenuItems = null;
-                nimarkoProfileMenuCtx = null;
-                if (otherItem.hasSubItem(nimarko_plugins_menu)) {
-                    otherItem.hideSubItem(nimarko_plugins_menu);
+                nebulaProfileMenuItems = null;
+                nebulaProfileMenuCtx = null;
+                if (otherItem.hasSubItem(nebula_plugins_menu)) {
+                    otherItem.hideSubItem(nebula_plugins_menu);
                 }
             }
         } catch (Throwable t) {
-            FileLog.e("nimarko: ProfileActivity profile_action_menu rebuild failed", t);
+            FileLog.e("nebula: ProfileActivity profile_action_menu rebuild failed", t);
         }
     }
 
-    /** NimarkoGram (C1): bottom-sheet listing the plugin profile-menu items.
+    /** NebulaGram (C1): bottom-sheet listing the plugin profile-menu items.
      *  Triggered from the single "Plugins (N)" entry in the profile overflow.
      *  Re-checks plugin liveness (C3) before crossing into Python. */
-    private void showNimarkoProfilePluginsBottomSheet(
-            java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> items,
+    private void showNebulaProfilePluginsBottomSheet(
+            java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> items,
             java.util.Map<String, Object> ctx) {
         try {
             if (getParentActivity() == null || items == null || items.isEmpty()) return;
             CharSequence[] labels = new CharSequence[items.size()];
             int[] icons = new int[items.size()];
             for (int i = 0; i < items.size(); i++) {
-                app.nimarkogram.messenger.plugins.hooks.MenuItemRecord rec = items.get(i);
+                app.nebulagram.messenger.plugins.hooks.MenuItemRecord rec = items.get(i);
                 labels[i] = rec.text != null ? rec.text : "";
                 // C12: consistent neutral fallback drawable.
                 icons[i] = rec.iconResId != 0 ? rec.iconResId : R.drawable.msg_plugins;
@@ -14731,19 +14731,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             builder.setTitle(LocaleController.getString(R.string.Plugins), true);
             builder.setItems(labels, icons, (dialog, which) -> {
                 try {
-                    app.nimarkogram.messenger.plugins.hooks.MenuItemRecord rec = items.get(which);
+                    app.nebulagram.messenger.plugins.hooks.MenuItemRecord rec = items.get(which);
                     // C3: re-check the owning plugin is still active right before dispatch.
-                    if (rec == null || !app.nimarkogram.messenger.plugins.PluginsController.getInstance().isPluginActive(rec.pluginId)) {
+                    if (rec == null || !app.nebulagram.messenger.plugins.PluginsController.getInstance().isPluginActive(rec.pluginId)) {
                         return;
                     }
                     rec.onClickCallback.call(ctx);
                 } catch (Throwable t) {
-                    FileLog.e("nimarko: profile plugins bottom-sheet item click failed", t);
+                    FileLog.e("nebula: profile plugins bottom-sheet item click failed", t);
                 }
             });
             showDialog(builder.create());
         } catch (Throwable t) {
-            FileLog.e("nimarko: showNimarkoProfilePluginsBottomSheet failed", t);
+            FileLog.e("nebula: showNebulaProfilePluginsBottomSheet failed", t);
         }
     }
 
@@ -15760,9 +15760,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     boolean containsQr = false;
                     boolean containsGift = false;
                     if (position == idDcRow) {
-                        // NimarkoGram: ID + DC line. Channels/supergroups use the
+                        // NebulaGram: ID + DC line. Channels/supergroups use the
                         // "-100" Bot-API prefix; legacy groups use plain "-".
-                        // DC resolution is delegated to NimarkoExtra so we get the
+                        // DC resolution is delegated to NebulaExtra so we get the
                         // user.dc_id -> photo.dc_id -> UserFull-photos fallback
                         // chain instead of just photo.dc_id.
                         final long id;
@@ -15786,12 +15786,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                         TLRPC.User userForDc = userId != 0 ? getMessagesController().getUser(userId) : null;
                         TLRPC.Chat chatForDc = chatId != 0 ? getMessagesController().getChat(chatId) : null;
-                        int dcId = app.nimarkogram.messenger.utils.NimarkoExtra.resolveDcId(currentAccount, userForDc, chatForDc);
+                        int dcId = app.nebulagram.messenger.utils.NebulaExtra.resolveDcId(currentAccount, userForDc, chatForDc);
                         // NG: include the DC codename + geo (e.g. "DC 2, Venus, NLD (Amsterdam)"), matching the
-                        // profile-popup format from NimarkoExtra.getProfileDC.
+                        // profile-popup format from NebulaExtra.getProfileDC.
                         CharSequence dcValue = dcId != 0
-                                ? ("DC " + dcId + ", " + app.nimarkogram.messenger.utils.ResourcesUtils.getDCName(dcId)
-                                        + ", " + app.nimarkogram.messenger.utils.ResourcesUtils.getDCGeo(dcId))
+                                ? ("DC " + dcId + ", " + app.nebulagram.messenger.utils.ResourcesUtils.getDCName(dcId)
+                                        + ", " + app.nebulagram.messenger.utils.ResourcesUtils.getDCGeo(dcId))
                                 : "DC ?";
                         detailCell.setTextAndValue("ID: " + formattedID, dcValue, false);
                     } else if (position == birthdayRow) {
@@ -15830,7 +15830,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             phoneNumber = vcardPhone;
                         } else if (user != null && !TextUtils.isEmpty(user.phone)) {
                             // NG: braille-mask the displayed phone when archive biometric lock is on (CG parity, ProfileActivity:13449).
-                            text = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.replaceStringToSpoilers(
+                            text = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.replaceStringToSpoilers(
                                     PhoneFormat.getInstance().format("+ " + user.phone),
                                     true
                             );
@@ -15932,7 +15932,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         String value;
                         if (user != null && user.phone != null && user.phone.length() != 0) {
                             // NG: braille-mask the user's own number when archive biometric lock is on (CG parity, ProfileActivity:13550).
-                            value = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.replaceStringToSpoilers(
+                            value = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.replaceStringToSpoilers(
                                     PhoneFormat.getInstance().format("+ " + user.phone),
                                     true
                             );
@@ -15990,8 +15990,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         detailCell.setImage(drawable, LocaleController.getString(R.string.GetQRCode));
                         detailCell.setImageClickListener(ProfileActivity.this::onTextDetailCellImageClicked);
                     } else if (position == idDcRow && userId != 0
-                            && app.nimarkogram.messenger.utils.NimarkoRegDate.isEstimatable(userId)) {
-                        // NimarkoGram: LOCAL registration-date estimate. Calendar icon at Gravity.END of the
+                            && app.nebulagram.messenger.utils.NebulaRegDate.isEstimatable(userId)) {
+                        // NebulaGram: LOCAL registration-date estimate. Calendar icon at Gravity.END of the
                         // ID row; its own 48dp tap target / ripple, separate from the row's copy-ID click.
                         Drawable cal = ContextCompat.getDrawable(detailCell.getContext(), R.drawable.msg_calendar2);
                         if (cal != null) {
@@ -17965,8 +17965,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             showDialog(new GiftSheet(getContext(), currentAccount, userId, null, null));
         } else if (parent.getTag() != null && ((int) parent.getTag()) == idDcRow && userId != 0) {
-            // NimarkoGram: show the LOCAL registration-date estimate (calendar icon on the ID row).
-            String when = app.nimarkogram.messenger.utils.NimarkoRegDate.estimateStringOrUnknown(userId);
+            // NebulaGram: show the LOCAL registration-date estimate (calendar icon on the ID row).
+            String when = app.nebulagram.messenger.utils.NebulaRegDate.estimateStringOrUnknown(userId);
             BulletinFactory.of(this)
                     .createSimpleBulletin(R.raw.info, LocaleController.getString(R.string.NM_RegDate), when)
                     .show();
@@ -17978,9 +17978,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onBecomeFullyVisible() {
         super.onBecomeFullyVisible();
-        if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
+        if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
             try {
-                app.nimarkogram.messenger.banners.NimarkoBannerRenderer rr = app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance();
+                app.nebulagram.messenger.banners.NebulaBannerRenderer rr = app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance();
                 rr.setAvatarViews(avatarImage, avatarContainer, avatarsViewPager, storyView, giftsView, avatarGooey);
                 rr.onProfileResumed(topView, getDialogId());
             } catch (Throwable ignored) {}
@@ -17998,7 +17998,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int color1 = getThemedColor(Theme.key_profile_actionBackground);
             int color2 = getThemedColor(Theme.key_profile_actionPressedBackground);
             int iconColor = getThemedColor(Theme.key_profile_actionIcon);
-            if (peerColor != null && Theme.hasHue(color1) && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor) {
+            if (peerColor != null && Theme.hasHue(color1) && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor) {
                 color1 = Theme.adaptHSV(peerColor.getBgColor1(false), +.05f, -.04f);
                 color2 = applyPeerColor2(color2);
                 iconColor = Color.WHITE;
@@ -18046,8 +18046,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     isPulledDown = false;
                     allowPullingDown = false;
                     try {
-                        app.nimarkogram.messenger.banners.NimarkoBannerRenderer banner =
-                            app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance();
+                        app.nebulagram.messenger.banners.NebulaBannerRenderer banner =
+                            app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance();
                         banner.setPagerOwnedByProfile(false);
                         banner.setCollapseSettling(false);
                     } catch (Throwable ignore) {}
@@ -18256,7 +18256,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             // Never derive system icon colour from the app theme while that media
             // is visible, otherwise light-theme time/network icons disappear.
             return false;
-        } else if (peerColor != null && app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor) {
+        } else if (peerColor != null && app.nebulagram.messenger.NebulaConfig.profileBackgroundColor) {
             color = peerColor.getBgColor2(Theme.isCurrentThemeDark());
         } else {
             color = getThemedColor(Theme.key_actionBarDefault);
@@ -19065,7 +19065,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     public void setCollectibleGiftStatus(TLRPC.TL_emojiStatusCollectible status) {
         if (profileLifecycleDestroyed) return;
-        if (app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) return;
+        if (app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) return;
         if (avatarContainer2 == null) return;
         if (collectibleStatus == status) return;
         if (collectibleStatus != null && status != null && collectibleStatus.collectible_id == status.collectible_id)
@@ -19081,13 +19081,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (status != null && !TextUtils.isEmpty(status.slug)) {
             collectibleHintVisible = null;
             collectibleHint = new HintView2(getContext(), HintView2.DIRECTION_BOTTOM);
-            if (app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor) {
+            if (app.nebulagram.messenger.NebulaConfig.profileBackgroundColor) {
                 collectibleHintBackgroundColor = Theme.blendOver(status.center_color | 0xFF000000, Theme.multAlpha(status.pattern_color | 0xFF000000, .5f));
             } else {
                 collectibleHintBackgroundColor = getThemedColor(Theme.key_undo_background);
             }
             collectibleHint.setPadding(dp(4), 0, dp(4), dp(2));
-            if (app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor) {
+            if (app.nebulagram.messenger.NebulaConfig.profileBackgroundColor) {
                 collectibleHint.setFlicker(.66f, Theme.multAlpha(status.text_color | 0xFF000000, 0.5f));
             } else {
                 collectibleHint.setFlicker(.66f, Theme.multAlpha(11922687 | 0xFF000000, 0.5f));

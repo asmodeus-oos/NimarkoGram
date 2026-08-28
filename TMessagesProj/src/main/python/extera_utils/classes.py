@@ -2,7 +2,7 @@
 extera_utils.classes — subclass Java from Python (exteraGram-compat shim).
 
 exteraGram ships a Cython framework (``Base`` + ``JHelper``) that lets a plugin
-define a Python class implementing/overriding Java methods. On NimarkoGram we
+define a Python class implementing/overriding Java methods. On NebulaGram we
 reimplement the *common* subset with a Java-owned invocation handler, which can
 implement Java **interfaces** (listeners/callbacks — the 80% case) without
 leaving Android a retained Chaquopy proxy after plugin unload.
@@ -93,14 +93,14 @@ class _JavaOwnedProxyMeta(type):
 
     def __call__(cls, *args, **kwargs):
         target = super().__call__(*args, **kwargs)
-        owner = getattr(cls, '__nimarko_runtime_owner__', None)
+        owner = getattr(cls, '__nebula_runtime_owner__', None)
         if owner is None:
             raise RuntimeError(
                 "Java callback class was created outside a plugin runtime")
-        target._nimarko_runtime_token = owner
+        target._nebula_runtime_token = owner
         proxy = make_interface_proxy(
             target, cls.__extera_interfaces__, owner=owner)
-        target._nimarko_java_proxy = proxy
+        target._nebula_java_proxy = proxy
         return proxy
 
 def _proxy_metaclass_for(user_cls):
@@ -111,7 +111,7 @@ def _proxy_metaclass_for(user_cls):
     if issubclass(_JavaOwnedProxyMeta, user_meta):
         return _JavaOwnedProxyMeta
     return type(
-        f'_NimarkoProxyMeta_{user_meta.__name__}',
+        f'_NebulaProxyMeta_{user_meta.__name__}',
         (_JavaOwnedProxyMeta, user_meta),
         {})
 
@@ -138,7 +138,7 @@ class Base:
                 '__doc__': user_cls.__doc__,
                 '__qualname__': user_cls.__qualname__,
                 '__extera_interfaces__': interfaces,
-                '__nimarko_runtime_owner__': owner,
+                '__nebula_runtime_owner__': owner,
             }
             proxy_meta = _proxy_metaclass_for(user_cls)
             new_cls = proxy_meta(
@@ -149,7 +149,7 @@ class Base:
     @property
     def this(self):
         """The proxy instance (usable wherever the Java object is expected)."""
-        proxy = getattr(self, '_nimarko_java_proxy', None)
+        proxy = getattr(self, '_nebula_java_proxy', None)
         if proxy is None:
             raise RuntimeError(
                 "Java proxy is not available during Python construction")
@@ -205,7 +205,7 @@ class JavaSuper:
     def __getattr__(self, name):
         raise NotImplementedError(
             "extera_utils.classes: JavaSuper calls are not available for interface "
-            "proxies on NimarkoGram (interfaces have no super implementation).")
+            "proxies on NebulaGram (interfaces have no super implementation).")
 
 def _passthrough_decorator(*_args, **_kwargs):
     """A decorator factory that returns the function unchanged.
@@ -242,7 +242,7 @@ class JHelper:
     @staticmethod
     def MVELMethod(*_args, **_kwargs):
         raise NotImplementedError(
-            "extera_utils.classes: MVELMethod is not supported on NimarkoGram "
+            "extera_utils.classes: MVELMethod is not supported on NebulaGram "
             "(no embedded MVEL engine for Java-from-Python method bodies).")
 
     MVELOverride = MVELMethod

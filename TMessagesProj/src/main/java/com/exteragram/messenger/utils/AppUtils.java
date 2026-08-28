@@ -12,20 +12,20 @@ public class AppUtils {
 
     private static void logInternal(String message, Throwable throwable, int callerDepth) {
         if (throwable != null) {
-            app.nimarkogram.messenger.utils.AppUtils.log(message, throwable);
+            app.nebulagram.messenger.utils.AppUtils.log(message, throwable);
         } else {
-            app.nimarkogram.messenger.utils.AppUtils.log(message);
+            app.nebulagram.messenger.utils.AppUtils.log(message);
         }
     }
 
-    public static Gson getGson() { return app.nimarkogram.messenger.utils.AppUtils.getGson(); }
+    public static Gson getGson() { return app.nebulagram.messenger.utils.AppUtils.getGson(); }
 
-    public static void ensureRunningOnUi(Runnable r) { app.nimarkogram.messenger.utils.AppUtils.ensureRunningOnUi(r); }
+    public static void ensureRunningOnUi(Runnable r) { app.nebulagram.messenger.utils.AppUtils.ensureRunningOnUi(r); }
 
-    public static String getVersionText() { return app.nimarkogram.messenger.utils.AppUtils.getVersionText(); }
+    public static String getVersionText() { return app.nebulagram.messenger.utils.AppUtils.getVersionText(); }
 
-    public static boolean isAppModified() { return app.nimarkogram.messenger.utils.AppUtils.isAppModified(); }
-    public static boolean isWinter() { return app.nimarkogram.messenger.utils.AppUtils.isWinter(); }
+    public static boolean isAppModified() { return app.nebulagram.messenger.utils.AppUtils.isAppModified(); }
+    public static boolean isWinter() { return app.nebulagram.messenger.utils.AppUtils.isWinter(); }
 
     public static int compareVersionValues(String first, String second) {
         String[] left = first != null ? first.split("\\.") : new String[0];
@@ -77,30 +77,30 @@ public class AppUtils {
         }
     }
 
-    public static String stackTraceToString(Throwable t) { return app.nimarkogram.messenger.utils.AppUtils.stackTraceToString(t); }
+    public static String stackTraceToString(Throwable t) { return app.nebulagram.messenger.utils.AppUtils.stackTraceToString(t); }
 
     public static boolean compareVersions(String op, String v1, String v2) {
-        return app.nimarkogram.messenger.utils.AppUtils.compareVersions(op, v1, v2);
+        return app.nebulagram.messenger.utils.AppUtils.compareVersions(op, v1, v2);
     }
 
     public static boolean compareVersions(String op, int v1, int v2) {
-        return app.nimarkogram.messenger.utils.AppUtils.compareVersions(op, v1, v2);
+        return app.nebulagram.messenger.utils.AppUtils.compareVersions(op, v1, v2);
     }
 
 
     public static Object getPrivateField(Object obj, String fieldName) {
-        return app.nimarkogram.messenger.utils.AppUtils.getPrivateField(obj, fieldName);
+        return app.nebulagram.messenger.utils.AppUtils.getPrivateField(obj, fieldName);
     }
 
     public static void setPrivateField(Object obj, String fieldName, Object value) {
-        app.nimarkogram.messenger.utils.AppUtils.setPrivateField(obj, fieldName, value);
+        app.nebulagram.messenger.utils.AppUtils.setPrivateField(obj, fieldName, value);
     }
 
     public static Object getPrivateStaticField(Class<?> clazz, String fieldName) {
-        return app.nimarkogram.messenger.utils.AppUtils.getPrivateStaticField(clazz, fieldName);
+        return app.nebulagram.messenger.utils.AppUtils.getPrivateStaticField(clazz, fieldName);
     }
 
     public static void setPrivateStaticField(Class<?> clazz, String fieldName, Object value) {
-        app.nimarkogram.messenger.utils.AppUtils.setPrivateStaticField(clazz, fieldName, value);
+        app.nebulagram.messenger.utils.AppUtils.setPrivateStaticField(clazz, fieldName, value);
     }
 }

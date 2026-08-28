@@ -1154,7 +1154,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 sendPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - sendPopupLayout.getMeasuredWidth() + AndroidUtilities.dp(8), location[1] - sendPopupLayout.getMeasuredHeight() - AndroidUtilities.dp(2));
                 sendPopupWindow.dimBehind();
                 
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                     try {
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     } catch (Exception ignored) {}

@@ -116,7 +116,7 @@ import org.telegram.ui.Stars.StarsIntroActivity;
 import org.telegram.ui.Stories.recorder.AlbumButton;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 
-import app.nimarkogram.messenger.camera.LockAnimationView;
+import app.nebulagram.messenger.camera.LockAnimationView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -160,9 +160,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     private AnimatorSet cameraInitAnimation;
     // NG: widened from CameraViewInternal to BaseCameraView so the field can hold
     // either the stock {@link CameraView} (via {@link CameraViewInternal}) or the
-    // CameraX-backed {@link app.nimarkogram.messenger.camera.NimarkoCameraXView}.
-    // Branching done in showCamera() on NimarkoConfig.cameraType == CAMERA_X.
-    protected app.nimarkogram.messenger.camera.BaseCameraView cameraView;
+    // CameraX-backed {@link app.nebulagram.messenger.camera.NebulaCameraXView}.
+    // Branching done in showCamera() on NebulaConfig.cameraType == CAMERA_X.
+    protected app.nebulagram.messenger.camera.BaseCameraView cameraView;
     private final CameraViewItemDecoration cameraViewItemDecoration;
     private TextView recordTime;
     private ImageView[] flashModeButton = new ImageView[2];
@@ -181,7 +181,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     private Runnable videoRecordRunnable;
     private DecelerateInterpolator interpolator = new DecelerateInterpolator(1.5f);
     private FrameLayout cameraPanel;
-    // NimarkoGram: extera-style "Hide Camera Tile" floating-icon overlay.
+    // NebulaGram: extera-style "Hide Camera Tile" floating-icon overlay.
     // Stays in parentAlert.getContainer() at the location of the (now
     // omitted) camera tile cell. Position synced with cameraView via
     // setTranslationX/Y everywhere cameraView is moved.
@@ -194,18 +194,18 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     // cameraIcon FrameLayout overlay declared above is still constructed but
     // immediately hidden via setVisibility(GONE) below so nothing floats.
     private static final boolean HIDE_CAMERA_TILE = false;
-    private final boolean disableAttachCamera = app.nimarkogram.messenger.NimarkoConfig.disableAttachCamera;
+    private final boolean disableAttachCamera = app.nebulagram.messenger.NebulaConfig.disableAttachCamera;
     // Outer-class camera glyph (shared with the cameraIcon overlay below).
-    private Drawable nimarkoCameraGlyph;
-    private Drawable getNimarkoCameraGlyph() {
-        if (nimarkoCameraGlyph == null) {
-            nimarkoCameraGlyph = getContext().getResources().getDrawable(R.drawable.camera).mutate();
+    private Drawable nebulaCameraGlyph;
+    private Drawable getNebulaCameraGlyph() {
+        if (nebulaCameraGlyph == null) {
+            nebulaCameraGlyph = getContext().getResources().getDrawable(R.drawable.camera).mutate();
         }
-        return nimarkoCameraGlyph;
+        return nebulaCameraGlyph;
     }
     private ShutterButton shutterButton;
     private ZoomControlView zoomControlView;
-    // NimarkoGram: CG-style lock animation view shown beside the shutter
+    // NebulaGram: CG-style lock animation view shown beside the shutter
     // button while the user holds-to-record. Slide-up gesture commits the
     // recording-locked state (mirrors CG ChatAttachAlertPhotoLayout).
     private LockAnimationView lockAnimationView;
@@ -255,7 +255,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     // checkCamera() can re-bind the lifecycle after a permission round-trip.
     private boolean needRebindCamera = false;
     // NG CG-port: maps device orientation to Surface.ROTATION_* and forwards
-    // to NimarkoCameraXView.setOrientation() so CameraX rotates captured
+    // to NebulaCameraXView.setOrientation() so CameraX rotates captured
     // JPEGs to match the user's hold orientation. Stock CameraView already
     // gets rotation via CameraSession.updateRotation() — only the CameraX
     // backend needs this manual wiring. Enabled when the camera view is
@@ -280,7 +280,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     };
 
     private boolean isCameraXBackend() {
-        return cameraView instanceof app.nimarkogram.messenger.camera.NimarkoCameraXView;
+        return cameraView instanceof app.nebulagram.messenger.camera.NebulaCameraXView;
     }
 
     private void requestCameraAdapterUpdate() {
@@ -309,7 +309,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         postOnAnimation(galleryAdaptersUpdateRunnable);
     }
 
-    private void fallbackToStockCamera(app.nimarkogram.messenger.camera.NimarkoCameraXView failedView) {
+    private void fallbackToStockCamera(app.nebulagram.messenger.camera.NebulaCameraXView failedView) {
         if (failedView == null || cameraView != failedView || parentAlert.destroyed) return;
         cameraXFallbackToStock = true;
         isCameraFrontfaceBeforeEnteringEditMode = failedView.isFrontface();
@@ -841,7 +841,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     public ChatAttachAlertPhotoLayout(ChatAttachAlert alert, Context context, boolean forceDarkTheme, boolean needCamera, Theme.ResourcesProvider resourcesProvider) {
         super(alert, context, resourcesProvider);
         this.forceDarkTheme = forceDarkTheme;
-        // NimarkoGram: keep the inline camera tile (extera pattern)
+        // NebulaGram: keep the inline camera tile (extera pattern)
         this.needCamera = needCamera;
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.albumsDidLoad);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.cameraInitied);
@@ -929,7 +929,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         gridView.getFastScroll().setAlpha(0f);
         gridView.getFastScroll().usePadding = false;
         gridView.getFastScroll().topOffset = ActionBar.getCurrentActionBarHeight(); // + AndroidUtilities.statusBarHeight;
-        // NimarkoGram: extera "Hide Camera Tile" — adapter built without
+        // NebulaGram: extera "Hide Camera Tile" — adapter built without
         // camera item, so the photo grid starts with the first real photo.
         // The camera-icon overlay (cameraIcon) is added separately in
         // showCamera() at the would-be tile location.
@@ -1024,7 +1024,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (!mediaEnabled || parentAlert.destroyed) {
                 return;
             }
-            // NimarkoGram fix: the camera tile only exists in the main gallery
+            // NebulaGram fix: the camera tile only exists in the main gallery
             // album, so this +1 (compensating the disabled camera tile) must be
             // gated on that album — otherwise inside a specific folder the
             // uncompensated +1 selects the NEXT photo/video instead of the
@@ -1053,7 +1053,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 openCameraByClick();
                 return;
             }
-            // NimarkoGram: extera-style position bump. Adapter no longer has
+            // NebulaGram: extera-style position bump. Adapter no longer has
             // the camera tile at position 0, so shift up so the rest of the
             // dispatching matches the original positions.
             if (HIDE_CAMERA_TILE && needCamera) {
@@ -1273,7 +1273,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         progressView.setTextSize(16);
         addView(progressView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        // NimarkoGram: the FAB overlay was removed — the standard inline
+        // NebulaGram: the FAB overlay was removed — the standard inline
         // camera tile (cell index 0 in the photo grid) acts as the camera
         // button, exactly like extera. needCamera stays at the
         // caller-supplied value and lazy=true is set in showCamera().
@@ -1347,9 +1347,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     cx3 = cx / 2 - dp(17);
                     cy3 = cy2 = getMeasuredHeight() / 2 - dp(13);
                 }
-                // NimarkoGram: optionally center switch & flash buttons under the shutter
+                // NebulaGram: optionally center switch & flash buttons under the shutter
                 // for a tidier landscape-style camera HUD.
-                if (app.nimarkogram.messenger.NimarkoConfig.centerCameraControlButtons && getMeasuredWidth() != dp(126)) {
+                if (app.nebulagram.messenger.NebulaConfig.centerCameraControlButtons && getMeasuredWidth() != dp(126)) {
                     cx2 = cx + dp(80);
                     cx3 = cx - dp(80);
                     cy2 = cy3 = cy;
@@ -1407,7 +1407,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             showZoomControls(true, true);
         });
 
-        // NimarkoGram: CG-style lock-recording overlay. Hidden until the
+        // NebulaGram: CG-style lock-recording overlay. Hidden until the
         // user long-presses the shutter button to start a video recording.
         lockAnimationView = new LockAnimationView(context);
         lockAnimationView.setVisibility(GONE);
@@ -1441,7 +1441,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     return false;
                 }
                 // NG: CameraX video-capture теперь реализован (VideoCapture<Recorder>
-                // в NimarkoCameraXView.recordVideo). Раньше тут стоял ранний
+                // в NebulaCameraXView.recordVideo). Раньше тут стоял ранний
                 // `return false` для CameraX — из-за него удержание кнопки на «Нажмите
                 // для фото, удерживайте для видео» вообще не запускало запись. Убрано,
                 // чтобы длинное нажатие дошло до recordVideo и писало видео.
@@ -1512,7 +1512,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     if (outputFile == recordingFile) outputFile = null;
                     openPhotoViewer(photoEntry, false, false);
                 };
-                // NimarkoGram: CG-style lock-recording hint. Reveal as soon
+                // NebulaGram: CG-style lock-recording hint. Reveal as soon
                 // as recording starts; the slide-up gesture handler below
                 // animates the lock progress and snaps to locked.
                 lockAnimationView.setVisibility(View.VISIBLE);
@@ -1522,7 +1522,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 if (!isCameraXBackend()) {
                     CameraController.getInstance().recordVideo(cameraView.getCameraSessionObject(), outputFile, parentAlert.avatarPicker != 0, onVideoSaved, () -> AndroidUtilities.runOnUIThread(videoRecordRunnable, 1000), (CameraView) cameraView);
                 } else {
-                    // CameraX path: NimarkoCameraXView.recordVideo() writes to
+                    // CameraX path: NebulaCameraXView.recordVideo() writes to
                     // outputFile via VideoCapture<Recorder> and surfaces a thumb
                     // + duration through onStop on finalize. Start the recording
                     // timer the same way the stock path does (1s tick).
@@ -1540,7 +1540,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 File cancelledFile = outputFile;
                 outputFile = null;
                 resetRecordState();
-                // NimarkoGram: CG-parity — fade out the lock-recording hint.
+                // NebulaGram: CG-parity — fade out the lock-recording hint.
                 lockAnimationView.animate().alpha(0f).setDuration(200).start();
                 // NG CG-port: route to the active backend.
                 if (!cameraX) {
@@ -1558,13 +1558,13 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 final boolean isCameraX = isCameraXBackend();
                 if (takingPhoto || cameraView == null) return;
                 if (!isCameraX && cameraView.getCameraSession() == null) return;
-                if (isCameraX && cameraView instanceof app.nimarkogram.messenger.camera.NimarkoCameraXView
-                        && ((app.nimarkogram.messenger.camera.NimarkoCameraXView) cameraView).isFlooding()) {
+                if (isCameraX && cameraView instanceof app.nebulagram.messenger.camera.NebulaCameraXView
+                        && ((app.nebulagram.messenger.camera.NebulaCameraXView) cameraView).isFlooding()) {
                     return;
                 }
                 if (shutterButton.getState() == ShutterButton.State.RECORDING) {
                     resetRecordState();
-                    // NimarkoGram: CG-parity — fade out the lock-recording hint.
+                    // NebulaGram: CG-parity — fade out the lock-recording hint.
                     lockAnimationView.animate().alpha(0f).setDuration(200).start();
                     if (!isCameraX) {
                         CameraController.getInstance().stopVideoRecording(cameraView.getCameraSession(), false);
@@ -1649,7 +1649,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     showZoomControls(true, true);
                     float ratio = -val2 / dp(200);
                     zoomControlView.setZoom(ratio, true);
-                    // NimarkoGram: CG-parity — also drive the lock-recording
+                    // NebulaGram: CG-parity — also drive the lock-recording
                     // hint while the user slides up during an active video
                     // recording. setCurrentMove animates the lock progress,
                     // setLocked snaps to the locked state once the gesture
@@ -2713,7 +2713,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (fragment == null || fragment.getParentActivity() == null) {
             return;
         }
-        if (!SharedConfig.inappCamera || app.nimarkogram.messenger.NimarkoConfig.cameraType == app.nimarkogram.messenger.camera.CameraXUtils.CAMERA_SYSTEM) {
+        if (!SharedConfig.inappCamera || app.nebulagram.messenger.NebulaConfig.cameraType == app.nebulagram.messenger.camera.CameraXUtils.CAMERA_SYSTEM) {
             deviceHasGoodCamera = false;
         } else {
             if (Build.VERSION.SDK_INT >= 23) {
@@ -2726,31 +2726,31 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         }
                     }
                     deviceHasGoodCamera = false;
-                } else if (app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
+                } else if (app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
                         && !cameraXFallbackToStock
-                        && app.nimarkogram.messenger.camera.NimarkoCameraXView.hasGoodCamera(getContext())) {
+                        && app.nebulagram.messenger.camera.NebulaCameraXView.hasGoodCamera(getContext())) {
                     // NG CG-port: when the user picked CAMERA_X in the camera
                     // type selector, defer the "good camera" check to
-                    // {@link NimarkoCameraXView#hasGoodCamera(Context)} — the
+                    // {@link NebulaCameraXView#hasGoodCamera(Context)} — the
                     // stock {@link CameraController#initCamera} probe targets
                     // the legacy Camera1/Camera2 path and would mis-report on
                     // CameraX-only configurations.
-                    deviceHasGoodCamera = app.nimarkogram.messenger.camera.NimarkoCameraXView.hasGoodCamera(getContext());
+                    deviceHasGoodCamera = app.nebulagram.messenger.camera.NebulaCameraXView.hasGoodCamera(getContext());
                 } else {
-                    if (app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) cameraXFallbackToStock = true;
+                    if (app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) cameraXFallbackToStock = true;
                     if (request || SharedConfig.hasCameraCache) {
                         CameraController.getInstance().initCamera(null);
                     }
                     deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
                 }
-            } else if (app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
+            } else if (app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
                     && !cameraXFallbackToStock
-                    && app.nimarkogram.messenger.camera.NimarkoCameraXView.hasGoodCamera(getContext())) {
+                    && app.nebulagram.messenger.camera.NebulaCameraXView.hasGoodCamera(getContext())) {
                 // NG CG-port: pre-23 fast-path for CameraX backend (no
                 // runtime-permission gate to traverse).
-                deviceHasGoodCamera = app.nimarkogram.messenger.camera.NimarkoCameraXView.hasGoodCamera(getContext());
+                deviceHasGoodCamera = app.nebulagram.messenger.camera.NebulaCameraXView.hasGoodCamera(getContext());
             } else {
-                if (app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) cameraXFallbackToStock = true;
+                if (app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) cameraXFallbackToStock = true;
                 if (request || SharedConfig.hasCameraCache) {
                     CameraController.getInstance().initCamera(null);
                 }
@@ -2768,7 +2768,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         // open. {@link #onPause()} flips {@code needRebindCamera = true} so the
         // next {@link #checkCamera(boolean)} re-binds the use-cases via the
         // backend's {@link BaseCameraView#rebind()} hook. Stock CameraView
-        // implements rebind() as a no-op; only NimarkoCameraXView actually
+        // implements rebind() as a no-op; only NebulaCameraXView actually
         // re-runs {@link androidx.camera.lifecycle.ProcessCameraProvider#bindToLifecycle}.
         if (isCameraXBackend()
                 && cameraOpened && needRebindCamera && cameraView != null) {
@@ -2919,24 +2919,24 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             final boolean lazy = true; // Yippe: hard-disable instant camera preview tile
             final boolean frontface = isCameraFrontfaceBeforeEnteringEditMode != null ? isCameraFrontfaceBeforeEnteringEditMode : parentAlert.openWithFrontFaceCamera;
             // NG CG-port: route to the CameraX backend when the user picked
-            // CAMERA_X in NimarkoCameraTypeSelector + the device passes the
+            // CAMERA_X in NebulaCameraTypeSelector + the device passes the
             // CameraX support gate. Otherwise stick with the stock backend so
             // existing record-video / take-picture paths (which depend on
             // {@link CameraController} + {@link CameraSessionWrapper}) keep
             // working. CAMERA_SYSTEM is already early-returned in checkCamera()
             // before we get here.
-            final boolean useCameraX = app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
+            final boolean useCameraX = app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
                     && !cameraXFallbackToStock
-                    && app.nimarkogram.messenger.camera.NimarkoCameraXView.hasGoodCamera(getContext());
-            if (app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX() && !useCameraX) {
+                    && app.nebulagram.messenger.camera.NebulaCameraXView.hasGoodCamera(getContext());
+            if (app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX() && !useCameraX) {
                 cameraXFallbackToStock = true;
             }
             if (useCameraX) {
-                app.nimarkogram.messenger.camera.NimarkoCameraXView cameraXView =
-                        new app.nimarkogram.messenger.camera.NimarkoCameraXView(getContext(), frontface);
+                app.nebulagram.messenger.camera.NebulaCameraXView cameraXView =
+                        new app.nebulagram.messenger.camera.NebulaCameraXView(getContext(), frontface);
                 cameraView = cameraXView;
                 cameraXView.setCameraFailureCallback(() -> fallbackToStockCamera(cameraXView));
-                // NG CG-port: feed device-orientation deltas into NimarkoCameraXView
+                // NG CG-port: feed device-orientation deltas into NebulaCameraXView
                 // so saved JPEGs are right-side-up regardless of activity orientation.
                 // Re-enabled each showCamera() because hideCamera() disables it.
                 if (cameraOrientationListener == null) {
@@ -2954,8 +2954,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                             } else {
                                 rotation = Surface.ROTATION_0;
                             }
-                            if (cameraView instanceof app.nimarkogram.messenger.camera.NimarkoCameraXView) {
-                                ((app.nimarkogram.messenger.camera.NimarkoCameraXView) cameraView).setOrientation(rotation);
+                            if (cameraView instanceof app.nebulagram.messenger.camera.NebulaCameraXView) {
+                                ((app.nebulagram.messenger.camera.NebulaCameraXView) cameraView).setOrientation(rotation);
                             }
                         }
                     };
@@ -2969,7 +2969,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             //if (lazy) {
             //    cameraView.setThumbDrawable(cameraViewItemDecoration.placeholderDrawable);
             //}
-            final app.nimarkogram.messenger.camera.BaseCameraView createdCameraView = cameraView;
+            final app.nebulagram.messenger.camera.BaseCameraView createdCameraView = cameraView;
             createdCameraView.setRecordFile(AndroidUtilities.generateVideoPath(parentAlert.baseFragment instanceof ChatActivity && ((ChatActivity) parentAlert.baseFragment).isSecretChat()));
             createdCameraView.setFocusable(true);
             createdCameraView.setFpsLimit(30);
@@ -3002,7 +3002,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 }
             }, 100);
             parentAlert.getContainer().addView(createdCameraView, 1, new FrameLayout.LayoutParams(itemSize, itemSize));
-            // NimarkoGram: extera-style camera icon overlay. Sits on top of
+            // NebulaGram: extera-style camera icon overlay. Sits on top of
             // the cameraView at the would-be tile location, draws the
             // static camera glyph centered. When HIDE_CAMERA_TILE is on,
             // cameraView is lazy (no live preview), so this icon is what
@@ -3014,7 +3014,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         int maxY = (int) Math.min(parentAlert.getCommentTextViewTop() + currentPanTranslationY + parentAlert.getContainerView().getTranslationY() - cameraView.getTranslationY(), getMeasuredHeight());
                         if (cameraOpened) maxY = getMeasuredHeight();
                         else if (cameraAnimationInProgress) maxY = AndroidUtilities.lerp(maxY, getMeasuredHeight(), cameraOpenProgress);
-                        Drawable glyph = getNimarkoCameraGlyph();
+                        Drawable glyph = getNebulaCameraGlyph();
                         int w = glyph.getIntrinsicWidth();
                         int h = glyph.getIntrinsicHeight();
                         int x = (itemSize - w) / 2;
@@ -3110,16 +3110,16 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     }
                 }
             });
-            if (createdCameraView instanceof app.nimarkogram.messenger.camera.NimarkoCameraXView) {
-                ((app.nimarkogram.messenger.camera.NimarkoCameraXView) createdCameraView).initCamera();
+            if (createdCameraView instanceof app.nebulagram.messenger.camera.NebulaCameraXView) {
+                ((app.nebulagram.messenger.camera.NebulaCameraXView) createdCameraView).initCamera();
             }
 
             createdCameraView.setAlpha(mediaEnabled ? 1.0f : 0.2f);
             createdCameraView.setEnabled(mediaEnabled);
             if (isHidden) {
                 createdCameraView.setVisibility(GONE);
-                if (createdCameraView instanceof app.nimarkogram.messenger.camera.NimarkoCameraXView) {
-                    ((app.nimarkogram.messenger.camera.NimarkoCameraXView) createdCameraView).setStreamingEnabled(false);
+                if (createdCameraView instanceof app.nebulagram.messenger.camera.NebulaCameraXView) {
+                    ((app.nebulagram.messenger.camera.NebulaCameraXView) createdCameraView).setStreamingEnabled(false);
                 }
             }
             if (cameraOpened) {
@@ -3157,7 +3157,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         }
         saveLastCameraBitmap();
         cameraViewItemDecoration.updateBitmap();
-        final app.nimarkogram.messenger.camera.BaseCameraView viewToRemove = cameraView;
+        final app.nebulagram.messenger.camera.BaseCameraView viewToRemove = cameraView;
         final View iconToRemove = cameraIcon;
         viewToRemove.destroy(async, null);
         if (cameraInitAnimation != null) {
@@ -4163,8 +4163,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         }
         if (cameraView != null) {
             cameraView.setDelegate(null);
-            if (cameraView instanceof app.nimarkogram.messenger.camera.NimarkoCameraXView) {
-                ((app.nimarkogram.messenger.camera.NimarkoCameraXView) cameraView).setCameraFailureCallback(null);
+            if (cameraView instanceof app.nebulagram.messenger.camera.NebulaCameraXView) {
+                ((app.nebulagram.messenger.camera.NebulaCameraXView) cameraView).setCameraFailureCallback(null);
             }
         }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.cameraInitied);
@@ -4416,10 +4416,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     @Override
     public void onShown() {
         isHidden = false;
-        app.nimarkogram.messenger.camera.BaseCameraView shownCamera = cameraView;
+        app.nebulagram.messenger.camera.BaseCameraView shownCamera = cameraView;
         if (shownCamera != null) {
-            if (shownCamera instanceof app.nimarkogram.messenger.camera.NimarkoCameraXView) {
-                ((app.nimarkogram.messenger.camera.NimarkoCameraXView) shownCamera).setStreamingEnabled(true);
+            if (shownCamera instanceof app.nebulagram.messenger.camera.NebulaCameraXView) {
+                ((app.nebulagram.messenger.camera.NebulaCameraXView) shownCamera).setStreamingEnabled(true);
             }
             shownCamera.setVisibility(VISIBLE);
         }
@@ -4473,7 +4473,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 CameraController.getInstance().stopPreview(cameraView.getCameraSessionObject());
             }
             // NG CG-port: CameraX backend uses lifecycle-based pause via
-            // {@link NimarkoCameraXView}'s LifecycleOwner — no explicit
+            // {@link NebulaCameraXView}'s LifecycleOwner — no explicit
             // stopPreview call needed.
         } catch (Exception e) {
             FileLog.e(e);
@@ -4532,8 +4532,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     @Override
     public void onHidden() {
         if (cameraView != null) {
-            if (cameraView instanceof app.nimarkogram.messenger.camera.NimarkoCameraXView) {
-                ((app.nimarkogram.messenger.camera.NimarkoCameraXView) cameraView).setStreamingEnabled(false);
+            if (cameraView instanceof app.nebulagram.messenger.camera.NebulaCameraXView) {
+                ((app.nebulagram.messenger.camera.NebulaCameraXView) cameraView).setStreamingEnabled(false);
             }
             cameraView.setVisibility(GONE);
         }
@@ -4870,7 +4870,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
         public PhotoAttachAdapter(Context context, boolean camera) {
             mContext = context;
-            // NimarkoGram: same as outer constructor — force-disable the
+            // NebulaGram: same as outer constructor — force-disable the
             // inline camera tile here too, otherwise the adapter still
             // renders cell index 0 as a camera viewfinder when camera==true.
             needCamera = false;

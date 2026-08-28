@@ -8,7 +8,7 @@ from java import cast
 from org.telegram.ui.ActionBar import AlertDialog, Theme
 
 from android_utils import is_on_ui_thread
-from app.nimarkogram.messenger.plugins.ui import (
+from app.nebulagram.messenger.plugins.ui import (
     PluginDialogCallback,
     PluginUiRegistry,
 )

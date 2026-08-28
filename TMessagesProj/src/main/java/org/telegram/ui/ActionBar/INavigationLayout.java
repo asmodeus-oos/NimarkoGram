@@ -250,13 +250,13 @@ public interface INavigationLayout {
     }
 
     default boolean presentFragment(BaseFragment fragment) {
-        // NimarkoGram (CG L255 / L278): biometric gate when opening a locked
+        // NebulaGram (CG L255 / L278): biometric gate when opening a locked
         // chat or the archive folder. shouldRequireBiometrics* are no-ops if
         // the user hasn't turned the flag on, so the fast path is unaffected.
         if (fragment instanceof ChatActivity
-                && (app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenChat
-                    || app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenSavedMessages
-                    || app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenEncrypted)) {
+                && (app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenChat
+                    || app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenSavedMessages
+                    || app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenEncrypted)) {
             Bundle args = fragment.getArguments();
             if (args == null) {
                 return false;
@@ -264,15 +264,15 @@ public interface INavigationLayout {
             long userID = args.getLong("user_id");
             long chatID = args.getLong("chat_id");
             int encID = args.getInt("enc_id");
-            boolean requiresBiometrics = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+            boolean requiresBiometrics = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                     .shouldRequireBiometrics(userID, chatID, encID, fragment.getCurrentAccount());
             if (requiresBiometrics && getParentActivity() == null) return false;
             if (requiresBiometrics
-                    && !app.nimarkogram.messenger.security.NimarkoBiometricPrompt.isRecentlyVerified(fragment.getCurrentAccount(), userID, chatID, encID)) {
+                    && !app.nebulagram.messenger.security.NebulaBiometricPrompt.isRecentlyVerified(fragment.getCurrentAccount(), userID, chatID, encID)) {
                 final int acc = fragment.getCurrentAccount();
-                app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(getParentActivity(), acc,
+                app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(getParentActivity(), acc,
                         () -> {
-                            app.nimarkogram.messenger.security.NimarkoBiometricPrompt.markVerified(acc, userID, chatID, encID);
+                            app.nebulagram.messenger.security.NebulaBiometricPrompt.markVerified(acc, userID, chatID, encID);
                             presentFragment(new NavigationParams(fragment));
                         });
                 return true;
@@ -281,7 +281,7 @@ public interface INavigationLayout {
         }
 
         if (fragment instanceof DialogsActivity
-                && app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenArchive) {
+                && app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenArchive) {
             Bundle args = fragment.getArguments();
             if (args == null) {
                 return presentFragment(new NavigationParams(fragment));
@@ -290,11 +290,11 @@ public interface INavigationLayout {
             if (folderId == 1) {
                 if (getParentActivity() == null) return false;
                 final int archiveAccount = fragment.getCurrentAccount();
-                if (app.nimarkogram.messenger.security.NimarkoBiometricPrompt.isArchiveRecentlyVerified(archiveAccount)) {
+                if (app.nebulagram.messenger.security.NebulaBiometricPrompt.isArchiveRecentlyVerified(archiveAccount)) {
                     return presentFragment(new NavigationParams(fragment));
                 }
-                app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(getParentActivity(), archiveAccount, () -> {
-                    app.nimarkogram.messenger.security.NimarkoBiometricPrompt.markArchiveVerified(archiveAccount);
+                app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(getParentActivity(), archiveAccount, () -> {
+                    app.nebulagram.messenger.security.NebulaBiometricPrompt.markArchiveVerified(archiveAccount);
                     presentFragment(new NavigationParams(fragment));
                 }, null);
                 return true;
@@ -322,13 +322,13 @@ public interface INavigationLayout {
      */
     @Deprecated
     default boolean presentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation, boolean check, boolean preview) {
-        // NimarkoGram (CG L321): biometric gate for ChatActivity on deprecated overload.
+        // NebulaGram (CG L321): biometric gate for ChatActivity on deprecated overload.
         if (!(fragment instanceof ChatActivity) || check) {
             return presentFragment(new NavigationParams(fragment).setRemoveLast(removeLast).setNoAnimation(forceWithoutAnimation).setCheckPresentFromDelegate(check).setPreview(preview));
         }
-        if (!(app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenChat
-                || app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenSavedMessages
-                || app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenEncrypted)) {
+        if (!(app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenChat
+                || app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenSavedMessages
+                || app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenEncrypted)) {
             return presentFragment(new NavigationParams(fragment).setRemoveLast(removeLast).setNoAnimation(forceWithoutAnimation).setCheckPresentFromDelegate(check).setPreview(preview));
         }
         Bundle args = fragment.getArguments();
@@ -338,15 +338,15 @@ public interface INavigationLayout {
         long userID = args.getLong("user_id");
         long chatID = args.getLong("chat_id");
         int encID = args.getInt("enc_id");
-        boolean requiresBiometrics = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+        boolean requiresBiometrics = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                 .shouldRequireBiometrics(userID, chatID, encID, fragment.getCurrentAccount());
         if (requiresBiometrics && getParentActivity() == null) return false;
         if (requiresBiometrics
-                && !app.nimarkogram.messenger.security.NimarkoBiometricPrompt.isRecentlyVerified(fragment.getCurrentAccount(), userID, chatID, encID)) {
+                && !app.nebulagram.messenger.security.NebulaBiometricPrompt.isRecentlyVerified(fragment.getCurrentAccount(), userID, chatID, encID)) {
             final int acc = fragment.getCurrentAccount();
-            app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(getParentActivity(), acc,
+            app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(getParentActivity(), acc,
                     () -> {
-                        app.nimarkogram.messenger.security.NimarkoBiometricPrompt.markVerified(acc, userID, chatID, encID);
+                        app.nebulagram.messenger.security.NebulaBiometricPrompt.markVerified(acc, userID, chatID, encID);
                         presentFragment(new NavigationParams(fragment).setRemoveLast(removeLast).setNoAnimation(forceWithoutAnimation).setCheckPresentFromDelegate(check).setPreview(preview));
                     });
             return true;
@@ -359,13 +359,13 @@ public interface INavigationLayout {
      */
     @Deprecated
     default boolean presentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation, boolean check, boolean preview, ActionBarPopupWindow.ActionBarPopupWindowLayout menuView) {
-        // NimarkoGram (CG L368): biometric gate for ChatActivity on deprecated overload with menuView.
+        // NebulaGram (CG L368): biometric gate for ChatActivity on deprecated overload with menuView.
         if (!(fragment instanceof ChatActivity)) {
             return presentFragment(new NavigationParams(fragment).setRemoveLast(removeLast).setNoAnimation(forceWithoutAnimation).setCheckPresentFromDelegate(check).setPreview(preview).setMenuView(menuView));
         }
-        if (!(app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenChat
-                || app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenSavedMessages
-                || app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenEncrypted)) {
+        if (!(app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenChat
+                || app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenSavedMessages
+                || app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenEncrypted)) {
             return presentFragment(new NavigationParams(fragment).setRemoveLast(removeLast).setNoAnimation(forceWithoutAnimation).setCheckPresentFromDelegate(check).setPreview(preview).setMenuView(menuView));
         }
         Bundle args = fragment.getArguments();
@@ -375,15 +375,15 @@ public interface INavigationLayout {
         long userID = args.getLong("user_id");
         long chatID = args.getLong("chat_id");
         int encID = args.getInt("enc_id");
-        boolean requiresBiometrics = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+        boolean requiresBiometrics = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                 .shouldRequireBiometrics(userID, chatID, encID, fragment.getCurrentAccount());
         if (requiresBiometrics && getParentActivity() == null) return false;
         if (requiresBiometrics
-                && !app.nimarkogram.messenger.security.NimarkoBiometricPrompt.isRecentlyVerified(fragment.getCurrentAccount(), userID, chatID, encID)) {
+                && !app.nebulagram.messenger.security.NebulaBiometricPrompt.isRecentlyVerified(fragment.getCurrentAccount(), userID, chatID, encID)) {
             final int acc = fragment.getCurrentAccount();
-            app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(getParentActivity(), acc,
+            app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(getParentActivity(), acc,
                     () -> {
-                        app.nimarkogram.messenger.security.NimarkoBiometricPrompt.markVerified(acc, userID, chatID, encID);
+                        app.nebulagram.messenger.security.NebulaBiometricPrompt.markVerified(acc, userID, chatID, encID);
                         presentFragment(new NavigationParams(fragment).setRemoveLast(removeLast).setNoAnimation(forceWithoutAnimation).setCheckPresentFromDelegate(check).setPreview(preview).setMenuView(menuView));
                     });
             return true;

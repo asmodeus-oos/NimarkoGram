@@ -3265,7 +3265,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
                 topView.addView(particlesView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
                 avatarImageView = new BackupImageView(context);
-                avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(100));
+                avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(100));
                 topView.addView(avatarImageView, LayoutHelper.createFrame(100, 100, Gravity.CENTER, 0, 32, 0, 24));
 
                 addView(topView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 150));

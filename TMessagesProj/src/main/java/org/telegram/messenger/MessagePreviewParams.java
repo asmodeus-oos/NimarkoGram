@@ -204,7 +204,7 @@ public class MessagePreviewParams {
         // concrete picker result is opened. Only the persistent preference is
         // safe to seed here: process-global transient flags let two overlapping
         // forward pickers overwrite each other.
-        this.hideForwardSendersName = app.nimarkogram.messenger.NimarkoConfig.forwardWithoutAuthor;
+        this.hideForwardSendersName = app.nebulagram.messenger.NebulaConfig.forwardWithoutAuthor;
         this.hideCaption = false;
     }
 
@@ -505,9 +505,9 @@ public class MessagePreviewParams {
             }
             if (header != null) {
                 message.fwd_from = header;
-                // NimarkoGram (CG parity): preview the original send date when
+                // NebulaGram (CG parity): preview the original send date when
                 // msgForwardDate is on, matching the send-time behaviour.
-                if (app.nimarkogram.messenger.NimarkoConfig.msgForwardDate && !messageObject.isForwarded()) {
+                if (app.nebulagram.messenger.NebulaConfig.msgForwardDate && !messageObject.isForwarded()) {
                     message.fwd_from.date = messageObject.messageOwner.date;
                 }
                 message.flags |= TLRPC.MESSAGE_FLAG_FWD;

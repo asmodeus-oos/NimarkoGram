@@ -218,7 +218,7 @@ public abstract class BlurredBackgroundDrawable extends Drawable {
         // back to a single uniform `strokeColorFull` stroke (extera parity —
         // their `useFullStroke` branch). Zero `strokeColorTop/Bottom` so the
         // halo halves are skipped in drawStrokeInternalIfNeeded.
-        if (app.nimarkogram.messenger.NimarkoConfig.glareOnElements) {
+        if (app.nebulagram.messenger.NebulaConfig.glareOnElements) {
             strokeColorTop = colorProvider.getStrokeColorTop();
             strokeColorBottom = colorProvider.getStrokeColorBottom();
             strokeColorFull = 0;

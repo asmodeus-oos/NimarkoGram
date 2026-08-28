@@ -543,7 +543,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         avatarDrawable.setTextSize(dp(12));
 
         BackupImageView imageView = new BackupImageView(getParentActivity());
-        imageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(40));
+        imageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(40));
         frameLayout2.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
 
         TextView textView = new TextView(getParentActivity());

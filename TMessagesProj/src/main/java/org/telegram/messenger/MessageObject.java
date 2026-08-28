@@ -128,7 +128,7 @@ import java.util.regex.Pattern;
 
 import me.vkryl.core.BitwiseUtils;
 
-import app.nimarkogram.messenger.chats.filters.MessagesFilterHelper;
+import app.nebulagram.messenger.chats.filters.MessagesFilterHelper;
 public class MessageObject {
     private static final int MESSAGE_ID_RESERVED_BITS_MASK = 0x70000000;
     private static final int MESSAGE_ID_EPHEMERAL_BITS_MASK = 0x60000000;
@@ -648,7 +648,7 @@ public class MessageObject {
     }
 
     public boolean hasMediaSpoilers() {
-        return !isRepostPreview && (messageOwner.media != null && messageOwner.media.spoiler || needDrawBluredPreview()) || isHiddenSensitive() || hasMediaSpoilersNimarko(false);
+        return !isRepostPreview && (messageOwner.media != null && messageOwner.media.spoiler || needDrawBluredPreview()) || isHiddenSensitive() || hasMediaSpoilersNebula(false);
     }
 
     /**
@@ -657,21 +657,21 @@ public class MessageObject {
      * biometric-locked or encrypted dialog and we're rendering it in the
      * chats list (or building a notification), force a media spoiler.
      */
-    public boolean hasMediaSpoilersNimarko(boolean notifications) {
+    public boolean hasMediaSpoilersNebula(boolean notifications) {
         boolean addSpoiler = false;
         org.telegram.ui.ActionBar.BaseFragment currentFragment = LaunchActivity.getSafeLastFragment();
         boolean isProperActivity = currentFragment instanceof org.telegram.ui.DialogsActivity || notifications;
-        if (isProperActivity && (app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenChat
-                || app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenSavedMessages
-                || app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenEncrypted)) {
+        if (isProperActivity && (app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenChat
+                || app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenSavedMessages
+                || app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenEncrypted)) {
             long chatID = messageOwner.dialog_id;
-            boolean require = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isChatLocked(currentAccount, chatID)
-                    || app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isSavedMessagesProtected(currentAccount, chatID)
-                    || app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isEncryptedChat(chatID, currentAccount);
+            boolean require = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isChatLocked(currentAccount, chatID)
+                    || app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isSavedMessagesProtected(currentAccount, chatID)
+                    || app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isEncryptedChat(chatID, currentAccount);
             addSpoiler = require;
         }
-        boolean filtered = (app.nimarkogram.messenger.NimarkoConfig.isMsgFiltersHideAll()
-                || app.nimarkogram.messenger.NimarkoConfig.isMsgFiltersHideFromBlocked())
+        boolean filtered = (app.nebulagram.messenger.NebulaConfig.isMsgFiltersHideAll()
+                || app.nebulagram.messenger.NebulaConfig.isMsgFiltersHideFromBlocked())
                 && shouldBlockMessage();
         return filtered || addSpoiler;
     }
@@ -2004,12 +2004,12 @@ public class MessageObject {
             } else {
                 paint = Theme.chat_msgTextPaint;
             }
-            // NimarkoGram: reconstruct local premium emoji (tg://emoji?id= text-URLs
+            // NebulaGram: reconstruct local premium emoji (tg://emoji?id= text-URLs
             // → custom-emoji entities) BEFORE the bubble's animated-emoji spans are
             // built — otherwise the emoji only animates on a later re-render, so it
             // looked like premium emoji "не всегда показываются в чате".
             try {
-                app.nimarkogram.messenger.utils.NimarkoLocalEmoji.parseCustomEmojis(
+                app.nebulagram.messenger.utils.NebulaLocalEmoji.parseCustomEmojis(
                         messageText, getEntities(), getId());
             } catch (Throwable ignored) {}
             int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
@@ -6865,7 +6865,7 @@ public class MessageObject {
                 paint = Theme.chat_msgTextPaint;
             }
             try {
-                app.nimarkogram.messenger.utils.NimarkoLocalEmoji.parseCustomEmojis(
+                app.nebulagram.messenger.utils.NebulaLocalEmoji.parseCustomEmojis(
                         messageText, getEntities(), getId());
             } catch (Throwable ignored) {}
             int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
@@ -7725,7 +7725,7 @@ public class MessageObject {
             addEntitiesToText(caption, useManualParse);
             try {
                 int captionMaxW = AndroidUtilities.displaySize.x - dp(needDrawAvatar() ? 147 : 95);
-                caption = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(
+                caption = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(
                         caption, Theme.chat_msgTextPaint.getTextSize(), captionMaxW, false);
             } catch (Throwable ignored) {}
             caption = FormattedDateSpan.applyFormatedDateEntities(caption);
@@ -7995,8 +7995,8 @@ public class MessageObject {
     }
 
     public void replaceEmojiToLottieFrame(CharSequence text, int[] emojiOnly) {
-        // NimarkoGram (CG L7346): skip animated-emoji conversion when systemEmoji is on.
-        if (!(text instanceof Spannable) || app.nimarkogram.messenger.NimarkoConfig.systemEmoji) {
+        // NebulaGram (CG L7346): skip animated-emoji conversion when systemEmoji is on.
+        if (!(text instanceof Spannable) || app.nebulagram.messenger.NebulaConfig.systemEmoji) {
             return;
         }
         Spannable spannable = (Spannable) text;
@@ -8424,30 +8424,30 @@ public class MessageObject {
         if (getDialogId() == UserObject.VERIFY) {
             return false;
         }
-        // NimarkoGram: per-peer-kind share-button overrides. Off-state hides
+        // NebulaGram: per-peer-kind share-button overrides. Off-state hides
         // the bubble even if Telegram would otherwise draw it.
         TLRPC.Message mo = messageOwner;
         if (mo != null && mo.from_id != null) {
             if (type == TYPE_STICKER || type == TYPE_ANIMATED_STICKER || type == TYPE_EMOJIS) {
-                if (app.nimarkogram.messenger.NimarkoConfig.stickersDrawShareButton) {
+                if (app.nebulagram.messenger.NebulaConfig.stickersDrawShareButton) {
                     return true;
                 }
             }
             if (mo.from_id instanceof TLRPC.TL_peerChannel || mo.post) {
-                if (!app.nimarkogram.messenger.NimarkoConfig.channelsDrawShareButton) {
+                if (!app.nebulagram.messenger.NebulaConfig.channelsDrawShareButton) {
                     return false;
                 }
             } else if (mo.peer_id != null && mo.peer_id.channel_id != 0) {
-                if (!app.nimarkogram.messenger.NimarkoConfig.supergroupsDrawShareButton) {
+                if (!app.nebulagram.messenger.NebulaConfig.supergroupsDrawShareButton) {
                     return false;
                 }
             } else if (mo.from_id instanceof TLRPC.TL_peerUser) {
                 TLRPC.User u = MessagesController.getInstance(currentAccount).getUser(mo.from_id.user_id);
                 if (u != null && u.bot) {
-                    if (!app.nimarkogram.messenger.NimarkoConfig.botsDrawShareButton) {
+                    if (!app.nebulagram.messenger.NebulaConfig.botsDrawShareButton) {
                         return false;
                     }
-                } else if (!app.nimarkogram.messenger.NimarkoConfig.usersDrawShareButton) {
+                } else if (!app.nebulagram.messenger.NebulaConfig.usersDrawShareButton) {
                     return false;
                 }
             }
@@ -8761,18 +8761,18 @@ public class MessageObject {
         if (type != TYPE_TEXT && type != TYPE_EMOJIS && type != TYPE_STORY_MENTION || messageOwner.peer_id == null || TextUtils.isEmpty(messageText) && !isBotPendingDraft) {
             return;
         }
-        // NimarkoGram: local premium emoji — reconstruct custom-emoji entities
+        // NebulaGram: local premium emoji — reconstruct custom-emoji entities
         // from tg://emoji?id= text-URLs BEFORE applyEntities() turns entities
         // into spans, so the smuggled animated emoji renders.
         try {
-            app.nimarkogram.messenger.utils.NimarkoLocalEmoji.parseCustomEmojis(
+            app.nebulagram.messenger.utils.NebulaLocalEmoji.parseCustomEmojis(
                     messageText, getEntities(), getId());
         } catch (Throwable t) {
             FileLog.e(t);
         }
         boolean hasUrls = applyEntities();
         try {
-            messageText = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(
+            messageText = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(
                     messageText, Theme.chat_msgTextPaint.getTextSize(), getMaxMessageTextWidth(), false);
         } catch (Throwable ignored) {}
         boolean noforwards = messageOwner != null && messageOwner.noforwards;

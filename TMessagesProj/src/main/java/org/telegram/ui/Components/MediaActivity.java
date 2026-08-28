@@ -394,7 +394,7 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
             }
         };
         avatarImageView.getImageReceiver().setAllowDecodeSingleFrame(true);
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(getDialogId() == getUserConfig().getClientUserId() && topicId == 0 && getMessagesController().savedViewAsChats ? 26 : 42));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(getDialogId() == getUserConfig().getClientUserId() && topicId == 0 && getMessagesController().savedViewAsChats ? 26 : 42));
         avatarImageView.setPivotX(0);
         avatarImageView.setPivotY(0);
         AvatarDrawable avatarDrawable = new AvatarDrawable();

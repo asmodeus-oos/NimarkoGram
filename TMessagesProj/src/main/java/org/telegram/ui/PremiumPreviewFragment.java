@@ -1119,7 +1119,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
     public static void buyPremium(BaseFragment fragment, SubscriptionTier tier, String source, boolean forcePremium, BillingFlowParams.SubscriptionUpdateParams updateParams) {
         
-        if (BuildVars.IS_BILLING_UNAVAILABLE && !app.nimarkogram.messenger.NimarkoConfig.allowSafeStars) {
+        if (BuildVars.IS_BILLING_UNAVAILABLE && !app.nebulagram.messenger.NebulaConfig.allowSafeStars) {
             if (fragment == null) {
                 new PremiumNotAvailableBottomSheet(fragment).show();
             } else {
@@ -1295,7 +1295,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             return getString(R.string.CG_SafeStars_BuyPremiumButton);
         }
         
-        if (BuildVars.IS_BILLING_UNAVAILABLE && !app.nimarkogram.messenger.NimarkoConfig.allowSafeStars) {
+        if (BuildVars.IS_BILLING_UNAVAILABLE && !app.nebulagram.messenger.NebulaConfig.allowSafeStars) {
             return getString(R.string.SubscribeToPremiumNotAvailable);
         }
 
@@ -2004,7 +2004,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 }
             }
 
-            if (app.nimarkogram.messenger.NimarkoConfig.allowSafeStars) {
+            if (app.nebulagram.messenger.NebulaConfig.allowSafeStars) {
                 TLRPC.TL_premiumSubscriptionOption safeStarsOption = new TLRPC.TL_premiumSubscriptionOption();
                 safeStarsOption.months = 1390;
                 safeStarsOption.currency = "USD";
@@ -2091,7 +2091,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 subtitleView.setText(AndroidUtilities.replaceTags(getString(getUserConfig().isPremium() || forcePremium ? R.string.TelegramBusinessSubscribedSubtitleTemp : R.string.TelegramBusinessSubtitleTemp)));
             }
             subtitleView.getLayoutParams().width = Math.min(AndroidUtilities.displaySize.x - dp(42), HintView2.cutInFancyHalf(subtitleView.getText(), subtitleView.getPaint()));
-            boolean tierNotVisible = forcePremium || BuildVars.IS_BILLING_UNAVAILABLE && !app.nimarkogram.messenger.NimarkoConfig.allowSafeStars || IS_PREMIUM_TIERS_UNAVAILABLE || subscriptionTiers.size() <= 1;
+            boolean tierNotVisible = forcePremium || BuildVars.IS_BILLING_UNAVAILABLE && !app.nebulagram.messenger.NebulaConfig.allowSafeStars || IS_PREMIUM_TIERS_UNAVAILABLE || subscriptionTiers.size() <= 1;
             if (!setTierListViewVisibility || !tierNotVisible) {
                 tierListView.setVisibility(tierNotVisible ? GONE : VISIBLE);
                 setTierListViewVisibility = true;
@@ -2148,7 +2148,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         if (LocaleController.isRTL) {
             animated = false;
         }
-        if (BuildVars.IS_BILLING_UNAVAILABLE && !app.nimarkogram.messenger.NimarkoConfig.allowSafeStars && selectedTierIndex < subscriptionTiers.size()) {
+        if (BuildVars.IS_BILLING_UNAVAILABLE && !app.nebulagram.messenger.NebulaConfig.allowSafeStars && selectedTierIndex < subscriptionTiers.size()) {
             premiumButtonView.setButton(getPremiumButtonText(currentAccount, subscriptionTiers.get(selectedTierIndex)), null, animated);
             buttonContainerInternal.setOnClickListener(v -> buyPremium(this));
             return;

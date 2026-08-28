@@ -399,28 +399,28 @@ public class ConnectionsManager extends BaseController {
     }
 
     private void sendRequestInternal(TLObject objectIn, RequestDelegate onCompleteIn, RequestDelegateTimestamp onCompleteTimestamp, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connectionType, boolean immediate, int requestToken) {
-        // NimarkoGram: pre-request plugin hook
+        // NebulaGram: pre-request plugin hook
         TLObject hookedObject = objectIn;
         String requestName = "";
         try {
             requestName = objectIn != null ? objectIn.getClass().getSimpleName() : "";
-            TLObject pre = app.nimarkogram.messenger.plugins.PluginsController.getInstance()
+            TLObject pre = app.nebulagram.messenger.plugins.PluginsController.getInstance()
                     .executePreRequestHook(requestName, currentAccount, objectIn);
             if (pre == null) {
                 return;
             }
             hookedObject = pre;
         } catch (Throwable t) {
-            FileLog.e("nimarko: pre-request hook threw", t);
+            FileLog.e("nebula: pre-request hook threw", t);
         }
-        // NimarkoGram: wrap onComplete with post-request hook (only when caller actually passed a callback)
+        // NebulaGram: wrap onComplete with post-request hook (only when caller actually passed a callback)
         final RequestDelegate userOnComplete = onCompleteIn;
         final String finalRequestName = requestName;
         final TLObject object = hookedObject;
         final RequestDelegate onComplete = (userOnComplete == null) ? null : (response, error) -> {
             try {
-                app.nimarkogram.messenger.plugins.hooks.PluginsHooks.PostRequestResult post =
-                        app.nimarkogram.messenger.plugins.PluginsController.getInstance()
+                app.nebulagram.messenger.plugins.hooks.PluginsHooks.PostRequestResult post =
+                        app.nebulagram.messenger.plugins.PluginsController.getInstance()
                                 .executePostRequestHook(finalRequestName, currentAccount, response, error);
                 if (post != null) {
                     userOnComplete.run(post.response, post.error);
@@ -429,7 +429,7 @@ public class ConnectionsManager extends BaseController {
                     return;
                 }
             } catch (Throwable t) {
-                FileLog.e("nimarko: post-request hook threw", t);
+                FileLog.e("nebula: post-request hook threw", t);
             }
             userOnComplete.run(response, error);
         };
@@ -460,7 +460,7 @@ public class ConnectionsManager extends BaseController {
                             int magic = buff.readInt32(true);
                             resp = object.deserializeResponse(buff, magic, true);
                         } catch (Exception e2) {
-                            // NimarkoGram (#340): a corrupt NETWORK response on a DOWNLOAD
+                            // NebulaGram (#340): a corrupt NETWORK response on a DOWNLOAD
                             // connection (garbage magic in upload_File — seen 42× when file
                             // streams come through the data-bypass relay) must fail the
                             // request gracefully, NOT crash the app. Keep the debug-rethrow
@@ -485,8 +485,8 @@ public class ConnectionsManager extends BaseController {
                         if (BuildVars.LOGS_ENABLED && error.code != -2000) {
                             FileLog.e(object + " got error " + error.code + " " + error.text);
                         }
-                        // NimarkoGram (CG parity): surface RPC errors as toasts when debug flag is on.
-                        if (app.nimarkogram.messenger.NimarkoConfig.showRPCErrors && error.code != -2000) {
+                        // NebulaGram (CG parity): surface RPC errors as toasts when debug flag is on.
+                        if (app.nebulagram.messenger.NebulaConfig.showRPCErrors && error.code != -2000) {
                             final int dbgCode = error.code;
                             final String dbgText = error.text;
                             final String dbgObj = object.toString();
@@ -691,10 +691,10 @@ public class ConnectionsManager extends BaseController {
             FileLog.d("selected ip strategy " + selectedStrategy);
         }
         native_setIpStrategy(currentAccount, selectedStrategy);
-        // NimarkoGram: force slow-network mode when the user opts in (uses smaller chunk sizes
+        // NebulaGram: force slow-network mode when the user opts in (uses smaller chunk sizes
         // and a more conservative retry profile inside tgnet).
         native_setNetworkAvailable(currentAccount, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(),
-                ApplicationLoader.isConnectionSlow() || app.nimarkogram.messenger.NimarkoConfig.slowNetworkMode);
+                ApplicationLoader.isConnectionSlow() || app.nebulagram.messenger.NebulaConfig.slowNetworkMode);
     }
 
     public void setPushConnectionEnabled(boolean value) {

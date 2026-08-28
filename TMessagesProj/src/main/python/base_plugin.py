@@ -10,10 +10,10 @@ from typing import Any, List, final, Optional, Callable, Dict, Union
 import plugin_settings
 import plugin_runtime
 from android_utils import log
-from app.nimarkogram.messenger import NimarkoConfig as NekoConfig
-from app.nimarkogram.messenger.plugins import PluginsController, PluginsConstants
-from app.nimarkogram.messenger.plugins.hooks import HookFilter as JavaHookFilter
-from app.nimarkogram.messenger.plugins.xposed import PyMethodHook, PyMethodReplacement
+from app.nebulagram.messenger import NebulaConfig as NekoConfig
+from app.nebulagram.messenger.plugins import PluginsController, PluginsConstants
+from app.nebulagram.messenger.plugins.hooks import HookFilter as JavaHookFilter
+from app.nebulagram.messenger.plugins.xposed import PyMethodHook, PyMethodReplacement
 
 @dataclass
 class PluginMetadata:
@@ -265,7 +265,7 @@ class BasePlugin:
         self.initialized = False
         
         self._runtime_token = None
-        self._nimarko_runtime_token = None
+        self._nebula_runtime_token = None
         
         self.isenabled = False
         self._initializing = False
@@ -409,7 +409,7 @@ class BasePlugin:
     @final
     @_runtime_owned()
     def reload_settings(self):
-        """NimarkoGram: convenience method some plugins (e.g. NimarkoBanner)
+        """NebulaGram: convenience method some plugins (e.g. NebulaBanner)
         call as ``self.reload_settings()``. The original API only had it as a
         keyword arg on set_setting/import_settings; we expose a top-level
         method so plugins that expect the explicit call don't crash with

@@ -336,7 +336,7 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
 
         telegramLogoView = new TextView(context);
         
-        telegramLogoView.setText(app.nimarkogram.messenger.NimarkoConfig.resolveMainTitle(getString(R.string.AppName)));
+        telegramLogoView.setText(app.nebulagram.messenger.NebulaConfig.resolveMainTitle(getString(R.string.AppName)));
         telegramLogoView.setContentDescription(telegramLogoView.getText());
         telegramLogoView.setTextColor(getTextLogoColor());
         telegramLogoView.setTypeface(AndroidUtilities.bold());

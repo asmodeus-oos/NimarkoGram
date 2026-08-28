@@ -113,7 +113,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import app.nimarkogram.messenger.chats.filters.MessagesFilterHelper;
+import app.nebulagram.messenger.chats.filters.MessagesFilterHelper;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
@@ -917,7 +917,7 @@ public class MediaDataController extends BaseController {
         if (type == TYPE_PREMIUM_STICKERS) {
             return new ArrayList<>(recentStickers[type]);
         }
-        ArrayList<TLRPC.Document> result = new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), app.nimarkogram.messenger.NimarkoConfig.recentStickersAmplifier + 1)));
+        ArrayList<TLRPC.Document> result = new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), app.nebulagram.messenger.NebulaConfig.recentStickersAmplifier + 1)));
         if (firstEmpty && !result.isEmpty() && !StickersAlert.DISABLE_STICKER_EDITOR) {
             result.add(0, new TLRPC.TL_documentEmpty());
         }
@@ -1021,7 +1021,7 @@ public class MediaDataController extends BaseController {
                     }
                 });
             }
-            maxCount = app.nimarkogram.messenger.NimarkoConfig.recentStickersAmplifier + 1;
+            maxCount = app.nebulagram.messenger.NebulaConfig.recentStickersAmplifier + 1;
         }
         if (recentStickers[type].size() > maxCount || remove) {
             TLRPC.Document old = remove ? document : recentStickers[type].remove(recentStickers[type].size() - 1);
@@ -1312,7 +1312,7 @@ public class MediaDataController extends BaseController {
         });
     }
 
-    /** Index-addressed variant used by the plugin engine to render pack icons (Nimarko parity). */
+    /** Index-addressed variant used by the plugin engine to render pack icons (Nebula parity). */
     public void setPlaceholderImageByIndex(final BackupImageView backupImageView, String setName, final int index, final String filter) {
         TLRPC.TL_inputStickerSetShortName inputStickerSet = new TLRPC.TL_inputStickerSetShortName();
         inputStickerSet.short_name = setName;
@@ -2117,7 +2117,7 @@ public class MediaDataController extends BaseController {
                         } else if (type == TYPE_FAVE) {
                             maxCount = getMessagesController().maxFaveStickersCount;
                         } else {
-                            maxCount = app.nimarkogram.messenger.NimarkoConfig.recentStickersAmplifier + 1;
+                            maxCount = app.nebulagram.messenger.NebulaConfig.recentStickersAmplifier + 1;
                         }
                     }
                     database.beginTransaction();
@@ -2213,13 +2213,13 @@ public class MediaDataController extends BaseController {
                         recentStickers[type] = documents;
                     } else {
                         // NG: server-side stickers_recent_limit (≈30) often
-                        // sits below the user's local NimarkoConfig.recentStickersAmplifier
+                        // sits below the user's local NebulaConfig.recentStickersAmplifier
                         // cap (10–50). Plain overwrite would clamp the user's
                         // local history to ~30. Merge instead: server's
                         // freshest-first list goes first; any locally-tracked
                         // entries that aren't in the server response get
                         // appended at the tail, total bounded by amplifier+1.
-                        int cap = app.nimarkogram.messenger.NimarkoConfig.recentStickersAmplifier + 1;
+                        int cap = app.nebulagram.messenger.NebulaConfig.recentStickersAmplifier + 1;
                         ArrayList<TLRPC.Document> merged = new ArrayList<>(documents);
                         if (merged.size() < cap && recentStickers[type] != null) {
                             java.util.HashSet<Long> seen = new java.util.HashSet<>();
@@ -4002,10 +4002,10 @@ public class MediaDataController extends BaseController {
                     req.saved_reaction.add(reaction.toTLReaction());
                     req.flags |= 8;
                 }
-                // NimarkoGram: CG parity — honor user-selected search filter (Photos / Videos /
+                // NebulaGram: CG parity — honor user-selected search filter (Photos / Videos /
                 // Files / etc.) instead of always Empty. Mirrors CG MediaDataController line ~3918
                 // (req.filter = ChatsHelper2.INSTANCE.getSearchFilterType()).
-                req.filter = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2.getSearchFilterType();
+                req.filter = app.nebulagram.messenger.utils.chats.NebulaChatHelper2.getSearchFilterType();
                 mergeReqId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                     if (lastMergeDialogId == mergeDialogId) {
                         mergeReqId = 0;
@@ -4090,10 +4090,10 @@ public class MediaDataController extends BaseController {
             req.saved_reaction.add(reaction.toTLReaction());
             req.flags |= 8;
         }
-        // NimarkoGram: CG parity — honor user-selected search filter (Photos / Videos / Files /
+        // NebulaGram: CG parity — honor user-selected search filter (Photos / Videos / Files /
         // etc.) instead of always Empty. Mirrors CG MediaDataController line ~4003
         // (req.filter = ChatsHelper2.INSTANCE.getSearchFilterType()).
-        req.filter = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2.getSearchFilterType();
+        req.filter = app.nebulagram.messenger.utils.chats.NebulaChatHelper2.getSearchFilterType();
         lastSearchQuery = query;
         long queryWithDialogFinal = queryWithDialog;
         String finalQuery = query;
@@ -7057,7 +7057,7 @@ public class MediaDataController extends BaseController {
         // NM_MF: wrap msg.entities with CG-style spoiler entities derived from MessageFilters.
         ArrayList<TLRPC.MessageEntity> ents = MessagesFilterHelper.INSTANCE.addSpoilerEntities(msg);
         // NM_PWD: overlay full-body spoiler for locked / encrypted dialogs.
-        ents = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.checkLockedChatsEntities(msg, ents);
+        ents = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.checkLockedChatsEntities(msg, ents);
         addTextStyleRuns(ents, msg.messageText, text, -1);
     }
 
@@ -7069,7 +7069,7 @@ public class MediaDataController extends BaseController {
         // NM_MF: wrap msg.entities with CG-style spoiler entities derived from MessageFilters.
         ArrayList<TLRPC.MessageEntity> ents = MessagesFilterHelper.INSTANCE.addSpoilerEntities(msg);
         // NM_PWD: overlay full-body spoiler for locked / encrypted dialogs.
-        ents = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.checkLockedChatsEntities(msg, ents);
+        ents = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.checkLockedChatsEntities(msg, ents);
         addTextStyleRuns(ents, msg.messageText, text, allowedFlags);
     }
 

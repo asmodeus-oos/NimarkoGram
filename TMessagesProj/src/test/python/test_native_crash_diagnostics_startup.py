@@ -9,7 +9,7 @@ class NativeCrashDiagnosticsStartupTest(unittest.TestCase):
     def setUpClass(cls):
         cls.handler = (
             JAVA
-            / "app/nimarkogram/messenger/plugins/utils/NativeCrashHandler.java"
+            / "app/nebulagram/messenger/plugins/utils/NativeCrashHandler.java"
         ).read_text()
         cls.application = (
             JAVA / "org/telegram/messenger/ApplicationLoader.java"

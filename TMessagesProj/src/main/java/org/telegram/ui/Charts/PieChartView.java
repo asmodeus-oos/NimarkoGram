@@ -379,7 +379,7 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
             pieLegendView.setTranslationX(xl);
             pieLegendView.setTranslationY(yl);
             
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 AndroidUtilities.vibrateCursor(this);
             }
         }

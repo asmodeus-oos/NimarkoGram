@@ -68,8 +68,8 @@ public class UItem extends AdapterWithDiffUtils.Item {
     private transient boolean searchable;
     private transient String linkAlias;
 
-    public app.nimarkogram.messenger.plugins.Plugin plugin;
-    public app.nimarkogram.messenger.plugins.models.SettingItem settingItem;
+    public app.nebulagram.messenger.plugins.Plugin plugin;
+    public app.nebulagram.messenger.plugins.models.SettingItem settingItem;
 
     public boolean withUsername = true;
 
@@ -720,9 +720,9 @@ public class UItem extends AdapterWithDiffUtils.Item {
     public UItem setSearchable(Object owner) {
         searchable = true;
         if (owner instanceof BaseFragment) searchOwner = (BaseFragment) owner;
-        if (searchOwner != null && app.nimarkogram.messenger.preferences.utils.SettingsRegistry.isValidForSearch(this)) {
-            app.nimarkogram.messenger.preferences.utils.SettingsRegistry registry =
-                    app.nimarkogram.messenger.preferences.utils.SettingsRegistry.getInstance();
+        if (searchOwner != null && app.nebulagram.messenger.preferences.utils.SettingsRegistry.isValidForSearch(this)) {
+            app.nebulagram.messenger.preferences.utils.SettingsRegistry registry =
+                    app.nebulagram.messenger.preferences.utils.SettingsRegistry.getInstance();
             if (!TextUtils.isEmpty(linkAlias)) {
                 registry.addLinkAliasForOption(linkAlias, searchOwner, this);
             } else {
@@ -734,8 +734,8 @@ public class UItem extends AdapterWithDiffUtils.Item {
     public UItem setLinkAlias(String alias, Object owner) {
         linkAlias = alias;
         if (owner instanceof BaseFragment) searchOwner = (BaseFragment) owner;
-        if (searchOwner != null && app.nimarkogram.messenger.preferences.utils.SettingsRegistry.isValidForLinkAliases(this)) {
-            app.nimarkogram.messenger.preferences.utils.SettingsRegistry.getInstance()
+        if (searchOwner != null && app.nebulagram.messenger.preferences.utils.SettingsRegistry.isValidForLinkAliases(this)) {
+            app.nebulagram.messenger.preferences.utils.SettingsRegistry.getInstance()
                     .addLinkAliasForOption(alias, searchOwner, this);
         }
         return this;

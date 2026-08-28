@@ -7826,7 +7826,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     super.invalidate(l, t, r, b);
                 }
             };
-            avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(128));
+            avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(128));
             avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REGISTER);
             avatarDrawable.setInfo(5, null, null);
             avatarImage.setImageDrawable(avatarDrawable);

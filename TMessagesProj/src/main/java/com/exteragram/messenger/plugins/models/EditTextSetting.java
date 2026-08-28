@@ -2,7 +2,7 @@ package com.exteragram.messenger.plugins.models;
 
 import com.chaquo.python.PyObject;
 
-public class EditTextSetting extends app.nimarkogram.messenger.plugins.models.EditTextSetting {
+public class EditTextSetting extends app.nebulagram.messenger.plugins.models.EditTextSetting {
     public EditTextSetting(String key, String hint, String defaultValue, boolean multiline,
                            int maxLength, String mask, PyObject onChangeCallback) {
         super(key, hint, defaultValue, multiline, maxLength, mask, onChangeCallback);

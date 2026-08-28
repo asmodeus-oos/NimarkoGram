@@ -19,7 +19,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.FilterCreateActivity;
 
-import app.nimarkogram.messenger.utils.ui.ColorRectSpan;
+import app.nebulagram.messenger.utils.ui.ColorRectSpan;
 
 public abstract class LocaleUtils {
 
@@ -27,51 +27,51 @@ public abstract class LocaleUtils {
             Pattern.compile("(?<![a-zA-Z0-9])#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})(?![a-zA-Z0-9])");
 
     public static CharSequence formatWithUsernames(CharSequence charSequence) {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.formatWithUsernames(charSequence);
+        return app.nebulagram.messenger.utils.text.LocaleUtils.formatWithUsernames(charSequence);
     }
 
     public static CharSequence formatWithUsernames(CharSequence charSequence, BaseFragment baseFragment) {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.formatWithUsernames(charSequence, baseFragment);
+        return app.nebulagram.messenger.utils.text.LocaleUtils.formatWithUsernames(charSequence, baseFragment);
     }
 
     public static CharSequence formatWithUsernames(CharSequence charSequence, BaseFragment baseFragment, Runnable runnable) {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.formatWithUsernames(charSequence, baseFragment, runnable);
+        return app.nebulagram.messenger.utils.text.LocaleUtils.formatWithUsernames(charSequence, baseFragment, runnable);
     }
 
     public static CharSequence formatWithHtmlURLs(CharSequence charSequence) {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.formatWithHtmlURLs(charSequence);
+        return app.nebulagram.messenger.utils.text.LocaleUtils.formatWithHtmlURLs(charSequence);
     }
 
     public static CharSequence formatWithURLs(CharSequence charSequence) {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.formatWithURLs(charSequence);
+        return app.nebulagram.messenger.utils.text.LocaleUtils.formatWithURLs(charSequence);
     }
 
     public static CharSequence fullyFormatText(CharSequence charSequence, BaseFragment baseFragment, Runnable runnable) {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.fullyFormatText(charSequence, baseFragment, runnable);
+        return app.nebulagram.messenger.utils.text.LocaleUtils.fullyFormatText(charSequence, baseFragment, runnable);
     }
 
     public static CharSequence fullyFormatText(CharSequence charSequence) {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.fullyFormatText(charSequence, null, null);
+        return app.nebulagram.messenger.utils.text.LocaleUtils.fullyFormatText(charSequence, null, null);
     }
 
     public static String getAppName() {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.getAppName();
+        return app.nebulagram.messenger.utils.text.LocaleUtils.getAppName();
     }
 
     public static void parseMarkdownLinks(CharSequence[] charSequenceArr, Runnable runnable) {
-        app.nimarkogram.messenger.utils.text.LocaleUtils.parseMarkdownLinks(charSequenceArr, runnable);
+        app.nebulagram.messenger.utils.text.LocaleUtils.parseMarkdownLinks(charSequenceArr, runnable);
     }
 
     public static void parseMarkdownLinks(CharSequence[] charSequenceArr) {
-        app.nimarkogram.messenger.utils.text.LocaleUtils.parseMarkdownLinks(charSequenceArr, null);
+        app.nebulagram.messenger.utils.text.LocaleUtils.parseMarkdownLinks(charSequenceArr, null);
     }
 
     public static String ensureUrlHasHttps(String str) {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.ensureUrlHasHttps(str);
+        return app.nebulagram.messenger.utils.text.LocaleUtils.ensureUrlHasHttps(str);
     }
 
     public static Spannable createCopySpan(BaseFragment baseFragment) {
-        return app.nimarkogram.messenger.utils.text.LocaleUtils.createCopySpan(baseFragment);
+        return app.nebulagram.messenger.utils.text.LocaleUtils.createCopySpan(baseFragment);
     }
 
     public static String capitalize(String str) {

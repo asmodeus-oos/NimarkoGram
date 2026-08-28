@@ -200,7 +200,7 @@ public class ProximitySheet extends FrameLayout {
         kmPicker.setTextOffset(AndroidUtilities.dp(20));
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
             
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {

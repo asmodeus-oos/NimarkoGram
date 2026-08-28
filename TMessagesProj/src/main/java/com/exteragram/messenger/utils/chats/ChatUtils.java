@@ -9,10 +9,10 @@ import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 
 public final class ChatUtils {
-    private final app.nimarkogram.messenger.utils.chats.ChatUtils real;
+    private final app.nebulagram.messenger.utils.chats.ChatUtils real;
     private final int account;
 
-    private ChatUtils(app.nimarkogram.messenger.utils.chats.ChatUtils real, int account) {
+    private ChatUtils(app.nebulagram.messenger.utils.chats.ChatUtils real, int account) {
         this.real = real;
         this.account = account;
     }
@@ -23,7 +23,7 @@ public final class ChatUtils {
 
     public static ChatUtils getInstance(int account) {
         return new ChatUtils(
-                app.nimarkogram.messenger.utils.chats.ChatUtils.getInstance(account), account);
+                app.nebulagram.messenger.utils.chats.ChatUtils.getInstance(account), account);
     }
 
     public String getPathToMessage(MessageObject messageObject) {
@@ -32,7 +32,7 @@ public final class ChatUtils {
 
     public void saveStickerToGallery(Activity activity, TLRPC.Document document,
                                      Utilities.Callback<Uri> callback) {
-        app.nimarkogram.messenger.utils.chats.NimarkoChatHelper
+        app.nebulagram.messenger.utils.chats.NebulaChatHelper
                 .getInstance(account).saveStickerToGallery(activity, document, callback);
     }
 }

@@ -115,7 +115,7 @@ public class Switch extends View {
         paint4 = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint5 = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        setHapticFeedbackEnabled(!app.nimarkogram.messenger.NimarkoConfig.disableVibration);
+        setHapticFeedbackEnabled(!app.nebulagram.messenger.NebulaConfig.disableVibration);
     }
 
     @Keep
@@ -302,7 +302,7 @@ public class Switch extends View {
             isChecked = checked;
             if (attachedToWindow && animated) {
                 
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                     vibrateChecked();
                 }
                 animateToCheckedState(checked);
@@ -409,9 +409,9 @@ public class Switch extends View {
             return;
         }
 
-        int switchStyle = app.nimarkogram.messenger.NimarkoConfig.switchStyle;
-        boolean oneUi = switchStyle == app.nimarkogram.messenger.NimarkoConfig.SWITCH_STYLE_ONEUI;
-        boolean md3 = switchStyle == app.nimarkogram.messenger.NimarkoConfig.SWITCH_STYLE_MD3;
+        int switchStyle = app.nebulagram.messenger.NebulaConfig.switchStyle;
+        boolean oneUi = switchStyle == app.nebulagram.messenger.NebulaConfig.SWITCH_STYLE_ONEUI;
+        boolean md3 = switchStyle == app.nebulagram.messenger.NebulaConfig.SWITCH_STYLE_MD3;
         int x;
         float y;
         int tx;
@@ -487,7 +487,7 @@ public class Switch extends View {
 
             color1 = processColor(Theme.getColor(trackColorKey, resourcesProvider));
             color2 = processColor(Theme.getColor(trackCheckedColorKey, resourcesProvider));
-            color3 = processColor(app.nimarkogram.messenger.utils.ui.MonetHelper
+            color3 = processColor(app.nebulagram.messenger.utils.ui.MonetHelper
                     .getOnPrimaryColor(Color.WHITE));
             color4 = processColor(0xff999999);                    
             color5 = processColor(0xff656660);                    

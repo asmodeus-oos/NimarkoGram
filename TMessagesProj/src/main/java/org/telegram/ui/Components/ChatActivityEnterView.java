@@ -236,9 +236,9 @@ import java.util.Locale;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 
-import app.nimarkogram.messenger.NimarkoConfig;
-import app.nimarkogram.messenger.icons.NimarkoIconResources;
-import app.nimarkogram.messenger.utils.ui.MonetHelper;
+import app.nebulagram.messenger.NebulaConfig;
+import app.nebulagram.messenger.icons.NebulaIconResources;
+import app.nebulagram.messenger.utils.ui.MonetHelper;
 
 public class ChatActivityEnterView extends FrameLayout implements
     NotificationCenter.NotificationCenterDelegate,
@@ -512,7 +512,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             textView = new SimpleTextView(context);
             addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             setWillNotDraw(false);
-            closeDrawable = NimarkoIconResources.getStockDrawable(context, R.drawable.msg_mini_close_tooltip).mutate();
+            closeDrawable = NebulaIconResources.getStockDrawable(context, R.drawable.msg_mini_close_tooltip).mutate();
             closeDrawable.setBounds(0, 0, closeDrawable.getIntrinsicWidth(), closeDrawable.getIntrinsicHeight());
             setClipToPadding(false);
             setClipChildren(false);
@@ -916,18 +916,18 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
     };
 
-    // NimarkoGram round-video camera chooser — drag-to-select without releasing the finger.
+    // NebulaGram round-video camera chooser — drag-to-select without releasing the finger.
     private ActionBarPopupWindow nmCameraChooser;
     private ActionBarMenuSubItem nmChooserFront, nmChooserRear;
     private boolean nmChooserActive;
     private int nmChooserHover = -1;   // -1 none, 0 front, 1 rear
 
-    // NimarkoGram: a camera was picked (drag-release or tap) — start the round video with it.
+    // NebulaGram: a camera was picked (drag-release or tap) — start the round video with it.
     private void nmOpenRoundCamera(boolean frontface) {
         if (delegate == null) {
             return;
         }
-        app.nimarkogram.messenger.NimarkoConfig.pendingRoundFront = frontface;
+        app.nebulagram.messenger.NebulaConfig.pendingRoundFront = frontface;
         delegate.needStartRecordVideo(0, true, 0, 0, 0, 0, 0);
         if (!recordingAudioVideo) {
             recordingAudioVideo = true;
@@ -944,12 +944,12 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
     }
 
-    // NimarkoGram: front/rear chooser shown right on long-press. The popup is NON-focusable and not
+    // NebulaGram: front/rear chooser shown right on long-press. The popup is NON-focusable and not
     // outside-touchable, so the still-pressed finger keeps feeding onTouchEvent — we drive the
     // selection from there (nmUpdateCameraChooserDrag / nmCommitCameraChooser). No lift needed.
     private void nmShowRoundCameraChooser() {
         if (parentActivity == null) {
-            nmOpenRoundCamera(app.nimarkogram.messenger.NimarkoConfig.videoMessagesCamera != 1);
+            nmOpenRoundCamera(app.nebulagram.messenger.NebulaConfig.videoMessagesCamera != 1);
             return;
         }
         // Rounded + dimmed exactly like the profile long-press menu (popup_fixed_alert bg + a rounded
@@ -1038,7 +1038,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             return;
         }
 
-        if (!NimarkoConfig.disableVibration) {
+        if (!NebulaConfig.disableVibration) {
             try {
                 anchor.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
@@ -1054,7 +1054,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         nmChooserHover = hover;
         nmSetChooserItemHighlighted(nmChooserFront, hover == 0);
         nmSetChooserItemHighlighted(nmChooserRear, hover == 1);
-        if (hover != -1 && !NimarkoConfig.disableVibration) {
+        if (hover != -1 && !NebulaConfig.disableVibration) {
             try {
                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
@@ -1158,7 +1158,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         }).start();
     }
 
-    // NimarkoGram: hard teardown of the round-video camera chooser. Used on long-press release
+    // NebulaGram: hard teardown of the round-video camera chooser. Used on long-press release
     // and from lifecycle/detach paths (HOME, rotation, destroy) so the popup + blur can't leak —
     // a leaked popup keeps nmChooserActive=true and the touch handler then swallows even ACTION_DOWN,
     // killing the record button.
@@ -1214,16 +1214,16 @@ public class ChatActivityEnterView extends FrameLayout implements
                         return;
                     }
                 }
-                // NimarkoGram: round-video camera — front (0) / rear (1) / ask each time (2).
+                // NebulaGram: round-video camera — front (0) / rear (1) / ask each time (2).
                 // In ASK mode, pop the front/rear chooser right here (on the long-press) so the still-
                 // pressed finger can drag onto an option and release to pick — recording (and the
                 // "slide to cancel" UI) starts only after the pick. Other modes record immediately.
-                if (app.nimarkogram.messenger.NimarkoConfig.videoMessagesCamera == 2) {
+                if (app.nebulagram.messenger.NebulaConfig.videoMessagesCamera == 2) {
                     nmShowRoundCameraChooser();
                     return;
                 }
-                app.nimarkogram.messenger.NimarkoConfig.pendingRoundFront = app.nimarkogram.messenger.NimarkoConfig.videoMessagesCamera == 0;
-                if (app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) {
+                app.nebulagram.messenger.NebulaConfig.pendingRoundFront = app.nebulagram.messenger.NebulaConfig.videoMessagesCamera == 0;
+                if (app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) {
                     // CameraX owns its own provider/enumeration path. Waiting for
                     // legacy CameraController.initCamera() here delayed every
                     // cold round-video start even though none of its Camera1
@@ -1544,8 +1544,8 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
 
         public void showTooltipIfNeed() {
-            if (NimarkoConfig.disableSendHints) {
-                return;   // NimarkoGram: suppress the "slide up to lock" tooltip shown while holding the record button
+            if (NebulaConfig.disableSendHints) {
+                return;   // NebulaGram: suppress the "slide up to lock" tooltip shown while holding the record button
             }
             if (SharedConfig.lockRecordAudioVideoHint < 3) {
                 showTooltip = true;
@@ -2431,7 +2431,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             return 1;
         }
 
-        // NimarkoGram: lock the recording hands-free INSTANTLY (no slide gesture needed). Used after the
+        // NebulaGram: lock the recording hands-free INSTANTLY (no slide gesture needed). Used after the
         // round-video camera chooser pick — the finger is already lifted, so we engage the lock and clear
         // the "slide to cancel" hint right away instead of making the user drag up to dismiss it.
         public void nmLockImmediately() {
@@ -3087,12 +3087,12 @@ public class ChatActivityEnterView extends FrameLayout implements
                 }
             }
         });
-        // NimarkoGram (CG parity): when hideSendAsChannel hides the dedicated "send-as"
+        // NebulaGram (CG parity): when hideSendAsChannel hides the dedicated "send-as"
         // avatar from the input bar, expose the send-as picker via long-press on emoji.
         // Reuses the existing senderSelectView click pipeline rather than duplicating it:
         // updateSendAsButton would otherwise skip creating the view because forceHide is
         // set, so we lazily build it here and dispatch its click.
-        if (NimarkoConfig.hideSendAsChannel) {
+        if (NebulaConfig.hideSendAsChannel) {
             emojiButton.setOnLongClickListener(v -> {
                 if (delegate == null || delegate.getSendAsPeers() == null) {
                     return false;
@@ -3110,7 +3110,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
         deleteRichDraftButton = new ImageView(context);
         deleteRichDraftButton.setScaleType(ImageView.ScaleType.CENTER);
-        deleteRichDraftButton.setImageDrawable(NimarkoIconResources.getStockDrawable(context, R.drawable.menu_delete_old).mutate());
+        deleteRichDraftButton.setImageDrawable(NebulaIconResources.getStockDrawable(context, R.drawable.menu_delete_old).mutate());
         deleteRichDraftButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_glass_defaultIcon), PorterDuff.Mode.SRC_IN));
         deleteRichDraftButton.setBackground(Theme.createInsetRoundRectDrawable(getThemedColor(Theme.key_listSelector), dp(19), dp(1), dp(3)));
         deleteRichDraftButton.setVisibility(View.GONE);
@@ -3353,7 +3353,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (isLiveComment) return false;
                 createRecordCircle();
-                // NimarkoGram: while the round-video camera chooser is open, this same (still-pressed)
+                // NebulaGram: while the round-video camera chooser is open, this same (still-pressed)
                 // finger drives front/rear selection — drag onto an option and release to pick, no lift.
                 // Swallow the events so the record button's slide-to-cancel logic never runs.
                 if (nmChooserActive) {
@@ -3432,10 +3432,10 @@ public class ChatActivityEnterView extends FrameLayout implements
                         calledRecordRunnable = false;
                         recordAudioVideoRunnableStarted = true;
                         if (isInVideoMode()
-                                && app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) {
+                                && app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) {
                             // Overlap the provider warm-up with Telegram's
                             // intentional 150 ms hold threshold.
-                            app.nimarkogram.messenger.camera.CameraXUtils.warmUpAsync(getContext());
+                            app.nebulagram.messenger.camera.CameraXUtils.warmUpAsync(getContext());
                         }
                         AndroidUtilities.runOnUIThread(recordAudioVideoRunnable, 150);
                     } else {
@@ -3493,9 +3493,9 @@ public class ChatActivityEnterView extends FrameLayout implements
                             } else {
                                 delegate.needShowMediaBanHint();
                             }
-                            // NimarkoGram (CG parity): respect disableVibration on the
+                            // NebulaGram (CG parity): respect disableVibration on the
                             // video<->voice mode switch inside the record button.
-                            if (!NimarkoConfig.disableVibration) {
+                            if (!NebulaConfig.disableVibration) {
                                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                             }
                             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
@@ -5067,8 +5067,8 @@ public class ChatActivityEnterView extends FrameLayout implements
 
     private void startLockTransition() {
         AnimatorSet animatorSet = new AnimatorSet();
-        // NimarkoGram (CG parity): suppress lock-slide haptic when disableVibration is on.
-        if (!NimarkoConfig.disableVibration) {
+        // NebulaGram (CG parity): suppress lock-slide haptic when disableVibration is on.
+        if (!NebulaConfig.disableVibration) {
             try {
                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
@@ -5276,7 +5276,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 // opens the target-language picker.
                 if (messageEditText.getText().length() > 0) {
                     ActionBarMenuSubItem preSentTranslateButton = new ActionBarMenuSubItem(getContext(), false, false, resourcesProvider);
-                    String languageText = app.nimarkogram.messenger.utils.text.Translator.getCurrentTranslator().getCurrentTargetKeyboardLanguage().toUpperCase();
+                    String languageText = app.nebulagram.messenger.utils.text.Translator.getCurrentTranslator().getCurrentTargetKeyboardLanguage().toUpperCase();
                     preSentTranslateButton.setTextAndIcon(LocaleController.getString(R.string.TranslateMessage) + " (" + languageText + ")", R.drawable.msg_translate);
                     preSentTranslateButton.setMinimumWidth(dp(196));
                     preSentTranslateButton.setOnClickListener(v -> {
@@ -5290,11 +5290,11 @@ public class ChatActivityEnterView extends FrameLayout implements
                             sendPopupWindow.dismiss();
                         }
                         // CG-parity: emit a haptic on the long-press that opens the translate target picker.
-                        if (!NimarkoConfig.disableVibration) {
+                        if (!NebulaConfig.disableVibration) {
                             performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP, android.view.HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         }
-                        app.nimarkogram.messenger.utils.text.Translator.showTranslationTargetSelector(getContext(), true, () -> {
-                            String language = app.nimarkogram.messenger.utils.text.Translator.getCurrentTranslator().getCurrentTargetKeyboardLanguage().toUpperCase();
+                        app.nebulagram.messenger.utils.text.Translator.showTranslationTargetSelector(getContext(), true, () -> {
+                            String language = app.nebulagram.messenger.utils.text.Translator.getCurrentTranslator().getCurrentTargetKeyboardLanguage().toUpperCase();
                             preSentTranslateButton.setTextAndIcon(LocaleController.getString(R.string.TranslateMessage) + " (" + language + ")", R.drawable.msg_translate);
                             translatePreSend();
                         }, resourcesProvider);
@@ -5348,8 +5348,8 @@ public class ChatActivityEnterView extends FrameLayout implements
             sendPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - sendPopupLayout.getMeasuredWidth() + dp(8), y);
             sendPopupWindow.dimBehind();
             sendButton.invalidate();
-            // NimarkoGram (CG parity): suppress send-popup haptic when disableVibration is on.
-            if (!NimarkoConfig.disableVibration) {
+            // NebulaGram (CG parity): suppress send-popup haptic when disableVibration is on.
+            if (!NebulaConfig.disableVibration) {
                 try {
                     view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {}
@@ -5596,8 +5596,8 @@ public class ChatActivityEnterView extends FrameLayout implements
 
         messageSendPreview.show();
 
-        // NimarkoGram (CG parity): suppress message-send-preview haptic when disableVibration is on.
-        if (!NimarkoConfig.disableVibration) {
+        // NebulaGram (CG parity): suppress message-send-preview haptic when disableVibration is on.
+        if (!NebulaConfig.disableVibration) {
             try {
                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
@@ -6467,7 +6467,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                     return;
                 }
 
-                if (NimarkoConfig.replacePunctuationMarks) {
+                if (NebulaConfig.replacePunctuationMarks) {
                     if (!isReplacing) {
                         long now = System.currentTimeMillis();
                         long elapsed = now - lastInputTime;
@@ -6579,7 +6579,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 checkIsEphemeralMessage(true);
             }
         });
-        if (NimarkoConfig.editTextSuggestionsFix) messageEditText.addTextChangedListener(new EditTextSuggestionsFix());
+        if (NebulaConfig.editTextSuggestionsFix) messageEditText.addTextChangedListener(new EditTextSuggestionsFix());
         messageEditText.setEnabled(messageEditTextEnabled);
         if (messageEditTextWatchers != null) {
             for (TextWatcher textWatcher : messageEditTextWatchers) {
@@ -8366,7 +8366,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             if (checkPremiumAnimatedEmoji(currentAccount, dialog_id, parentFragment, null, message)) {
                 return;
             }
-            // NimarkoMedia native: intercept when the entire message body is a
+            // NebulaMedia native: intercept when the entire message body is a
             // single supported URL and auto-mode is on. Controller takes over
             // the API call + hyperlinked message send; we clear the editor and
             // bail so the original send doesn't fire too. Mirrors plugin
@@ -8376,9 +8376,9 @@ public class ChatActivityEnterView extends FrameLayout implements
             // retyping (and without the URL leaking into the chat next to a
             // "still downloading" bulletin).
             if (parentFragment instanceof ChatActivity
-                    && app.nimarkogram.messenger.NimarkoConfig.nimarkoMediaAuto) {
-                app.nimarkogram.messenger.media.NimarkoMediaController.SendOptions sendOptions =
-                        new app.nimarkogram.messenger.media.NimarkoMediaController.SendOptions(
+                    && app.nebulagram.messenger.NebulaConfig.nebulaMediaAuto) {
+                app.nebulagram.messenger.media.NebulaMediaController.SendOptions sendOptions =
+                        new app.nebulagram.messenger.media.NebulaMediaController.SendOptions(
                                 notify,
                                 scheduleDate,
                                 scheduleRepeatPeriod,
@@ -8393,9 +8393,9 @@ public class ChatActivityEnterView extends FrameLayout implements
                                 delegate != null ? delegate.getReplyQuote() : null,
                                 parentFragment.messagePreviewParams != null
                                         && parentFragment.messagePreviewParams.webpageTop);
-                int interceptResult = app.nimarkogram.messenger.media.NimarkoMediaController.getInstance()
+                int interceptResult = app.nebulagram.messenger.media.NebulaMediaController.getInstance()
                         .interceptOutgoingMessage(message, (ChatActivity) parentFragment, sendOptions);
-                if (interceptResult == app.nimarkogram.messenger.media.NimarkoMediaController.INTERCEPT_HIJACKED) {
+                if (interceptResult == app.nebulagram.messenger.media.NebulaMediaController.INTERCEPT_HIJACKED) {
                     sendButton.setEffect(effectId = 0);
                     if (messageEditText != null) {
                         messageEditText.setText("");
@@ -8404,7 +8404,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                         delegate.onMessageSend(null, notify, scheduleDate, scheduleRepeatPeriod, payStars);
                     }
                     return;
-                } else if (interceptResult == app.nimarkogram.messenger.media.NimarkoMediaController.INTERCEPT_BLOCKED) {
+                } else if (interceptResult == app.nebulagram.messenger.media.NebulaMediaController.INTERCEPT_BLOCKED) {
                     return;
                 }
             }
@@ -8475,9 +8475,9 @@ public class ChatActivityEnterView extends FrameLayout implements
         if (message == null || parentFragment == null) {
             return false;
         }
-        // NimarkoGram: local premium emoji — don't block a non-premium sender;
+        // NebulaGram: local premium emoji — don't block a non-premium sender;
         // the custom emoji are smuggled as tg://emoji?id= entities on send.
-        if (app.nimarkogram.messenger.utils.NimarkoLocalEmoji.canUse(currentAccount)) {
+        if (app.nebulagram.messenger.utils.NebulaLocalEmoji.canUse(currentAccount)) {
             return false;
         }
         final boolean isPremium = UserConfig.getInstance(currentAccount).isPremium();
@@ -12341,11 +12341,11 @@ public class ChatActivityEnterView extends FrameLayout implements
         if (delegate == null) {
             return;
         }
-        // NimarkoGram (CG parity): hideSendAsChannel hides the avatar from the input bar,
+        // NebulaGram (CG parity): hideSendAsChannel hides the avatar from the input bar,
         // but the send-as picker is still reachable via long-press on the emoji button.
         // We force-hide rather than early-return so the senderSelectView is still
         // constructed lazily and callable from the long-press handler.
-        if (NimarkoConfig.hideSendAsChannel) {
+        if (NebulaConfig.hideSendAsChannel) {
             forceHide = true;
         }
         createMessageEditText();
@@ -15984,7 +15984,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 FileLog.e(e);
             }
         });
-        app.nimarkogram.messenger.utils.text.Translator.translate(sourceWithEntities, true, currentAccount, (error, text) -> {
+        app.nebulagram.messenger.utils.text.Translator.translate(sourceWithEntities, true, currentAccount, (error, text) -> {
             if (error != null) {
                 AndroidUtilities.runOnUIThread(() -> {
                     try {
@@ -16012,7 +16012,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                         translated = applyMessageEntities(value.entities, value.text,
                                 messageEditText.getPaint().getFontMetricsInt());
                     } else {
-                        translated = app.nimarkogram.messenger.utils.text.BaseTranslator.stringFromTranslation(text.translation);
+                        translated = app.nebulagram.messenger.utils.text.BaseTranslator.stringFromTranslation(text.translation);
                     }
                     messageEditText.setText(translated);
                     messageEditText.setSelection(messageEditText.length());
@@ -16741,7 +16741,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             canvas.drawCircle(_cx, _cy, sz / 2f + dp(2), Theme.PAINT_CLEAR);
             canvas.drawCircle(_cx, _cy, sz / 2f, backgroundPaint);
             if (lockIcon == null) {
-                lockIcon = NimarkoIconResources.getStockDrawable(getContext(), R.drawable.mini_switch_lock).mutate();
+                lockIcon = NebulaIconResources.getStockDrawable(getContext(), R.drawable.mini_switch_lock).mutate();
                 lockIcon.setColorFilter(new PorterDuffColorFilter(lockIconColor = drawableColor, PorterDuff.Mode.SRC_IN));
             }
             if (lockIconColor != drawableColor) {

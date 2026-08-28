@@ -1,6 +1,6 @@
 package com.exteragram.messenger.plugins.models;
 
-public class HeaderSetting extends app.nimarkogram.messenger.plugins.models.HeaderSetting {
+public class HeaderSetting extends app.nebulagram.messenger.plugins.models.HeaderSetting {
     public HeaderSetting(String text) {
         super(text);
     }

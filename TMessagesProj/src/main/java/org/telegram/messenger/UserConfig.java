@@ -458,16 +458,16 @@ public class UserConfig extends BaseController {
 
     public void clearConfig() {
         
-        app.nimarkogram.messenger.security.NimarkoBiometricPrompt.clearVerifiedForAccount(currentAccount);
-        app.nimarkogram.messenger.utils.LockedChats.onAccountLoggedOut(currentAccount, clientUserId);
+        app.nebulagram.messenger.security.NebulaBiometricPrompt.clearVerifiedForAccount(currentAccount);
+        app.nebulagram.messenger.utils.LockedChats.onAccountLoggedOut(currentAccount, clientUserId);
         getPreferences().edit().clear().apply();
 
         sharingMyLocationUntil = 0;
         lastMyLocationShareTime = 0;
         currentUser = null;
         clientUserId = 0;
-        app.nimarkogram.messenger.security.NimarkoBiometricPrompt.onAccountOwnerCleared(currentAccount);
-        app.nimarkogram.messenger.utils.LockedChats.onAccountOwnerCleared(currentAccount);
+        app.nebulagram.messenger.security.NebulaBiometricPrompt.onAccountOwnerCleared(currentAccount);
+        app.nebulagram.messenger.utils.LockedChats.onAccountOwnerCleared(currentAccount);
         registeredForPush = false;
         contactsSavedCount = 0;
         lastSendMessageId = -210000;

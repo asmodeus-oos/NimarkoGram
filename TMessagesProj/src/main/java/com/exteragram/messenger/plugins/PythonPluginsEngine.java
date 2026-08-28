@@ -1,6 +1,6 @@
 package com.exteragram.messenger.plugins;
 
-public class PythonPluginsEngine extends app.nimarkogram.messenger.plugins.PythonPluginsEngine {
+public class PythonPluginsEngine extends app.nebulagram.messenger.plugins.PythonPluginsEngine {
     public PythonPluginsEngine() {
         super();
     }
@@ -21,7 +21,7 @@ public class PythonPluginsEngine extends app.nimarkogram.messenger.plugins.Pytho
 
     @Override
     public void openPluginSettings(
-            app.nimarkogram.messenger.plugins.Plugin plugin,
+            app.nebulagram.messenger.plugins.Plugin plugin,
             org.telegram.ui.ActionBar.BaseFragment fragment) {
         openPluginSettings(
                 com.exteragram.messenger.plugins.Plugin.fromReal(plugin),
@@ -31,9 +31,9 @@ public class PythonPluginsEngine extends app.nimarkogram.messenger.plugins.Pytho
     public void openPluginSettings(
             com.exteragram.messenger.plugins.Plugin plugin,
             org.telegram.ui.ActionBar.BaseFragment fragment) {
-        app.nimarkogram.messenger.plugins.Plugin live = null;
+        app.nebulagram.messenger.plugins.Plugin live = null;
         if (plugin != null) {
-            live = app.nimarkogram.messenger.plugins.PluginsController
+            live = app.nebulagram.messenger.plugins.PluginsController
                     .getInstance().plugins.get(plugin.getId());
         }
         super.openPluginSettings(live != null ? live : plugin, fragment);
@@ -41,7 +41,7 @@ public class PythonPluginsEngine extends app.nimarkogram.messenger.plugins.Pytho
 
     @Override
     public void showInstallDialog(org.telegram.ui.ActionBar.BaseFragment fragment,
-                                  app.nimarkogram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams params) {
+                                  app.nebulagram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams params) {
         showInstallDialog(fragment,
                 new com.exteragram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams(
                         params != null ? params.filePath : null,
@@ -51,7 +51,7 @@ public class PythonPluginsEngine extends app.nimarkogram.messenger.plugins.Pytho
     public void showInstallDialog(org.telegram.ui.ActionBar.BaseFragment fragment,
                                   com.exteragram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams params) {
         super.showInstallDialog(fragment,
-                new app.nimarkogram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams(
+                new app.nebulagram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams(
                         params != null ? params.getFilePath() : null,
                         params == null || !params.getTrusted()));
     }

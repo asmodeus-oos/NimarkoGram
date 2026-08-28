@@ -113,7 +113,7 @@ public class Camera2Session {
 
     public static Camera2Session create(boolean front, int viewWidth, int viewHeight, boolean preferLogical) {
         
-        return create(front, viewWidth, viewHeight, preferLogical, app.nimarkogram.messenger.NimarkoConfig.cameraResolution);
+        return create(front, viewWidth, viewHeight, preferLogical, app.nebulagram.messenger.NebulaConfig.cameraResolution);
     }
 
     public static Camera2Session create(boolean front, int viewWidth, int viewHeight, boolean preferLogical, int requestedHeight) {
@@ -892,13 +892,13 @@ public class Camera2Session {
             if (recordingVideo) {
                 
                 Range<Integer> aeFps;
-                switch (app.nimarkogram.messenger.NimarkoConfig.cameraXFpsRange) {
-                    case app.nimarkogram.messenger.NimarkoConfig.CameraXFpsRange25to30: aeFps = new Range<>(25, 30); break;
-                    case app.nimarkogram.messenger.NimarkoConfig.CameraXFpsRange30to30: aeFps = new Range<>(30, 30); break;
-                    case app.nimarkogram.messenger.NimarkoConfig.CameraXFpsRange30to60: aeFps = new Range<>(30, 60); break;
+                switch (app.nebulagram.messenger.NebulaConfig.cameraXFpsRange) {
+                    case app.nebulagram.messenger.NebulaConfig.CameraXFpsRange25to30: aeFps = new Range<>(25, 30); break;
+                    case app.nebulagram.messenger.NebulaConfig.CameraXFpsRange30to30: aeFps = new Range<>(30, 30); break;
+                    case app.nebulagram.messenger.NebulaConfig.CameraXFpsRange30to60: aeFps = new Range<>(30, 60); break;
                     
-                    case app.nimarkogram.messenger.NimarkoConfig.CameraXFpsRange60to60: aeFps = new Range<>(30, 60); break;
-                    case app.nimarkogram.messenger.NimarkoConfig.CameraXFpsRangeDefault:
+                    case app.nebulagram.messenger.NebulaConfig.CameraXFpsRange60to60: aeFps = new Range<>(30, 60); break;
+                    case app.nebulagram.messenger.NebulaConfig.CameraXFpsRangeDefault:
                     default:                                                            aeFps = new Range<>(30, 60); break;
                 }
                 
@@ -910,14 +910,14 @@ public class Camera2Session {
             }
             
             try {
-                int mode = app.nimarkogram.messenger.NimarkoConfig.cameraStabilisation
+                int mode = app.nebulagram.messenger.NebulaConfig.cameraStabilisation
                         ? CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON
                         : CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_OFF;
                 captureRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, mode);
             } catch (Throwable ignored) {}
 
             try {
-                if (app.nimarkogram.messenger.NimarkoConfig.cameraOpticalStabilization) {
+                if (app.nebulagram.messenger.NebulaConfig.cameraOpticalStabilization) {
                     captureRequestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE,
                             CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON);
                     captureRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE,
@@ -929,7 +929,7 @@ public class Camera2Session {
             } catch (Throwable ignored) {}
 
             try {
-                int af = app.nimarkogram.messenger.NimarkoConfig.cameraContinuousFocus
+                int af = app.nebulagram.messenger.NebulaConfig.cameraContinuousFocus
                         ? CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO
                         : CaptureRequest.CONTROL_AF_MODE_AUTO;
                 captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, af);
@@ -937,7 +937,7 @@ public class Camera2Session {
 
             try {
                 int nr;
-                if (app.nimarkogram.messenger.NimarkoConfig.cameraNoiseReduction) {
+                if (app.nebulagram.messenger.NebulaConfig.cameraNoiseReduction) {
                     nr = recordingVideo
                             ? CaptureRequest.NOISE_REDUCTION_MODE_HIGH_QUALITY
                             : CaptureRequest.NOISE_REDUCTION_MODE_FAST;
@@ -955,7 +955,7 @@ public class Camera2Session {
             } catch (Throwable ignored) {}
 
             try {
-                int fd = app.nimarkogram.messenger.NimarkoConfig.cameraFaceDetection
+                int fd = app.nebulagram.messenger.NebulaConfig.cameraFaceDetection
                         ? CaptureRequest.STATISTICS_FACE_DETECT_MODE_SIMPLE
                         : CaptureRequest.STATISTICS_FACE_DETECT_MODE_OFF;
                 captureRequestBuilder.set(CaptureRequest.STATISTICS_FACE_DETECT_MODE, fd);

@@ -185,7 +185,7 @@ public class AuctionWearingSheet extends BottomSheetWithRecyclerListView impleme
         headerContainer.addView(topView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, topHeightDp, Gravity.TOP));
 
         BackupImageView avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(90));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(90));
         headerContainer.addView(avatarImageView, LayoutHelper.createFrame(90, 90, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 42, 0, 0));
 
         TLObject userOrChat;

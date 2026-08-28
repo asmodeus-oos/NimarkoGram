@@ -6,7 +6,7 @@ import unittest
 REPO = pathlib.Path(__file__).resolve().parents[4]
 ENGINE = (
     REPO
-    / "TMessagesProj/src/main/java/app/nimarkogram/messenger/plugins"
+    / "TMessagesProj/src/main/java/app/nebulagram/messenger/plugins"
     / "PythonPluginsEngine.java"
 )
 PYTHON = REPO / "TMessagesProj/src/main/python"

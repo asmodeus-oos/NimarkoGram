@@ -15,22 +15,22 @@ public final class UIUtil {
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable, int width, int height) {
-        return app.nimarkogram.messenger.utils.ui.UIUtil.drawableToBitmap(drawable, width, height);
+        return app.nebulagram.messenger.utils.ui.UIUtil.drawableToBitmap(drawable, width, height);
     }
 
     public static CombinedDrawable createCircleDrawableWithIcon(Context context, int iconRes, int size) {
-        return app.nimarkogram.messenger.utils.ui.UIUtil.createCircleDrawableWithIcon(context, iconRes, size);
+        return app.nebulagram.messenger.utils.ui.UIUtil.createCircleDrawableWithIcon(context, iconRes, size);
     }
 
     public static int adjustHsl(int color, float luminance, float saturation) {
-        return app.nimarkogram.messenger.utils.ui.UIUtil.adjustHsl(color, luminance, saturation);
+        return app.nebulagram.messenger.utils.ui.UIUtil.adjustHsl(color, luminance, saturation);
     }
 
     public static int adjustHsl(int color, float luminance) {
-        return app.nimarkogram.messenger.utils.ui.UIUtil.adjustHsl(color, luminance);
+        return app.nebulagram.messenger.utils.ui.UIUtil.adjustHsl(color, luminance);
     }
 
     public static void drawNowPlayingPattern(Canvas canvas, Drawable pattern, float w, float h, float alpha) {
-        app.nimarkogram.messenger.utils.ui.UIUtil.drawNowPlayingPattern(canvas, pattern, w, h, alpha);
+        app.nebulagram.messenger.utils.ui.UIUtil.drawNowPlayingPattern(canvas, pattern, w, h, alpha);
     }
 }

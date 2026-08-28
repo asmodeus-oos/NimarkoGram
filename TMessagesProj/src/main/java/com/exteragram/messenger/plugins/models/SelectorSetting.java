@@ -2,7 +2,7 @@ package com.exteragram.messenger.plugins.models;
 
 import com.chaquo.python.PyObject;
 
-public class SelectorSetting extends app.nimarkogram.messenger.plugins.models.SelectorSetting {
+public class SelectorSetting extends app.nebulagram.messenger.plugins.models.SelectorSetting {
     public SelectorSetting(String key, String text, int defaultValue, String[] items, String icon,
                            PyObject onChangeCallback, PyObject onLongClickCallback, String linkAlias) {
         super(key, text, defaultValue, items, icon, onChangeCallback, onLongClickCallback, linkAlias);

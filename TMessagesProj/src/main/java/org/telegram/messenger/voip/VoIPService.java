@@ -159,9 +159,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import app.nimarkogram.messenger.wsbypass.NimarkoWsBypassConfig;
-import app.nimarkogram.messenger.wsbypass.voip.VoipBypassConfig;
-import app.nimarkogram.messenger.wsbypass.voip.VoipBypassCore;
+import app.nebulagram.messenger.wsbypass.NebulaWsBypassConfig;
+import app.nebulagram.messenger.wsbypass.voip.VoipBypassConfig;
+import app.nebulagram.messenger.wsbypass.voip.VoipBypassCore;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;

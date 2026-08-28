@@ -4,7 +4,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[4]
 JAVA = (
     ROOT
-    / "TMessagesProj/src/main/java/app/nimarkogram/messenger/plugins"
+    / "TMessagesProj/src/main/java/app/nebulagram/messenger/plugins"
 )
 
 class PluginStartupMetadataPublicationTests(unittest.TestCase):

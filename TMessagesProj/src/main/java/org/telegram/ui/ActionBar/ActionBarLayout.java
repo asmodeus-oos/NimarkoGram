@@ -533,8 +533,8 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                                     if (shouldBeEnabled != enabled) {
                                         ripple.setState(shouldBeEnabled ? new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled} : new int[]{});
                                         if (shouldBeEnabled) {
-                                            // NimarkoGram (CG parity): gate haptic on disableVibration flag.
-                                            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                                            // NebulaGram (CG parity): gate haptic on disableVibration flag.
+                                            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                                 AndroidUtilities.vibrateCursor(button);
                                             }
                                         }
@@ -731,7 +731,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             headerShadowDrawable = getResources().getDrawable(R.drawable.header_shadow).mutate();
         }
 
-        // NimarkoGram (CG parity): when actionbar crossfade is active we must opt-out of
+        // NebulaGram (CG parity): when actionbar crossfade is active we must opt-out of
         // the default FrameLayout willNotDraw optimisation and pre-create the MenuDrawable
         // so the draw() override that crossfades both action bars is reliably invoked.
         if (USE_ACTIONBAR_CROSSFADE) {
@@ -1026,7 +1026,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                     currFragment.setNavigationBarColor(ColorUtils.blendARGB(currNavigationBarColor, prevNavigationBarColor, ratio));
                 }
             }
-            // NimarkoGram: the per-fragment status-bar overlay blend that used to live here was DROPPED — 12.9.0
+            // NebulaGram: the per-fragment status-bar overlay blend that used to live here was DROPPED — 12.9.0
             // removed the whole slide-time setStatusBarColor block (and the LIGHT/DARK_STATUS_BAR_OVERLAY
             // constants + SharedConfig.noStatusBar it relied on), moving status-bar handling to edge-to-edge.
             // Following upstream; our NG refinement is moot with the block gone.
@@ -1239,10 +1239,10 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
 
         if (translationX != 0 || overrideWidthOffset != -1) {
             int widthOffset = overrideWidthOffset != -1 ? overrideWidthOffset : width - translationX;
-            // NimarkoGram (CG parity): when crossfade is active, shift the shadow/scrim down by
+            // NebulaGram (CG parity): when crossfade is active, shift the shadow/scrim down by
             // the action bar height so they don't paint over the bar currently crossfading.
             int top = getTop(widthOffset, (float) width);
-            // NimarkoGram: taper shadow/scrim toward 0 over the last dp(20) of cancel-back so the
+            // NebulaGram: taper shadow/scrim toward 0 over the last dp(20) of cancel-back so the
             // back-gesture shadow fades out smoothly instead of snapping when translationX hits 0.
             // Without this factor, the inner `if (translationX != 0)` guard clips the shadow off
             // abruptly at the end of a cancel animation -- very visible on the white theme.
@@ -1431,7 +1431,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         containerViewBack.setVisibility(View.INVISIBLE);
         setInnerTranslationX(0f);
         swipeProgress = 0f;
-        // NimarkoGram (CG parity): drop any lingering crossfade ratios after the
+        // NebulaGram (CG parity): drop any lingering crossfade ratios after the
         // swipe finishes so the next swipe / present doesn't inherit stale alpha.
         if (USE_ACTIONBAR_CROSSFADE) {
             invalidateActionBars();
@@ -1524,9 +1524,9 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         if (fragmentView == null) {
             fragmentView = lastFragment.performCreateView(parentActivity);
             if (fragmentView != null && lastFragment.isSupportEdgeToEdge() && lastFragment.drawEdgeNavigationBar()) {
-                // NimarkoGram (CG L1326): strip haptic feedback when disableVibration on.
-                if (app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-                    app.nimarkogram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
+                // NebulaGram (CG L1326): strip haptic feedback when disableVibration on.
+                if (app.nebulagram.messenger.NebulaConfig.disableVibration) {
+                    app.nebulagram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
                 }
                 ViewCompat.setOnApplyWindowInsetsListener(fragmentView, lastFragment::onInsetsInternal);
                 containerViewBack.invalidate();
@@ -1568,7 +1568,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         currentFragment.prepareFragmentToSlide(true, true);
         lastFragment.prepareFragmentToSlide(false, true);
 
-        // NimarkoGram (CG parity): reset crossfade progress at the start of a new swipe
+        // NebulaGram (CG parity): reset crossfade progress at the start of a new swipe
         // so the first frame doesn't inherit a leftover value from a previous animation.
         if (USE_ACTIONBAR_CROSSFADE) {
             swipeProgress = 0f;
@@ -1789,10 +1789,10 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         }
     }
 
-    // NimarkoGram: CG parity — drives both panels + swipeProgress during predictive back.
+    // NebulaGram: CG parity — drives both panels + swipeProgress during predictive back.
     private void updateTransitionProgress(float dx, float progress, boolean backAnimation) {
         containerView.setTranslationX(dx);
-        // NimarkoGram: this method is the PREDICTIVE-back driver (onBackProgress) — dx here is only a small
+        // NebulaGram: this method is the PREDICTIVE-back driver (onBackProgress) — dx here is only a small
         // ~15% peek of the gesture. Keep innerTranslationX pinned (the original 1f). Feeding the peek dx made
         // the back-swipe scrim treat the predictive preview as a real swipe and slam to full dim = the broken
         // predictive animation. The spring RELEASE path sets the live innerTranslationX in its own update
@@ -1850,7 +1850,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         float distToMove;
         boolean overrideTransition = currentFragment.shouldOverrideSlideTransition(false, backAnimation);
 
-        // NimarkoGram: CG Spring back-end animation (verbatim port, GPL-2.0).
+        // NebulaGram: CG Spring back-end animation (verbatim port, GPL-2.0).
         if (shouldUseSpringAnimationForStack()) {
             FloatValueHolder valueHolder = new FloatValueHolder((x / containerView.getMeasuredWidth()) * SPRING_MULTIPLIER);
             final SpringAnimation springAnimation;
@@ -1888,7 +1888,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                 } else {
                     if (getBackgroundFragment() != null) getBackgroundFragment().onTransitionAnimationProgress(true, 1f - progress);
                 }
-                // NimarkoGram: do NOT call updateTransitionProgress() here. This listener already drives both
+                // NebulaGram: do NOT call updateTransitionProgress() here. This listener already drives both
                 // panels, swipeProgress and the fragment progress callbacks above, AND sets the LIVE
                 // innerTranslationX (line above) that the back-swipe scrim reads. updateTransitionProgress is
                 // the PREDICTIVE-back driver and pins innerTranslationX to 1f — calling it here clobbered that
@@ -2373,7 +2373,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                 armPreviewTransitionTimeout(open);
             }
         }
-        // NimarkoGram: CG Spring layout animation (verbatim port, GPL-2.0).
+        // NebulaGram: CG Spring layout animation (verbatim port, GPL-2.0).
         if (shouldUseSpringAnimationForTransition()) {
             if (USE_ACTIONBAR_CROSSFADE) {
                 swipeProgress = open ? 1f : 0f;
@@ -2642,18 +2642,18 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                 long chatId = arguments.getLong("chat_id");
                 int encId = arguments.getInt("enc_id");
                 int account = fragment.getCurrentAccount();
-                boolean required = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+                boolean required = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                         .shouldRequireBiometrics(userId, chatId, encId, account);
-                if (required && !app.nimarkogram.messenger.security.NimarkoBiometricPrompt
+                if (required && !app.nebulagram.messenger.security.NebulaBiometricPrompt
                         .isRecentlyVerified(account, userId, chatId, encId)) {
                     if (parentActivity == null) {
                         return false;
                     }
-                    app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(
+                    app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(
                             parentActivity,
                             account,
                             () -> {
-                                app.nimarkogram.messenger.security.NimarkoBiometricPrompt
+                                app.nebulagram.messenger.security.NebulaBiometricPrompt
                                         .markVerified(account, userId, chatId, encId);
                                 presentFragment(params);
                             },
@@ -2728,9 +2728,9 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         if (fragmentView == null) {
             fragmentView = fragment.performCreateView(parentActivity);
             if (fragmentView != null && fragment.isSupportEdgeToEdge() && fragment.drawEdgeNavigationBar()) {
-                // NimarkoGram (CG L2163): strip haptic feedback when disableVibration on.
-                if (app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-                    app.nimarkogram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
+                // NebulaGram (CG L2163): strip haptic feedback when disableVibration on.
+                if (app.nebulagram.messenger.NebulaConfig.disableVibration) {
+                    app.nebulagram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
                 }
                 ViewCompat.setOnApplyWindowInsetsListener(fragmentView, fragment::onInsetsInternal);
                 containerViewBack.invalidate();
@@ -3133,9 +3133,9 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         if (fragmentView == null) {
             fragmentView = fragment.performCreateView(parentActivity);
             if (fragmentView != null && fragment.isSupportEdgeToEdge() && fragment.drawEdgeNavigationBar()) {
-                // NimarkoGram (CG L2537): strip haptic feedback when disableVibration on.
-                if (app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-                    app.nimarkogram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
+                // NebulaGram (CG L2537): strip haptic feedback when disableVibration on.
+                if (app.nebulagram.messenger.NebulaConfig.disableVibration) {
+                    app.nebulagram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
                 }
                 ViewCompat.setOnApplyWindowInsetsListener(fragmentView, fragment::onInsetsInternal);
                 containerView.invalidate();
@@ -3172,9 +3172,9 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         if (fragmentView == null) {
             fragmentView = fragment.performCreateView(parentActivity);
             if (fragmentView != null && fragment.isSupportEdgeToEdge() && fragment.drawEdgeNavigationBar()) {
-                // NimarkoGram (CG L2575): strip haptic feedback when disableVibration on.
-                if (app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-                    app.nimarkogram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
+                // NebulaGram (CG L2575): strip haptic feedback when disableVibration on.
+                if (app.nebulagram.messenger.NebulaConfig.disableVibration) {
+                    app.nebulagram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
                 }
                 ViewCompat.setOnApplyWindowInsetsListener(fragmentView, fragment::onInsetsInternal);
                 containerView.invalidate();
@@ -3255,7 +3255,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         layoutParams.height = LayoutHelper.MATCH_PARENT;
         fragment.fragmentView.setLayoutParams(layoutParams);
 
-        // NimarkoGram: CG Spring expandPreview animation (verbatim port, GPL-2.0).
+        // NebulaGram: CG Spring expandPreview animation (verbatim port, GPL-2.0).
         if (USE_SPRING_ANIMATION && !isCommunityDialogsFragment(fragment)) {
             final View view = fragment.fragmentView;
             previewExpandView = view;
@@ -3304,8 +3304,8 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             springAnimation.addUpdateListener(updateListener);
             springAnimation.addEndListener(endListener);
             springAnimation.start();
-            // NimarkoGram (CG L2690): only haptic when disableVibration is off.
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            // NebulaGram (CG L2690): only haptic when disableVibration is off.
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 } catch (Exception ignore) {}
@@ -3349,8 +3349,8 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             }
         });
         animatorSet.start();
-        // NimarkoGram (CG L2713): only haptic when disableVibration is off.
-        if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+        // NebulaGram (CG L2713): only haptic when disableVibration is off.
+        if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
             try {
                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             } catch (Exception ignore) {}
@@ -3417,9 +3417,9 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             if (fragmentView == null) {
                 fragmentView = previousFragment.performCreateView(parentActivity);
                 if (fragmentView != null && previousFragment.isSupportEdgeToEdge() && previousFragment.drawEdgeNavigationBar()) {
-                    // NimarkoGram (CG L2775): strip haptic feedback when disableVibration on.
-                    if (app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-                        app.nimarkogram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
+                    // NebulaGram (CG L2775): strip haptic feedback when disableVibration on.
+                    if (app.nebulagram.messenger.NebulaConfig.disableVibration) {
+                        app.nebulagram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
                     }
                     ViewCompat.setOnApplyWindowInsetsListener(fragmentView, previousFragment::onInsetsInternal);
                     containerView.invalidate();
@@ -3615,9 +3615,9 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         if (fragmentView == null) {
             fragmentView = previousFragment.performCreateView(parentActivity);
             if (fragmentView != null && previousFragment.isSupportEdgeToEdge() && previousFragment.drawEdgeNavigationBar()) {
-                // NimarkoGram (CG L2966): strip haptic feedback when disableVibration on.
-                if (app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-                    app.nimarkogram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
+                // NebulaGram (CG L2966): strip haptic feedback when disableVibration on.
+                if (app.nebulagram.messenger.NebulaConfig.disableVibration) {
+                    app.nebulagram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
                 }
                 ViewCompat.setOnApplyWindowInsetsListener(fragmentView, previousFragment::onInsetsInternal);
                 containerView.invalidate();
@@ -4542,7 +4542,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         return WindowInsetsCompat.CONSUMED;
     }
 
-    /** NimarkoGram spring transition runtime. */
+    /** NebulaGram spring transition runtime. */
     private float swipeProgress;
     private MenuDrawable menuDrawable;
 
@@ -4552,7 +4552,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
     private DynamicAnimation.OnAnimationEndListener currentSpringEndListener;
     private AnimatorSet previewExpandAnimator;
     private View previewExpandView;
-    private final boolean USE_SPRING_ANIMATION = app.nimarkogram.messenger.NimarkoConfig.isSpringAnimationEnabled();
+    private final boolean USE_SPRING_ANIMATION = app.nebulagram.messenger.NebulaConfig.isSpringAnimationEnabled();
     private static final boolean USE_ACTIONBAR_CROSSFADE = false;
     private final float SPRING_STIFFNESS = 700f;
     private final float SPRING_STIFFNESS_PREVIEW = 650f;
@@ -4678,7 +4678,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         }
     }
 
-    // NimarkoGram (CG parity): when the actionbar crossfades both fragments the layer-shadow
+    // NebulaGram (CG parity): when the actionbar crossfades both fragments the layer-shadow
     // and dim scrim must be pushed below the action bar so they don't paint over the
     // crossfading bar itself. Returns 0 outside crossfade so non-crossfade paths are unaffected.
     private int getTop(int widthOffset, float width) {
@@ -4695,5 +4695,5 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         }
         return top;
     }
-    /** NimarkoGram finish */
+    /** NebulaGram finish */
 }

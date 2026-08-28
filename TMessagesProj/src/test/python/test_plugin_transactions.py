@@ -2,7 +2,7 @@ import pathlib
 import unittest
 
 REPO = pathlib.Path(__file__).resolve().parents[4]
-JAVA = REPO / 'TMessagesProj/src/main/java/app/nimarkogram/messenger/plugins'
+JAVA = REPO / 'TMessagesProj/src/main/java/app/nebulagram/messenger/plugins'
 
 class PluginTransactionTest(unittest.TestCase):
     def test_source_update_has_durable_prepare_and_commit_barrier(self):

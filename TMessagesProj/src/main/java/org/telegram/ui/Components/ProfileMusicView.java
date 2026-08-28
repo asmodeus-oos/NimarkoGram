@@ -94,7 +94,7 @@ public class ProfileMusicView extends View {
 
     public void setColor(MessagesController.PeerColor peerColor) {
         
-        if (!app.nimarkogram.messenger.NimarkoConfig.profileBackgroundColor) peerColor = null;
+        if (!app.nebulagram.messenger.NebulaConfig.profileBackgroundColor) peerColor = null;
         int color1, color2;
         if (peerColor == null) {
             color1 = color2 = Theme.getColor(Theme.key_actionBarDefault, resourcesProvider);

@@ -2286,9 +2286,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                 newMsg.fwd_from.flags |= 8;
                             }
                         }
-                        // NimarkoGram (CG parity): keep the original send date on the fwd_from
+                        // NebulaGram (CG parity): keep the original send date on the fwd_from
                         // header so forwarded messages don't look brand-new when msgForwardDate is on.
-                        if (app.nimarkogram.messenger.NimarkoConfig.msgForwardDate && !msgObj.isForwarded()) {
+                        if (app.nebulagram.messenger.NebulaConfig.msgForwardDate && !msgObj.isForwarded()) {
                             newMsg.fwd_from.date = msgObj.messageOwner.date;
                         }
                         newMsg.date = msgObj.messageOwner.date;
@@ -2896,13 +2896,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             int type = -1;
             DelayedMessage delayedMessage = null;
             long peer = messageObject.getDialogId();
-            // NimarkoGram: local premium emoji — same conversion as the send
+            // NebulaGram: local premium emoji — same conversion as the send
             // path so an edited message keeps non-premium custom emoji.
             try {
-                app.nimarkogram.messenger.utils.NimarkoLocalEmoji.replaceCustomEmojis(
+                app.nebulagram.messenger.utils.NebulaLocalEmoji.replaceCustomEmojis(
                         currentAccount, peer, messageObject.messageOwner.entities);
             } catch (Throwable t) {
-                FileLog.e("nimarko-local-emoji: edit convert failed", t);
+                FileLog.e("nebula-local-emoji: edit convert failed", t);
             }
             boolean supportsSendingNewEntities = true;
             if (DialogObject.isEncryptedDialog(peer)) {
@@ -4271,22 +4271,22 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     public void sendMessage(SendMessageParams _smpInParam) {
-        // NimarkoGram plugin engine — pre-send hook. May mutate or cancel the outgoing message.
+        // NebulaGram plugin engine — pre-send hook. May mutate or cancel the outgoing message.
         try {
-            _smpInParam = app.nimarkogram.messenger.plugins.PluginsController.getInstance()
+            _smpInParam = app.nebulagram.messenger.plugins.PluginsController.getInstance()
                     .executeSendMessageHook(currentAccount, _smpInParam);
             if (_smpInParam == null) return; // cancelled by a plugin
         } catch (Throwable t) {
             FileLog.e("plugin sendMessage hook failed", t);
         }
         final SendMessageParams sendMessageParams = _smpInParam;
-        // NimarkoGram: local premium emoji — rewrite custom-emoji entities into
+        // NebulaGram: local premium emoji — rewrite custom-emoji entities into
         // tg://emoji?id= text-URLs so a non-premium account can still send them.
         try {
-            app.nimarkogram.messenger.utils.NimarkoLocalEmoji.replaceCustomEmojis(
+            app.nebulagram.messenger.utils.NebulaLocalEmoji.replaceCustomEmojis(
                     currentAccount, sendMessageParams.peer, sendMessageParams.entities);
         } catch (Throwable t) {
-            FileLog.e("nimarko-local-emoji: send convert failed", t);
+            FileLog.e("nebula-local-emoji: send convert failed", t);
         }
         final SendMessageChatArguments sendMessageChatArguments = sendMessageParams.sendMessageChatArguments != null ?
                 sendMessageParams.sendMessageChatArguments : SendMessageChatArguments.EMPTY;
@@ -4310,24 +4310,24 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         boolean searchLinks = sendMessageParams.searchLinks;
         MessageObject retryMessageObject = sendMessageParams.retryMessageObject;
         ArrayList<TLRPC.MessageEntity> entities = sendMessageParams.entities;
-        // NimarkoGram: pre-reform Russian orthography (до 1918) — convert the outgoing text to the old
+        // NebulaGram: pre-reform Russian orthography (до 1918) — convert the outgoing text to the old
         // spelling right before sending. Default OFF. Remaps entity offsets since the text length changes;
         // leaves URLs/mentions/hashtags/code/pre entities' spans handled by the converter's skip list.
-        if (app.nimarkogram.messenger.NimarkoConfig.preReformRussian) {
+        if (app.nebulagram.messenger.NebulaConfig.preReformRussian) {
             try {
                 if (message != null && message.length() > 0) {
-                    app.nimarkogram.messenger.utils.PreReformRussian.Result r =
-                            app.nimarkogram.messenger.utils.PreReformRussian.convert(message, entities);
+                    app.nebulagram.messenger.utils.PreReformRussian.Result r =
+                            app.nebulagram.messenger.utils.PreReformRussian.convert(message, entities);
                     message = r.text;
                     entities = r.entities;
                 } else if (caption != null && caption.length() > 0) {
-                    app.nimarkogram.messenger.utils.PreReformRussian.Result r =
-                            app.nimarkogram.messenger.utils.PreReformRussian.convert(caption, entities);
+                    app.nebulagram.messenger.utils.PreReformRussian.Result r =
+                            app.nebulagram.messenger.utils.PreReformRussian.convert(caption, entities);
                     caption = r.text;
                     entities = r.entities;
                 }
             } catch (Throwable t) {
-                FileLog.e("nimarko prereform convert failed", t);
+                FileLog.e("nebula prereform convert failed", t);
             }
         }
         TLRPC.ReplyMarkup replyMarkup = sendMessageParams.replyMarkup;
@@ -4340,11 +4340,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         MessageObject.SendAnimationData sendAnimationData = sendMessageParams.sendAnimationData;
         boolean updateStickersOrder = sendMessageParams.updateStickersOrder;
         boolean hasMediaSpoilers = sendMessageParams.hasMediaSpoilers;
-        // NimarkoGram (CG parity): gifSpoilers auto-attaches the spoiler flag to
+        // NebulaGram (CG parity): gifSpoilers auto-attaches the spoiler flag to
         // outgoing GIF documents. One-shot per send — the flag stays on until the
         // user disables it from settings, but each individual document is checked
         // here so it only applies to actual GIFs (not other documents).
-        if (app.nimarkogram.messenger.NimarkoConfig.gifSpoilers
+        if (app.nebulagram.messenger.NebulaConfig.gifSpoilers
                 && document != null
                 && MessageObject.isGifDocument(document)) {
             hasMediaSpoilers = true;
@@ -4384,13 +4384,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             caption = "";
         }
 
-        // NimarkoGram (CG parity): when autoQuoteReplies is on, automatically
+        // NebulaGram (CG parity): when autoQuoteReplies is on, automatically
         // attach a reply-quote built from the replied-to message so the recipient
         // sees the context inline. Skip channel-post comments (linked discussion,
         // already implies target) and forum topics (CG does the same).
-        if (app.nimarkogram.messenger.NimarkoConfig.autoQuoteReplies && replyToMsg != null) {
+        if (app.nebulagram.messenger.NebulaConfig.autoQuoteReplies && replyToMsg != null) {
             boolean isComments = replyToMsg.messageOwner.fwd_from != null && replyToMsg.messageOwner.fwd_from.channel_post != 0;
-            boolean isTopic = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper
+            boolean isTopic = app.nebulagram.messenger.utils.chats.NebulaChatHelper
                     .getInstance(currentAccount).isTopic(replyToMsg);
             if (!isComments && !isTopic && replyQuote == null) {
                 replyQuote = ChatActivity.ReplyQuote.from(replyToMsg);
@@ -9280,9 +9280,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     public TLRPC.TL_photo generatePhotoSizes(String path, Uri imageUri) {
-        // NimarkoGram (CG parity): respect the largePhotos toggle for legacy callers
+        // NebulaGram (CG parity): respect the largePhotos toggle for legacy callers
         // that don't pass the highQuality flag (e.g. clipboard / share intents).
-        return generatePhotoSizes(null, path, imageUri, app.nimarkogram.messenger.NimarkoConfig.largePhotos);
+        return generatePhotoSizes(null, path, imageUri, app.nebulagram.messenger.NebulaConfig.largePhotos);
     }
 
     public TLRPC.TL_photo generatePhotoSizes(TLRPC.TL_photo photo, String path, Uri imageUri, boolean highQuality) {
@@ -10816,7 +10816,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 for (int a = 0; a < count; a++) {
                     final SendingMediaInfo info = media.get(a);
                     info.highQuality = !info.forceAsSticker
-                            && (info.highQuality || app.nimarkogram.messenger.NimarkoConfig.largePhotos);
+                            && (info.highQuality || app.nebulagram.messenger.NebulaConfig.largePhotos);
                     if (info.searchImage == null && !info.isVideo && info.videoEditedInfo == null) {
                         if (info.originalPhotoEntry != null && info.highQuality) {
                             info.originalPhotoEntry.rebuildPhoto(true);
@@ -11898,8 +11898,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         int compressionsCount;
 
         float maxSize = Math.max(videoEditedInfo.originalWidth, videoEditedInfo.originalHeight);
-        // NimarkoGram (CG parity): sendVideosAtMaxQuality extends the compression ladder so 1080p+ stays uncompressed.
-        if (app.nimarkogram.messenger.NimarkoConfig.sendVideosAtMaxQuality) {
+        // NebulaGram (CG parity): sendVideosAtMaxQuality extends the compression ladder so 1080p+ stays uncompressed.
+        if (app.nebulagram.messenger.NebulaConfig.sendVideosAtMaxQuality) {
             if (maxSize > 3840) {
                 compressionsCount = 7;
             } else if (maxSize > 2560) {
@@ -11932,9 +11932,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }
         boolean needCompress = false;
         if (new File(videoPath).length() < 1024L * 1024L * 1000L) {
-            if (selectedCompression != compressionsCount || Math.max(videoEditedInfo.originalWidth, videoEditedInfo.originalHeight) > (app.nimarkogram.messenger.NimarkoConfig.sendVideosAtMaxQuality ? 3840 : 1280)) {
+            if (selectedCompression != compressionsCount || Math.max(videoEditedInfo.originalWidth, videoEditedInfo.originalHeight) > (app.nebulagram.messenger.NebulaConfig.sendVideosAtMaxQuality ? 3840 : 1280)) {
                 needCompress = true;
-                if (app.nimarkogram.messenger.NimarkoConfig.sendVideosAtMaxQuality) {
+                if (app.nebulagram.messenger.NebulaConfig.sendVideosAtMaxQuality) {
                     switch (selectedCompression) {
                         case 1:
                             maxSize = 480.0f;

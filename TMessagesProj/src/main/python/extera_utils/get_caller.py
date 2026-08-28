@@ -19,7 +19,7 @@ _SDK_MODULES = {
 
 def _loaded_plugin_ids():
     try:
-        from app.nimarkogram.messenger.plugins import PluginsController
+        from app.nebulagram.messenger.plugins import PluginsController
         controller = PluginsController.getInstance()
         return {str(k) for k in controller.plugins.keySet()}
     except Exception:

@@ -130,7 +130,7 @@ import org.telegram.ui.RoundVideoProgressShadow;
 import org.telegram.ui.ThemeActivity;
 import org.telegram.ui.ThemePreviewActivity;
 
-import app.nimarkogram.messenger.NimarkoConfig;
+import app.nebulagram.messenger.NebulaConfig;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -1356,7 +1356,7 @@ public class Theme {
         public int previewWallpaperOffset;
         private int previewInColor;
         private int previewOutColor;
-        // NimarkoGram: Monet preview palette keys. Set only for the built-in Monet themes so the
+        // NebulaGram: Monet preview palette keys. Set only for the built-in Monet themes so the
         // preview getters recompute their colours live from the current dynamic palette instead of
         // handing back a cache that goes stale after the system wallpaper/accent changes. null otherwise.
         private String monetPreviewBgKey;
@@ -1609,14 +1609,14 @@ public class Theme {
             return previewBackgroundColor;
         }
 
-        // NimarkoGram: recompute a Monet preview colour from the live dynamic palette so a system
+        // NebulaGram: recompute a Monet preview colour from the live dynamic palette so a system
         // wallpaper/accent change is reflected immediately in the theme chooser. Returns 0 (use the
         // cached value) for non-Monet themes or when the palette lookup is unavailable.
         private int getMonetPreviewColor(String key) {
             if (key == null || android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.S) {
                 return 0;
             }
-            return app.nimarkogram.messenger.utils.ui.MonetHelper.getColor(key);
+            return app.nebulagram.messenger.utils.ui.MonetHelper.getColor(key);
         }
 
 
@@ -4052,7 +4052,7 @@ public class Theme {
         themes.add(themeInfo);
         themesDict.put("Night", themeInfo);
 
-        // NimarkoGram: Monet (Android 12+) — Nimarko implementation.
+        // NebulaGram: Monet (Android 12+) — Nebula implementation.
         // Uses monet_light.attheme / monet_dark.attheme bundled in assets/. The .attheme files contain
         // dynamic Monet tokens (a1_500, n2_900, monetGreen, ...) which getThemeFileValues resolves via
         // MonetHelper.getColor() at parse time. The name fast-path in isDark() handles the dark/light
@@ -4061,9 +4061,9 @@ public class Theme {
             themeInfo = new ThemeInfo();
             themeInfo.name = "Monet Light";
             themeInfo.assetName = "monet_light.attheme";
-            themeInfo.previewBackgroundColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor("n1_50");
-            themeInfo.previewInColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor("a1_50");
-            themeInfo.previewOutColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor("a1_600");
+            themeInfo.previewBackgroundColor = app.nebulagram.messenger.utils.ui.MonetHelper.getColor("n1_50");
+            themeInfo.previewInColor = app.nebulagram.messenger.utils.ui.MonetHelper.getColor("a1_50");
+            themeInfo.previewOutColor = app.nebulagram.messenger.utils.ui.MonetHelper.getColor("a1_600");
             themeInfo.monetPreviewBgKey = "n1_50";
             themeInfo.monetPreviewInKey = "a1_50";
             themeInfo.monetPreviewOutKey = "a1_600";
@@ -4074,9 +4074,9 @@ public class Theme {
             themeInfo = new ThemeInfo();
             themeInfo.name = "Monet Dark";
             themeInfo.assetName = "monet_dark.attheme";
-            themeInfo.previewBackgroundColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor("n1_900");
-            themeInfo.previewInColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor("n2_800");
-            themeInfo.previewOutColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor("a1_100");
+            themeInfo.previewBackgroundColor = app.nebulagram.messenger.utils.ui.MonetHelper.getColor("n1_900");
+            themeInfo.previewInColor = app.nebulagram.messenger.utils.ui.MonetHelper.getColor("n2_800");
+            themeInfo.previewOutColor = app.nebulagram.messenger.utils.ui.MonetHelper.getColor("a1_100");
             themeInfo.monetPreviewBgKey = "n1_900";
             themeInfo.monetPreviewInKey = "n2_800";
             themeInfo.monetPreviewOutKey = "a1_100";
@@ -4087,9 +4087,9 @@ public class Theme {
             themeInfo = new ThemeInfo();
             themeInfo.name = "Monet AMOLED";
             themeInfo.assetName = "monet_dark.attheme";
-            themeInfo.previewBackgroundColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor("n1_1000");
-            themeInfo.previewInColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor("n2_800");
-            themeInfo.previewOutColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor("a1_100");
+            themeInfo.previewBackgroundColor = app.nebulagram.messenger.utils.ui.MonetHelper.getColor("n1_1000");
+            themeInfo.previewInColor = app.nebulagram.messenger.utils.ui.MonetHelper.getColor("n2_800");
+            themeInfo.previewOutColor = app.nebulagram.messenger.utils.ui.MonetHelper.getColor("a1_100");
             themeInfo.monetPreviewBgKey = "n1_1000";
             themeInfo.monetPreviewInKey = "n2_800";
             themeInfo.monetPreviewOutKey = "a1_100";
@@ -4563,10 +4563,10 @@ public class Theme {
     }
 
     public static Drawable getCurrentHolidayDrawable() {
-        // NimarkoGram: short-circuit the 60s cache when the user-flag is on so the
+        // NebulaGram: short-circuit the 60s cache when the user-flag is on so the
         // snowflake-effect drawable is loaded immediately after the toggle is flipped.
-        boolean nimarkoForce = NimarkoConfig.drawSnowInActionBar;
-        if (nimarkoForce && dialogs_holidayDrawable == null) {
+        boolean nebulaForce = NebulaConfig.drawSnowInActionBar;
+        if (nebulaForce && dialogs_holidayDrawable == null) {
             dialogs_holidayDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.newyear);
             dialogs_holidayDrawableOffsetX = -dp(3);
             dialogs_holidayDrawableOffsetY = -dp(-7);
@@ -4585,7 +4585,7 @@ public class Theme {
                 canStartHolidayAnimation = false;
             }
             if (dialogs_holidayDrawable == null) {
-                if ((monthOfYear == 11 && dayOfMonth >= (BuildVars.DEBUG_PRIVATE_VERSION ? 29 : 31) && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) || nimarkoForce) {
+                if ((monthOfYear == 11 && dayOfMonth >= (BuildVars.DEBUG_PRIVATE_VERSION ? 29 : 31) && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) || nebulaForce) {
                     dialogs_holidayDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.newyear);
                     dialogs_holidayDrawableOffsetX = -dp(3);
                     dialogs_holidayDrawableOffsetY = -dp(-7);
@@ -7820,8 +7820,8 @@ public class Theme {
                                         // Do not turn malformed colours into unrelated integers.
                                     }
                                 } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S
-                                        && app.nimarkogram.messenger.utils.ui.MonetHelper.isMonetColorToken(param)) {
-                                    int resolved = app.nimarkogram.messenger.utils.ui.MonetHelper.getColor(param, monetAmoled);
+                                        && app.nebulagram.messenger.utils.ui.MonetHelper.isMonetColorToken(param)) {
+                                    int resolved = app.nebulagram.messenger.utils.ui.MonetHelper.getColor(param, monetAmoled);
                                     // Zero is valid only for a token with an explicit zero alpha.
                                     if (resolved != 0 || param.endsWith("_0")) {
                                         value = resolved;
@@ -9251,7 +9251,7 @@ public class Theme {
                 return animatingColors.valueAt(index);
             }
         }
-        if (app.nimarkogram.messenger.NimarkoConfig.disableDividers && key_divider == key) {
+        if (app.nebulagram.messenger.NebulaConfig.disableDividers && key_divider == key) {
             return 0x00ffffff;
         }
         if (serviceBitmapShader != null && (key_chat_serviceText == key || key_chat_serviceLink == key || key_chat_serviceIcon == key

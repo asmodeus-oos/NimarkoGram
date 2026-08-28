@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import org.telegram.ui.ActionBar.Theme;
 
-public class LoadingModelView extends app.nimarkogram.messenger.speech.ui.LoadingModelView {
+public class LoadingModelView extends app.nebulagram.messenger.speech.ui.LoadingModelView {
 
     public TextView title;
      

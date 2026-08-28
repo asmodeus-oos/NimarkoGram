@@ -1,6 +1,6 @@
 package com.exteragram.messenger.plugins.hooks;
 
-public class HookFilter extends app.nimarkogram.messenger.plugins.hooks.HookFilter {
+public class HookFilter extends app.nebulagram.messenger.plugins.hooks.HookFilter {
 
     public HookFilter(String filterType) {
         super(filterType);
@@ -18,11 +18,11 @@ public class HookFilter extends app.nimarkogram.messenger.plugins.hooks.HookFilt
         this.argIndex = argIndex;
     }
 
-    public java.util.ArrayList<app.nimarkogram.messenger.plugins.hooks.HookFilter> getOrFilters() {
+    public java.util.ArrayList<app.nebulagram.messenger.plugins.hooks.HookFilter> getOrFilters() {
         return this.orFilters;
     }
 
-    public void setOrFilters(java.util.ArrayList<app.nimarkogram.messenger.plugins.hooks.HookFilter> orFilters) {
+    public void setOrFilters(java.util.ArrayList<app.nebulagram.messenger.plugins.hooks.HookFilter> orFilters) {
         this.orFilters = orFilters;
     }
 

@@ -1034,7 +1034,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 int dw = (int) (rightDrawable.getIntrinsicWidth() * rightDrawableScale);
                 int dh = (int) (rightDrawable.getIntrinsicHeight() * rightDrawableScale);
                 int x = textOffsetX + textWidth + drawablePadding + (int) -scrollingOffset + nextScrollX;
-                // NimarkoGram: marquee branch must honour center/right offset like the non-scrolling
+                // NebulaGram: marquee branch must honour center/right offset like the non-scrolling
                 // path, else a centered title's right badge is drawn at the left (looks "behind" the text).
                 if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.CENTER_HORIZONTAL ||
                         (gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.RIGHT) {
@@ -1497,7 +1497,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
         sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED);
     }
 
-    // NimarkoGram: slot-2 click listener for extera-style badges drawn in
+    // NebulaGram: slot-2 click listener for extera-style badges drawn in
     // rightDrawable2. Hit-test uses the drawable's bounds (already set by the
     // draw pass), so no extra fields are needed.
     private OnClickListener rightDrawable2OnClickListener;

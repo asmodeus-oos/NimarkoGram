@@ -560,7 +560,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     super.invalidate(l, t, r, b);
                 }
             };
-            avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(64));
+            avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(64));
             avatarDrawable.setInfo(5, null, null);
             avatarImage.setImageDrawable(avatarDrawable);
             frameLayout.addView(avatarImage, LayoutHelper.createFrame(64, 64, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), LocaleController.isRTL ? 0 : 16, 12, LocaleController.isRTL ? 16 : 0, 12));

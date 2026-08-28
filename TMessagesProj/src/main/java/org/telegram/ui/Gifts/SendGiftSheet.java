@@ -70,7 +70,7 @@ import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.EditTextSuggestionsFix;
 import org.telegram.ui.Components.LayoutHelper;
 
-import app.nimarkogram.messenger.NimarkoConfig;
+import app.nebulagram.messenger.NebulaConfig;
 import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.Premium.GiftPremiumBottomSheet;
@@ -367,7 +367,7 @@ public class SendGiftSheet extends BottomSheetWithRecyclerListView implements No
 
             }
         };
-        if (NimarkoConfig.editTextSuggestionsFix) messageEdit.editTextEmoji.getEditText().addTextChangedListener(new EditTextSuggestionsFix());
+        if (NebulaConfig.editTextSuggestionsFix) messageEdit.editTextEmoji.getEditText().addTextChangedListener(new EditTextSuggestionsFix());
         messageEdit.editTextEmoji.allowEmojisForNonPremium(true);
         messageEdit.setShowLimitWhenNear(50);
         setEditTextEmoji(messageEdit.editTextEmoji);
@@ -509,7 +509,7 @@ public class SendGiftSheet extends BottomSheetWithRecyclerListView implements No
             }
             if (starGift != null) {
                 
-                if (app.nimarkogram.messenger.NimarkoConfig.allowSafeStars) {
+                if (app.nebulagram.messenger.NebulaConfig.allowSafeStars) {
                     if (closeParentSheet != null) {
                         closeParentSheet.run();
                     }

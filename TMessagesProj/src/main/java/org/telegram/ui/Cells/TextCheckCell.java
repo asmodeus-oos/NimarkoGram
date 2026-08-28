@@ -454,9 +454,9 @@ public class TextCheckCell extends FrameLayout {
         imageView.setPadding(AndroidUtilities.dp(2), AndroidUtilities.dp(2), AndroidUtilities.dp(2), AndroidUtilities.dp(2));
         imageView.setImageResource(resId);
         imageView.setColorFilter(new PorterDuffColorFilter(
-                app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconForegroundColor(Color.WHITE),
+                app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconForegroundColor(Color.WHITE),
                 PorterDuff.Mode.SRC_IN));
         imageView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(9),
-                app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(color)));
+                app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(color)));
     }
 }

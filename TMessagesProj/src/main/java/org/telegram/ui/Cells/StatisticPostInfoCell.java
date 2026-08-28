@@ -226,7 +226,7 @@ public class StatisticPostInfoCell extends FrameLayout {
         } else {
             text = messageObject.caption != null ? messageObject.caption : messageObject.messageText;
             if (text != null && text.toString().contains("$")) {
-                text = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(text.toString());
+                text = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(text.toString());
             }
         }
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text == null ? "" : text);

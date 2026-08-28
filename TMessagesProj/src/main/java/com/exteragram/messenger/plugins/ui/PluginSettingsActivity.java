@@ -1,8 +1,8 @@
 package com.exteragram.messenger.plugins.ui;
 
-import app.nimarkogram.messenger.plugins.Plugin;
+import app.nebulagram.messenger.plugins.Plugin;
 
-public class PluginSettingsActivity extends app.nimarkogram.messenger.plugins.ui.PluginSettingsActivity {
+public class PluginSettingsActivity extends app.nebulagram.messenger.plugins.ui.PluginSettingsActivity {
     public PluginSettingsActivity(Plugin plugin) {
         super(plugin);
     }

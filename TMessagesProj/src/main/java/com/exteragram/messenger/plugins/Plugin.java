@@ -1,6 +1,6 @@
 package com.exteragram.messenger.plugins;
 
-public class Plugin extends app.nimarkogram.messenger.plugins.Plugin {
+public class Plugin extends app.nebulagram.messenger.plugins.Plugin {
     public Plugin(String id, String name) {
         super(id, name);
     }
@@ -13,7 +13,7 @@ public class Plugin extends app.nimarkogram.messenger.plugins.Plugin {
         setRequirements(String.join("\n", requirements));
     }
 
-    public static Plugin fromReal(app.nimarkogram.messenger.plugins.Plugin real) {
+    public static Plugin fromReal(app.nebulagram.messenger.plugins.Plugin real) {
         if (real == null) {
             return null;
         }

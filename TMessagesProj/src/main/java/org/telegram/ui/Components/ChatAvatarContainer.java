@@ -81,18 +81,18 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
     private static final int INLINE_COMMUNITY_GAP_DP = 2;
     private final BoolAnimator animatorTimeVisible = new BoolAnimator(ANIMATOR_ID_TIME_ITEM_VISIBLE, this, CubicBezierInterpolator.EASE_OUT_QUINT, 320);
 
-    // NimarkoGram (CG parity, L81): centerChatTitle is a field, not a local —
+    // NebulaGram (CG parity, L81): centerChatTitle is a field, not a local —
     // onMeasure / onLayout / onTouchEvent / openProfile / star-drawable picker
     // all read it, so a setup-block-local variable does not reach those sites
     // and the centered layout never actually takes effect at draw time.
     // Initial value comes from the user pref; the per-context guards (Saved
     // mode, self-chat, REPLY_BOT, reply-comment) AND-out inside the setup
     // block once parentFragment is known.
-    private boolean centerChatTitle = app.nimarkogram.messenger.NimarkoConfig.centerChatTitle;
+    private boolean centerChatTitle = app.nebulagram.messenger.NebulaConfig.centerChatTitle;
     private boolean useChatTitleLayoutOutsideChat;
 
     private boolean resolveCenterChatTitle() {
-        if (!app.nimarkogram.messenger.NimarkoConfig.centerChatTitle) {
+        if (!app.nebulagram.messenger.NebulaConfig.centerChatTitle) {
             return false;
         }
         if (parentFragment == null) {
@@ -235,7 +235,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
     private boolean occupyStatusBar = true;
     private int leftPadding = dp(8);
     private int rightAvatarPadding = 0;
-    private int nmCenteredAvatarCx;   // NimarkoGram: centered-title avatar center-x (aligned to the headerItem at layout time)
+    private int nmCenteredAvatarCx;   // NebulaGram: centered-title avatar center-x (aligned to the headerItem at layout time)
     StatusDrawable currentTypingDrawable;
 
     private int lastWidth = -1;
@@ -277,10 +277,10 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
 
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable emojiStatusDrawable;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable botVerificationDrawable;
-    // NimarkoGram: extera-style badge slot — populated from BadgesController
+    // NebulaGram: extera-style badge slot — populated from BadgesController
     // when the currently-shown user has a registered badge.
     private AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable badgeEmojiDrawable;
-    private app.nimarkogram.messenger.api.dto.BadgeDTO currentNimarkoBadge;
+    private app.nebulagram.messenger.api.dto.BadgeDTO currentNebulaBadge;
 
     protected boolean useAnimatedSubtitle() {
         return false;
@@ -421,7 +421,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         avatarImageView.setRoundRadius(AndroidUtilities.dp(21));   // Chat header keeps Telegram's own shape.
         addView(avatarImageView);
 
-        // NimarkoGram (CG parity, L262/L270-273): full-set centerChatTitle guards.
+        // NebulaGram (CG parity, L262/L270-273): full-set centerChatTitle guards.
         // Title centring is disabled in Saved-Messages mode, reply-comment threads,
         // empty-dialog chats, your own self-chat, and the REPLY_BOT chat — these
         // contexts already have CG-default left alignment and forcing center would
@@ -580,14 +580,14 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         if (canSearch()) {
             // CG-parity: emit a keyboard-tap haptic when long-press opens the
             // header search — unless the user disabled vibration globally.
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP, android.view.HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignored) {}
             }
             // CG-parity: reset messages-search filter to NONE before opening
             // the header search so a stale per-chat filter doesn't leak in.
-            app.nimarkogram.messenger.NimarkoConfig.setMessagesSearchFilter(app.nimarkogram.messenger.NimarkoConfig.FILTER_NONE);
+            app.nebulagram.messenger.NebulaConfig.setMessagesSearchFilter(app.nebulagram.messenger.NebulaConfig.FILTER_NONE);
             openSearch();
         }
     };
@@ -744,7 +744,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         }
     }
 
-    // NimarkoGram: reserves right padding for the centered-title / hide-call-icon feature (called from
+    // NebulaGram: reserves right padding for the centered-title / hide-call-icon feature (called from
     // ChatActivity.setTitleExpand). Dropped during the 12.9.0 merge resolution — restored.
     public void setTitleExpand(boolean titleExpand) {
         int newRightPadding = titleExpand ? dp(10) : 0;
@@ -1121,7 +1121,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         this.titleTextLargerCopyView.set(titleTextLargerCopyView);
         titleTextLargerCopyView.setTextColor(getThemedColor(Theme.key_actionBarDefaultTitle));
         titleTextLargerCopyView.setTextSizePx(dp(glassMode ? 17.5f : 18));
-        // NimarkoGram: keep gravity consistent with the live titleTextView so the
+        // NebulaGram: keep gravity consistent with the live titleTextView so the
         // cross-fade copy created on setTitle change does not visibly jump from
         // centered to left-aligned when centerChatTitle is enabled (CG parity).
         titleTextLargerCopyView.setGravity(centerChatTitle ? Gravity.CENTER_HORIZONTAL : Gravity.LEFT);
@@ -1151,7 +1151,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         subtitleTextLargerCopyView.setTextColor(getThemedColor(Theme.key_actionBarDefaultSubtitle));
         subtitleTextLargerCopyView.setTag(Theme.key_actionBarDefaultSubtitle);
         subtitleTextLargerCopyView.setTextSizePx(dp(glassMode ? 13.5f : 14));
-        // NimarkoGram: same fix as titleTextLargerCopyView — gravity must mirror
+        // NebulaGram: same fix as titleTextLargerCopyView — gravity must mirror
         // the live subtitle so centerChatTitle works across the fade animation.
         subtitleTextLargerCopyView.setGravity(centerChatTitle ? Gravity.CENTER_HORIZONTAL : Gravity.LEFT);
         if (subtitleTextView != null) {
@@ -1221,7 +1221,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         // (36 dp box, inset by leftPadding+50dp from container's right).
         // Non-centered → standard avatar at leftPadding (measured size).
         if (centerChatTitle && !isInlineCenteredAvatar()) {
-            // NimarkoGram: REALLY center the avatar on the headerItem (3-dots) circle it visually replaces, by
+            // NebulaGram: REALLY center the avatar on the headerItem (3-dots) circle it visually replaces, by
             // reading the headerItem's actual on-screen position at layout time. Exact for glass AND non-glass and
             // any device/density — no hardcoded dp guess. Falls back to a static estimate only if the menu hasn't
             // been laid out yet (first frame); the next layout pass snaps it to the real position.
@@ -1337,7 +1337,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         }
         if (inlineTextClipEnabled) {
             // The visible title unit includes every trailing badge (Premium,
-            // emoji status, verification and Nimarko badge).  Optical centring
+            // emoji status, verification and Nebula badge).  Optical centring
             // for the community arrow and fractional glass-width animation can
             // otherwise move the whole view one or more pixels past the live
             // capsule.  Clamp the complete measured unit, not the text alone,
@@ -1362,7 +1362,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         } else {
             // NG: when the status is hidden the title is centered; nudge it up ~2dp so it sits
             // a touch higher in the bar (user-tuned) instead of slightly low at dead-center.
-            int titleTop = app.nimarkogram.messenger.NimarkoConfig.hideActionBarStatus ? dp(9) : dp(11);
+            int titleTop = app.nebulagram.messenger.NebulaConfig.hideActionBarStatus ? dp(9) : dp(11);
             titleTextView.layout(titleL, viewTop + titleTop - titleTextView.getPaddingTop(), titleL + titleTextView.getMeasuredWidth(), viewTop + titleTextView.getTextHeight() + titleTop - titleTextView.getPaddingTop() + titleTextView.getPaddingBottom());
             if (titleTextLargerCopyView != null) {
                 titleTextLargerCopyView.layout(titleCopyL, viewTop + titleTop, titleCopyL + titleTextLargerCopyView.getMeasuredWidth(), viewTop + titleTextLargerCopyView.getTextHeight() + titleTop);
@@ -1403,7 +1403,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
             // CG L799-803: timeItem follows the avatar — left edge when default,
             // right edge when title is centered.
             if (centerChatTitle) {
-                timeItem.layout(nmCenteredAvatarCx + dp(8), dp(5) + viewTop, nmCenteredAvatarCx + dp(42), viewTop + dp(15 + 34));   // NimarkoGram: TTL badge follows the (dynamically centered) avatar's lower-right corner
+                timeItem.layout(nmCenteredAvatarCx + dp(8), dp(5) + viewTop, nmCenteredAvatarCx + dp(42), viewTop + dp(15 + 34));   // NebulaGram: TTL badge follows the (dynamically centered) avatar's lower-right corner
             } else {
                 // Upstream 12.9.0: repositioned TTL badge (dp(19.333f) left, viewTop - dp(8)).
                 timeItem.layout(
@@ -1544,7 +1544,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         titleTextView.setLeftDrawable(leftIcon);
         // NG: never show the muted bell in the chat header (slot 2). User
         // reported a brief flash when opening a chat from search — setTitleIcons
-        // fired with mutedIcon != null before applyNimarkoBadge ran, the bell
+        // fired with mutedIcon != null before applyNebulaBadge ran, the bell
         // appeared for a frame and then vanished. The bell also clobbered NG
         // badges already in slot 2. Mute status is still visible to the user
         // via the chat-list cell mute icon and notification settings.
@@ -1570,7 +1570,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
     }
 
     public void setTitle(CharSequence value, boolean scam, boolean fake, boolean verified, boolean premium, TLRPC.EmojiStatus emojiStatus, boolean animated) {
-        // NimarkoGram slot layout (CG-derived, badge guaranteed visible):
+        // NebulaGram slot layout (CG-derived, badge guaranteed visible):
         //   slot 1 (rightDrawable)
         //     emoji_status              (highest)
         //     premium + badge           → badge replaces default star
@@ -1592,7 +1592,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         titleTextView.setText(value);
 
         // NG: disablePremiumStatuses kills emoji-status display entirely (CG-parity).
-        if (app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) {
+        if (app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) {
             emojiStatus = null;
             premium = false;
         }
@@ -1609,8 +1609,8 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
             premium = false;
         }
 
-        // Lookup NimarkoGram badge for the dialog owner.
-        app.nimarkogram.messenger.api.dto.BadgeDTO badge = null;
+        // Lookup NebulaGram badge for the dialog owner.
+        app.nebulagram.messenger.api.dto.BadgeDTO badge = null;
         try {
             org.telegram.tgnet.TLObject target = null;
             if (parentFragment != null) {
@@ -1621,10 +1621,10 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
                 target = headerIdentityTarget;
             }
             // NG: show the badge in Saved Messages too — plugins
-            // (NimarkoAchievements streaks, etc.) inject badges at the user's
+            // (NebulaAchievements streaks, etc.) inject badges at the user's
             // own id and need to be visible on the Saved Messages header.
             if (target != null) {
-                badge = app.nimarkogram.messenger.badges.BadgesController.getInstance().i(target);
+                badge = app.nebulagram.messenger.badges.BadgesController.getInstance().i(target);
                 if (badge != null && badge.getDocumentId() == 0L) badge = null;
             }
         } catch (Throwable ignored) {}
@@ -1634,16 +1634,16 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
                 badgeEmojiDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(titleTextView, dp(24));
                 if (isAttachedToWindow()) badgeEmojiDrawable.attach();
             }
-            boolean animateBadge = animated && lastNimarkoBadgeDocId != 0L && lastNimarkoBadgeDocId != badge.getDocumentId();
+            boolean animateBadge = animated && lastNebulaBadgeDocId != 0L && lastNebulaBadgeDocId != badge.getDocumentId();
             badgeEmojiDrawable.set(badge.getDocumentId(), animateBadge);
             badgeEmojiDrawable.setParticles(true, false);
             badgeEmojiDrawable.setColor(getThemedColor(Theme.key_profile_verifiedBackground));
-            lastNimarkoBadgeDocId = badge.getDocumentId();
+            lastNebulaBadgeDocId = badge.getDocumentId();
             // NG: the bulletin click is wired AFTER slot placement (below) so it
             // lands on whichever slot the badge actually occupies — tapping the
             // BADGE shows the bulletin, not the emoji status next to it.
         } else {
-            lastNimarkoBadgeDocId = 0L;
+            lastNebulaBadgeDocId = 0L;
             if (badgeEmojiDrawable != null) {
                 badgeEmojiDrawable.set((Drawable) null, false);
                 badgeEmojiDrawable.setParticles(false, false);
@@ -1702,7 +1702,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         // NG slot-1 priority:
         //   emoji_status > (premium + badge → badge replaces star) > premium-star > badge (non-premium) > null
         Drawable primaryTitleDrawable = null;
-        if ((premium || emojiStatusPresent) && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) {
+        if ((premium || emojiStatusPresent) && !app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) {
             if (titleTextView.getRightDrawable() instanceof AnimatedEmojiDrawable.WrapSizeDrawable
                     && ((AnimatedEmojiDrawable.WrapSizeDrawable) titleTextView.getRightDrawable()).getDrawable() instanceof AnimatedEmojiDrawable) {
                 ((AnimatedEmojiDrawable) ((AnimatedEmojiDrawable.WrapSizeDrawable) titleTextView.getRightDrawable()).getDrawable()).removeView(titleTextView);
@@ -1720,7 +1720,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
                 // It is a real 14dp drawable. Do not put it into the 24dp
                 // animated-emoji slot: that leaves a transparent 10dp tail on
                 // the right, shifts the centred title group by 5dp, and creates
-                // an oversized gap before slot 2. Custom emoji and Nimarko
+                // an oversized gap before slot 2. Custom emoji and Nebula
                 // badges still use the full 24dp swap drawable above.
                 emojiStatusDefaultDrawable = ContextCompat.getDrawable(
                         ApplicationLoader.applicationContext,
@@ -1753,23 +1753,23 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         // Clear the other slot's listener so tapping the emoji status does
         // nothing (user wants the bulletin only on the badge itself).
         boolean badgeInSlot1 = badge != null && !emojiStatusPresent;
-        final app.nimarkogram.messenger.api.dto.BadgeDTO renderedBadge =
+        final app.nebulagram.messenger.api.dto.BadgeDTO renderedBadge =
                 badgeInSlot1 || rightDrawable2IsBadge ? badge : null;
-        currentNimarkoBadge = renderedBadge;
+        currentNebulaBadge = renderedBadge;
         if (renderedBadge != null) {
-            final app.nimarkogram.messenger.api.dto.BadgeDTO finalBadge = renderedBadge;
+            final app.nebulagram.messenger.api.dto.BadgeDTO finalBadge = renderedBadge;
             if (rightDrawable2IsBadge) {
-                titleTextView.setRightDrawable2OnClick(v -> showNimarkoBadgeBulletin(finalBadge));
+                titleTextView.setRightDrawable2OnClick(v -> showNebulaBadgeBulletin(finalBadge));
                 titleTextView.setRightDrawableOnClick(null);
             } else {
-                titleTextView.setRightDrawableOnClick(v -> showNimarkoBadgeBulletin(finalBadge));
+                titleTextView.setRightDrawableOnClick(v -> showNebulaBadgeBulletin(finalBadge));
                 titleTextView.setRightDrawable2OnClick(null);
             }
         } else {
             titleTextView.setRightDrawableOnClick(null);
             titleTextView.setRightDrawable2OnClick(null);
         }
-        // NimarkoGram: SimpleTextView.setRightDrawable{,2} only rebuilds the
+        // NebulaGram: SimpleTextView.setRightDrawable{,2} only rebuilds the
         // StaticLayout via recreateLayoutMaybe() — it does NOT requestLayout
         // upward. Without a full re-measure, the parent container's onMeasure
         // never re-runs, so the avatarContainer width / menu-overlap math
@@ -1789,7 +1789,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
     // the drawable directly — we have to redo the slot-1 priority decision
     // (emoji_status > premium-star > badge > null). The simplest correct
     // implementation is to re-invoke setTitle with the current state.
-    private void applyNimarkoBadge(boolean animated) {
+    private void applyNebulaBadge(boolean animated) {
         try {
             if (parentFragment == null) return;
             TLRPC.User user = parentFragment.getCurrentUser();
@@ -1805,11 +1805,11 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         } catch (Throwable ignored) {}
     }
 
-    private long lastNimarkoBadgeDocId = 0L;
+    private long lastNebulaBadgeDocId = 0L;
 
-    // NimarkoGram: tap-to-info bulletin for the badge — matches extera's
+    // NebulaGram: tap-to-info bulletin for the badge — matches extera's
     // BulletinFactory.createEmojiBulletin behaviour.
-    private void showNimarkoBadgeBulletin(app.nimarkogram.messenger.api.dto.BadgeDTO badge) {
+    private void showNebulaBadgeBulletin(app.nebulagram.messenger.api.dto.BadgeDTO badge) {
         try {
             if (badge == null || parentFragment == null) return;
             CharSequence rawText = badge.getText();
@@ -1862,7 +1862,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
     public void setSubtitle(CharSequence value) {
         // NG: hide the chat-header status line (online / last seen / member count)
         // when the user opts out via Appearance settings.
-        if (app.nimarkogram.messenger.NimarkoConfig.hideActionBarStatus) {
+        if (app.nebulagram.messenger.NebulaConfig.hideActionBarStatus) {
             subtitleHiddenByPreference = true;
             inlineSubtitleWidthReserve = 0f;
             subtitleTransitionGeneration++;
@@ -2190,7 +2190,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
                     newStatus = getString(R.string.Bot);
                 } else {
                     isOnline[0] = false;
-                    newStatus = app.nimarkogram.messenger.NimarkoConfig.oldTimeStyle
+                    newStatus = app.nebulagram.messenger.NebulaConfig.oldTimeStyle
                             ? LocaleController.formatUserStatus(currentAccount, user, isOnline, allowShorterStatus ? statusMadeShorter : null)
                             : LocaleController.formatUserStatusIOS(currentAccount, user, isOnline, allowShorterStatus ? statusMadeShorter : null);
                     useOnlineColor = isOnline[0];
@@ -2235,7 +2235,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
             useOnlineColor = true;
             setTypingAnimation(true);
         }
-        if (app.nimarkogram.messenger.NimarkoConfig.hideActionBarStatus) {
+        if (app.nebulagram.messenger.NebulaConfig.hideActionBarStatus) {
             // Real status path: updateSubtitle() writes online/last-seen/typing/member-count
             // straight to the subtitle view, bypassing the guarded setSubtitle overload.
             // Blank it here and kill the animated typing dots so nothing shows.
@@ -2500,7 +2500,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.dialogsNeedReload);
-            // NimarkoGram: retrigger badge apply when chat/user info finally
+            // NebulaGram: retrigger badge apply when chat/user info finally
             // loads — otherwise the first setTitle() fires with empty
             // parentFragment data and badge probe returns null.
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
@@ -2525,7 +2525,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
         // ended up empty. Re-evaluate the badge state every time the view
         // re-attaches; cheap (no allocation when badge unchanged).
         if (parentFragment != null) {
-            applyNimarkoBadge(false);
+            applyNebulaBadge(false);
         }
     }
 
@@ -2587,12 +2587,12 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
             updateSubtitle(true);
         } else if (id == NotificationCenter.updateInterfaces || id == NotificationCenter.dialogsNeedReload
                 || id == NotificationCenter.chatInfoDidLoad || id == NotificationCenter.userInfoDidLoad) {
-            // NimarkoGram: badge cache may have just been populated by
+            // NebulaGram: badge cache may have just been populated by
             // BadgesController.refreshSync() OR the chat/user info finally
             // loaded — re-evaluate the slot so the badge appears without a
             // manual scroll/rebind. animated=false because we already
-            // dedupe on lastNimarkoBadgeDocId.
-            applyNimarkoBadge(false);
+            // dedupe on lastNebulaBadgeDocId.
+            applyNebulaBadge(false);
         }
     }
 
@@ -2682,7 +2682,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
                     AccessibilityNodeInfo.ACTION_CLICK,
                     getString(R.string.OpenProfile)));
         }
-        if (currentNimarkoBadge != null) {
+        if (currentNebulaBadge != null) {
             info.addAction(new AccessibilityNodeInfo.AccessibilityAction(
                     R.id.acc_action_badge_info, getString(R.string.NM_ProfileBadge)));
         }
@@ -2690,8 +2690,8 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
 
     @Override
     public boolean performAccessibilityAction(int action, Bundle arguments) {
-        if (action == R.id.acc_action_badge_info && currentNimarkoBadge != null) {
-            showNimarkoBadgeBulletin(currentNimarkoBadge);
+        if (action == R.id.acc_action_badge_info && currentNebulaBadge != null) {
+            showNebulaBadgeBulletin(currentNebulaBadge);
             return true;
         }
         return super.performAccessibilityAction(action, arguments);

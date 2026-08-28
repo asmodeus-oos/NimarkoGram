@@ -204,14 +204,14 @@ class Camera2Session implements CameraSession {
 
     private void chooseStabilizationMode(CaptureRequest.Builder captureRequestBuilder) {
       
-      if (!app.nimarkogram.messenger.NimarkoConfig.cameraOpticalStabilization) {
+      if (!app.nebulagram.messenger.NebulaConfig.cameraOpticalStabilization) {
         try {
           captureRequestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE,
               CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_OFF);
           captureRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE,
               CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_OFF);
         } catch (Throwable ignored) {}
-        Logging.d(TAG, "Stabilization disabled by NimarkoConfig.");
+        Logging.d(TAG, "Stabilization disabled by NebulaConfig.");
         return;
       }
       final int[] availableOpticalStabilization = cameraCharacteristics.get(
@@ -246,8 +246,8 @@ class Camera2Session implements CameraSession {
 
     private void chooseFocusMode(CaptureRequest.Builder captureRequestBuilder) {
       
-      if (!app.nimarkogram.messenger.NimarkoConfig.cameraContinuousFocus) {
-        Logging.d(TAG, "Continuous focus disabled by NimarkoConfig.");
+      if (!app.nebulagram.messenger.NebulaConfig.cameraContinuousFocus) {
+        Logging.d(TAG, "Continuous focus disabled by NebulaConfig.");
         return;
       }
       final int[] availableFocusModes =

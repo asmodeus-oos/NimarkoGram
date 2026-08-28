@@ -88,9 +88,9 @@ import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.EditTextSuggestionsFix;
 import org.telegram.ui.Components.EmojiView;
 
-import app.nimarkogram.messenger.NimarkoConfig;
-import app.nimarkogram.messenger.preferences.folders.IconSelectorAlert;
-import app.nimarkogram.messenger.preferences.folders.helpers.FolderIconHelper;
+import app.nebulagram.messenger.NebulaConfig;
+import app.nebulagram.messenger.preferences.folders.IconSelectorAlert;
+import app.nebulagram.messenger.preferences.folders.helpers.FolderIconHelper;
 import org.telegram.ui.Components.FolderBottomSheet;
 import org.telegram.ui.Components.HintView;
 import org.telegram.ui.Components.ItemOptions;
@@ -1498,7 +1498,7 @@ public class FilterCreateActivity extends BaseFragment {
                     cell.editTextEmoji.setText(newFilterName);
                     AnimatedEmojiDrawable.toggleAnimations(currentAccount, newFilterAnimations);
                     EditTextCaption editText = cell.editTextEmoji.getEditText();
-                    if (NimarkoConfig.editTextSuggestionsFix) editText.addTextChangedListener(new EditTextSuggestionsFix());
+                    if (NebulaConfig.editTextSuggestionsFix) editText.addTextChangedListener(new EditTextSuggestionsFix());
                     editText.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

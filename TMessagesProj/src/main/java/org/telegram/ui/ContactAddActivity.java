@@ -236,7 +236,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         infoLayout.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
 
         avatarImage = new BackupImageView(context);
-        avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(64));
+        avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(64));
         infoLayout.addView(avatarImage, LayoutHelper.createFrame(64, 64, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 16, 13, 16, 13));
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -393,7 +393,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                     oldAvatarView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(30), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(30), MeasureSpec.EXACTLY));
-                    oldAvatarView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(60));
+                    oldAvatarView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(60));
                 }
 
                 @Override

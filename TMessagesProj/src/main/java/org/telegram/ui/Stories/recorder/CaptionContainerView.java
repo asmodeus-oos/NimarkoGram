@@ -75,7 +75,7 @@ import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.EditTextSuggestionsFix;
 import org.telegram.ui.Components.EmojiView;
 
-import app.nimarkogram.messenger.NimarkoConfig;
+import app.nebulagram.messenger.NebulaConfig;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MentionsContainerView;
 import org.telegram.ui.Components.ScaleStateListAnimator;
@@ -316,7 +316,7 @@ public class CaptionContainerView extends FrameLayout {
             }
         };
         editText.glassDesignForEmojiView = true;
-        if (NimarkoConfig.editTextSuggestionsFix) editText.getEditText().addTextChangedListener(new EditTextSuggestionsFix());
+        if (NebulaConfig.editTextSuggestionsFix) editText.getEditText().addTextChangedListener(new EditTextSuggestionsFix());
         editText.setFocusable(true);
         editText.setFocusableInTouchMode(true);
         editText.getEditText().hintLayoutYFix = true;

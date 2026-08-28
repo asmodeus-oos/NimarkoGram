@@ -747,7 +747,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
                 getPaddingLeft() + (int) r - dp(4),
                 height - getPaddingBottom() - dp(4)
             );
-            if (app.nimarkogram.messenger.NimarkoConfig.tabStyleStroke) {
+            if (app.nebulagram.messenger.NebulaConfig.tabStyleStroke) {
                 selectorDrawable.setStroke(AndroidUtilities.dp(1), processColor(Theme.getColor(activeTextColorKey, resourcesProvider)));
             }
             selectorDrawable.draw(canvas);

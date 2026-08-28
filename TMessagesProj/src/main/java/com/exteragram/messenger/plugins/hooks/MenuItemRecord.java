@@ -1,6 +1,6 @@
 package com.exteragram.messenger.plugins.hooks;
 
-public class MenuItemRecord extends app.nimarkogram.messenger.plugins.hooks.MenuItemRecord {
+public class MenuItemRecord extends app.nebulagram.messenger.plugins.hooks.MenuItemRecord {
 
     public MenuItemRecord(String pluginId, com.chaquo.python.PyObject pyData) {
         super(pluginId, pyData);

@@ -808,14 +808,14 @@ public class ChatActivity extends BaseFragment implements
     private MessageObject selectedObject;
     private MessageObject.GroupedMessages selectedObjectGroup;
     private boolean forbidForwardingWithDismiss;
-    private static final String ARG_NIMARKO_FORWARD_HIDE_AUTHOR = "nimarko_forward_hide_author";
-    private static final String ARG_NIMARKO_FORWARD_HIDE_CAPTION = "nimarko_forward_hide_caption";
+    private static final String ARG_NEBULA_FORWARD_HIDE_AUTHOR = "nebula_forward_hide_author";
+    private static final String ARG_NEBULA_FORWARD_HIDE_CAPTION = "nebula_forward_hide_caption";
 
-    private static final class NimarkoForwardOptions {
+    private static final class NebulaForwardOptions {
         final boolean hideAuthor;
         final boolean hideCaption;
 
-        NimarkoForwardOptions(boolean hideAuthor, boolean hideCaption) {
+        NebulaForwardOptions(boolean hideAuthor, boolean hideCaption) {
             this.hideAuthor = hideAuthor;
             this.hideCaption = hideCaption;
         }
@@ -1264,7 +1264,7 @@ public class ChatActivity extends BaseFragment implements
     public static Pattern publicMsgUrlPattern;
     public static Pattern voiceChatUrlPattern;
     public static Pattern privateMsgUrlPattern;
-    // NimarkoGram: bumped to public so NimarkoChatHelper2 (CG ChatsHelper.forwardMessages port) can set it.
+    // NebulaGram: bumped to public so NebulaChatHelper2 (CG ChatsHelper.forwardMessages port) can set it.
     public boolean waitingForSendingMessageLoad;
     private Runnable waitingForSendingMessageLoadTimeout;
     private ValueAnimator changeBoundAnimator;
@@ -1766,10 +1766,10 @@ public class ChatActivity extends BaseFragment implements
     private final static int chat_menu_edit_text_options = -3;
     private final static int clear_history = 15;
     private final static int delete_chat = 16;
-    private final static int nimarko_plugins_menu = 1091;   // NimarkoGram: plugin-registered "Plugins (N)" item in the chat overflow
-    private java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> nimarkoChatMenuItems;
-    private java.util.Map<String, Object> nimarkoChatMenuCtx;
-    private ActionBarMenuItem.Item nimarkoChatMenuLazyItem; // lazy sub-item handle so the "(N)" label can be relabeled/hidden live
+    private final static int nebula_plugins_menu = 1091;   // NebulaGram: plugin-registered "Plugins (N)" item in the chat overflow
+    private java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> nebulaChatMenuItems;
+    private java.util.Map<String, Object> nebulaChatMenuCtx;
+    private ActionBarMenuItem.Item nebulaChatMenuLazyItem; // lazy sub-item handle so the "(N)" label can be relabeled/hidden live
     private final static int share_contact = 17;
     private final static int mute = 18;
     private final static int report = 21;
@@ -1825,11 +1825,11 @@ public class ChatActivity extends BaseFragment implements
 
     private final static int chat_menu_topic_create = 73;
 
-    // NimarkoGram shortcut IDs.
-    private final static int nimarko_jump_to_begin = 9101;
-    private final static int nimarko_saved_messages = 9102;
-    private final static int nimarko_browser = 9103;
-    private final static int nimarko_delete_all = 9104;
+    // NebulaGram shortcut IDs.
+    private final static int nebula_jump_to_begin = 9101;
+    private final static int nebula_saved_messages = 9102;
+    private final static int nebula_browser = 9103;
+    private final static int nebula_delete_all = 9104;
 
     private final static int id_chat_compose_panel = 1000;
 
@@ -2033,8 +2033,8 @@ public class ChatActivity extends BaseFragment implements
         @Override
         public boolean hasDoubleTap(View view, int position) {
             if (isQuickRepliesOrWelcomeMessagesMode()) return false;
-            // NimarkoGram: NONE kills double-tap entirely; custom modes get their own gating.
-            if (!app.nimarkogram.messenger.utils.chats.DoubleTapUtils.isDoubleTapEnabled()) {
+            // NebulaGram: NONE kills double-tap entirely; custom modes get their own gating.
+            if (!app.nebulagram.messenger.utils.chats.DoubleTapUtils.isDoubleTapEnabled()) {
                 return false;
             }
             MessageObject messageObject;
@@ -2048,8 +2048,8 @@ public class ChatActivity extends BaseFragment implements
             if (messageObject == null || messageObject.isDateObject || actionBar.isActionModeShowed()) {
                 return false;
             }
-            if (app.nimarkogram.messenger.utils.chats.DoubleTapUtils.isCustomActionEnabled()) {
-                return app.nimarkogram.messenger.utils.chats.DoubleTapUtils.canHandle(messageObject);
+            if (app.nebulagram.messenger.utils.chats.DoubleTapUtils.isCustomActionEnabled()) {
+                return app.nebulagram.messenger.utils.chats.DoubleTapUtils.canHandle(messageObject);
             }
             // Default: stock reaction-double-tap path.
             String reactionStringSetting = getMediaDataController().getDoubleTapReaction();
@@ -2083,9 +2083,9 @@ public class ChatActivity extends BaseFragment implements
             } else {
                 return;
             }
-            // NimarkoGram: route to custom action when the user picked a non-reaction mode.
-            if (app.nimarkogram.messenger.utils.chats.DoubleTapUtils.isCustomActionEnabled()
-                    && app.nimarkogram.messenger.utils.chats.DoubleTapUtils.dispatch(ChatActivity.this, view, messageObject)) {
+            // NebulaGram: route to custom action when the user picked a non-reaction mode.
+            if (app.nebulagram.messenger.utils.chats.DoubleTapUtils.isCustomActionEnabled()
+                    && app.nebulagram.messenger.utils.chats.DoubleTapUtils.dispatch(ChatActivity.this, view, messageObject)) {
                 return;
             }
             if (messageObject.isSecret() || !messageObject.canSetReaction() || messageObject.isExpiredStory() || messageObject.type == MessageObject.TYPE_JOINED_CHANNEL) {
@@ -2293,7 +2293,7 @@ public class ChatActivity extends BaseFragment implements
                             if (attachItem != null) {
                                 attachItem.setVisibility(View.GONE);
                             }
-                            // NimarkoGram (CG parity): when centerChatTitle is on, re-bind the avatar
+                            // NebulaGram (CG parity): when centerChatTitle is on, re-bind the avatar
                             // tap to invoke editTextItem while text is selected. Mirrors CherrygramChats
                             // ChatActivity.onTextSelectionChanged dynamic rebind.
                             {
@@ -2389,7 +2389,7 @@ public class ChatActivity extends BaseFragment implements
                         }
                     }
                 }
-                // NimarkoGram (CG parity): when leaving edit-text mode with centerChatTitle on,
+                // NebulaGram (CG parity): when leaving edit-text mode with centerChatTitle on,
                 // restore the avatar tap to open the chat header menu. Mirrors CherrygramChats
                 // ChatActivity.onTextSelectionChanged trailing rebind.
                 {
@@ -2875,8 +2875,8 @@ public class ChatActivity extends BaseFragment implements
         // CG parity: search filter is a transient per-chat selection — clear it so reopening
         // the chat doesn't restore a previous filter unexpectedly. Mirrors
         // CherrygramChatsConfig.setMessagesSearchFilter(FILTER_NONE) at onFragmentCreate.
-        app.nimarkogram.messenger.NimarkoConfig.setMessagesSearchFilter(
-                app.nimarkogram.messenger.NimarkoConfig.FILTER_NONE);
+        app.nebulagram.messenger.NebulaConfig.setMessagesSearchFilter(
+                app.nebulagram.messenger.NebulaConfig.FILTER_NONE);
         final long chatId = arguments.getLong("chat_id", 0);
         final long userId = arguments.getLong("user_id", 0);
         final int encId = arguments.getInt("enc_id", 0);
@@ -3199,7 +3199,7 @@ public class ChatActivity extends BaseFragment implements
             .add(NotificationCenter.botForumDraftUpdate)
             .add(NotificationCenter.botForumDraftDelete)
             .add(NotificationCenter.joinedGroup)
-            // NimarkoGram: keep the back-arrow unread badge live across new messages / reads.
+            // NebulaGram: keep the back-arrow unread badge live across new messages / reads.
             .add(NotificationCenter.dialogsUnreadCounterChanged);
 
         globalObserversGroup
@@ -3208,8 +3208,8 @@ public class ChatActivity extends BaseFragment implements
             .add(NotificationCenter.didSetNewWallpapper)
             .add(NotificationCenter.didApplyNewTheme)
             .add(NotificationCenter.goingToPreviewTheme)
-            .add(NotificationCenter.pluginMenuItemsUpdated) // NimarkoGram: refresh the "Plugins (N)" chat-overflow item when plugins register/unregister
-            // NimarkoGram: repaint open-chat bubbles when the hideBubbleTail shape toggles. Subscribed on the
+            .add(NotificationCenter.pluginMenuItemsUpdated) // NebulaGram: refresh the "Plugins (N)" chat-overflow item when plugins register/unregister
+            // NebulaGram: repaint open-chat bubbles when the hideBubbleTail shape toggles. Subscribed on the
             // GLOBAL group (not per-account observersGroup) so the matching global post from the settings
             // fragment reaches a chat open on any account, not just the settings fragment's own account.
             .add(NotificationCenter.nmUpdateBubbleShape)
@@ -3348,9 +3348,9 @@ public class ChatActivity extends BaseFragment implements
 
         if (currentUser != null) {
             TLRPC.UserFull userFull = getMessagesController().getUserFull(currentUser.id);
-            // NimarkoGram: customWallpapers gate — when off, ignore per-peer wallpapers and
+            // NebulaGram: customWallpapers gate — when off, ignore per-peer wallpapers and
             // fall through to the user's default Telegram theme.
-            if (userFull != null && userFull.theme != null && app.nimarkogram.messenger.NimarkoConfig.customWallpapers) {
+            if (userFull != null && userFull.theme != null && app.nebulagram.messenger.NebulaConfig.customWallpapers) {
                 ChatThemeController.getInstance(currentAccount).putThemeIfNeeded(userFull.theme);
             }
         }
@@ -3933,7 +3933,7 @@ public class ChatActivity extends BaseFragment implements
             actionBar.setBackButtonDrawable(null);
         } else {
             actionBar.setBackButtonDrawable(new BackDrawable(isReport()));
-            // NimarkoGram (CG-port): seed the unread-chats badge on the back arrow when the
+            // NebulaGram (CG-port): seed the unread-chats badge on the back arrow when the
             // user opted into the feature. UnreadImageView.checkUnreadView gates internally.
             if (actionBar != null && actionBar.backButtonImageView != null) {
                 actionBar.backButtonImageView.checkUnreadView(getMessagesStorage().getMainUnreadCount());
@@ -4000,8 +4000,8 @@ public class ChatActivity extends BaseFragment implements
                         undoView.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null);
                     }
                     clearSelectionMode();
-                } else if (id == app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_CREATE_QUOTE) {
-                    app.nimarkogram.messenger.quotes.NimarkoQuoteCreator.openSelection(ChatActivity.this);
+                } else if (id == app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_CREATE_QUOTE) {
+                    app.nebulagram.messenger.quotes.NebulaQuoteCreator.openSelection(ChatActivity.this);
                 } else if (id == delete) {
                     if (getParentActivity() == null) {
                         return;
@@ -4077,9 +4077,9 @@ public class ChatActivity extends BaseFragment implements
                         return;
                     }
                     showDialog(AlertsCreator.createTTLAlert(getParentActivity(), currentEncryptedChat, themeDelegate).create());
-                } else if (id == nimarko_plugins_menu) {
-                    if (nimarkoChatMenuItems != null && !nimarkoChatMenuItems.isEmpty()) {
-                        showNimarkoPluginsBottomSheet(nimarkoChatMenuItems, nimarkoChatMenuCtx);
+                } else if (id == nebula_plugins_menu) {
+                    if (nebulaChatMenuItems != null && !nebulaChatMenuItems.isEmpty()) {
+                        showNebulaPluginsBottomSheet(nebulaChatMenuItems, nebulaChatMenuCtx);
                     }
                 } else if (id == clear_history || id == delete_chat || id == auto_delete_timer) {
                     if (getParentActivity() == null) {
@@ -4155,35 +4155,35 @@ public class ChatActivity extends BaseFragment implements
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
-                } else if (id == nimarko_jump_to_begin) {
-                    // NimarkoGram (CG parity): jump to the earliest message via the existing
+                } else if (id == nebula_jump_to_begin) {
+                    // NebulaGram (CG parity): jump to the earliest message via the existing
                     // jumpToDate flow (same as CherrygramChatsConfig.shortcut_JumpToBegin).
                     jumpToDate(2);
-                } else if (id == nimarko_saved_messages) {
-                    // NimarkoGram: open Saved Messages from chat 3-dot menu.
+                } else if (id == nebula_saved_messages) {
+                    // NebulaGram: open Saved Messages from chat 3-dot menu.
                     Bundle savedArgs = new Bundle();
-                    long savedId = app.nimarkogram.messenger.NimarkoConfig.getEffectiveSavedMessagesDialogId(currentAccount, getUserConfig().getClientUserId());
+                    long savedId = app.nebulagram.messenger.NebulaConfig.getEffectiveSavedMessagesDialogId(currentAccount, getUserConfig().getClientUserId());
                     if (savedId > 0) {
                         savedArgs.putLong("user_id", savedId);
                     } else {
                         savedArgs.putLong("chat_id", -savedId);
                     }
                     presentFragment(new ChatActivity(savedArgs));
-                } else if (id == nimarko_browser) {
-                    // NimarkoGram (CG parity): force the in-app Telegram Browser tab
+                } else if (id == nebula_browser) {
+                    // NebulaGram (CG parity): force the in-app Telegram Browser tab
                     // (CG uses Browser.openInTelegramBrowser with SearchEngine URL).
                     try {
                         org.telegram.messenger.browser.Browser.openInTelegramBrowser(getParentActivity(), "https://telegram.org/", null);
                     } catch (Throwable t) { FileLog.e(t); }
-                } else if (id == nimarko_delete_all) {
+                } else if (id == nebula_delete_all) {
                     // CG parity: delete all messages sent by the CURRENT USER in this group.
-                    // Route through NimarkoMessageHelper#createDeleteHistoryAlert (the CG-
+                    // Route through NebulaMessageHelper#createDeleteHistoryAlert (the CG-
                     // equivalent flow used by OPTION_DELETE_ALL_FROM_SELF). The previous
                     // implementation called AlertsCreator.createClearOrDeleteDialogAlert
                     // with clear=false, which shows the "leave / delete group" alert and
                     // does not actually trigger a per-user history wipe on confirm.
                     if (currentChat != null && (ChatObject.isMegagroup(currentChat) || !ChatObject.isChannel(currentChat))) {
-                        app.nimarkogram.messenger.utils.chats.NimarkoMessageHelper
+                        app.nebulagram.messenger.utils.chats.NebulaMessageHelper
                                 .getInstance(currentAccount)
                                 .createDeleteHistoryAlert(
                                         ChatActivity.this,
@@ -4193,28 +4193,28 @@ public class ChatActivity extends BaseFragment implements
                                         getResourceProvider());
                     }
                 } else if (
-                        id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_JUMP_TO_BEGINNING
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_DELETE_ALL_FROM_SELF
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_UPGRADE_GROUP
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_TEXT_MENTION
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_SELECT_BETWEEN
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_FOR_ADMINS_REACTIONS
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_FOR_ADMINS_PERMISSIONS
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_FOR_ADMINS_ADMINISTRATORS
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_FOR_ADMINS_MEMBERS
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_FOR_ADMINS_STATISTICS
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_FOR_ADMINS_RECENT_ACTIONS
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_TEXT_CODE
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_GO_TO_SAVED
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_ASK_PASSCODE
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_DO_NOT_ASK_PASSCODE
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_OPEN_TELEGRAM_BROWSER
-                                || id == app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_ADVANCED_SEARCH) {
-                    // Nimarko CG-port wave 17 action-bar shortcuts. Routed to
-                    // NimarkoChatActivityHelper so this file stays a thin router.
+                        id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_JUMP_TO_BEGINNING
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_DELETE_ALL_FROM_SELF
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_UPGRADE_GROUP
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_TEXT_MENTION
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_SELECT_BETWEEN
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_FOR_ADMINS_REACTIONS
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_FOR_ADMINS_PERMISSIONS
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_FOR_ADMINS_ADMINISTRATORS
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_FOR_ADMINS_MEMBERS
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_FOR_ADMINS_STATISTICS
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_FOR_ADMINS_RECENT_ACTIONS
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_TEXT_CODE
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_GO_TO_SAVED
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_ASK_PASSCODE
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_DO_NOT_ASK_PASSCODE
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_OPEN_TELEGRAM_BROWSER
+                                || id == app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_ADVANCED_SEARCH) {
+                    // Nebula CG-port wave 17 action-bar shortcuts. Routed to
+                    // NebulaChatActivityHelper so this file stays a thin router.
                     // mergeDialogId / editTextStart / editTextEnd / forumTopic are
                     // the same fields the native text-style cases read above.
-                    app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper
+                    app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper
                             .getInstance(currentAccount)
                             .checkActionBarOptions(
                                     id,
@@ -4294,8 +4294,8 @@ public class ChatActivity extends BaseFragment implements
                 } else if (id == search) {
                     // CG parity: reset the messages search filter when the user opens search
                     // from the header — keeps the picker starting at FILTER_NONE on each entry.
-                    app.nimarkogram.messenger.NimarkoConfig.setMessagesSearchFilter(
-                            app.nimarkogram.messenger.NimarkoConfig.FILTER_NONE);
+                    app.nebulagram.messenger.NebulaConfig.setMessagesSearchFilter(
+                            app.nebulagram.messenger.NebulaConfig.FILTER_NONE);
                     openSearchWithText(isSupportedTags() ? "" : null);
                 } else if (id == translate) {
                     getMessagesController().getTranslateController().setHideTranslateDialog(getDialogId(), false, true);
@@ -4591,11 +4591,11 @@ public class ChatActivity extends BaseFragment implements
             searchItemVisible = false;
         }
 
-        // NimarkoGram (CG parity): when centerChatTitle is enabled, hide the right-side
+        // NebulaGram (CG parity): when centerChatTitle is enabled, hide the right-side
         // call icon and use a transparent drawable for the 3-dots so the centered title
         // is not crowded by extra elements. The header item itself stays so avatar-tap
         // can still forward to it (see headerItem creation below).
-        boolean centerHidesIcons = app.nimarkogram.messenger.NimarkoConfig.centerChatTitle
+        boolean centerHidesIcons = app.nebulagram.messenger.NebulaConfig.centerChatTitle
                 && getChatMode() != ChatActivity.MODE_SAVED
                 && !isComments
                 && getDialogId() != 0
@@ -4659,7 +4659,7 @@ public class ChatActivity extends BaseFragment implements
             otherIcon.addView(headerItem.getIconView());
             headerItem.setContentDescription(LocaleController.getString(R.string.AccDescrMoreOptions));
 
-            // NimarkoGram (CG parity): when centerChatTitle is enabled, tapping the avatar
+            // NebulaGram (CG parity): when centerChatTitle is enabled, tapping the avatar
             // opens the chat header menu (mirrors CherrygramChatsConfig.centerChatTitle).
             if (avatarContainer != null
                     && avatarContainer.isCenterChatTitleEnabled()
@@ -4738,7 +4738,7 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }, getResourceProvider());
                 muteItem = headerItem.lazilyAddSwipeBackItem(R.drawable.msg_mute, null, null, chatNotificationsPopupWrapper.windowLayout);
-                if (app.nimarkogram.messenger.NimarkoConfig.hideMuteUnmuteButton) {
+                if (app.nebulagram.messenger.NebulaConfig.hideMuteUnmuteButton) {
                     muteItem.setVisibility(View.GONE);
                 }
                 muteItem.setOnClickListener(view -> {
@@ -4759,7 +4759,7 @@ public class ChatActivity extends BaseFragment implements
                 muteItemGap = headerItem.lazilyAddColoredGap();
             }
             if (currentChat != null) {
-                // NimarkoGram (CG parity): keep the upstream admin/mono-forum rule, and also
+                // NebulaGram (CG parity): keep the upstream admin/mono-forum rule, and also
                 // expose "Open Direct" when the user hid the Mute button on a broadcast channel
                 // that still has a suggest-bar (mirrors CherrygramChatsConfig.hideMuteUnmuteButton).
                 boolean isChannel = ChatObject.isChannelAndNotMegaGroup(currentChat);
@@ -4768,7 +4768,7 @@ public class ChatActivity extends BaseFragment implements
                 boolean showSuggestButton = currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
                 boolean shouldShow =
                         (ChatObject.isChannel(currentChat) && !ChatObject.isMonoForum(currentChat) && currentChat.linked_monoforum_id != 0 && canManageMonoForum)
-                        || (isChannel && app.nimarkogram.messenger.NimarkoConfig.hideMuteUnmuteButton && !isAdmin && !canManageMonoForum && showSuggestButton);
+                        || (isChannel && app.nebulagram.messenger.NebulaConfig.hideMuteUnmuteButton && !isAdmin && !canManageMonoForum && showSuggestButton);
                 headerItem.lazilyAddSubItem(open_direct, R.drawable.msg_markunread, getString(R.string.ChannelOpenDirect));
                 headerItem.setSubItemShown(open_direct, shouldShow);
             }
@@ -4790,65 +4790,65 @@ public class ChatActivity extends BaseFragment implements
 
             if (searchItem != null) {
                 headerItem.lazilyAddSubItem(search, R.drawable.msg_search, LocaleController.getString(R.string.Search));
-                // NimarkoGram (CG parity): "Search (ID)" — opens the numeric-id search prompt
-                // dispatched through NimarkoChatActivityHelper.OPTION_ADVANCED_SEARCH.
+                // NebulaGram (CG parity): "Search (ID)" — opens the numeric-id search prompt
+                // dispatched through NebulaChatActivityHelper.OPTION_ADVANCED_SEARCH.
                 if (currentChat != null) {
                     headerItem.lazilyAddSubItem(
-                            app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_ADVANCED_SEARCH,
+                            app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_ADVANCED_SEARCH,
                             R.drawable.msg_search,
                             LocaleController.getString(R.string.Search) + " (ID)");
                 }
             }
-            // NimarkoGram: user-configurable extra header shortcuts.
+            // NebulaGram: user-configurable extra header shortcuts.
             // CG ordering (CGChatMenuInjector.injectCherrygramShortcuts L135-169):
             //   1. JumpToBeginning  (icon ic_upward)
             //   2. DeleteAllFromSelf (megagroup / non-channel only)
             //   3. SavedMessages    (icon msg_saved)
             //   4. TelegramBrowser  (icon msg_language)
-            if (app.nimarkogram.messenger.NimarkoConfig.chatShortcutJumpToBegin) {
-                headerItem.lazilyAddSubItem(nimarko_jump_to_begin, R.drawable.ic_upward_solar, LocaleController.getString(R.string.NM_JumpToBeginning));
+            if (app.nebulagram.messenger.NebulaConfig.chatShortcutJumpToBegin) {
+                headerItem.lazilyAddSubItem(nebula_jump_to_begin, R.drawable.ic_upward_solar, LocaleController.getString(R.string.NM_JumpToBeginning));
             }
-            // NimarkoGram (CG parity): CG only requires this to be a group / megagroup chat
+            // NebulaGram (CG parity): CG only requires this to be a group / megagroup chat
             // (NOT necessarily an admin) — semantically "delete all messages I sent here".
-            if (app.nimarkogram.messenger.NimarkoConfig.shortcutDeleteAll
+            if (app.nebulagram.messenger.NebulaConfig.shortcutDeleteAll
                     && currentChat != null
                     && (ChatObject.isMegagroup(currentChat) || !ChatObject.isChannel(currentChat))) {
-                headerItem.lazilyAddSubItem(nimarko_delete_all, R.drawable.msg_delete, LocaleController.getString(R.string.NM_CMS_DeleteAllFromSelf));
+                headerItem.lazilyAddSubItem(nebula_delete_all, R.drawable.msg_delete, LocaleController.getString(R.string.NM_CMS_DeleteAllFromSelf));
             }
-            if (app.nimarkogram.messenger.NimarkoConfig.chatShortcutSavedMessages
+            if (app.nebulagram.messenger.NebulaConfig.chatShortcutSavedMessages
                     && (currentUser == null || !currentUser.self)) {
-                // NimarkoGram (CG parity): also suppress when the open chat already IS the
+                // NebulaGram (CG parity): also suppress when the open chat already IS the
                 // user-configured custom Saved Messages target (mirrors CG's
                 // `currentChat.id != abs(ChatsHelper2.getCustomChatID())` guard).
-                long savedTarget = app.nimarkogram.messenger.NimarkoConfig.getEffectiveSavedMessagesDialogId(currentAccount, getUserConfig().getClientUserId());
+                long savedTarget = app.nebulagram.messenger.NebulaConfig.getEffectiveSavedMessagesDialogId(currentAccount, getUserConfig().getClientUserId());
                 boolean isSavedTarget =
                         (currentUser != null && savedTarget > 0 && currentUser.id == savedTarget)
                                 || (currentChat != null && savedTarget < 0 && currentChat.id == -savedTarget);
                 if (!isSavedTarget) {
-                    headerItem.lazilyAddSubItem(nimarko_saved_messages, R.drawable.msg_saved, LocaleController.getString(R.string.SavedMessages));
+                    headerItem.lazilyAddSubItem(nebula_saved_messages, R.drawable.msg_saved, LocaleController.getString(R.string.SavedMessages));
                 }
             }
-            // NimarkoGram Wave-5: optional "Open Telegram Browser" shortcut.
-            if (app.nimarkogram.messenger.NimarkoConfig.shortcutBrowser) {
-                headerItem.lazilyAddSubItem(nimarko_browser, R.drawable.msg_language, LocaleController.getString(R.string.NM_CMS_TelegramBrowser));
+            // NebulaGram Wave-5: optional "Open Telegram Browser" shortcut.
+            if (app.nebulagram.messenger.NebulaConfig.shortcutBrowser) {
+                headerItem.lazilyAddSubItem(nebula_browser, R.drawable.msg_language, LocaleController.getString(R.string.NM_CMS_TelegramBrowser));
             }
-            // NimarkoGram (CG parity): NimarkoChatMenuInjector.injectPrivacyShortcuts
+            // NebulaGram (CG parity): NebulaChatMenuInjector.injectPrivacyShortcuts
             // adds the Ask/DoNotAsk-passcode + Upgrade-group rows (CG's
             // injectCherrygramShortcuts subset that isn't already inline above).
             // Routed through the same OPTION_(ASK|DO_NOT_ASK)_PASSCODE /
-            // OPTION_UPGRADE_GROUP ids the NimarkoChatActivityHelper router already
+            // OPTION_UPGRADE_GROUP ids the NebulaChatActivityHelper router already
             // dispatches.
-            app.nimarkogram.messenger.utils.chats.NimarkoChatMenuInjector.injectPrivacyShortcuts(
+            app.nebulagram.messenger.utils.chats.NebulaChatMenuInjector.injectPrivacyShortcuts(
                     headerItem, ChatActivity.this, currentChat, currentUser, currentEncryptedChat != null);
-            // NimarkoGram (CG parity): NimarkoChatMenuInjector.injectAdminShortcuts adds
+            // NebulaGram (CG parity): NebulaChatMenuInjector.injectAdminShortcuts adds
             // Reactions / Permissions / Administrators / Members / Blacklist / Statistics /
-            // RecentActions rows under NimarkoConfig.admins* flags. The ADMIN_OPTION_*
-            // constants in NimarkoChatMenuInjector are now aliased to
-            // NimarkoChatActivityHelper.OPTION_FOR_ADMINS_* (same int values), so the
+            // RecentActions rows under NebulaConfig.admins* flags. The ADMIN_OPTION_*
+            // constants in NebulaChatMenuInjector are now aliased to
+            // NebulaChatActivityHelper.OPTION_FOR_ADMINS_* (same int values), so the
             // existing OPTION_FOR_ADMINS_* router below (checkActionBarOptions) handles
             // every click site without any new branches. ADMIN_OPTION_BLACKLIST shares
             // the PERMISSIONS id intentionally — see injector header for rationale.
-            app.nimarkogram.messenger.utils.chats.NimarkoChatMenuInjector.injectAdminShortcuts(headerItem, currentChat);
+            app.nebulagram.messenger.utils.chats.NebulaChatMenuInjector.injectAdminShortcuts(headerItem, currentChat);
             if (ChatObject.isBoostSupported(currentChat) && (getUserConfig().isPremium() || ChatObject.isBoosted(chatInfo) || ChatObject.hasAdminRights(currentChat))) {
                 RLottieDrawable drawable = new RLottieDrawable(R.raw.boosts, "" + R.raw.boosts, dp(24), dp(24));
                 headerItem.lazilyAddSubItem(boost_group, drawable, LocaleController.getString(ChatObject.isChannelAndNotMegaGroup(currentChat) ? R.string.BoostingBoostChannelMenu : R.string.BoostingBoostGroupMenu));
@@ -4974,11 +4974,11 @@ public class ChatActivity extends BaseFragment implements
             headerItem.lazilyAddSubItem(888, R.drawable.menu_download_round, "Dump Canvas");
         }
 
-        // NimarkoGram: inject the plugin-registered "Plugins (N)" item into the chat three-dots overflow
+        // NebulaGram: inject the plugin-registered "Plugins (N)" item into the chat three-dots overflow
         // (CHAT_ACTION_MENU). Deterministic explicit inject — NOT a fragile runtime Pine/Xposed hook like
         // exteraGram — and it appears ONLY when a plugin actually registered a chat_action_menu item. Tapping it
-        // opens the clean NimarkoGram plugins bottom-sheet (same as the message-context-menu path).
-        nimarkoRebuildChatPluginsMenu();
+        // opens the clean NebulaGram plugins bottom-sheet (same as the message-context-menu path).
+        nebulaRebuildChatPluginsMenu();
 
         actionModeViews.clear();
         selectedMessagesCountTextView = null;
@@ -5405,10 +5405,10 @@ public class ChatActivity extends BaseFragment implements
                 }
 
                 int alpha = (int) (iconProgress * 0xFF);
-                // NimarkoGram (CG parity): swap the swipe-gesture overlay icon based on
-                // NimarkoConfig.messageSlideAction (CG CGResourcesHelper.getReplyIconDrawable).
+                // NebulaGram (CG parity): swap the swipe-gesture overlay icon based on
+                // NebulaConfig.messageSlideAction (CG CGResourcesHelper.getReplyIconDrawable).
                 Drawable replyIconDrawable = getContext().getResources().getDrawable(
-                        app.nimarkogram.messenger.NimarkoResourcesHelper.getReplyIconDrawable());
+                        app.nebulagram.messenger.NebulaResourcesHelper.getReplyIconDrawable());
                 replyIconDrawable.setAlpha(alpha);
                 replyIconDrawable.setBounds((int) (x - replyIconDrawable.getIntrinsicWidth() / 2 * scale), (int) (y - replyIconDrawable.getIntrinsicHeight() / 2 * scale), (int) (x + replyIconDrawable.getIntrinsicWidth() / 2 * scale), (int) (y + replyIconDrawable.getIntrinsicHeight() / 2 * scale));
                 replyIconDrawable.draw(canvas);
@@ -5476,8 +5476,8 @@ public class ChatActivity extends BaseFragment implements
                     } else if (startedTrackingSlidingView) {
                         if (Math.abs(dx) >= AndroidUtilities.dp(50)) {
                             if (!wasTrackingVibrate) {
-                                // NimarkoGram (CG parity): respect disableVibration on swipe.
-                                if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                                // NebulaGram (CG parity): respect disableVibration on swipe.
+                                if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                     try {
                                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                     } catch (Exception ignore) {}
@@ -5499,12 +5499,12 @@ public class ChatActivity extends BaseFragment implements
                     }
                 } else if (slidingView != null && (e == null || e.getPointerId(0) == startedTrackingPointerId && (e.getAction() == MotionEvent.ACTION_CANCEL || e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_POINTER_UP))) {
                     if (e != null && e.getAction() != MotionEvent.ACTION_CANCEL && Math.abs(getSlidingNonAnimationTranslationX(false)) >= AndroidUtilities.dp(50)) {
-                        // NimarkoGram: CG ChatsHelper2.injectChatActivityMsgSlideAction port.
+                        // NebulaGram: CG ChatsHelper2.injectChatActivityMsgSlideAction port.
                         // The Gemini branch is intentionally dropped — slide-to-Gemini is not ported.
                         // Read-only / not-in-chat / can't-post chats are gated out in processTouchEvent
                         // ACTION_DOWN (upstream 12.7.3 parity) — slidingView is nulled before this fires,
                         // matching upstream's "no swipe-to-reply available" behavior on those chats.
-                        app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2.injectChatActivityMsgSlideAction(
+                        app.nebulagram.messenger.utils.chats.NebulaChatHelper2.injectChatActivityMsgSlideAction(
                                 ChatActivity.this,
                                 getSlidingMessageObject(),
                                 ChatObject.isChannel(currentChat),
@@ -5530,7 +5530,7 @@ public class ChatActivity extends BaseFragment implements
                 if (e.getAction() == MotionEvent.ACTION_DOWN) {
                     scrollByTouch = true;
                 }
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableSwipeToNext && pullingDownOffset != 0 && (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL)) {
+                if (!app.nebulagram.messenger.NebulaConfig.disableSwipeToNext && pullingDownOffset != 0 && (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL)) {
                     float progress = Math.min(1f, pullingDownOffset / AndroidUtilities.dp(110));
                     if (e.getAction() == MotionEvent.ACTION_UP && progress == 1 && pullingDownDrawable != null && !pullingDownDrawable.emptyStub) {
                         if (pullingDownDrawable.animationIsRunning()) {
@@ -5671,7 +5671,7 @@ public class ChatActivity extends BaseFragment implements
                     drawReplyButton(c);
                 }
 
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableSwipeToNext && pullingDownOffset != 0 && !isInPreviewMode() && !isInsideContainer && chatMode != MODE_SAVED && chatMode != MODE_SCHEDULED) {
+                if (!app.nebulagram.messenger.NebulaConfig.disableSwipeToNext && pullingDownOffset != 0 && !isInPreviewMode() && !isInsideContainer && chatMode != MODE_SAVED && chatMode != MODE_SCHEDULED) {
                     c.save();
                     float transitionOffset = 0;
                     if (pullingDownAnimateProgress != 0) {
@@ -6804,11 +6804,11 @@ public class ChatActivity extends BaseFragment implements
                             canvas.translate(dp(24) * getSideMenuAlpha(), 0f);
                         }
                         imageReceiver.draw(canvas);
-                        // NimarkoGram: online dot on group/supergroup sender avatars. Drawn here because the
+                        // NebulaGram: online dot on group/supergroup sender avatars. Drawn here because the
                         // avatar is blitted by the parent at this parent-owned Y. Use the ORIGINAL "cell" (never
                         // reassigned), NOT "mcell" (it is repointed to a predecessor during the pinned-top walk).
                         // The cell owns the AnimatedFloat + online state and re-invalidates itself as the fade runs.
-                        if (app.nimarkogram.messenger.NimarkoConfig.onlineIndicatorInGroups
+                        if (app.nebulagram.messenger.NebulaConfig.onlineIndicatorInGroups
                                 && cell != null && imageReceiver == cell.getAvatarImage()) {
                             cell.drawOnlineIndicator(canvas, imageReceiver);
                         }
@@ -7075,7 +7075,7 @@ public class ChatActivity extends BaseFragment implements
 
             @Override
             public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableSwipeToNext && dy < 0 && pullingDownOffset != 0) {
+                if (!app.nebulagram.messenger.NebulaConfig.disableSwipeToNext && dy < 0 && pullingDownOffset != 0) {
                     pullingDownOffset += dy;
                     if (pullingDownOffset < 0) {
                         dy = (int) pullingDownOffset;
@@ -7105,7 +7105,7 @@ public class ChatActivity extends BaseFragment implements
                 if (!foundTopView) {
                     scrolled = super.scrollVerticallyBy(dy, recycler, state);
                 }
-                final boolean allowPullingDownScroll = !isInPollAddOptionMode() && !hasSelectedMessages() && !app.nimarkogram.messenger.NimarkoConfig.disableSwipeToNext;
+                final boolean allowPullingDownScroll = !isInPollAddOptionMode() && !hasSelectedMessages() && !app.nebulagram.messenger.NebulaConfig.disableSwipeToNext;
                 if (allowPullingDownScroll && dy > 0 && scrolled == 0 && (ChatObject.isChannel(currentChat) && !currentChat.megagroup || isTopic && !UserObject.isBotForum(currentUser)) && chatMode != MODE_SAVED && chatMode != MODE_WELCOME_MESSAGES && chatMode != MODE_SCHEDULED && chatListView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && !chatListView.isFastScrollAnimationRunning() && !chatListView.isMultiselect() && !isReport()) {
                     if (pullingDownOffset == 0 && pullingDownDrawable != null) {
                         if (nextChannels != null && !nextChannels.isEmpty()) {
@@ -7216,7 +7216,7 @@ public class ChatActivity extends BaseFragment implements
                 // on a fast fling whose velocity exceeds the inverted threshold.
                 // Intensity == 0 keeps the keyboard visible regardless of scroll.
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING
-                        && app.nimarkogram.messenger.NimarkoConfig.hideKeyboardOnScrollIntensity >= 10) {
+                        && app.nebulagram.messenger.NebulaConfig.hideKeyboardOnScrollIntensity >= 10) {
                     try {
                         if (chatActivityEnterView != null && chatActivityEnterView.isKeyboardVisible()) {
                             AndroidUtilities.hideKeyboard(chatActivityEnterView.getEditField());
@@ -7428,7 +7428,7 @@ public class ChatActivity extends BaseFragment implements
 
         // CherryGram parity: attach a VelocityTracker-based listener so a fast fling
         // (px/sec > inverted-threshold) hides the soft keyboard. The threshold is
-        // computed from NimarkoConfig.hideKeyboardOnScrollIntensity (0..10):
+        // computed from NebulaConfig.hideKeyboardOnScrollIntensity (0..10):
         //   intensity 0  -> listener becomes a no-op (config check at touch time).
         //   intensity 1  -> very fast fling required.
         //   intensity 10 -> any drag triggers hide (handled in onScrollStateChanged).
@@ -7457,7 +7457,7 @@ public class ChatActivity extends BaseFragment implements
                             velocityTracker.computeCurrentVelocity(1000);
                             float velocityY = velocityTracker.getYVelocity();
 
-                            int intensity = app.nimarkogram.messenger.NimarkoConfig.hideKeyboardOnScrollIntensity;
+                            int intensity = app.nebulagram.messenger.NebulaConfig.hideKeyboardOnScrollIntensity;
                             if (intensity > 0 && intensity < 10) {
                                 int threshold = dp(intensity * 1000);
                                 int invertedSensitivity = dp(10000) - threshold + 1;
@@ -7497,9 +7497,9 @@ public class ChatActivity extends BaseFragment implements
         chatActivityFadeView.setFadeHeightBottom(dp(48));
         contentView.addView(chatActivityFadeView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        // NimarkoGram (CG parity): suppress the selection-reactions overlay when
+        // NebulaGram (CG parity): suppress the selection-reactions overlay when
         // the user has disabled it. Mirrors CherrygramMessagesConfig.disableReactionsOverlay.
-        if (getDialogId() != getUserConfig().getClientUserId() && !app.nimarkogram.messenger.NimarkoConfig.disableReactionsOverlay) {
+        if (getDialogId() != getUserConfig().getClientUserId() && !app.nebulagram.messenger.NebulaConfig.disableReactionsOverlay) {
             selectionReactionsOverlay = new ChatSelectionReactionMenuOverlay(this, context);
             contentView.addView(selectionReactionsOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         }
@@ -8448,7 +8448,7 @@ public class ChatActivity extends BaseFragment implements
                         invalidateMessagesVisiblePart();
                         chatActivityEnterViewAnimateFromTop = 0;
                     }
-                    // NimarkoGram: a former `else if (lastContentViewHeight != contentView.getMeasuredHeight())`
+                    // NebulaGram: a former `else if (lastContentViewHeight != contentView.getMeasuredHeight())`
                     // branch zeroed chatActivityEnterViewAnimateFromTop here, ABANDONING a pending line-wrap
                     // slide whenever the contentView height had not settled on this exact frame. During fast
                     // typing the height churns almost every frame, so the slide was dropped and the message
@@ -8527,17 +8527,17 @@ public class ChatActivity extends BaseFragment implements
         };
         chatActivityEnterView.setSeparatedComposerLayout(
                 chatMode != MODE_EDIT_BUSINESS_LINK
-                        && app.nimarkogram.messenger.NimarkoConfig.iosStyleComposer);
+                        && app.nebulagram.messenger.NebulaConfig.iosStyleComposer);
         chatInputViewsContainer.setSeparatedComposerLeadingAnchor(
                 chatActivityEnterView.getSeparatedComposerLeadingAnchor());
         chatInputViewsContainer.setSeparatedComposerTrailingAnchor(
                 chatActivityEnterView.getSeparatedComposerTrailingAnchor());
         chatInputViewsContainer.setLeadingComposerExpansionListener(
                 chatActivityEnterView::setLeadingComposerExpansionProgress);
-        // NimarkoGram (CG parity): hide soft keyboard + popup when the chat list is
-        // fling-scrolled past NimarkoConfig.hideKeyboardOnScrollIntensity (CG
+        // NebulaGram (CG parity): hide soft keyboard + popup when the chat list is
+        // fling-scrolled past NebulaConfig.hideKeyboardOnScrollIntensity (CG
         // ChatActivityHelper.KeyboardHiderOnFastScroll.attachTo).
-        app.nimarkogram.messenger.utils.chats.NimarkoKeyboardHider.attachTo(
+        app.nebulagram.messenger.utils.chats.NebulaKeyboardHider.attachTo(
                 chatListView, contentView, chatActivityEnterView);
         chatActivityEnterView.setVisibility(View.VISIBLE);
         chatActivityEnterView.getEditField().adaptiveCreateLinkDialog = true;
@@ -8670,15 +8670,15 @@ public class ChatActivity extends BaseFragment implements
         // so the live binding reflects the current actionsBarLeftButton choice.
         actionsButtonsLayout.setNoForwards(isPeerNoForwards());
         actionsButtonsLayout.updateReplyButtonUI(
-            app.nimarkogram.messenger.NimarkoResourcesHelper.getLeftActionButtonText(isPeerNoForwards()),
-            app.nimarkogram.messenger.NimarkoResourcesHelper.getLeftActionButtonDrawable(isPeerNoForwards()),
-            app.nimarkogram.messenger.NimarkoConfig.actionsBarLeftButton != app.nimarkogram.messenger.NimarkoConfig.ACTIONS_LEFT_REPLY
+            app.nebulagram.messenger.NebulaResourcesHelper.getLeftActionButtonText(isPeerNoForwards()),
+            app.nebulagram.messenger.NebulaResourcesHelper.getLeftActionButtonDrawable(isPeerNoForwards()),
+            app.nebulagram.messenger.NebulaConfig.actionsBarLeftButton != app.nebulagram.messenger.NebulaConfig.ACTIONS_LEFT_REPLY
         );
         actionsButtonsLayout.setForwardButtonOnClickListener(v -> {
             openForward(false);
         });
         actionsButtonsLayout.setReplyButtonOnClickListener(v -> {
-            // NimarkoGram: CG parity — delegate to NimarkoChatHelper2.makeReplyButtonClick
+            // NebulaGram: CG parity — delegate to NebulaChatHelper2.makeReplyButtonClick
             // (CG ChatsHelper.makeReplyButtonClick port). The picked message is snapshotted
             // first so the helper sees the right selection across degrade/forward paths.
             final boolean noForwards = isPeerNoForwards();
@@ -8688,21 +8688,21 @@ public class ChatActivity extends BaseFragment implements
                     pickedMessage = messagesDict[a].get(selectedMessagesIds[a].keyAt(0));
                 }
             }
-            app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2.makeReplyButtonClick(
+            app.nebulagram.messenger.utils.chats.NebulaChatHelper2.makeReplyButtonClick(
                     ChatActivity.this, pickedMessage, noForwards
             );
             updateSelectedMessageReactions();
         });
         // CG parity: long-press the left button to pick which mode it binds to (Reply / Save /
         // Direct share / Forward-without-authorship), then refresh the button drawable. Delegates
-        // to NimarkoChatHelper2.makeReplyButtonLongClick (CG ChatsHelper.makeReplyButtonLongClick).
+        // to NebulaChatHelper2.makeReplyButtonLongClick (CG ChatsHelper.makeReplyButtonLongClick).
         if (actionsButtonsLayout.getReplyButton() != null) {
             actionsButtonsLayout.setReplyButtonOnLongClickListener(v -> {
-                // CG parity: tap-feedback on the long-press, gated by NimarkoConfig.disableVibration.
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                // CG parity: tap-feedback on the long-press, gated by NebulaConfig.disableVibration.
+                if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                     v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
-                app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2.makeReplyButtonLongClick(
+                app.nebulagram.messenger.utils.chats.NebulaChatHelper2.makeReplyButtonLongClick(
                         ChatActivity.this, isPeerNoForwards(), getResourceProvider()
                 );
                 return true;
@@ -8984,7 +8984,7 @@ public class ChatActivity extends BaseFragment implements
                 presentFragment(new ChatActivity(bundle));
             }
         });
-        // NimarkoGram (CG parity, verbatim port of CG ChatActivity 8536-8547): mute/unmute click swaps.
+        // NebulaGram (CG parity, verbatim port of CG ChatActivity 8536-8547): mute/unmute click swaps.
         // BUTTON_DISCUSS is NG-specific: when discussInsteadOfMute is on, mute/unmute hide and the
         // discuss button is shown instead, opening the linked discussion group on click.
         bottomChannelButtonsLayout.setButtonOnClickListener(ChatActivityChannelButtonsLayout.BUTTON_MUTE, v -> {
@@ -10878,7 +10878,7 @@ public class ChatActivity extends BaseFragment implements
         topPanelLayout.setDebugName(bizBotButton, "bot biz");
     }
 
-    // NimarkoGram: bumped to public so NimarkoChatHelper2 (CG ChatsHelper port) can lazy-instantiate it.
+    // NebulaGram: bumped to public so NebulaChatHelper2 (CG ChatsHelper port) can lazy-instantiate it.
     public void createUndoView() {
         if (undoView != null || getContext() == null) {
             return;
@@ -10897,12 +10897,12 @@ public class ChatActivity extends BaseFragment implements
         if (actionMode == null
                 || getDialogId() != getUserConfig().getClientUserId()
                 || chatMode != 0 && chatMode != MODE_SAVED) {
-            app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.updateMultipleSelection(actionMode, this);
+            app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.updateMultipleSelection(actionMode, this);
             return;
         }
         View tagItem = actionMode.getItem(tag_message);
         View selectBetweenItem = actionMode.getItem(
-                app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_SELECT_BETWEEN
+                app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_SELECT_BETWEEN
         );
         if (tagItem == null || selectBetweenItem == null) {
             return;
@@ -10915,7 +10915,7 @@ public class ChatActivity extends BaseFragment implements
                 forward,
                 star,
                 copy,
-                app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_CREATE_QUOTE,
+                app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_CREATE_QUOTE,
                 share,
                 delete
         };
@@ -10998,13 +10998,13 @@ public class ChatActivity extends BaseFragment implements
             }
             // CG parity: "Select between" — picks every message between the two
             // currently-selected ones. OPTION_SELECT_BETWEEN handler lives in
-            // NimarkoChatActivityHelper#checkProcessSelectedOption; this is the
+            // NebulaChatActivityHelper#checkProcessSelectedOption; this is the
             // only missing piece, the actionMode entry-point.
-            actionModeViews.add(actionMode.addItemWithWidth(app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_SELECT_BETWEEN, R.drawable.msg_select_between_solar, AndroidUtilities.dp(48), LocaleController.getString(R.string.Edit)));
+            actionModeViews.add(actionMode.addItemWithWidth(app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_SELECT_BETWEEN, R.drawable.msg_select_between_solar, AndroidUtilities.dp(48), LocaleController.getString(R.string.Edit)));
             actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.msg_fave, AndroidUtilities.dp(48), LocaleController.getString(R.string.AddToFavorites)));
             actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.msg_copy, AndroidUtilities.dp(48), LocaleController.getString(R.string.Copy)));
             actionModeViews.add(actionMode.addItemWithWidth(
-                    app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_CREATE_QUOTE,
+                    app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_CREATE_QUOTE,
                     R.drawable.menu_select_quote,
                     AndroidUtilities.dp(48),
                     LocaleController.getString(R.string.NM_QC_Create)));
@@ -11016,7 +11016,7 @@ public class ChatActivity extends BaseFragment implements
             actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.msg_copy, dp(48), LocaleController.getString(R.string.Copy)));
             actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, dp(48), LocaleController.getString(R.string.Delete)));
         }
-        app.nimarkogram.messenger.quotes.NimarkoQuoteCreator.updateActionModeVisibility(actionMode, this);
+        app.nebulagram.messenger.quotes.NebulaQuoteCreator.updateActionModeVisibility(actionMode, this);
         actionMode.setItemVisibility(edit, canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.setItemVisibility(copy, !isPeerNoForwards() && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
         actionMode.setItemVisibility(star, selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size() != 0 ? View.VISIBLE : View.GONE);
@@ -11281,8 +11281,8 @@ public class ChatActivity extends BaseFragment implements
                 }
                 // CG parity: switching to "search by user" clears the active type filter
                 // so the user picker doesn't inherit a stale Photos/Videos/etc. constraint.
-                app.nimarkogram.messenger.NimarkoConfig.setMessagesSearchFilter(
-                        app.nimarkogram.messenger.NimarkoConfig.FILTER_NONE);
+                app.nebulagram.messenger.NebulaConfig.setMessagesSearchFilter(
+                        app.nebulagram.messenger.NebulaConfig.FILTER_NONE);
                 searchingForUser = true;
                 searchingUserMessages = null;
                 searchingChatMessages = null;
@@ -11319,8 +11319,8 @@ public class ChatActivity extends BaseFragment implements
         }
 
         // NG (CG-port): search-mode message-type filter button (Photos/Videos/Files/etc.).
-        // Tap opens NimarkoChatHelper2.showSearchMessageFilterSelector → user picks a type;
-        // MediaDataController already honours NimarkoConfig.messagesSearchFilter.
+        // Tap opens NebulaChatHelper2.showSearchMessageFilterSelector → user picks a type;
+        // MediaDataController already honours NebulaConfig.messagesSearchFilter.
         if (!searchingForUser && chatMode != MODE_SEARCH) {
             searchFilterButton = new ImageView(getContext());
             searchFilterButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -11333,7 +11333,7 @@ public class ChatActivity extends BaseFragment implements
                 if (getParentActivity() == null) {
                     return;
                 }
-                app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2.showSearchMessageFilterSelector(this);
+                app.nebulagram.messenger.utils.chats.NebulaChatHelper2.showSearchMessageFilterSelector(this);
             });
             searchFilterButton.setContentDescription(LocaleController.getString(R.string.NM_CH_SearchFilter));
         }
@@ -11615,11 +11615,11 @@ public class ChatActivity extends BaseFragment implements
         stringBuilder = new SpannableStringBuilder(LocaleController.getString(R.string.Mono));
         stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         item.addSubItem(text_mono, stringBuilder);
-        // NimarkoGram (CG parity): "Create code block" — dispatched via OPTION_TEXT_CODE through
-        // NimarkoChatActivityHelper.checkActionBarOptions -> EditTextCaption.makeSelectedCode.
+        // NebulaGram (CG parity): "Create code block" — dispatched via OPTION_TEXT_CODE through
+        // NebulaChatActivityHelper.checkActionBarOptions -> EditTextCaption.makeSelectedCode.
         stringBuilder = new SpannableStringBuilder(LocaleController.getString(R.string.NM_CreateCode));
         stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        item.addSubItem(app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_TEXT_CODE, stringBuilder);
+        item.addSubItem(app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_TEXT_CODE, stringBuilder);
         if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
             stringBuilder = new SpannableStringBuilder(LocaleController.getString(R.string.Strike));
             TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
@@ -11637,9 +11637,9 @@ public class ChatActivity extends BaseFragment implements
         if (currentEncryptedChat == null) {
             item.addSubItem(text_date, LocaleController.getString(R.string.FormattedDate));
         }
-        // NimarkoGram (CG parity): "Create mention" — dispatched via OPTION_TEXT_MENTION through
-        // NimarkoChatActivityHelper.checkActionBarOptions -> EditTextCaption.makeSelectedMention.
-        item.addSubItem(app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_TEXT_MENTION, LocaleController.getString(R.string.NM_CreateMention));
+        // NebulaGram (CG parity): "Create mention" — dispatched via OPTION_TEXT_MENTION through
+        // NebulaChatActivityHelper.checkActionBarOptions -> EditTextCaption.makeSelectedMention.
+        item.addSubItem(app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_TEXT_MENTION, LocaleController.getString(R.string.NM_CreateMention));
         item.addSubItem(text_regular, LocaleController.getString(R.string.Regular));
 
         filledEditTextItemMenu = true;
@@ -13010,23 +13010,23 @@ public class ChatActivity extends BaseFragment implements
         }
     }
 
-    public static void putNimarkoForwardOptions(Bundle args, boolean hideAuthor, boolean hideCaption) {
+    public static void putNebulaForwardOptions(Bundle args, boolean hideAuthor, boolean hideCaption) {
         if (args == null) {
             return;
         }
-        args.putBoolean(ARG_NIMARKO_FORWARD_HIDE_AUTHOR, hideAuthor);
-        args.putBoolean(ARG_NIMARKO_FORWARD_HIDE_CAPTION, hideCaption);
+        args.putBoolean(ARG_NEBULA_FORWARD_HIDE_AUTHOR, hideAuthor);
+        args.putBoolean(ARG_NEBULA_FORWARD_HIDE_CAPTION, hideCaption);
     }
 
-    private static NimarkoForwardOptions getNimarkoForwardOptions(DialogsActivity fragment) {
+    private static NebulaForwardOptions getNebulaForwardOptions(DialogsActivity fragment) {
         Bundle args = fragment == null ? null : fragment.getArguments();
-        return new NimarkoForwardOptions(
-                args != null && args.getBoolean(ARG_NIMARKO_FORWARD_HIDE_AUTHOR, false),
-                args != null && args.getBoolean(ARG_NIMARKO_FORWARD_HIDE_CAPTION, false)
+        return new NebulaForwardOptions(
+                args != null && args.getBoolean(ARG_NEBULA_FORWARD_HIDE_AUTHOR, false),
+                args != null && args.getBoolean(ARG_NEBULA_FORWARD_HIDE_CAPTION, false)
         );
     }
 
-    // NimarkoGram: bumped to public so NimarkoChatHelper2.makeReplyButtonClick (CG ChatsHelper port) can open the forward picker.
+    // NebulaGram: bumped to public so NebulaChatHelper2.makeReplyButtonClick (CG ChatsHelper port) can open the forward picker.
     public void openForward(boolean fromActionBar) {
         openForward(fromActionBar, false, false);
     }
@@ -13109,7 +13109,7 @@ public class ChatActivity extends BaseFragment implements
         args.putInt("hasPoll", hasPoll);
         args.putBoolean("hasInvoice", hasInvoice);
         args.putBoolean("canSelectTopics", true);
-        putNimarkoForwardOptions(args, hideAuthor, hideCaption);
+        putNebulaForwardOptions(args, hideAuthor, hideCaption);
         putForwardPickerSource(args);
         DialogsActivity fragment = new DialogsActivity(args);
         fragment.setDelegate(ChatActivity.this);
@@ -13664,7 +13664,7 @@ public class ChatActivity extends BaseFragment implements
         return animatorSearchResultAsListVisibility.getValue();
     }
 
-    // NimarkoGram: kept public so NimarkoChatsHelper can open the in-chat search list.
+    // NebulaGram: kept public so NebulaChatsHelper can open the in-chat search list.
     public void showMessagesSearchListView(boolean show) {
         if (messagesSearchListContainer == null || animatorSearchResultAsListVisibility.getValue() == show) {
             return;
@@ -13818,8 +13818,8 @@ public class ChatActivity extends BaseFragment implements
     }
 
     private void showVoiceHint(boolean hide, boolean video) {
-        if (app.nimarkogram.messenger.NimarkoConfig.disableSendHints && !hide) {
-            return;   // NimarkoGram: "Hold to record audio/video. Tap to switch" hint suppressed
+        if (app.nebulagram.messenger.NebulaConfig.disableSendHints && !hide) {
+            return;   // NebulaGram: "Hold to record audio/video. Tap to switch" hint suppressed
         }
         if (getParentActivity() == null || fragmentView == null || hide && voiceHintTextView == null || chatMode != 0 || chatActivityEnterView == null  || chatActivityEnterView.getAudioVideoButtonContainer() == null || chatActivityEnterView.getAudioVideoButtonContainer().getVisibility() != View.VISIBLE || isInPreviewMode()) {
             return;
@@ -13959,7 +13959,7 @@ public class ChatActivity extends BaseFragment implements
 
     private void showScheduledHint() {
         boolean disableNoSound = (UserObject.isUserSelf(currentUser) || (chatInfo != null && chatInfo.slowmode_next_send_date > 0) && chatMode == 0);
-        if (app.nimarkogram.messenger.NimarkoConfig.disableSendHints || scheduledHintShown || scheduledOrNoSoundHintShown || disableNoSound || SharedConfig.scheduledHintShows >= 3 || chatActivityEnterView.isEditingMessage()) {
+        if (app.nebulagram.messenger.NebulaConfig.disableSendHints || scheduledHintShown || scheduledOrNoSoundHintShown || disableNoSound || SharedConfig.scheduledHintShows >= 3 || chatActivityEnterView.isEditingMessage()) {
             return;
         }
         AndroidUtilities.cancelRunOnUIThread(showScheduledHintRunnable);
@@ -13970,7 +13970,7 @@ public class ChatActivity extends BaseFragment implements
         boolean disableNoSound = UserObject.isUserSelf(currentUser) || (chatInfo != null && chatInfo.slowmode_next_send_date > 0) && chatMode == 0 || chatMode == MODE_EDIT_BUSINESS_LINK;
         long scheduledOrNoSoundHintTimeFromLastSeen = System.currentTimeMillis() - SharedConfig.scheduledOrNoSoundHintSeenAt;
         long scheduledHintTimeFromLastSeen = System.currentTimeMillis() - SharedConfig.scheduledHintSeenAt;
-        if (app.nimarkogram.messenger.NimarkoConfig.disableSendHints || disableNoSound || SharedConfig.scheduledOrNoSoundHintShows >= 3 || scheduledOrNoSoundHintTimeFromLastSeen < 86400000L || scheduledHintTimeFromLastSeen < 86400000L || chatActivityEnterView.isEditingMessage()) {
+        if (app.nebulagram.messenger.NebulaConfig.disableSendHints || disableNoSound || SharedConfig.scheduledOrNoSoundHintShows >= 3 || scheduledOrNoSoundHintTimeFromLastSeen < 86400000L || scheduledHintTimeFromLastSeen < 86400000L || chatActivityEnterView.isEditingMessage()) {
             return;
         }
         AndroidUtilities.cancelRunOnUIThread(showScheduledOrNoSoundRunnable);
@@ -15532,18 +15532,18 @@ public class ChatActivity extends BaseFragment implements
         showFieldPanel(show, null, null, messageObjectsToForward, null, true, 0, null, false, 0, true);
     }
 
-    private void showFieldPanelForForward(boolean show, ArrayList<MessageObject> messageObjectsToForward, NimarkoForwardOptions options) {
+    private void showFieldPanelForForward(boolean show, ArrayList<MessageObject> messageObjectsToForward, NebulaForwardOptions options) {
         showFieldPanel(show, null, null, messageObjectsToForward, null, true, 0, null, false, 0, null, true, options);
     }
 
     public void showFieldPanelForReply(MessageObject messageObjectToReply) {
-        // NimarkoGram (CG parity): auto-quote the full message text when the flag is on.
+        // NebulaGram (CG parity): auto-quote the full message text when the flag is on.
         // Skip in topics (matches CherrygramChatsConfig.autoQuoteReplies + !ChatsHelper.isTopic
         // gate in showFieldPanel's reply-icon branch).
         ReplyQuote autoQuote = null;
-        if (app.nimarkogram.messenger.NimarkoConfig.autoQuoteReplies && messageObjectToReply != null) {
+        if (app.nebulagram.messenger.NebulaConfig.autoQuoteReplies && messageObjectToReply != null) {
             try {
-                boolean isTopic = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper
+                boolean isTopic = app.nebulagram.messenger.utils.chats.NebulaChatHelper
                         .getInstance(currentAccount).isTopic(messageObjectToReply);
                 if (!isTopic) {
                     autoQuote = ReplyQuote.from(messageObjectToReply);
@@ -15708,7 +15708,7 @@ public class ChatActivity extends BaseFragment implements
         showFieldPanel(show, messageObjectToReply, messageObjectToEdit, messageObjectsToForward, webPage, notify, scheduleDate, quote, cancel, payStars, suggestionParams, animated, null);
     }
 
-    private void showFieldPanel(boolean show, MessageObject messageObjectToReply, MessageObject messageObjectToEdit, ArrayList<MessageObject> messageObjectsToForward, TLRPC.WebPage webPage, boolean notify, int scheduleDate, ReplyQuote quote, boolean cancel, long payStars, MessageSuggestionParams suggestionParams, boolean animated, NimarkoForwardOptions forwardOptions) {
+    private void showFieldPanel(boolean show, MessageObject messageObjectToReply, MessageObject messageObjectToEdit, ArrayList<MessageObject> messageObjectsToForward, TLRPC.WebPage webPage, boolean notify, int scheduleDate, ReplyQuote quote, boolean cancel, long payStars, MessageSuggestionParams suggestionParams, boolean animated, NebulaForwardOptions forwardOptions) {
         if (chatActivityEnterView == null) {
             return;
         }
@@ -16107,7 +16107,7 @@ public class ChatActivity extends BaseFragment implements
                     if (mess.toString().contains("$")) {
                         float rSize = replyObjectTextView.getPaint().getTextSize();
                         int rWidth = AndroidUtilities.displaySize.x - AndroidUtilities.dp(120);
-                        mess = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(mess, rSize, rWidth, true);
+                        mess = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(mess, rSize, rWidth, true);
                     }
                     mess = Emoji.replaceEmoji(mess, replyObjectTextView.getPaint().getFontMetricsInt(), false);
                     if (messageObjectToReply.messageOwner != null && messageObjectToReply.messageOwner.entities != null) {
@@ -16143,7 +16143,7 @@ public class ChatActivity extends BaseFragment implements
                 }
                 if (forwardOptions != null) {
                     messagePreviewParams.hideForwardSendersName =
-                            forwardOptions.hideAuthor || app.nimarkogram.messenger.NimarkoConfig.forwardWithoutAuthor;
+                            forwardOptions.hideAuthor || app.nebulagram.messenger.NebulaConfig.forwardWithoutAuthor;
                     messagePreviewParams.hideCaption = forwardOptions.hideCaption;
                 }
                 messagePreviewParams.updateForward(messageObjectsToForward, dialog_id);
@@ -17127,7 +17127,7 @@ public class ChatActivity extends BaseFragment implements
                     updateReactionsMentionButton(true);
                 }
                 getDownloadController().checkUnviewedDownloads(messageCell.getId(), dialog_id);
-                boolean allowPlayEffect = !app.nimarkogram.messenger.NimarkoConfig.disablePremStickAutoPlay
+                boolean allowPlayEffect = !app.nebulagram.messenger.NebulaConfig.disablePremStickAutoPlay
                         && (messageObject.getEffect() != null
                             || ((messageObject.messageOwner.media != null && !messageObject.messageOwner.media.nopremium)
                                 || (messageObject.isAnimatedEmojiStickerSingle() && dialog_id > 0)));
@@ -17684,11 +17684,11 @@ public class ChatActivity extends BaseFragment implements
         }
     }
 
-    // NimarkoGram (CG parity): "Discuss instead of Mute" — when the channel has
+    // NebulaGram (CG parity): "Discuss instead of Mute" — when the channel has
     // a linked discussion group and the user toggle is on, the channel bottom
     // bar offers a one-tap entry to the linked group rather than mute/unmute.
     public boolean showDiscussInsteadOfMute() {
-        return app.nimarkogram.messenger.NimarkoConfig.discussInsteadOfMute
+        return app.nebulagram.messenger.NebulaConfig.discussInsteadOfMute
                 && chatInfo != null && chatInfo.linked_chat_id != 0
                 && currentChat != null && ChatObject.isChannel(currentChat)
                 && ChatObject.isInChat(currentChat);
@@ -19337,10 +19337,10 @@ public class ChatActivity extends BaseFragment implements
                     }
                 } else {
                     if (avatarContainer != null && avatarContainer.getLayoutParams() != null) {
-                        // NimarkoGram (CG parity): give the avatar container the full action-bar width
+                        // NebulaGram (CG parity): give the avatar container the full action-bar width
                         // (minus the back-affordance) when centerChatTitle is on so the title can sit
                         // centered. Mirrors CherrygramChatsConfig.centerChatTitle.
-                        if (app.nimarkogram.messenger.NimarkoConfig.centerChatTitle) {
+                        if (app.nebulagram.messenger.NebulaConfig.centerChatTitle) {
                             ((ViewGroup.MarginLayoutParams) avatarContainer.getLayoutParams()).rightMargin =
                                     (UserObject.isReplyUser(currentUser) || isComments) ? AndroidUtilities.dp(40) : AndroidUtilities.dp(0);
                         } else {
@@ -19886,7 +19886,7 @@ public class ChatActivity extends BaseFragment implements
 
     @Override
     public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
-        if (app.nimarkogram.messenger.quotes.NimarkoQuoteCreator.onRequestPermissionsResult(
+        if (app.nebulagram.messenger.quotes.NebulaQuoteCreator.onRequestPermissionsResult(
                 this,
                 requestCode,
                 grantResults
@@ -20353,8 +20353,8 @@ public class ChatActivity extends BaseFragment implements
                     // operate across multi-column selection / mixed group ids) — OR the chat is
                     // no-forwards — hide the actions bar in those edge selection states. Mirrors
                     // CherrygramMessagesConfig.leftBottomButton == LEFT_BUTTON_REPLY check from CG.
-                    boolean ngLeftIsReply = app.nimarkogram.messenger.NimarkoConfig.actionsBarLeftButton
-                            == app.nimarkogram.messenger.NimarkoConfig.ACTIONS_LEFT_REPLY;
+                    boolean ngLeftIsReply = app.nebulagram.messenger.NebulaConfig.actionsBarLeftButton
+                            == app.nebulagram.messenger.NebulaConfig.ACTIONS_LEFT_REPLY;
                     boolean ngNoForwards = isPeerNoForwards();
 
                     if ((chatMode == MODE_SCHEDULED || !allowChatActions || selectedMessagesIds[0].size() != 0 && selectedMessagesIds[1].size() != 0) && (ngLeftIsReply || ngNoForwards)) {
@@ -20424,7 +20424,7 @@ public class ChatActivity extends BaseFragment implements
         updateSelectedMessageReactions();
         if (last && actionBar.isActionModeShowed() && !isReport()) {
             ActionBarMenu actionMode = actionBar.createActionMode();
-            app.nimarkogram.messenger.quotes.NimarkoQuoteCreator.updateActionModeVisibility(actionMode, this);
+            app.nebulagram.messenger.quotes.NebulaQuoteCreator.updateActionModeVisibility(actionMode, this);
             updateSavedMessagesActionModeState(actionMode);
         }
     }
@@ -20524,7 +20524,7 @@ public class ChatActivity extends BaseFragment implements
             }
         }
         ActionBarMenu actionMode = actionBar.createActionMode();
-        app.nimarkogram.messenger.quotes.NimarkoQuoteCreator.updateActionModeVisibility(actionMode, this);
+        app.nebulagram.messenger.quotes.NebulaQuoteCreator.updateActionModeVisibility(actionMode, this);
         updateSavedMessagesActionModeState(actionMode);
     }
 
@@ -21604,7 +21604,7 @@ public class ChatActivity extends BaseFragment implements
         if (id == NotificationCenter.messagePlayingProgressDidChanged && paused) {
             return;
         }
-        // NimarkoGram (CG-port): refresh back-arrow unread badge when global dialog unread count changes.
+        // NebulaGram (CG-port): refresh back-arrow unread badge when global dialog unread count changes.
         if (id == NotificationCenter.dialogsUnreadCounterChanged) {
             if (actionBar != null && actionBar.backButtonImageView != null) {
                 actionBar.backButtonImageView.checkUnreadView(getMessagesStorage().getMainUnreadCount());
@@ -23052,10 +23052,10 @@ public class ChatActivity extends BaseFragment implements
                 }
                 updateSubtitle = true;
             }
-            // NimarkoGram: a member coming online/offline must re-arm the sender online-dot fade. The block above
+            // NebulaGram: a member coming online/offline must re-arm the sender online-dot fade. The block above
             // is gated on !isThreadChat() and never repaints the message list, so handle STATUS unconditionally here.
             if ((updateMask & MessagesController.UPDATE_MASK_STATUS) != 0
-                    && app.nimarkogram.messenger.NimarkoConfig.onlineIndicatorInGroups
+                    && app.nebulagram.messenger.NebulaConfig.onlineIndicatorInGroups
                     && chatListView != null) {
                 chatListView.invalidateViews();
             }
@@ -23090,14 +23090,14 @@ public class ChatActivity extends BaseFragment implements
                 updateTopPanel(true);
             }
             if (headerItem != null && currentChat != null) {
-                // NimarkoGram (CG parity): mirror the post-create rule on later refreshes.
+                // NebulaGram (CG parity): mirror the post-create rule on later refreshes.
                 boolean isChannel = ChatObject.isChannelAndNotMegaGroup(currentChat);
                 boolean isAdmin = ChatObject.hasAdminRights(currentChat);
                 boolean canManageMonoForum = ChatObject.canManageMonoForum(currentAccount, -currentChat.linked_monoforum_id);
                 boolean showSuggestButton = currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
                 boolean shouldShow =
                         (ChatObject.isChannel(currentChat) && !ChatObject.isMonoForum(currentChat) && currentChat.linked_monoforum_id != 0 && canManageMonoForum)
-                        || (isChannel && app.nimarkogram.messenger.NimarkoConfig.hideMuteUnmuteButton && !isAdmin && !canManageMonoForum && showSuggestButton);
+                        || (isChannel && app.nebulagram.messenger.NebulaConfig.hideMuteUnmuteButton && !isAdmin && !canManageMonoForum && showSuggestButton);
                 headerItem.setSubItemShown(open_direct, shouldShow);
             }
         } else if (id == NotificationCenter.didReceiveNewMessages) {
@@ -24230,8 +24230,8 @@ public class ChatActivity extends BaseFragment implements
                             }
                         }
                         if (hasChosen) {
-                            // NimarkoGram (CG parity): respect disableVibration on poll-vote feedback.
-                            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                            // NebulaGram (CG parity): respect disableVibration on poll-vote feedback.
+                            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                 try {
                                     pollView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 } catch (Exception ignored) {
@@ -25089,7 +25089,7 @@ public class ChatActivity extends BaseFragment implements
                     // (private chat) flips showAudioCallAsIcon = true → checkActionBar()
                     // sets rightMargin=96dp → avatar gets pushed inward away from edge.
                     // (base expression `userInfo.phone_calls_available && !inPreviewMode` matches upstream 12.9.0)
-                    final boolean ngCenterHidesCallIcon = app.nimarkogram.messenger.NimarkoConfig.centerChatTitle
+                    final boolean ngCenterHidesCallIcon = app.nebulagram.messenger.NebulaConfig.centerChatTitle
                             && getChatMode() != ChatActivity.MODE_SAVED
                             && !isComments
                             && getDialogId() != 0
@@ -25164,7 +25164,7 @@ public class ChatActivity extends BaseFragment implements
                 chatListView.invalidateViews();
             }
         } else if (id == NotificationCenter.nmUpdateBubbleShape) {
-            // NimarkoGram: hideBubbleTail toggled — repaint visible bubbles in place. updateVisibleRows()
+            // NebulaGram: hideBubbleTail toggled — repaint visible bubbles in place. updateVisibleRows()
             // re-binds visible cells (regenerating their bubble path) and invalidateViews() forces a redraw
             // so the shared NinePatch caches re-bake; no RecyclerView recreation, so no screen jump.
             if (chatListView != null) {
@@ -25172,15 +25172,15 @@ public class ChatActivity extends BaseFragment implements
                 chatListView.invalidateViews();
             }
         } else if (id == NotificationCenter.nmUpdateOnlineIndicator) {
-            // NimarkoGram: onlineIndicatorInGroups toggled — repaint visible sender avatars in place. The dot
+            // NebulaGram: onlineIndicatorInGroups toggled — repaint visible sender avatars in place. The dot
             // reads the flag live at draw time, so a plain invalidate is enough (no RecyclerView recreation).
             if (chatListView != null) {
                 chatListView.invalidateViews();
             }
         } else if (id == NotificationCenter.pluginMenuItemsUpdated) {
-            // NimarkoGram: a plugin registered/unregistered (or the engine finished loading) — rebuild the
+            // NebulaGram: a plugin registered/unregistered (or the engine finished loading) — rebuild the
             // "Plugins (N)" chat-overflow item so it appears/relabels/disappears without reopening the chat.
-            nimarkoRebuildChatPluginsMenu();
+            nebulaRebuildChatPluginsMenu();
         } else if (id == NotificationCenter.didApplyNewTheme) {
             if (undoView == null || paused) {
                 return;
@@ -26047,8 +26047,8 @@ public class ChatActivity extends BaseFragment implements
     }
 
     private void loadSendAsPeers(boolean animatedUpdate) {
-        // NimarkoGram: skip loading sendAs UI entirely when user opts out.
-        if (app.nimarkogram.messenger.NimarkoConfig.hideSendAsChannel) {
+        // NebulaGram: skip loading sendAs UI entirely when user opts out.
+        if (app.nebulagram.messenger.NebulaConfig.hideSendAsChannel) {
             return;
         }
         if (sendAsPeersObj != null || currentChat == null || !ChatObject.canSendAsPeers(currentChat) || chatActivityEnterView == null || ChatObject.isMonoForum(currentChat)) {
@@ -28899,7 +28899,7 @@ public class ChatActivity extends BaseFragment implements
             }
             showBottomOverlayProgress(false, false);
         } else if (currentUser != null && currentUser.id == UserObject.VERIFY) {
-            // NimarkoGram (CG parity): discussInsteadOfMute swaps mute/unmute label for Discuss.
+            // NebulaGram (CG parity): discussInsteadOfMute swaps mute/unmute label for Discuss.
             if (showDiscussInsteadOfMute()) {
                 bottomOverlayChatText.setText(getString(R.string.ProfileActionsDiscuss), false);
                 bottomOverlayChatText.setEnabled(true);
@@ -28944,7 +28944,7 @@ public class ChatActivity extends BaseFragment implements
                     bottomOverlayChatText.setTextInfo(LocaleController.getString(R.string.ForumReplyToMessagesInTopic));
                     bottomOverlayChatText.setEnabled(false);
                 } else if (!isThreadChat()) {
-                    // NimarkoGram (CG parity): discussInsteadOfMute swaps mute/unmute label for Discuss.
+                    // NebulaGram (CG parity): discussInsteadOfMute swaps mute/unmute label for Discuss.
                     if (showDiscussInsteadOfMute()) {
                         bottomOverlayChatText.setText(getString(R.string.ProfileActionsDiscuss), false);
                         bottomOverlayChatText.setEnabled(true);
@@ -29005,7 +29005,7 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
             } else if (UserObject.isReplyUser(currentUser)) {
-                // NimarkoGram (CG parity): discussInsteadOfMute swaps mute/unmute label for Discuss.
+                // NebulaGram (CG parity): discussInsteadOfMute swaps mute/unmute label for Discuss.
                 if (showDiscussInsteadOfMute()) {
                     bottomOverlayChatText.setText(getString(R.string.ProfileActionsDiscuss), false);
                 } else if (!getMessagesController().isDialogMuted(dialog_id, getTopicId())) {
@@ -29204,7 +29204,7 @@ public class ChatActivity extends BaseFragment implements
         bottomChannelButtonsLayout.showButton(ChatActivityChannelButtonsLayout.BUTTON_GIFT, showGiftButton && bottomChannelButtonsLayout.getVisibility() == View.VISIBLE, animated);
         bottomChannelButtonsLayout.showButton(ChatActivityChannelButtonsLayout.BUTTON_GIGA_GROUP_INFO, showGigaGroupButton && bottomChannelButtonsLayout.getVisibility() == View.VISIBLE, animated);
 
-        // NimarkoGram: when discussInsteadOfMute is ON, the central wide bar
+        // NebulaGram: when discussInsteadOfMute is ON, the central wide bar
         // (bottomOverlayChatText) already shows "Discussion". The small
         // BUTTON_MUTE/UNMUTE icons act as the secondary mute alternative.
         // BUTTON_DISCUSS was a duplicate — the BIG bar is the canonical
@@ -29374,7 +29374,7 @@ public class ChatActivity extends BaseFragment implements
         return false;
     }
 
-    // NimarkoGram: bumped to public so NimarkoChatHelper2 (CG ChatsHelper port) can refresh the pinned banner after a selection clear.
+    // NebulaGram: bumped to public so NebulaChatHelper2 (CG ChatsHelper port) can refresh the pinned banner after a selection clear.
     public void updatePinnedMessageView(boolean animated) {
         updatePinnedMessageView(animated, 0);
     }
@@ -29812,7 +29812,7 @@ public class ChatActivity extends BaseFragment implements
                     if (capMess.contains("$")) {
                         float cpSize = messageTextView.getPaint().getTextSize();
                         int cpWidth = AndroidUtilities.displaySize.x - AndroidUtilities.dp(140);
-                        capCs = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(capCs, cpSize, cpWidth, true);
+                        capCs = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(capCs, cpSize, cpWidth, true);
                     }
                     pinnedText = capCs;
                     pinnedText = Emoji.replaceEmoji(pinnedText, messageTextView.getPaint().getFontMetricsInt(), false);
@@ -29826,7 +29826,7 @@ public class ChatActivity extends BaseFragment implements
                     if (rawPinned.contains("$")) {
                         float pSize = messageTextView.getPaint().getTextSize();
                         int pWidth = AndroidUtilities.displaySize.x - AndroidUtilities.dp(140);
-                        pinnedCs = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(pinnedCs, pSize, pWidth, true);
+                        pinnedCs = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(pinnedCs, pSize, pWidth, true);
                     }
                     pinnedText = pinnedCs;
                     pinnedText = Emoji.replaceEmoji(pinnedText, messageTextView.getPaint().getFontMetricsInt(), false);
@@ -30930,47 +30930,47 @@ public class ChatActivity extends BaseFragment implements
 
     Bulletin.Delegate bulletinDelegate;
 
-    private boolean nimarkoBiometricVerified;
+    private boolean nebulaBiometricVerified;
 
     @Override
     public void onResume() {
         super.onResume();
         final boolean deferResumeUi = wasPaused && !isFullyVisible;
-        LaunchActivity.invalidateNimarkoSecureFlag();
-        // NimarkoGram (CG-port): refresh back-arrow unread badge on resume — picks up
-        // runtime toggles of NimarkoConfig.unreadBadgeOnBackButton from settings.
+        LaunchActivity.invalidateNebulaSecureFlag();
+        // NebulaGram (CG-port): refresh back-arrow unread badge on resume — picks up
+        // runtime toggles of NebulaConfig.unreadBadgeOnBackButton from settings.
         if (actionBar != null && actionBar.backButtonImageView != null) {
             actionBar.backButtonImageView.checkUnreadView(getMessagesStorage().getMainUnreadCount());
         }
-        // NimarkoGram: per-chat / encrypted biometric gate. Trigger once per ChatActivity instance.
-        if (!nimarkoBiometricVerified) {
+        // NebulaGram: per-chat / encrypted biometric gate. Trigger once per ChatActivity instance.
+        if (!nebulaBiometricVerified) {
             final int encId = arguments != null ? arguments.getInt("enc_id", 0) : 0;
             final long uid = currentUser != null ? currentUser.id : 0L;
             final long cid = currentChat != null ? currentChat.id : 0L;
-            boolean needPrompt = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+            boolean needPrompt = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                     .shouldRequireBiometrics(uid, cid, encId, currentAccount);
             if (needPrompt) {
                 // NG bug-fix (double-prompt): if a sibling site (LaunchActivity push or
                 // INavigationLayout.presentFragment) just authenticated this chat moments
-                // ago, skip re-prompting. The shared TTL token lives in NimarkoBiometricPrompt.
-                if (app.nimarkogram.messenger.security.NimarkoBiometricPrompt.isRecentlyVerified(currentAccount, uid, cid, encId)) {
-                    nimarkoBiometricVerified = true;
+                // ago, skip re-prompting. The shared TTL token lives in NebulaBiometricPrompt.
+                if (app.nebulagram.messenger.security.NebulaBiometricPrompt.isRecentlyVerified(currentAccount, uid, cid, encId)) {
+                    nebulaBiometricVerified = true;
                 } else if (getParentActivity() != null) {
-                    nimarkoBiometricVerified = true; // prevent re-fire on quick onResume cycles
+                    nebulaBiometricVerified = true; // prevent re-fire on quick onResume cycles
                     final ChatActivity self = this;
                     final int acc = currentAccount;
-                    app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(
+                    app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(
                             getParentActivity(),
                             acc,
-                            () -> app.nimarkogram.messenger.security.NimarkoBiometricPrompt.markVerified(acc, uid, cid, encId),
+                            () -> app.nebulagram.messenger.security.NebulaBiometricPrompt.markVerified(acc, uid, cid, encId),
                             () -> { try { self.finishFragment(); } catch (Throwable ignored) {} }
                     );
                 }
-                // NimarkoGram bug-fix: when needPrompt && parentActivity==null we deliberately
-                // leave nimarkoBiometricVerified=false so the next onResume re-triggers the gate
+                // NebulaGram bug-fix: when needPrompt && parentActivity==null we deliberately
+                // leave nebulaBiometricVerified=false so the next onResume re-triggers the gate
                 // instead of silently marking the locked chat as authenticated.
             } else {
-                nimarkoBiometricVerified = true;
+                nebulaBiometricVerified = true;
             }
         }
         checkShowBlur(false);
@@ -31226,7 +31226,7 @@ public class ChatActivity extends BaseFragment implements
             chatListView.removeCallbacks(pendingVisibleRowsRebindRunnable);
         }
         dismissReactionUiForNavigation();
-        // NimarkoGram SECURITY FIX (H2): the per-instance gate flag was set true
+        // NebulaGram SECURITY FIX (H2): the per-instance gate flag was set true
         // when a locked chat was unlocked and NEVER reset, so the opened locked
         // chat stayed unlocked forever (even across app backgrounding). Reset it
         // here so onResume re-evaluates the gate on re-entry. This does NOT cause
@@ -31235,7 +31235,7 @@ public class ChatActivity extends BaseFragment implements
         // which is still fresh for a quick round-trip and silently re-marks the
         // flag without showing a sheet. After the app actually backgrounds, H1
         // clears those tokens, so re-entry then genuinely re-prompts.
-        nimarkoBiometricVerified = false;
+        nebulaBiometricVerified = false;
         scrolling = false;
         long replyId = threadMessageId;
         getMessagesController().markDialogAsReadNow(dialog_id, replyId);
@@ -31848,7 +31848,7 @@ public class ChatActivity extends BaseFragment implements
         }, hideDimAfter ? () -> dimBehindView(false) : null, themeDelegate);
     }
 
-    // NimarkoGram: bumped to public so NimarkoChatHelper2 (CG ChatsHelper port) can dismiss the multiselect bar.
+    // NebulaGram: bumped to public so NebulaChatHelper2 (CG ChatsHelper port) can dismiss the multiselect bar.
     public void hideActionMode() {
         hideActionMode(null);
     }
@@ -32010,7 +32010,7 @@ public class ChatActivity extends BaseFragment implements
             popupX += location[0];
         }
 
-        boolean compactExpanded = app.nimarkogram.messenger.NimarkoConfig
+        boolean compactExpanded = app.nebulagram.messenger.NebulaConfig
                 .msgMenuItemsCompactView
                 && (AndroidUtilities.isTablet()
                 || AndroidUtilities.displaySize != null
@@ -32073,7 +32073,7 @@ public class ChatActivity extends BaseFragment implements
             return false;
         }
         final boolean telegramPlusMessageMenu =
-                app.nimarkogram.messenger.ui.MessageMenuTelegramPlus.isEnabled(ordinaryTap);
+                app.nebulagram.messenger.ui.MessageMenuTelegramPlus.isEnabled(ordinaryTap);
         final boolean telegramPlusGlassBlur = true;
         if (chatActivityEnterView != null) {
             chatActivityEnterView.hideHints();
@@ -32406,11 +32406,11 @@ public class ChatActivity extends BaseFragment implements
             } else if (message.isForwardedChannelPost()) {
                 TLRPC.ChatFull chatInfo = getMessagesController().getChatFull(-message.getFromChatId());
                 if (chatInfo == null) {
-                    // NimarkoGram (CG parity): drop the long-press reactions row when disableReactionsOverlay is on.
-                    isReactionsAvailable = !app.nimarkogram.messenger.NimarkoConfig.disableReactionsOverlay;
+                    // NebulaGram (CG parity): drop the long-press reactions row when disableReactionsOverlay is on.
+                    isReactionsAvailable = !app.nebulagram.messenger.NebulaConfig.disableReactionsOverlay;
                 } else {
-                    // NimarkoGram (CG parity): drop the long-press reactions row when disableReactionsOverlay is on.
-                    isReactionsAvailable = !app.nimarkogram.messenger.NimarkoConfig.disableReactionsOverlay
+                    // NebulaGram (CG parity): drop the long-press reactions row when disableReactionsOverlay is on.
+                    isReactionsAvailable = !app.nebulagram.messenger.NebulaConfig.disableReactionsOverlay
                         && !isSecretChat()
                         && !isQuickRepliesOrWelcomeMessagesMode()
                         && !isInScheduleMode()
@@ -32422,8 +32422,8 @@ public class ChatActivity extends BaseFragment implements
                         );
                 }
             } else {
-                // NimarkoGram (CG parity): drop the long-press reactions row when disableReactionsOverlay is on.
-                isReactionsAvailable = !app.nimarkogram.messenger.NimarkoConfig.disableReactionsOverlay
+                // NebulaGram (CG parity): drop the long-press reactions row when disableReactionsOverlay is on.
+                isReactionsAvailable = !app.nebulagram.messenger.NebulaConfig.disableReactionsOverlay
                     && !isSecretChat()
                     && !isQuickRepliesOrWelcomeMessagesMode()
                     && !isInScheduleMode()
@@ -32447,10 +32447,10 @@ public class ChatActivity extends BaseFragment implements
             final boolean showSponsorInfo = !suggestEdit && !isEphemeral && selectedObject != null && selectedObject.isSponsored() && (selectedObject.sponsoredInfo != null || selectedObject.sponsoredAdditionalInfo != null || selectedObject.sponsoredUrl != null && !selectedObject.sponsoredUrl.startsWith("https://" + getMessagesController().linkPrefix));
             final boolean isReactionsAvailableFinal = !suggestEdit && isReactionsAvailable;
 
-            // NimarkoGram: drop context-menu entries the user has disabled in
+            // NebulaGram: drop context-menu entries the user has disabled in
             // MessageMenuItemsPreferencesActivity. Runs after the menu has been
             // populated but before any popup view is constructed.
-            app.nimarkogram.messenger.ui.MessageMenuTweaks.filterMenuItems(items, options, icons);
+            app.nebulagram.messenger.ui.MessageMenuTweaks.filterMenuItems(items, options, icons);
 
             int flags = 0;
             if (isReactionsViewAvailable || showMessageSeen || showSponsorInfo) {
@@ -32996,7 +32996,7 @@ public class ChatActivity extends BaseFragment implements
                 }
                 boolean showRateTranscription = selectedObject != null && selectedObject.isVoice() && selectedObject.messageOwner != null && getUserConfig().isPremium() && !TextUtils.isEmpty(selectedObject.messageOwner.voiceTranscription) && selectedObject.messageOwner != null && !selectedObject.messageOwner.voiceTranscriptionRated && selectedObject.messageOwner.voiceTranscriptionId != 0 && selectedObject.messageOwner.voiceTranscriptionOpen;
 
-                if (!showRateTranscription && message.probablyRingtone() && currentEncryptedChat == null && app.nimarkogram.messenger.NimarkoConfig.showSaveForNotifications) {
+                if (!showRateTranscription && message.probablyRingtone() && currentEncryptedChat == null && app.nebulagram.messenger.NebulaConfig.showSaveForNotifications) {
                     ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getParentActivity(), !showPrivateMessageSeen && !showPrivateMessageEdit && !showPrivateMessageFwdOriginal, false, themeDelegate);
                     cell.setMinimumWidth(AndroidUtilities.dp(200));
                     cell.setTextAndIcon(getString(R.string.SaveForNotifications), R.drawable.msg_tone_add);
@@ -33359,10 +33359,10 @@ public class ChatActivity extends BaseFragment implements
                             continue;
                         }
                         final MessageObject translationSource =
-                                app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.getTranslationSource(
+                                app.nebulagram.messenger.utils.chats.NebulaChatHelper.getTranslationSource(
                                         message, groupedMessages, messageIdToTranslate[0]);
                         final ArrayList<TLRPC.MessageEntity> translationEntities =
-                                app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.getTranslationEntities(
+                                app.nebulagram.messenger.utils.chats.NebulaChatHelper.getTranslationEntities(
                                         message, groupedMessages, messageIdToTranslate[0], finalMessageText);
                         final MessageObject translationSelectedObject = selectedObject;
                         Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress = (link) -> {
@@ -33575,62 +33575,62 @@ public class ChatActivity extends BaseFragment implements
                     popupLayout.addView(layout);
                 }
 
-                // NimarkoGram: inject plugin message_context_menu items.
-                // Used by NimarkoExport for "Import plugins" on .zip files.
+                // NebulaGram: inject plugin message_context_menu items.
+                // Used by NebulaExport for "Import plugins" on .zip files.
                 try {
-                    final java.util.Map<String, Object> nimarkoCtx = new java.util.HashMap<>();
-                    nimarkoCtx.put("fragment", "ChatActivity");
+                    final java.util.Map<String, Object> nebulaCtx = new java.util.HashMap<>();
+                    nebulaCtx.put("fragment", "ChatActivity");
                     // C10: provide the chat context scalars/peers so message_context
                     // plugins can condition on the dialog the same way chat_action
-                    // ones can (parity with nimarkoRebuildChatPluginsMenu's ctx).
-                    nimarkoCtx.put("dialog_id", dialog_id);
-                    if (currentUser != null) nimarkoCtx.put("user", currentUser);
-                    if (currentChat != null) nimarkoCtx.put("chat", currentChat);
+                    // ones can (parity with nebulaRebuildChatPluginsMenu's ctx).
+                    nebulaCtx.put("dialog_id", dialog_id);
+                    if (currentUser != null) nebulaCtx.put("user", currentUser);
+                    if (currentChat != null) nebulaCtx.put("chat", currentChat);
                     if (selectedObject != null) {
                         // extera plugins reference the selected message via MVEL expr
                         // `message.getDocument()` etc. — `message` is the canonical key
                         // used by MenuContextBuilder.withMessage. Keep `messageObject`
                         // alias too for any plugins that probe with the old name.
-                        nimarkoCtx.put("message", selectedObject);
-                        nimarkoCtx.put("messageObject", selectedObject);
+                        nebulaCtx.put("message", selectedObject);
+                        nebulaCtx.put("messageObject", selectedObject);
                         // C10: expose the album group when the selected message is part
                         // of a grouped media post, so plugins can act on the whole album.
                         if (selectedObjectGroup != null) {
-                            nimarkoCtx.put("groupedMessages", selectedObjectGroup);
+                            nebulaCtx.put("groupedMessages", selectedObjectGroup);
                         }
                         if (selectedObject.getDocument() != null) {
-                            nimarkoCtx.put("document", selectedObject.getDocument());
-                            nimarkoCtx.put("fileName", selectedObject.getDocumentName());
-                            nimarkoCtx.put("mimeType", selectedObject.getMimeType());
+                            nebulaCtx.put("document", selectedObject.getDocument());
+                            nebulaCtx.put("fileName", selectedObject.getDocumentName());
+                            nebulaCtx.put("mimeType", selectedObject.getMimeType());
                         }
                     }
-                    java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> nimarkoItems =
-                            app.nimarkogram.messenger.plugins.PluginsController.getInstance()
-                                    .getMenuItemsForLocation("message_context_menu", nimarkoCtx);
-                    if (nimarkoItems != null && !nimarkoItems.isEmpty()) {
+                    java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> nebulaItems =
+                            app.nebulagram.messenger.plugins.PluginsController.getInstance()
+                                    .getMenuItemsForLocation("message_context_menu", nebulaCtx);
+                    if (nebulaItems != null && !nebulaItems.isEmpty()) {
                         // Dedupe by stable plugin identity (not label); controller already pre-filtered conditions and pre-sorted by priority.
-                        final java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> nimarkoUnique = new java.util.ArrayList<>(nimarkoItems.size());
+                        final java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> nebulaUnique = new java.util.ArrayList<>(nebulaItems.size());
                         java.util.Set<String> seenP = new java.util.HashSet<>();
-                        for (final app.nimarkogram.messenger.plugins.hooks.MenuItemRecord rec : nimarkoItems) {
+                        for (final app.nebulagram.messenger.plugins.hooks.MenuItemRecord rec : nebulaItems) {
                             if (rec == null || android.text.TextUtils.isEmpty(rec.text)) continue;
                             if (!seenP.add(rec.pluginId + ":" + rec.itemId)) continue;
-                            nimarkoUnique.add(rec);
+                            nebulaUnique.add(rec);
                         }
-                        if (!nimarkoUnique.isEmpty()) {
+                        if (!nebulaUnique.isEmpty()) {
                             popupLayout.addView(new ActionBarPopupWindow.GapView(contentView.getContext(), themeDelegate), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
-                            final java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> finalItems = nimarkoUnique;
+                            final java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> finalItems = nebulaUnique;
                             ActionBarMenuSubItem pluginsBtn = new ActionBarMenuSubItem(getParentActivity(), false, false, themeDelegate);
                             pluginsBtn.setMinimumWidth(AndroidUtilities.dp(200));
-                            pluginsBtn.setTextAndIcon(getString(R.string.Plugins) + " (" + nimarkoUnique.size() + ")", R.drawable.msg_plugins);
+                            pluginsBtn.setTextAndIcon(getString(R.string.Plugins) + " (" + nebulaUnique.size() + ")", R.drawable.msg_plugins);
                             popupLayout.addView(pluginsBtn);
                             pluginsBtn.setOnClickListener(v1 -> {
                                 closeMenu();
-                                showNimarkoPluginsBottomSheet(finalItems, nimarkoCtx);
+                                showNebulaPluginsBottomSheet(finalItems, nebulaCtx);
                             });
                         }
                     }
                 } catch (Throwable t) {
-                    FileLog.e("nimarko: ChatActivity msg-context inject failed", t);
+                    FileLog.e("nebula: ChatActivity msg-context inject failed", t);
                 }
             }
 
@@ -33642,11 +33642,11 @@ public class ChatActivity extends BaseFragment implements
                 popupLayout.addView(tapAndHoldView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             }
 
-            // NimarkoGram: compact mode is a real quick-actions panel, not a
+            // NebulaGram: compact mode is a real quick-actions panel, not a
             // global row-height shrink. Install it only after every source row
             // has its final listener and before popup measurement, so geometry,
             // touch targets and accessibility all describe the rendered menu.
-            app.nimarkogram.messenger.ui.MessageMenuTweaks.applyAfterRowsAdded(
+            app.nebulagram.messenger.ui.MessageMenuTweaks.applyAfterRowsAdded(
                     popupLayout,
                     getDialogId(),
                     scrimPopupWindowItems,
@@ -33654,7 +33654,7 @@ public class ChatActivity extends BaseFragment implements
                     themeDelegate
             );
             if (telegramPlusMessageMenu) {
-                app.nimarkogram.messenger.ui.MessageMenuTelegramPlus.apply(
+                app.nebulagram.messenger.ui.MessageMenuTelegramPlus.apply(
                         popupLayout,
                         scrimPopupWindowItems,
                         options,
@@ -33979,7 +33979,7 @@ public class ChatActivity extends BaseFragment implements
             scrimPopupWindow.setOutsideTouchable(true);
             scrimPopupWindow.setClippingEnabled(true);
             final boolean telegramPlusCustomEntrance = telegramPlusMessageMenu
-                    && app.nimarkogram.messenger.ui.MessageMenuTelegramPlus.shouldAnimate()
+                    && app.nebulagram.messenger.ui.MessageMenuTelegramPlus.shouldAnimate()
                     && (!isReactionsAvailable || reactionsLayout == null
                     || !ReactionsContainerLayout.allowSmoothEnterTransition());
             if (telegramPlusCustomEntrance) {
@@ -34206,7 +34206,7 @@ public class ChatActivity extends BaseFragment implements
                     return;
                 }
                 if (telegramPlusMessageMenu) {
-                    app.nimarkogram.messenger.ui.MessageMenuTelegramPlus.prepareEntrance(
+                    app.nebulagram.messenger.ui.MessageMenuTelegramPlus.prepareEntrance(
                             scrimPopupContainerLayout,
                             popupLayout,
                             telegramPlusAnchorRight,
@@ -34221,9 +34221,9 @@ public class ChatActivity extends BaseFragment implements
                     popupForShow.dismiss(false);
                     return;
                 }
-                app.nimarkogram.messenger.ui.MessageMenuTweaks.playHaptic(v);
+                app.nebulagram.messenger.ui.MessageMenuTweaks.playHaptic(v);
                 if (telegramPlusMessageMenu) {
-                    app.nimarkogram.messenger.ui.MessageMenuTelegramPlus.startEntrance(
+                    app.nebulagram.messenger.ui.MessageMenuTelegramPlus.startEntrance(
                             scrimPopupContainerLayout,
                             popupLayout,
                             telegramPlusCustomEntrance);
@@ -34235,7 +34235,7 @@ public class ChatActivity extends BaseFragment implements
                     if (scrimPopupWindow != popupForShow || !popupForShow.isShowing()) {
                         return;
                     }
-                    View focusTarget = app.nimarkogram.messenger.ui.MessageMenuCompactView
+                    View focusTarget = app.nebulagram.messenger.ui.MessageMenuCompactView
                             .findInitialFocusTarget(popupLayout, scrimPopupWindowItems);
                     if (focusTarget != null) {
                         focusTarget.requestFocus();
@@ -34336,8 +34336,8 @@ public class ChatActivity extends BaseFragment implements
             selectedMessagesCountTextView.setText(LocaleController.formatPluralString("MessagesSelected", selectedMessagesIds[0].size() + selectedMessagesIds[1].size()), false);
         }
         // CG parity: refresh "select between" visibility when selection changes.
-        app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.updateMultipleSelection(actionMode, this);
-        app.nimarkogram.messenger.quotes.NimarkoQuoteCreator.updateActionModeVisibility(actionMode, this);
+        app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.updateMultipleSelection(actionMode, this);
+        app.nebulagram.messenger.quotes.NebulaQuoteCreator.updateActionModeVisibility(actionMode, this);
         updateVisibleRows(true);
         if (chatActivityEnterView != null) {
             chatActivityEnterView.hideBotCommands();
@@ -35226,7 +35226,7 @@ public class ChatActivity extends BaseFragment implements
         MediaController.saveFile(path, getParentActivity(), messageObject.isVideo() ? 1 : 0, null, null);
     }
 
-    // NimarkoGram (CG parity): bumped to public so NimarkoChatActivityHelper#checkDoubleTapOptions
+    // NebulaGram (CG parity): bumped to public so NebulaChatActivityHelper#checkDoubleTapOptions
     // can dispatch the configured double-tap action through the same option pipeline CG uses.
     public void processSelectedOption(int option) {
         if (selectedObject == null || getParentActivity() == null) {
@@ -35290,14 +35290,14 @@ public class ChatActivity extends BaseFragment implements
                 }
                 args.putBoolean("hasInvoice", forwardingMessage.isInvoice());
                 args.putBoolean("canSelectTopics", true);
-                putNimarkoForwardOptions(args, false, false);
+                putNebulaForwardOptions(args, false, false);
                 putForwardPickerSource(args);
                 DialogsActivity fragment = new DialogsActivity(args);
                 fragment.setDelegate(this);
                 presentFragment(fragment);
                 break;
             }
-            case app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_FORWARD_WO_AUTHOR: {
+            case app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_FORWARD_WO_AUTHOR: {
                 if (getMessagesController().isFrozen()) {
                     AccountFrozenAlert.show(currentAccount);
                     selectedObject = null;
@@ -35317,14 +35317,14 @@ public class ChatActivity extends BaseFragment implements
                 }
                 wArgs.putBoolean("hasInvoice", forwardingMessage.isInvoice());
                 wArgs.putBoolean("canSelectTopics", true);
-                putNimarkoForwardOptions(wArgs, true, false);
+                putNebulaForwardOptions(wArgs, true, false);
                 putForwardPickerSource(wArgs);
                 DialogsActivity wFragment = new DialogsActivity(wArgs);
                 wFragment.setDelegate(this);
                 presentFragment(wFragment);
                 break;
             }
-            case app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_SAVE_MESSAGE_CHAT: {
+            case app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_SAVE_MESSAGE_CHAT: {
                 // CG parity: silently forward the selected message into Saved Messages
                 // (or the configured custom chat — mirrors CG ChatActivityHelper OPTION_SAVE_MESSAGE_CHAT).
                 if (selectedObject != null || selectedObjectGroup != null) {
@@ -35336,17 +35336,17 @@ public class ChatActivity extends BaseFragment implements
                     } else {
                         toSave.add(selectedObject);
                     }
-                    long targetId = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2
+                    long targetId = app.nebulagram.messenger.utils.chats.NebulaChatHelper2
                             .getCustomChatID(getUserConfig().getClientUserId());
                     getSendMessagesHelper().sendMessage(toSave, targetId, false, false, true, 0, null, -1, 0);
                 }
                 break;
             }
-            case app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_CREATE_QUOTE: {
+            case app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_CREATE_QUOTE: {
                 final MessageObject quoteObject = selectedObject;
                 final MessageObject.GroupedMessages quoteGroup = selectedObjectGroup;
                 AndroidUtilities.runOnUIThread(
-                        () -> app.nimarkogram.messenger.quotes.NimarkoQuoteCreator.open(
+                        () -> app.nebulagram.messenger.quotes.NebulaQuoteCreator.open(
                                 ChatActivity.this,
                                 quoteObject,
                                 quoteGroup
@@ -35355,13 +35355,13 @@ public class ChatActivity extends BaseFragment implements
                 break;
             }
             // NG audit (v17): OPTION_DETAILS_JSON (206) case removed — the JSON
-            // row now emits {@link NimarkoChatActivityHelper#OPTION_DETAILS} (2021)
-            // which routes through NimarkoJsonBottomSheet (see the OPTION_DETAILS
+            // row now emits {@link NebulaChatActivityHelper#OPTION_DETAILS} (2021)
+            // which routes through NebulaJsonBottomSheet (see the OPTION_DETAILS
             // case below). 206 has no injection site since the deprecation, so
             // the case was unreachable. The constant is still declared
             // {@code @Deprecated} on the injector for source-compat with any
             // out-of-tree code paths.
-            case app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_VIEW_HISTORY: {
+            case app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_VIEW_HISTORY: {
                 // CG parity (ChatActivityHelper#OPTION_VIEW_HISTORY): open chat search
                 // and filter to the selected message's sender peer so the user actually
                 // sees the rest of that author's messages instead of an empty search.
@@ -35389,7 +35389,7 @@ public class ChatActivity extends BaseFragment implements
                 }
                 break;
             }
-            case app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_CLEAR_FROM_CACHE: {
+            case app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_CLEAR_FROM_CACHE: {
                 // CG parity (ChatActivityHelper#OPTION_CLEAR_FROM_CACHE):
                 //   1. On legacy storage builds, require WRITE_EXTERNAL_STORAGE first.
                 //   2. Prefer the message's attachPath when present; fall back to
@@ -35434,7 +35434,7 @@ public class ChatActivity extends BaseFragment implements
                         try {
                             boolean deleted = !file.exists() || file.delete();
                             if (!deleted && file.exists()) {
-                                FileLog.e("Nimarko: failed to clear cached media " + file);
+                                FileLog.e("Nebula: failed to clear cached media " + file);
                                 break;
                             }
                             selectedObject.mediaExists = false;
@@ -35458,12 +35458,12 @@ public class ChatActivity extends BaseFragment implements
                 }
                 break;
             }
-            case app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_COPY_PHOTO: {
+            case app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_COPY_PHOTO: {
                 // CG parity: copy the photo's underlying file to the system clipboard
                 // via NG's FileProvider, then show a confirmation bulletin.
                 if (selectedObject != null) {
                     final MessageObject toCopy = selectedObject;
-                    app.nimarkogram.messenger.utils.ImageClipboardUtils.addMessageToClipboard(
+                    app.nebulagram.messenger.utils.ImageClipboardUtils.addMessageToClipboard(
                         toCopy,
                         () -> {
                             try {
@@ -35478,12 +35478,12 @@ public class ChatActivity extends BaseFragment implements
                 }
                 break;
             }
-            case app.nimarkogram.messenger.NimarkoMessageMenuInjector.OPTION_COPY_PHOTO_AS_STICKER: {
+            case app.nebulagram.messenger.NebulaMessageMenuInjector.OPTION_COPY_PHOTO_AS_STICKER: {
                 // CG parity: re-encode the bitmap as WebP and place that on the clipboard
                 // so it can be pasted as a custom sticker into Telegram or other apps.
                 if (selectedObject != null) {
                     final MessageObject toCopy = selectedObject;
-                    app.nimarkogram.messenger.utils.ImageClipboardUtils.addMessageToClipboardAsSticker(
+                    app.nebulagram.messenger.utils.ImageClipboardUtils.addMessageToClipboardAsSticker(
                         toCopy,
                         () -> {
                             try {
@@ -35499,25 +35499,25 @@ public class ChatActivity extends BaseFragment implements
                 break;
             }
             // ================================================================
-            // Nimarko CG-port wave 17 message-menu options.
-            // Each constant is owned by NimarkoChatActivityHelper and the actual
+            // Nebula CG-port wave 17 message-menu options.
+            // Each constant is owned by NebulaChatActivityHelper and the actual
             // dispatch logic lives there so this file stays a thin router.
             // ================================================================
-            case app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_FORWARD_WO_CAPTION:
-            case app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_DETAILS:
-            case app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_GET_CUSTOM_REACTIONS:
-            case app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_DOWNLOAD_STICKER:
-            case app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_TRANSLATE_DOUBLE_TAP: {
-                app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper
+            case app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_FORWARD_WO_CAPTION:
+            case app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_DETAILS:
+            case app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_GET_CUSTOM_REACTIONS:
+            case app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_DOWNLOAD_STICKER:
+            case app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_TRANSLATE_DOUBLE_TAP: {
+                app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper
                         .getInstance(currentAccount)
                         .checkProcessSelectedOption(option, ChatActivity.this, selectedObject, selectedObjectGroup, threadMessageId, currentChat);
                 break;
             }
-            case app.nimarkogram.messenger.utils.chats.NimarkoChatActivityHelper.OPTION_NIMARKO_MEDIA_DOWNLOAD: {
-                // Native NimarkoMedia dispatch — routes through the singleton
+            case app.nebulagram.messenger.utils.chats.NebulaChatActivityHelper.OPTION_NEBULA_MEDIA_DOWNLOAD: {
+                // Native NebulaMedia dispatch — routes through the singleton
                 // controller which spawns a background download and sends the
                 // resolved media back into the chat.
-                app.nimarkogram.messenger.media.NimarkoMediaController.getInstance()
+                app.nebulagram.messenger.media.NebulaMediaController.getInstance()
                         .tryHandle(selectedObject, ChatActivity.this);
                 break;
             }
@@ -36547,18 +36547,18 @@ public class ChatActivity extends BaseFragment implements
         }
         final Bundle ngPickerArgs = fragment == null ? null : fragment.getArguments();
         final boolean ngHasExplicitForwardOptions = ngPickerArgs != null
-                && (ngPickerArgs.containsKey(ARG_NIMARKO_FORWARD_HIDE_AUTHOR)
-                || ngPickerArgs.containsKey(ARG_NIMARKO_FORWARD_HIDE_CAPTION));
-        final NimarkoForwardOptions ngForwardOptions;
+                && (ngPickerArgs.containsKey(ARG_NEBULA_FORWARD_HIDE_AUTHOR)
+                || ngPickerArgs.containsKey(ARG_NEBULA_FORWARD_HIDE_CAPTION));
+        final NebulaForwardOptions ngForwardOptions;
         if (ngHasExplicitForwardOptions) {
-            ngForwardOptions = getNimarkoForwardOptions(fragment);
+            ngForwardOptions = getNebulaForwardOptions(fragment);
         } else if (messagePreviewParams != null && messagePreviewParams.forwardMessages != null) {
-            ngForwardOptions = new NimarkoForwardOptions(
+            ngForwardOptions = new NebulaForwardOptions(
                     messagePreviewParams.hideForwardSendersName,
                     messagePreviewParams.hideCaption
             );
         } else {
-            ngForwardOptions = new NimarkoForwardOptions(false, false);
+            ngForwardOptions = new NebulaForwardOptions(false, false);
         }
         ArrayList<MessageObject> fmessages = new ArrayList<>();
         if (forwardingMessage != null) {
@@ -36630,7 +36630,7 @@ public class ChatActivity extends BaseFragment implements
                         getSendMessagesHelper().sendMessage(params);
                     }
                     boolean ngForwardWoAuthor = ngForwardOptions.hideAuthor
-                            || app.nimarkogram.messenger.NimarkoConfig.forwardWithoutAuthor;
+                            || app.nebulagram.messenger.NebulaConfig.forwardWithoutAuthor;
                     boolean ngHideCaption = ngForwardOptions.hideCaption;
                     getSendMessagesHelper().sendMessage(fmessages, did, ngForwardWoAuthor, ngHideCaption, notify, scheduleDate, scheduleRepeatPeriod, null, -1, price == null ? 0 : price, getSendMonoForumPeerId(), getSendMessageSuggestionParams());
                 }
@@ -36695,10 +36695,10 @@ public class ChatActivity extends BaseFragment implements
                         fragment.removeSelfFromStack();
                     }
                 }
-                // NimarkoGram: CG parity — gate forward-target open behind a biometric prompt
+                // NebulaGram: CG parity — gate forward-target open behind a biometric prompt
                 // when the target dialog is in LockedChats (askBiometricsToOpenChat) or is an
                 // encrypted dialog (askBiometricsToOpenEncrypted). Ported from CG ChatActivity
-                // forwardWithPasscode callsite (line ~33735); helper lives in NimarkoChatHelper2.
+                // forwardWithPasscode callsite (line ~33735); helper lives in NebulaChatHelper2.
                 final ChatActivity ngForwardTarget = chatActivity;
                 final long ngForwardTargetDid = did;
                 final Runnable ngDoForward = () -> {
@@ -36735,7 +36735,7 @@ public class ChatActivity extends BaseFragment implements
                         fragment.finishFragment();
                     }
                 };
-                app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2.forwardWithPasscode(
+                app.nebulagram.messenger.utils.chats.NebulaChatHelper2.forwardWithPasscode(
                         fragment, ngForwardTargetDid, ngDoForward);
             } else {
                 List<BaseFragment> fragments = new ArrayList<>(getParentLayout().getFragmentStack());
@@ -37339,7 +37339,7 @@ public class ChatActivity extends BaseFragment implements
                     createArticleViewer(false).open(message, finalParsed);
                 } else {
                     try {
-                        if (!app.nimarkogram.messenger.plugins.PluginsController.maybeShowInstallDialog(message, ChatActivity.this)) {
+                        if (!app.nebulagram.messenger.plugins.PluginsController.maybeShowInstallDialog(message, ChatActivity.this)) {
                             AndroidUtilities.openForView(message, getParentActivity(), themeDelegate, false);
                         }
                     } catch (Exception e) {
@@ -37518,7 +37518,7 @@ public class ChatActivity extends BaseFragment implements
     }
 
     boolean preventReopenSearchWithText = false;
-    // NimarkoGram: bumped to public so NimarkoChatHelper2 (CG ChatsHelper2 port) can route avatar-menu search clicks.
+    // NebulaGram: bumped to public so NebulaChatHelper2 (CG ChatsHelper2 port) can route avatar-menu search clicks.
     public void openSearchWithUser(TLRPC.User user) {
         boolean delay = false;
         if (savedMessagesHint != null && savedMessagesHint.shown()) {
@@ -37783,8 +37783,8 @@ public class ChatActivity extends BaseFragment implements
         return chatInfo;
     }
 
-    // NimarkoGram: public getters exposing private fields that the ChatsHelper2 port
-    // (NimarkoChatHelper2) needs. CG accesses these via Kotlin's relaxed visibility;
+    // NebulaGram: public getters exposing private fields that the ChatsHelper2 port
+    // (NebulaChatHelper2) needs. CG accesses these via Kotlin's relaxed visibility;
     // Java port requires explicit accessors.
     public ChatActivityActionsButtonsLayout getActionsButtonsLayout() {
         return actionsButtonsLayout;
@@ -37801,7 +37801,7 @@ public class ChatActivity extends BaseFragment implements
     }
 
     // NG helper: returns the MessageObject mapped to (idx, id) in selectedMessagesIds — needed by
-    // NimarkoChatHelper2 to assemble fmessages without touching the private SparseArray.
+    // NebulaChatHelper2 to assemble fmessages without touching the private SparseArray.
     public MessageObject getSelectedMessage(int idx, int id) {
         if (idx < 0 || idx >= selectedMessagesIds.length) return null;
         return selectedMessagesIds[idx].get(id);
@@ -37819,7 +37819,7 @@ public class ChatActivity extends BaseFragment implements
         return replyingMessageObject;
     }
 
-    // NG: setter exposed for NimarkoChatHelper2.createReplyAction (CG ChatsHelper port).
+    // NG: setter exposed for NebulaChatHelper2.createReplyAction (CG ChatsHelper port).
     public void setReplyingMessageObject(MessageObject obj) {
         replyingMessageObject = obj;
     }
@@ -41306,7 +41306,7 @@ public class ChatActivity extends BaseFragment implements
         return msg;
     }
 
-    // NimarkoGram: bumped to public so NimarkoChatHelper2.injectChatActivityAvatarOnClickNew (CG ChatsHelper2 port)
+    // NebulaGram: bumped to public so NebulaChatHelper2.injectChatActivityAvatarOnClickNew (CG ChatsHelper2 port)
     // can reference the type from outside ChatActivity.
     public class ChatMessageCellDelegate implements ChatMessageCell.ChatMessageCellDelegate {
         @Override
@@ -42124,9 +42124,9 @@ public class ChatActivity extends BaseFragment implements
                     });
                     return true;
                 } else {
-                    // NimarkoGram: route through the CG-port helper for admin actions
+                    // NebulaGram: route through the CG-port helper for admin actions
                     // (kick / change permissions / edit admin rights) on group participants.
-                    app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2.injectChatActivityAvatarOnClickNew(
+                    app.nebulagram.messenger.utils.chats.NebulaChatHelper2.injectChatActivityAvatarOnClickNew(
                             ChatActivity.this, this, cell, user, enableMention, enableSearchMessages
                     );
                     return true;
@@ -42161,7 +42161,7 @@ public class ChatActivity extends BaseFragment implements
             }
         }
 
-        // NimarkoGram: bumped to public so the avatar-menu port (NimarkoChatHelper2) can invoke it.
+        // NebulaGram: bumped to public so the avatar-menu port (NebulaChatHelper2) can invoke it.
         public void appendMention(TLRPC.User user) {
             if (chatActivityEnterView != null) {
                 SpannableStringBuilder sb;
@@ -42260,7 +42260,7 @@ public class ChatActivity extends BaseFragment implements
             return false;
         }
 
-        // NimarkoGram: bumped to public so the avatar-menu port (NimarkoChatHelper2) can invoke it.
+        // NebulaGram: bumped to public so the avatar-menu port (NebulaChatHelper2) can invoke it.
         public void openProfile(TLRPC.User user) {
             openProfile(user, false);
         }
@@ -42294,7 +42294,7 @@ public class ChatActivity extends BaseFragment implements
             }
         }
 
-        // NimarkoGram: bumped to public so the avatar-menu port (NimarkoChatHelper2) can invoke it.
+        // NebulaGram: bumped to public so the avatar-menu port (NebulaChatHelper2) can invoke it.
         public void openDialog(ChatMessageCell cell, TLRPC.User user) {
             if (user != null) {
                 Bundle args = new Bundle();
@@ -42575,11 +42575,11 @@ public class ChatActivity extends BaseFragment implements
                     cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
             } else {
-                // NimarkoGram (CG parity): long-press copy menu for inline buttons.
+                // NebulaGram (CG parity): long-press copy menu for inline buttons.
                 // Surfaces the button title, callback bytes (UTF-8 or Base64), inline
                 // query, and user_id depending on which fields the keyboard button
                 // carries. Ported from CG ChatActivity#didLongPressBotButton's
-                // BottomSheet block; getTextFromCallback lives on NimarkoMessageHelper.
+                // BottomSheet block; getTextFromCallback lives on NebulaMessageHelper.
                 final TL_keyboard.TL_inlineButtonTypeCallback callbackType = TLKeyboardHelper.getType(button, TL_keyboard.TL_inlineButtonTypeCallback.class);
                 final TL_keyboard.TL_inlineButtonTypeSwitchInline switchInlineType = TLKeyboardHelper.getType(button, TL_keyboard.TL_inlineButtonTypeSwitchInline.class);
                 final TL_keyboard.TL_inlineButtonTypeUserProfile userProfileType = TLKeyboardHelper.getType(button, TL_keyboard.TL_inlineButtonTypeUserProfile.class);
@@ -42596,7 +42596,7 @@ public class ChatActivity extends BaseFragment implements
                         AndroidUtilities.addToClipboard(buttonText);
                     } else if (which == 1) {
                         AndroidUtilities.addToClipboard(
-                                app.nimarkogram.messenger.utils.chats.NimarkoMessageHelper.getTextFromCallback(callbackType.data));
+                                app.nebulagram.messenger.utils.chats.NebulaMessageHelper.getTextFromCallback(callbackType.data));
                     } else if (which == 2) {
                         AndroidUtilities.addToClipboard(switchInlineType.query);
                     } else if (which == 3) {
@@ -43072,13 +43072,13 @@ public class ChatActivity extends BaseFragment implements
             // NG port of CG ChatActivity.checkDeepLink hook (ChatMessageCellDelegate.didPressUrl,
             // Cherrygram-main/.../org/telegram/ui/ChatActivity.java ~line 39488). Tapping a
             // tg://restart / tg://luck link in chat triggers in-process restart only for
-            // trusted callers (gated inside NimarkoChatHelper.checkDeepLink — BuildVars +
+            // trusted callers (gated inside NebulaChatHelper.checkDeepLink — BuildVars +
             // not-self). On hit we swallow the click so didPressMessageUrl does not also
             // open the link as an external URL.
             if (cell.getMessageObject() != null
                     && cell.getMessageObject().messageOwner != null
                     && cell.getMessageObject().messageOwner.from_id != null
-                    && app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.getInstance(currentAccount)
+                    && app.nebulagram.messenger.utils.chats.NebulaChatHelper.getInstance(currentAccount)
                         .checkDeepLink(url.toString(), cell.getMessageObject().messageOwner.from_id.user_id)) {
                 return;
             }
@@ -43480,7 +43480,7 @@ public class ChatActivity extends BaseFragment implements
                     || mo.replyMessageObject.messageOwner.from_id == null) {
                 return;
             }
-            long emojiDocumentId = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper
+            long emojiDocumentId = app.nebulagram.messenger.utils.chats.NebulaChatHelper
                     .getInstance(currentAccount)
                     .getEmojiIdFromReply(mo, getMessagesController().getUser(mo.replyMessageObject.messageOwner.from_id.user_id));
             org.telegram.tgnet.TLRPC.Document document = org.telegram.ui.Components.AnimatedEmojiDrawable.findDocument(currentAccount, emojiDocumentId);
@@ -43752,7 +43752,7 @@ public class ChatActivity extends BaseFragment implements
                     }
                     if (!handled) {
                         try {
-                            if (!app.nimarkogram.messenger.plugins.PluginsController.maybeShowInstallDialog(message, ChatActivity.this)) {
+                            if (!app.nebulagram.messenger.plugins.PluginsController.maybeShowInstallDialog(message, ChatActivity.this)) {
                                 AndroidUtilities.openForView(message, getParentActivity(), themeDelegate, false);
                             }
                         } catch (Exception e) {
@@ -44059,7 +44059,7 @@ public class ChatActivity extends BaseFragment implements
                 }
                 if (!handled) {
                     try {
-                        if (!app.nimarkogram.messenger.plugins.PluginsController.maybeShowInstallDialog(message, ChatActivity.this)) {
+                        if (!app.nebulagram.messenger.plugins.PluginsController.maybeShowInstallDialog(message, ChatActivity.this)) {
                             AndroidUtilities.openForView(message, getParentActivity(), themeDelegate, false);
                         }
                     } catch (Exception e) {
@@ -47350,35 +47350,35 @@ public class ChatActivity extends BaseFragment implements
         }
     }
 
-    /** NimarkoGram: (re)build the "Plugins (N)" item in the chat three-dots overflow (CHAT_ACTION_MENU).
+    /** NebulaGram: (re)build the "Plugins (N)" item in the chat three-dots overflow (CHAT_ACTION_MENU).
      *  Called once from createView AND on every pluginMenuItemsUpdated notification, so the item appears even
      *  when the plugin engine finishes loading after the chat opened (cold start), reflects late
      *  registrations/removals, drops disabled plugins, and relabels its "(N)" count live. The item shows ONLY
      *  when a plugin actually registered a chat_action_menu item — deterministic explicit inject, unlike a
      *  fragile runtime Pine/Xposed hook. */
-    private void nimarkoRebuildChatPluginsMenu() {
+    private void nebulaRebuildChatPluginsMenu() {
         try {
             if (headerItem == null) return;
-            final java.util.Map<String, Object> nimarkoCtx = new java.util.HashMap<>();
-            nimarkoCtx.put("fragment", "ChatActivity");
-            nimarkoCtx.put("dialog_id", dialog_id);
-            if (currentUser != null) nimarkoCtx.put("user", currentUser);
-            if (currentChat != null) nimarkoCtx.put("chat", currentChat);
+            final java.util.Map<String, Object> nebulaCtx = new java.util.HashMap<>();
+            nebulaCtx.put("fragment", "ChatActivity");
+            nebulaCtx.put("dialog_id", dialog_id);
+            if (currentUser != null) nebulaCtx.put("user", currentUser);
+            if (currentChat != null) nebulaCtx.put("chat", currentChat);
             // C11: scalar aliases so plugins can condition on raw ids/account
             // without unwrapping the TLObjects.
-            nimarkoCtx.put("userId", currentUser != null ? currentUser.id : 0L);
-            nimarkoCtx.put("chatId", currentChat != null ? currentChat.id : 0L);
-            nimarkoCtx.put("account", currentAccount);
-            nimarkoCtx.put("is_group", currentChat != null && !ChatObject.isChannel(currentChat));
-            nimarkoCtx.put("is_channel", currentChat != null && ChatObject.isChannel(currentChat) && !currentChat.megagroup);
-            nimarkoCtx.put("is_user", currentUser != null);
-            java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> items =
-                    app.nimarkogram.messenger.plugins.PluginsController.getInstance()
-                            .getMenuItemsForLocation("chat_action_menu", nimarkoCtx);
-            final java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> unique = new java.util.ArrayList<>();
+            nebulaCtx.put("userId", currentUser != null ? currentUser.id : 0L);
+            nebulaCtx.put("chatId", currentChat != null ? currentChat.id : 0L);
+            nebulaCtx.put("account", currentAccount);
+            nebulaCtx.put("is_group", currentChat != null && !ChatObject.isChannel(currentChat));
+            nebulaCtx.put("is_channel", currentChat != null && ChatObject.isChannel(currentChat) && !currentChat.megagroup);
+            nebulaCtx.put("is_user", currentUser != null);
+            java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> items =
+                    app.nebulagram.messenger.plugins.PluginsController.getInstance()
+                            .getMenuItemsForLocation("chat_action_menu", nebulaCtx);
+            final java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> unique = new java.util.ArrayList<>();
             if (items != null) {
                 final java.util.Set<String> seen = new java.util.HashSet<>();
-                for (app.nimarkogram.messenger.plugins.hooks.MenuItemRecord rec : items) {
+                for (app.nebulagram.messenger.plugins.hooks.MenuItemRecord rec : items) {
                     if (rec == null || android.text.TextUtils.isEmpty(rec.text)) continue;
                     // dedupe by stable plugin identity, not visible label (two plugins may share a caption)
                     if (!seen.add(rec.pluginId + ":" + rec.itemId)) continue;
@@ -47386,39 +47386,39 @@ public class ChatActivity extends BaseFragment implements
                 }
             }
             if (!unique.isEmpty()) {
-                nimarkoChatMenuItems = unique;
-                nimarkoChatMenuCtx = nimarkoCtx;
+                nebulaChatMenuItems = unique;
+                nebulaChatMenuCtx = nebulaCtx;
                 final CharSequence label = getString(R.string.Plugins) + " (" + unique.size() + ")";
-                if (nimarkoChatMenuLazyItem != null && headerItem.hasSubItem(nimarko_plugins_menu)) {
-                    nimarkoChatMenuLazyItem.setText(label); // relabel count live (works lazy or materialized)
-                    headerItem.showSubItem(nimarko_plugins_menu);
+                if (nebulaChatMenuLazyItem != null && headerItem.hasSubItem(nebula_plugins_menu)) {
+                    nebulaChatMenuLazyItem.setText(label); // relabel count live (works lazy or materialized)
+                    headerItem.showSubItem(nebula_plugins_menu);
                 } else {
-                    nimarkoChatMenuLazyItem = headerItem.lazilyAddSubItem(nimarko_plugins_menu, R.drawable.msg_plugins, label);
+                    nebulaChatMenuLazyItem = headerItem.lazilyAddSubItem(nebula_plugins_menu, R.drawable.msg_plugins, label);
                 }
             } else {
-                nimarkoChatMenuItems = null;
-                nimarkoChatMenuCtx = null;
-                if (headerItem.hasSubItem(nimarko_plugins_menu)) {
-                    headerItem.hideSubItem(nimarko_plugins_menu); // last plugin unregistered — pull the row
+                nebulaChatMenuItems = null;
+                nebulaChatMenuCtx = null;
+                if (headerItem.hasSubItem(nebula_plugins_menu)) {
+                    headerItem.hideSubItem(nebula_plugins_menu); // last plugin unregistered — pull the row
                 }
             }
-        } catch (Throwable nimarkoChatMenuT) {
-            FileLog.e("nimarko: ChatActivity chat_action_menu rebuild failed", nimarkoChatMenuT);
+        } catch (Throwable nebulaChatMenuT) {
+            FileLog.e("nebula: ChatActivity chat_action_menu rebuild failed", nebulaChatMenuT);
         }
     }
 
-    /** NimarkoGram: bottom-sheet listing all plugin context-menu items for the
+    /** NebulaGram: bottom-sheet listing all plugin context-menu items for the
      *  currently selected message. Triggered from the single "Плагины (N)"
      *  entry in the chat long-press popup. */
-    private void showNimarkoPluginsBottomSheet(
-            java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> items,
+    private void showNebulaPluginsBottomSheet(
+            java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> items,
             java.util.Map<String, Object> ctx) {
         try {
             if (getParentActivity() == null || items == null || items.isEmpty()) return;
             CharSequence[] labels = new CharSequence[items.size()];
             int[] icons = new int[items.size()];
             for (int i = 0; i < items.size(); i++) {
-                app.nimarkogram.messenger.plugins.hooks.MenuItemRecord rec = items.get(i);
+                app.nebulagram.messenger.plugins.hooks.MenuItemRecord rec = items.get(i);
                 labels[i] = rec.text != null ? rec.text : "";
                 // C12: consistent neutral fallback drawable across all item sites.
                 icons[i] = rec.iconResId != 0 ? rec.iconResId : R.drawable.msg_plugins;
@@ -47427,21 +47427,21 @@ public class ChatActivity extends BaseFragment implements
             builder.setTitle(getString(R.string.Plugins), true);
             builder.setItems(labels, icons, (dialog, which) -> {
                 try {
-                    app.nimarkogram.messenger.plugins.hooks.MenuItemRecord rec = items.get(which);
+                    app.nebulagram.messenger.plugins.hooks.MenuItemRecord rec = items.get(which);
                     // C3: re-check the owning plugin is still active right before
                     // crossing into Python — the list was captured when the sheet
                     // opened and the plugin may have been disabled meanwhile.
-                    if (rec == null || !app.nimarkogram.messenger.plugins.PluginsController.getInstance().isPluginActive(rec.pluginId)) {
+                    if (rec == null || !app.nebulagram.messenger.plugins.PluginsController.getInstance().isPluginActive(rec.pluginId)) {
                         return;
                     }
                     rec.onClickCallback.call(ctx);
                 } catch (Throwable t) {
-                    FileLog.e("nimarko: plugins bottom-sheet item click failed", t);
+                    FileLog.e("nebula: plugins bottom-sheet item click failed", t);
                 }
             });
             showDialog(builder.create());
         } catch (Throwable t) {
-            FileLog.e("nimarko: showNimarkoPluginsBottomSheet failed", t);
+            FileLog.e("nebula: showNebulaPluginsBottomSheet failed", t);
         }
     }
 
@@ -47799,8 +47799,8 @@ public class ChatActivity extends BaseFragment implements
             return;
         }
         if (longpress && reaction.reaction instanceof TLRPC.TL_reactionPaid) {
-            // NimarkoGram: gate reactions long-press haptic on messageMenuHaptic toggle.
-            app.nimarkogram.messenger.ui.MessageMenuTweaks.playHaptic(cell);
+            // NebulaGram: gate reactions long-press haptic on messageMenuHaptic toggle.
+            app.nebulagram.messenger.ui.MessageMenuTweaks.playHaptic(cell);
             ArrayList<TLRPC.MessageReactor> reactors = null;
             if (messageObject.messageOwner != null && messageObject.messageOwner.reactions != null) {
                 reactors = messageObject.messageOwner.reactions.top_reactors;
@@ -47813,8 +47813,8 @@ public class ChatActivity extends BaseFragment implements
             return;
         }
         if (longpress || messageObject.areTags() && (isInsideContainer || searchingReaction != null && searchingReaction.isSame(reaction.reaction))) {
-            // NimarkoGram: gate reactions long-press haptic on messageMenuHaptic toggle.
-            app.nimarkogram.messenger.ui.MessageMenuTweaks.playHaptic(cell);
+            // NebulaGram: gate reactions long-press haptic on messageMenuHaptic toggle.
+            app.nebulagram.messenger.ui.MessageMenuTweaks.playHaptic(cell);
             FrameLayout scrimPopupContainerLayout = new FrameLayout(getParentActivity()) {
                 @Override
                 public boolean dispatchKeyEvent(KeyEvent event) {
@@ -48417,8 +48417,8 @@ public class ChatActivity extends BaseFragment implements
 //                            options.add(OPTION_EDIT_PRICE);
 //                            icons.add(R.drawable.menu_feature_paid);
 //                        }
-                if (app.nimarkogram.messenger.NimarkoConfig.showReport && chatMode != MODE_WELCOME_MESSAGES && selectedObject.contentType == 0 && !selectedObject.isMediaEmptyWebpage() && selectedObject.getId() > 0 && !selectedObject.isOut() && (currentChat != null || currentUser != null && currentUser.bot)) {
-                    // CG parity: gate the native Report row on NimarkoConfig.showReport.
+                if (app.nebulagram.messenger.NebulaConfig.showReport && chatMode != MODE_WELCOME_MESSAGES && selectedObject.contentType == 0 && !selectedObject.isMediaEmptyWebpage() && selectedObject.getId() > 0 && !selectedObject.isOut() && (currentChat != null || currentUser != null && currentUser.bot)) {
+                    // CG parity: gate the native Report row on NebulaConfig.showReport.
                     items.add(LocaleController.getString(R.string.ReportChat));
                     options.add(OPTION_REPORT_CHAT);
                     icons.add(R.drawable.msg_report);
@@ -48662,9 +48662,9 @@ public class ChatActivity extends BaseFragment implements
                         options.add(OPTION_ADD_TO_STICKERS_OR_MASKS);
                         icons.add(R.drawable.msg_sticker);
                     } else {
-                        // NimarkoGram (CG parity): allow saving the sticker file before
-                        // the native "Add to stickers" row, gated on NimarkoConfig.showDownloadSticker.
-                        app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectDownloadSticker(
+                        // NebulaGram (CG parity): allow saving the sticker file before
+                        // the native "Add to stickers" row, gated on NebulaConfig.showDownloadSticker.
+                        app.nebulagram.messenger.NebulaMessageMenuInjector.injectDownloadSticker(
                                 selectedObject, items, options, icons);
                         items.add(LocaleController.getString(R.string.AddToStickers));
                         options.add(OPTION_ADD_TO_STICKERS_OR_MASKS);
@@ -48704,9 +48704,9 @@ public class ChatActivity extends BaseFragment implements
                         icons.add(R.drawable.msg_callback);
                     }
                 } else if (type == 9) {
-                    // NimarkoGram (CG parity): type==9 is the animated/regular sticker
+                    // NebulaGram (CG parity): type==9 is the animated/regular sticker
                     // context — inject the "Download sticker" row before favourite toggles.
-                    app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectDownloadSticker(
+                    app.nebulagram.messenger.NebulaMessageMenuInjector.injectDownloadSticker(
                             selectedObject, items, options, icons);
                     TLRPC.Document document = selectedObject.getDocument();
                     if (!getMediaDataController().isStickerInFavorites(document)) {
@@ -48739,7 +48739,7 @@ public class ChatActivity extends BaseFragment implements
                     && message.type != MessageObject.TYPE_STORY_MENTION
                     && message.type != MessageObject.TYPE_GIFT_STARS;
                 if (canForward) {
-                    if (app.nimarkogram.messenger.NimarkoConfig.showForward) {
+                    if (app.nebulagram.messenger.NebulaConfig.showForward) {
                         items.add(LocaleController.getString(R.string.Forward));
                         options.add(OPTION_FORWARD);
                         icons.add(R.drawable.msg_forward);
@@ -48747,39 +48747,39 @@ public class ChatActivity extends BaseFragment implements
                     // CG parity: inject "Forward without authorship" right next to the
                     // native Forward so they appear adjacent in the menu. The injector
                     // re-evaluates eligibility itself (sponsored/scheduled/etc.) and
-                    // gates on NimarkoConfig.showForwardWoAuthorship + noforwardsOrPaidMedia
+                    // gates on NebulaConfig.showForwardWoAuthorship + noforwardsOrPaidMedia
                     // (CG-parity gate: outer block only checks !noforwards, paid-media leaks through).
-                    app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectForwardWoAuthorship(
+                    app.nebulagram.messenger.NebulaMessageMenuInjector.injectForwardWoAuthorship(
                         selectedObject, chatMode, noforwardsOrPaidMedia, items, options, icons
                     );
                     // CG parity: "Forward without caption" sits adjacent to the without-author
-                    // entry; gated by NimarkoConfig.showForwardWoCaption + caption-presence
+                    // entry; gated by NebulaConfig.showForwardWoCaption + caption-presence
                     // (any caption on selectedObject or an album sibling) inside the injector.
-                    app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectForwardWoCaption(
+                    app.nebulagram.messenger.NebulaMessageMenuInjector.injectForwardWoCaption(
                         selectedObject, selectedObjectGroup, chatMode, noforwardsOrPaidMedia, items, options, icons
                     );
                 }
                 // CG parity: photo-only context items live right after Forward so they
                 // cluster with the share/save actions.
                 if (selectedObject.type == MessageObject.TYPE_PHOTO && !noforwardsOrPaidMedia) {
-                    app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectCopyPhoto(items, options, icons);
+                    app.nebulagram.messenger.NebulaMessageMenuInjector.injectCopyPhoto(items, options, icons);
                 }
                 // CG parity: "View History" — CG gates this on CG_AllowViewHistory =
                 // currentChat != null && chatMode == 0 && !currentChat.broadcast &&
                 // !(threadMessageObjects && contains message). Pass the same context
                 // to the injector instead of leaving it unconditional (BUG FIX).
-                app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectViewHistory(
+                app.nebulagram.messenger.NebulaMessageMenuInjector.injectViewHistory(
                     currentChat, chatMode, message, threadMessageObjects, items, options, icons
                 );
                 // CG parity: "Save to Saved Messages" — opt-in, skipped in self-chat
                 // and gated additionally by noforwardsOrPaidMedia (Save uses forward).
-                app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectSaveMessage(
+                app.nebulagram.messenger.NebulaMessageMenuInjector.injectSaveMessage(
                     selectedObject, chatMode, noforwardsOrPaidMedia, currentUser, items, options, icons
                 );
                 // CG parity: "View Statistics" for outgoing forwarded messages where
                 // the current user is an admin — OPTION_STATISTICS handler already
                 // exists in ChatActivity, the menu entry was the only missing piece.
-                app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectViewStatistics(
+                app.nebulagram.messenger.NebulaMessageMenuInjector.injectViewStatistics(
                     this, selectedObject, items, options, icons
                 );
                 // NG (CG-parity surrogate for ChatsHelper.showCustomReactionsInfo):
@@ -48787,15 +48787,15 @@ public class ChatActivity extends BaseFragment implements
                 // when reactions are present; NG instead surfaces the same
                 // OPTION_GET_CUSTOM_REACTIONS dispatch as a regular menu row gated
                 // by the showGetCustomReactions flag. Dispatch routes through
-                // NimarkoChatActivityHelper.checkProcessSelectedOption which opens
+                // NebulaChatActivityHelper.checkProcessSelectedOption which opens
                 // the EmojiPacksAlert.
-                app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectGetCustomReactions(
+                app.nebulagram.messenger.NebulaMessageMenuInjector.injectGetCustomReactions(
                     selectedObject, items, options, icons
                 );
-                // NimarkoMedia native: surfaces "Download media" when the
+                // NebulaMedia native: surfaces "Download media" when the
                 // message contains a supported download URL. Replaces the
-                // Python NimarkoMedia plugin's menu hook.
-                app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectNimarkoMediaDownload(
+                // Python NebulaMedia plugin's menu hook.
+                app.nebulagram.messenger.NebulaMessageMenuInjector.injectNebulaMediaDownload(
                     selectedObject, items, options, icons
                 );
                 if (allowUnpin) {
@@ -48840,8 +48840,8 @@ public class ChatActivity extends BaseFragment implements
                         items.add(LocaleController.getString(R.string.BlockContact));
                         options.add(OPTION_REPORT_CHAT);
                         icons.add(R.drawable.msg_block2);
-                    } else if (app.nimarkogram.messenger.NimarkoConfig.showReport) {
-                        // CG parity: gate the native Report row on NimarkoConfig.showReport.
+                    } else if (app.nebulagram.messenger.NebulaConfig.showReport) {
+                        // CG parity: gate the native Report row on NebulaConfig.showReport.
                         items.add(LocaleController.getString(R.string.ReportChat));
                         options.add(OPTION_REPORT_CHAT);
                         icons.add(R.drawable.msg_report);
@@ -48945,11 +48945,11 @@ public class ChatActivity extends BaseFragment implements
         }
 
         // CG parity: honour user's MessageMenuItems prefs by stripping Telegram-native
-        // rows whose matching NimarkoConfig.showXxx flag is off (SaveToGallery,
+        // rows whose matching NebulaConfig.showXxx flag is off (SaveToGallery,
         // SaveToDownloads, Share, CopyPhoto, CopyPhotoAsSticker, Reply, Forward,
         // ForwardWoAuthorship). Runs BEFORE the tail injections below so the user's
         // injected items (ClearFromCache, JSON) survive the prune.
-        app.nimarkogram.messenger.NimarkoMessageMenuInjector.removeItems(
+        app.nebulagram.messenger.NebulaMessageMenuInjector.removeItems(
                 selectedObject, getValidGroupedMessage(selectedObject), noforwardsOrPaidMedia, allowEdit, items, options, icons);
 
         // CherryGram parity: tail injections — these always come last in the menu.
@@ -48957,9 +48957,9 @@ public class ChatActivity extends BaseFragment implements
         //   JSON:           dumps the TLRPC.Message JSON (developer aid).
         // (injectGetCustomReactions runs earlier, beside injectViewStatistics, so the row
         //  appears adjacent to the other CG-port custom rows instead of at the tail.)
-        // Each gated by the matching NimarkoConfig.show* flag.
-        app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectClearFromCache(selectedObject, currentAccount, items, options, icons);
-        app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectCreateQuote(
+        // Each gated by the matching NebulaConfig.show* flag.
+        app.nebulagram.messenger.NebulaMessageMenuInjector.injectClearFromCache(selectedObject, currentAccount, items, options, icons);
+        app.nebulagram.messenger.NebulaMessageMenuInjector.injectCreateQuote(
                 this,
                 selectedObject,
                 selectedObjectGroup,
@@ -48968,9 +48968,9 @@ public class ChatActivity extends BaseFragment implements
                 options,
                 icons
         );
-        app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectJSON(items, options, icons);
+        app.nebulagram.messenger.NebulaMessageMenuInjector.injectJSON(items, options, icons);
         // Wave-27 restored: separate "Details" entry opening the rich JSON inspector.
-        app.nimarkogram.messenger.NimarkoMessageMenuInjector.injectDetails(items, options, icons);
+        app.nebulagram.messenger.NebulaMessageMenuInjector.injectDetails(items, options, icons);
 
         if (showWelcomeMessageRevertOption(primaryMessage)) {
             items.add(getString(R.string.WelcomeMessageRevert));
@@ -49022,7 +49022,7 @@ public class ChatActivity extends BaseFragment implements
         return false;
     }
 
-    // NimarkoGram (CG parity): hide the bottom Mute/Unmute (and Discuss) bar on read-only
+    // NebulaGram (CG parity): hide the bottom Mute/Unmute (and Discuss) bar on read-only
     // broadcast channels when the user enabled hideMuteUnmuteButton. Mirrors
     // CherrygramChatsConfig.hideMuteUnmuteButton + isBottomOverlaysInvisible() in CG.
     private boolean isBottomOverlaysInvisible() {
@@ -49030,7 +49030,7 @@ public class ChatActivity extends BaseFragment implements
                 && ChatObject.isChannel(currentChat) && currentChat.broadcast
                 && !ChatObject.canWriteToChat(currentChat)
                 && isMuteUnmuteButton()
-                && app.nimarkogram.messenger.NimarkoConfig.hideMuteUnmuteButton;
+                && app.nebulagram.messenger.NebulaConfig.hideMuteUnmuteButton;
     }
 
     private boolean isMuteUnmuteButton() {
@@ -49589,8 +49589,8 @@ public class ChatActivity extends BaseFragment implements
                 chatActivityEnterView.getEditField().setAllowDrawCursor(true);
             }
         });
-        // NimarkoGram (CG parity): respect disableVibration on long-press scrim popup.
-        if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+        // NebulaGram (CG parity): respect disableVibration on long-press scrim popup.
+        if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
             try {
                 view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
@@ -49782,8 +49782,8 @@ public class ChatActivity extends BaseFragment implements
             return;
         }
         fireworksOverlay.start();
-        // NimarkoGram (CG parity): respect disableVibration on fireworks effect.
-        if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+        // NebulaGram (CG parity): respect disableVibration on fireworks effect.
+        if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
             try {
                 fireworksOverlay.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {};

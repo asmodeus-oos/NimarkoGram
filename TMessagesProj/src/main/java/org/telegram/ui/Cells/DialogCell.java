@@ -150,7 +150,7 @@ import java.util.Stack;
 
 import me.vkryl.android.animator.BoolAnimator;
 
-import app.nimarkogram.messenger.chats.filters.MessagesFilterHelper;
+import app.nebulagram.messenger.chats.filters.MessagesFilterHelper;
 
 public class DialogCell extends BaseCell implements StoriesListPlaceProvider.AvatarOverlaysView, Theme.Colorable {
 
@@ -644,7 +644,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable emojiStatus;
     // Per-cell guard for plugin badge: dedupe the SwapAnimatedEmojiDrawable
     // rebind when the same badge fires again on UPDATE_MASK_EMOJI_STATUS.
-    private long lastNimarkoMaskDocId = 0L;
+    private long lastNebulaMaskDocId = 0L;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable botVerification;
 
     private int drawScam;
@@ -707,7 +707,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         Theme.createDialogsResources(context);
         drawMonoforumAvatar = false;
         drawCommunityAvatar = false;
-        avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(56));
+        avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(56));
         for (int i = 0; i < thumbImage.length; ++i) {
             thumbImage[i] = new ImageReceiver(this);
             thumbImage[i].ignoreNotifications = true;
@@ -1155,7 +1155,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 continue;
             }
             // NM_PWD: braille-mask archived-folder preview titles when the archive lock is on.
-            title = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.replaceStringToSpoilers(title);
+            title = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.replaceStringToSpoilers(title);
             if (builder.length() > 0) {
                 builder.append(", ");
             }
@@ -1347,14 +1347,14 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 sp.removeSpan(span);
             for (Object span : sp.getSpans(0, sp.length(), URLSpanNoUnderline.class))
                 sp.removeSpan(span);
-            for (Object span : sp.getSpans(0, sp.length(), app.nimarkogram.messenger.utils.NimarkoLatexHelper.LatexSpan.class))
+            for (Object span : sp.getSpans(0, sp.length(), app.nebulagram.messenger.utils.NebulaLatexHelper.LatexSpan.class))
                 sp.removeSpan(span);
             msgText = sp;
         }
         if (msgText != null && msgText.toString().contains("$")) {
             float dlgTextSize = Theme.dialogs_messagePaint[0].getTextSize();
             int dlgMaxWidth = AndroidUtilities.displaySize.x - AndroidUtilities.dp(100);
-            msgText = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(msgText, dlgTextSize, dlgMaxWidth, true);
+            msgText = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(msgText, dlgTextSize, dlgMaxWidth, true);
         }
         lastMessageString = msgText;
 
@@ -1508,7 +1508,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                         } else if (chat.fake) {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
-                        } else if (DialogObject.getEmojiStatusDocumentId(chat.emoji_status) != 0 && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) {
+                        } else if (DialogObject.getEmojiStatusDocumentId(chat.emoji_status) != 0 && !app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) {
                             drawPremium = true;
                             nameLayoutEllipsizeByGradient = true;
                             emojiStatus.center = LocaleController.isRTL;
@@ -1536,7 +1536,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                             drawVerified = !forbidVerified && user.verified;
                             drawBotVerified = !forbidVerified && !UserObject.isUserSelf(user) && user.bot_verification_icon != 0;
                         }
-                        drawPremium = MessagesController.getInstance(currentAccount).isPremiumUser(user) && UserConfig.getInstance(currentAccount).clientUserId != user.id && user.id != 0 && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses;
+                        drawPremium = MessagesController.getInstance(currentAccount).isPremiumUser(user) && UserConfig.getInstance(currentAccount).clientUserId != user.id && user.id != 0 && !app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses;
                         if (drawPremium) {
                             Long emojiStatusId = UserObject.getEmojiStatusDocumentId(user);
                             emojiStatus.center = LocaleController.isRTL;
@@ -1559,25 +1559,25 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     if (dialogBotVerificationIcon != 0 && drawBotVerified) {
                         botVerification.set(dialogBotVerificationIcon, false);
                     }
-                    // NimarkoGram: probe the badge for the dialog owner. NO
+                    // NebulaGram: probe the badge for the dialog owner. NO
                     // Saved-Messages exclusion — achievement-style plugins
                     // push badges at the user's own id and need them visible
                     // on the Saved Messages row too.
                     try {
                         org.telegram.tgnet.TLObject badgeTarget = user != null ? user : chat;
-                        app.nimarkogram.messenger.api.dto.BadgeDTO nimarkoBadge =
-                                app.nimarkogram.messenger.badges.BadgesController.getInstance().i(badgeTarget);
-                        if (nimarkoBadge != null && nimarkoBadge.getDocumentId() != 0L) {
+                        app.nebulagram.messenger.api.dto.BadgeDTO nebulaBadge =
+                                app.nebulagram.messenger.badges.BadgesController.getInstance().i(badgeTarget);
+                        if (nebulaBadge != null && nebulaBadge.getDocumentId() != 0L) {
                             drawPremium = true;
                             nameLayoutEllipsizeByGradient = true;
                             emojiStatus.center = LocaleController.isRTL;
-                            emojiStatus.set(nimarkoBadge.getDocumentId(), false);
+                            emojiStatus.set(nebulaBadge.getDocumentId(), false);
                             emojiStatus.setParticles(true, false);
-                            // NimarkoGram: kill the chat's bot-verification
+                            // NebulaGram: kill the chat's bot-verification
                             // emoji when our badge wins — otherwise both
                             // render side-by-side on channels like "Фумошка"
                             // that have both bot_verification_icon and a
-                            // nimarko badge.
+                            // nebula badge.
                             drawBotVerified = false;
                             drawVerified = false;
                             botVerification.set((Drawable) null, false);
@@ -1975,14 +1975,14 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                                             if (message != null) {
                                                 message.spoilLoginCode();
                                             }
-                                            // NimarkoGram: CG parity — when the chat is in LockedChats or is an encrypted dialog,
+                                            // NebulaGram: CG parity — when the chat is in LockedChats or is an encrypted dialog,
                                             // overlay the locked-chats entity mask (spoiler+strike) on the caption preview
                                             // instead of the regular keyword spoilers. Mirrors CG DialogCell line ~1791
                                             // (parentFragment.getChatsPasswordHelper().isChatLocked/.isEncryptedChat).
                                             if (parentFragment != null
-                                                    && (app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isChatLocked(message)
-                                                        || app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isEncryptedChat(message))) {
-                                                MediaDataController.addTextStyleRuns(app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.checkLockedChatsEntities(message), message.caption, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
+                                                    && (app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isChatLocked(message)
+                                                        || app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isEncryptedChat(message))) {
+                                                MediaDataController.addTextStyleRuns(app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.checkLockedChatsEntities(message), message.caption, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
                                             } else {
                                                 // NM_MF: layer ported CG keyword spoilers over the caption preview.
                                                 MediaDataController.addTextStyleRuns(MessagesFilterHelper.INSTANCE.addSpoilerEntities(message, message.caption, message.messageOwner.entities), message.caption, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
@@ -3324,7 +3324,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             }
             drawMonoforumAvatar = false;
             drawCommunityAvatar = false;
-            avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(56));
+            avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(56));
             drawUnmute = false;
         } else {
             int oldUnreadCount = unreadCount;
@@ -3435,30 +3435,30 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 }
                 if ((mask & MessagesController.UPDATE_MASK_EMOJI_STATUS) != 0) {
                     long dialogBotVerificationIcon = 0;
-                    // NimarkoGram: probe badge FIRST and let it short-circuit
+                    // NebulaGram: probe badge FIRST and let it short-circuit
                     // the original premium/emoji-status assignment for this
                     // bind. Otherwise the cell flashes premium-star → badge
                     // on every emoji-status mask update (user reported as
                     // "duplicating / disappearing" badges on channels).
-                    app.nimarkogram.messenger.api.dto.BadgeDTO nimarkoBadgeMask = null;
+                    app.nebulagram.messenger.api.dto.BadgeDTO nebulaBadgeMask = null;
                     try {
                         org.telegram.tgnet.TLObject t = user != null ? user : chat;
-                        nimarkoBadgeMask = app.nimarkogram.messenger.badges.BadgesController.getInstance().i(t);
-                        if (nimarkoBadgeMask != null && nimarkoBadgeMask.getDocumentId() == 0L) nimarkoBadgeMask = null;
+                        nebulaBadgeMask = app.nebulagram.messenger.badges.BadgesController.getInstance().i(t);
+                        if (nebulaBadgeMask != null && nebulaBadgeMask.getDocumentId() == 0L) nebulaBadgeMask = null;
                     } catch (Throwable ignored) {}
                     // Per-cell guard: skip the expensive emojiStatus.set+setParticles
                     // chain when this exact badge already rendered for this cell.
                     // Saves N visible cells × SwapAnimatedEmojiDrawable rebind on
                     // every UPDATE_MASK_EMOJI_STATUS broadcast.
-                    long _nimarkoMaskDoc = nimarkoBadgeMask != null ? nimarkoBadgeMask.getDocumentId() : 0L;
-                    boolean _nimarkoMaskSame = (_nimarkoMaskDoc != 0L) && (_nimarkoMaskDoc == lastNimarkoMaskDocId);
-                    lastNimarkoMaskDocId = _nimarkoMaskDoc;
+                    long _nebulaMaskDoc = nebulaBadgeMask != null ? nebulaBadgeMask.getDocumentId() : 0L;
+                    boolean _nebulaMaskSame = (_nebulaMaskDoc != 0L) && (_nebulaMaskDoc == lastNebulaMaskDocId);
+                    lastNebulaMaskDocId = _nebulaMaskDoc;
                     if (user != null) {
                         user = MessagesController.getInstance(currentAccount).getUser(user.id);
-                        if (nimarkoBadgeMask != null) {
+                        if (nebulaBadgeMask != null) {
                             nameLayoutEllipsizeByGradient = true;
-                            if (!_nimarkoMaskSame) {
-                                emojiStatus.set(_nimarkoMaskDoc, false);
+                            if (!_nebulaMaskSame) {
+                                emojiStatus.set(_nebulaMaskDoc, false);
                                 emojiStatus.setParticles(true, false);
                                 botVerification.set((Drawable) null, false);
                             }
@@ -3476,10 +3476,10 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     }
                     if (chat != null) {
                         chat = MessagesController.getInstance(currentAccount).getChat(chat.id);
-                        if (nimarkoBadgeMask != null) {
+                        if (nebulaBadgeMask != null) {
                             nameLayoutEllipsizeByGradient = true;
-                            if (!_nimarkoMaskSame) {
-                                emojiStatus.set(_nimarkoMaskDoc, false);
+                            if (!_nebulaMaskSame) {
+                                emojiStatus.set(_nebulaMaskDoc, false);
                                 emojiStatus.setParticles(true, false);
                                 botVerification.set((Drawable) null, false);
                             }
@@ -3816,7 +3816,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             } else {
                 // NG: honour the user's avatarCorners preference for both forum-style and regular chat avatars.
                 final boolean forumLike = chat != null && chat.forum && currentDialogFolderId == 0 && !useFromUserAsAvatar || !isSavedDialog && user != null && user.self && MessagesController.getInstance(currentAccount).savedViewAsChats;
-                avatarRadius = app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(56, forumLike);
+                avatarRadius = app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(56, forumLike);
             }
 
             avatarImage.setRoundRadius(avatarRadius);
@@ -3888,7 +3888,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             boolean prevValue = drawRevealBackground;
             drawRevealBackground = Math.abs(translationX) >= getMeasuredWidth() * 0.45f;
             // NG: disableVibration gate on the reveal-background haptic (CG parity, DialogCell:3576).
-            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {}
@@ -4566,7 +4566,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     botVerification.draw(canvas);
                 }
             }
-            // NimarkoGram: extera-style — hide the muted-bell glyph next to
+            // NebulaGram: extera-style — hide the muted-bell glyph next to
             // the dialog name. The right side of the row is reserved for
             // badges / emoji-status only. (Upstream 12.9.0 expression preserved
             // in the disabled branch: drawUnmute || dialogMuted || isHiddenInCommunity.)
@@ -4876,7 +4876,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             } else {
                 // Suppress archive previews while that surface is protected.
                 storyParams.drawHiddenStoriesAsSegments = (isShareToStoryCell || currentDialogFolderId != 0)
-                        && !app.nimarkogram.messenger.NimarkoConfig.askBiometricsToOpenArchive;
+                        && !app.nebulagram.messenger.NebulaConfig.askBiometricsToOpenArchive;
                 int s = storyParams.forceState;
                 if (isShareToStoryCell) {
                     storyParams.forceState = StoriesUtilities.STATE_HAS_UNREAD;
@@ -5634,9 +5634,9 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
 
     @Override
     public boolean performAccessibilityAction(int action, Bundle arguments) {
-        app.nimarkogram.messenger.api.dto.BadgeDTO badge = getNimarkoBadgeForAccessibility();
+        app.nebulagram.messenger.api.dto.BadgeDTO badge = getNebulaBadgeForAccessibility();
         if (action == R.id.acc_action_badge_info && badge != null) {
-            app.nimarkogram.messenger.badges.BadgeUi.showBulletin(currentAccount, badge);
+            app.nebulagram.messenger.badges.BadgeUi.showBulletin(currentAccount, badge);
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
             return true;
         }
@@ -5664,19 +5664,19 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             info.setCheckable(true);
             info.setChecked(true);
         }
-        app.nimarkogram.messenger.api.dto.BadgeDTO badge = getNimarkoBadgeForAccessibility();
+        app.nebulagram.messenger.api.dto.BadgeDTO badge = getNebulaBadgeForAccessibility();
         if (badge != null) {
             info.addAction(new AccessibilityNodeInfo.AccessibilityAction(
                     R.id.acc_action_badge_info,
-                    app.nimarkogram.messenger.badges.BadgeUi.accessibilityLabel(badge)));
+                    app.nebulagram.messenger.badges.BadgeUi.accessibilityLabel(badge)));
         }
     }
 
-    private app.nimarkogram.messenger.api.dto.BadgeDTO getNimarkoBadgeForAccessibility() {
+    private app.nebulagram.messenger.api.dto.BadgeDTO getNebulaBadgeForAccessibility() {
         try {
             TLObject target = user != null ? user : chat;
-            app.nimarkogram.messenger.api.dto.BadgeDTO badge =
-                    app.nimarkogram.messenger.badges.BadgesController.getInstance().i(target);
+            app.nebulagram.messenger.api.dto.BadgeDTO badge =
+                    app.nebulagram.messenger.badges.BadgesController.getInstance().i(target);
             return badge != null && badge.getDocumentId() != 0L ? badge : null;
         } catch (Throwable ignored) {
             return null;
@@ -5735,9 +5735,9 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             sb.append(getString(R.string.AccDescrVerified));
             sb.append(". ");
         }
-        app.nimarkogram.messenger.api.dto.BadgeDTO accessibilityBadge = getNimarkoBadgeForAccessibility();
+        app.nebulagram.messenger.api.dto.BadgeDTO accessibilityBadge = getNebulaBadgeForAccessibility();
         if (accessibilityBadge != null) {
-            sb.append(app.nimarkogram.messenger.badges.BadgeUi.accessibilityLabel(accessibilityBadge));
+            sb.append(app.nebulagram.messenger.badges.BadgeUi.accessibilityLabel(accessibilityBadge));
             sb.append(". ");
         }
         if (dialogMuted) {
@@ -5787,7 +5787,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             StringBuilder messageString = new StringBuilder();
             CharSequence accText = message.messageText;
             if (accText != null && accText.toString().contains("$")) {
-                accText = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(accText.toString());
+                accText = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(accText.toString());
             }
             messageString.append(accText);
             if (!message.isMediaEmpty()) {
@@ -6075,7 +6075,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         MessageObject captionMessage = getCaptionMessage();
         CharSequence msgText = message != null ? message.messageText : null;
         if (msgText != null && msgText.toString().contains("$")) {
-            msgText = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(msgText.toString());
+            msgText = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(msgText.toString());
         }
         applyName = true;
         if (!TextUtils.isEmpty(restrictionReason)) {
@@ -6140,14 +6140,14 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 if (message != null) {
                     message.spoilLoginCode();
                 }
-                // NimarkoGram: CG parity — when the chat is in LockedChats or is an encrypted dialog,
+                // NebulaGram: CG parity — when the chat is in LockedChats or is an encrypted dialog,
                 // overlay the locked-chats entity mask (spoiler+strike) on the dialog-list preview
                 // instead of the regular keyword spoilers. Mirrors CG DialogCell line ~5708
                 // (parentFragment.getChatsPasswordHelper().isChatLocked/.isEncryptedChat).
                 if (parentFragment != null
-                        && (app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isChatLocked(message)
-                            || app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isEncryptedChat(message))) {
-                    MediaDataController.addTextStyleRuns(app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.checkLockedChatsEntities(message), mess, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
+                        && (app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isChatLocked(message)
+                            || app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isEncryptedChat(message))) {
+                    MediaDataController.addTextStyleRuns(app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.checkLockedChatsEntities(message), mess, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
                 } else {
                     // NM_MF: layer ported CG keyword spoilers over the dialog-list preview.
                     MediaDataController.addTextStyleRuns(MessagesFilterHelper.INSTANCE.addSpoilerEntities(message, mess, message.messageOwner != null ? message.messageOwner.entities : null), mess, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
@@ -6247,7 +6247,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             if (mess.toString().contains("$")) {
                 float dlgSize2 = Theme.dialogs_messagePaint[0].getTextSize();
                 int dlgWidth2 = AndroidUtilities.displaySize.x - AndroidUtilities.dp(100);
-                mess = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(mess, dlgSize2, dlgWidth2, true);
+                mess = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(mess, dlgSize2, dlgWidth2, true);
             }
             if (message.hasHighlightedWords()) {
                 if (message.messageTrimmedToHighlight != null) {

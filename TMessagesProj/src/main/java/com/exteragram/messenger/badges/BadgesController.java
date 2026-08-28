@@ -20,19 +20,19 @@ public final class BadgesController {
 
     public static final com.exteragram.messenger.badges.source.ApiBadgeSource apiBadgeSource =
             new com.exteragram.messenger.badges.source.ApiBadgeSource(
-                    app.nimarkogram.messenger.badges.BadgesController.getInstance().apiBadgeSource);
+                    app.nebulagram.messenger.badges.BadgesController.getInstance().apiBadgeSource);
 
     public static final BadgeDTO DEV_BADGE = BadgeDTO.fromReal(
-            app.nimarkogram.messenger.badges.BadgesController.DEV_BADGE);
+            app.nebulagram.messenger.badges.BadgesController.DEV_BADGE);
     public static final BadgeDTO SUPPORTER_BADGE = BadgeDTO.fromReal(
-            app.nimarkogram.messenger.badges.BadgesController.SUPPORTER_BADGE);
+            app.nebulagram.messenger.badges.BadgesController.SUPPORTER_BADGE);
     public static final BadgeDTO TRUSTED_BADGE = BadgeDTO.fromReal(
-            app.nimarkogram.messenger.badges.BadgesController.TRUSTED_BADGE);
+            app.nebulagram.messenger.badges.BadgesController.TRUSTED_BADGE);
 
-    private final app.nimarkogram.messenger.badges.BadgesController real;
+    private final app.nebulagram.messenger.badges.BadgesController real;
 
     private BadgesController() {
-        this.real = app.nimarkogram.messenger.badges.BadgesController.getInstance();
+        this.real = app.nebulagram.messenger.badges.BadgesController.getInstance();
     }
 
     public void init(Context context) {
@@ -122,9 +122,9 @@ public final class BadgesController {
     }
 
     public Map<Long, BadgeDTO> getAllBadges() {
-        Map<Long, app.nimarkogram.messenger.api.dto.BadgeDTO> src = real.getAllBadges();
+        Map<Long, app.nebulagram.messenger.api.dto.BadgeDTO> src = real.getAllBadges();
         Map<Long, BadgeDTO> out = new HashMap<>(src.size());
-        for (Map.Entry<Long, app.nimarkogram.messenger.api.dto.BadgeDTO> e : src.entrySet()) {
+        for (Map.Entry<Long, app.nebulagram.messenger.api.dto.BadgeDTO> e : src.entrySet()) {
             out.put(e.getKey(), BadgeDTO.fromReal(e.getValue()));
         }
         return out;

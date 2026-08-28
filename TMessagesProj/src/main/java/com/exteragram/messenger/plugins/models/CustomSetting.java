@@ -4,11 +4,11 @@ import android.view.View;
 
 import com.chaquo.python.PyObject;
 
-import app.nimarkogram.messenger.plugins.Plugin;
+import app.nebulagram.messenger.plugins.Plugin;
 
 import org.telegram.ui.Components.UItem;
 
-public class CustomSetting extends app.nimarkogram.messenger.plugins.models.SettingItem {
+public class CustomSetting extends app.nebulagram.messenger.plugins.models.SettingItem {
     private PyObject createSubFragmentCallback;
     private Factory<?> factory;
     private PyObject factoryArgs;
@@ -64,7 +64,7 @@ public class CustomSetting extends app.nimarkogram.messenger.plugins.models.Sett
     public void setFactoryArgs(PyObject v) { this.factoryArgs = v; }
 
     public static abstract class Factory<V extends View>
-            extends app.nimarkogram.messenger.plugins.models.CustomSetting.Factory<V> {
+            extends app.nebulagram.messenger.plugins.models.CustomSetting.Factory<V> {
 
         public UItem create(Plugin plugin, CustomSetting setting, PyObject args) {
             return null;

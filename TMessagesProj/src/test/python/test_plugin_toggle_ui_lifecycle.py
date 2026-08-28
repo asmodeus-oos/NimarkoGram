@@ -4,9 +4,9 @@ import unittest
 REPO = pathlib.Path(__file__).resolve().parents[4]
 JAVA = REPO / 'TMessagesProj/src/main/java'
 ACTIVITY = JAVA / (
-    'app/nimarkogram/messenger/plugins/ui/PluginsActivity.java')
+    'app/nebulagram/messenger/plugins/ui/PluginsActivity.java')
 CELL = JAVA / (
-    'app/nimarkogram/messenger/plugins/ui/components/PluginCell.java')
+    'app/nebulagram/messenger/plugins/ui/components/PluginCell.java')
 
 def method(source, signature, next_signature):
     start = source.index(signature)

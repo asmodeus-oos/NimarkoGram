@@ -7,22 +7,22 @@ import java.util.Map;
 
 public class SettingsRegistry {
 
-    public static class Entry extends app.nimarkogram.messenger.preferences.utils.SettingsRegistry.Entry {}
+    public static class Entry extends app.nebulagram.messenger.preferences.utils.SettingsRegistry.Entry {}
 
     public static final Map<Class<?>, Boolean> ayuCategories =
-            app.nimarkogram.messenger.preferences.utils.SettingsRegistry.ayuCategories;
+            app.nebulagram.messenger.preferences.utils.SettingsRegistry.ayuCategories;
 
     private SettingsRegistry() {}
 
-    public static app.nimarkogram.messenger.preferences.utils.SettingsRegistry getInstance() {
-        return app.nimarkogram.messenger.preferences.utils.SettingsRegistry.getInstance();
+    public static app.nebulagram.messenger.preferences.utils.SettingsRegistry getInstance() {
+        return app.nebulagram.messenger.preferences.utils.SettingsRegistry.getInstance();
     }
 
     public static boolean isValidForLinkAliases(UItem item) {
-        return app.nimarkogram.messenger.preferences.utils.SettingsRegistry.isValidForLinkAliases(item);
+        return app.nebulagram.messenger.preferences.utils.SettingsRegistry.isValidForLinkAliases(item);
     }
 
     public static boolean isValidForSearch(UItem item) {
-        return app.nimarkogram.messenger.preferences.utils.SettingsRegistry.isValidForSearch(item);
+        return app.nebulagram.messenger.preferences.utils.SettingsRegistry.isValidForSearch(item);
     }
 }

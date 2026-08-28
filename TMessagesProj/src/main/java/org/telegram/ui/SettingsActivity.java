@@ -140,8 +140,8 @@ import org.telegram.ui.bots.BotLocation;
 import org.telegram.ui.bots.BotWebViewSheet;
 import org.telegram.ui.bots.SetupEmojiStatusSheet;
 
-import app.nimarkogram.messenger.NimarkoConfig;
-import app.nimarkogram.messenger.utils.AppRestartHelper;
+import app.nebulagram.messenger.NebulaConfig;
+import app.nebulagram.messenger.utils.AppRestartHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -418,7 +418,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         avatarDrawable = new AvatarDrawable();
         avatarView = new BackupImageView(context);
-        avatarView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(90));
+        avatarView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(90));
         avatarContainer.addView(avatarView, LayoutHelper.createFrame(90, 90, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 15, 0, 0));
 
         avatarProgressView = new RadialProgressView(context) {
@@ -447,14 +447,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         cameraButton.setBackground(Theme.createCircleDrawable(dp(32), getThemedColor(Theme.key_windowBackgroundGray)));
         cameraButton.setPadding(dp(2), dp(2), dp(2), dp(2));
         cameraBackground = new FrameLayout(context);
-        int cameraColor = app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(
+        int cameraColor = app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(
                 getThemedColor(Theme.key_featuredStickers_addButton));
         cameraBackground.setBackground(Theme.createCircleDrawable(dp(30), cameraColor));
         cameraImageView = new ImageView(context);
         cameraImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         cameraImageView.setImageResource(R.drawable.filled_premium_camera);
         cameraImageView.setColorFilter(new PorterDuffColorFilter(
-                app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconForegroundColor(Color.WHITE),
+                app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconForegroundColor(Color.WHITE),
                 PorterDuff.Mode.SRC_IN));
         cameraBackground.addView(cameraImageView, LayoutHelper.createFrame(22, 22, Gravity.CENTER));
         cameraButton.addView(cameraBackground, LayoutHelper.createFrame(30, 30));
@@ -555,7 +555,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         final StringBuilder sb = new StringBuilder();
         if (user != null) {
             if (hidePhoneNumber) {
-                sb.append(app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.replaceStringToSpoilers(
+                sb.append(app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.replaceStringToSpoilers(
                         PhoneFormat.getInstance().format("+ " + user.phone),
                         true
                 ));
@@ -719,7 +719,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             items.add(UItem.asShadow(null));
         }
 
-        if (accountNumbers.size() > 0 && NimarkoConfig.showAccounts) {
+        if (accountNumbers.size() > 0 && NebulaConfig.showAccounts) {
             items.add(UItem.asHeader(getString(R.string.SettingsAccounts)));
             for (int i = 0; i < accountNumbers.size(); ++i) {
                 items.add(AccountCell.Factory.of(i, accountNumbers.get(i)));
@@ -727,7 +727,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             items.add(UItem.asShadow(null));
         }
 
-        items.add(SettingCell.Factory.of(900, IconBackgroundColors.PURPLE.top, IconBackgroundColors.PURPLE.bottom, R.drawable.msg_settings_solar, getString(R.string.NimarkoGramSettings)));
+        items.add(SettingCell.Factory.of(900, IconBackgroundColors.PURPLE.top, IconBackgroundColors.PURPLE.bottom, R.drawable.msg_settings_solar, getString(R.string.NebulaGramSettings)));
         items.add(UItem.asShadow(null));
 
         items.add(SettingCell.Factory.of(1, IconBackgroundColors.BLUE.top, IconBackgroundColors.BLUE.bottom, R.drawable.settings_account, getString(R.string.SettingsAccount), getString(R.string.SettingsAccountInfo)));
@@ -852,7 +852,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
         switch (item.id) {
             case 900:
-                presentFragment(new app.nimarkogram.messenger.preferences.MainPreferencesActivity());
+                presentFragment(new app.nebulagram.messenger.preferences.MainPreferencesActivity());
                 return;
             case 1:
                 presentSettingFragment(new UserInfoActivity());
@@ -1026,7 +1026,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
             avatarDrawable = new AvatarDrawable();
             avatarView = new BackupImageView(context);
-            avatarView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(28));
+            avatarView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(28));
 
             textView = new SimpleTextView(context);
             textView.setTextSize(15);
@@ -1243,11 +1243,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             iconBackground.setDrawBorder(resourcesProvider != null ? resourcesProvider.isDark() : Theme.isCurrentThemeDark());
             if (hasIconColors) {
                 iconBackground.setColor(
-                        app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(originalIconColorTop),
-                        app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(originalIconColorBottom));
+                        app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(originalIconColorTop),
+                        app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(originalIconColorBottom));
             }
             iconView.setColorFilter(new PorterDuffColorFilter(
-                    app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconForegroundColor(Color.WHITE),
+                    app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconForegroundColor(Color.WHITE),
                     PorterDuff.Mode.SRC_IN));
         }
 
@@ -1269,11 +1269,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             originalIconColorBottom = iconColorBottom;
             hasIconColors = true;
             iconBackground.setColor(
-                    app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(originalIconColorTop),
-                    app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(originalIconColorBottom));
+                    app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(originalIconColorTop),
+                    app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(originalIconColorBottom));
             iconView.setImageResource(icon);
             iconView.setColorFilter(new PorterDuffColorFilter(
-                    app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconForegroundColor(Color.WHITE),
+                    app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconForegroundColor(Color.WHITE),
                     PorterDuff.Mode.SRC_IN));
             titleView.setText(title);
             subtitleView.setVisibility((twoLines = !TextUtils.isEmpty(subtitle)) ? View.VISIBLE : View.GONE);

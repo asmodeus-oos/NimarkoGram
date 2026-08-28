@@ -300,8 +300,8 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 textY = maybeTextY;
 
                 selectedView = newView;
-                // NimarkoGram: gate haptic on disableVibration.
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                // NebulaGram: gate haptic on disableVibration.
+                if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                     try {
                         textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignored) {}

@@ -263,7 +263,7 @@ public class GroupCallUserCell extends FrameLayout {
         setClipChildren(false);
 
         avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(48));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(48));
         addView(avatarImageView, LayoutHelper.createFrame(46, 46, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 11, 6, LocaleController.isRTL ? 11 : 0, 0));
 
         avatarProgressView = new RadialProgressView(context) {

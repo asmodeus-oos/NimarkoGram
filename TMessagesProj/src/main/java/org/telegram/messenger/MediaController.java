@@ -515,7 +515,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         public boolean forceAsSticker;
         public boolean isHighQuality() {
             if (highQuality == null) {
-                if (!forceAsSticker && app.nimarkogram.messenger.NimarkoConfig.largePhotos) {
+                if (!forceAsSticker && app.nebulagram.messenger.NebulaConfig.largePhotos) {
                     return true;
                 }
                 return SharedConfig.photoHighQualityDefault;
@@ -1307,10 +1307,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             int count = 0;
             Cursor cursor = null;
             try {
-                // NimarkoGram (CG parity): use PermissionsUtils.isImagesPermissionGranted —
+                // NebulaGram (CG parity): use PermissionsUtils.isImagesPermissionGranted —
                 // narrower than the upstream DrKLO union check; only query when the
                 // matching READ_MEDIA_IMAGES (SDK33+) / READ_EXTERNAL_STORAGE (<33) is held.
-                if (app.nimarkogram.messenger.utils.PermissionsUtils.isImagesPermissionGranted()) {
+                if (app.nebulagram.messenger.utils.PermissionsUtils.isImagesPermissionGranted()) {
                     cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
                     if (cursor != null) {
                         if (cursor.moveToNext()) {
@@ -1326,8 +1326,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
             }
             try {
-                // NimarkoGram (CG parity): use PermissionsUtils.isVideoPermissionGranted.
-                if (app.nimarkogram.messenger.utils.PermissionsUtils.isVideoPermissionGranted()) {
+                // NebulaGram (CG parity): use PermissionsUtils.isVideoPermissionGranted.
+                if (app.nebulagram.messenger.utils.PermissionsUtils.isVideoPermissionGranted()) {
                     cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
                     if (cursor != null) {
                         if (cursor.moveToNext()) {
@@ -4789,7 +4789,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         requestRecordAudioFocus(true);
 //                        MediaDataController.getInstance(recordingCurrentAccount).pushDraftVoiceMessage(recordDialogId, recordTopicId, null);
 //
-                        audioRecorder = new AudioRecord(app.nimarkogram.messenger.NimarkoConfig.getMediaRecorderAudioSource(), sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, recordBufferSize);
+                        audioRecorder = new AudioRecord(app.nebulagram.messenger.NebulaConfig.getMediaRecorderAudioSource(), sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, recordBufferSize);
                         recordStartTime = System.currentTimeMillis();
                         writtenFrame = 0;
                         samplesCount = 0;
@@ -4812,7 +4812,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         manualRecording = manual;
         requestRecordAudioFocus(true);
 
-        if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+        if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
             try {
                 feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
@@ -4868,7 +4868,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
 
                 audioRecorderPaused = false;
-                audioRecorder = new AudioRecord(app.nimarkogram.messenger.NimarkoConfig.getMediaRecorderAudioSource(), sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, recordBufferSize);
+                audioRecorder = new AudioRecord(app.nebulagram.messenger.NebulaConfig.getMediaRecorderAudioSource(), sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, recordBufferSize);
                 recordStartTime = System.currentTimeMillis();
                 recordTimeCount = 0;
                 writtenFrame = 0;
@@ -5102,7 +5102,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (send == 0) {
                 stopRecordingInternal(0, false, 0, false, 0);
             }
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {}
@@ -5367,7 +5367,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (Build.VERSION.SDK_INT >= 29) {
                 final ContentValues cv = new ContentValues();
                 final Uri uriToInsert = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-                final File dirDest = new File(Environment.DIRECTORY_DOWNLOADS, "NimarkoGram");
+                final File dirDest = new File(Environment.DIRECTORY_DOWNLOADS, "NebulaGram");
                 cv.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                 cv.put(MediaStore.Downloads.DISPLAY_NAME, filename);
                 cv.put(MediaStore.MediaColumns.MIME_TYPE, outputMime);
@@ -5389,7 +5389,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     }
                 }
             } else {
-                final File destDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "NimarkoGram");
+                final File destDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "NebulaGram");
                 destDir.mkdirs();
                 File destFile = new File(destDir, filename);
                 if (!destFile.exists()) {
@@ -5609,11 +5609,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     } else {
                         File destFile;
                         if (type == 0) {
-                            destFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "NimarkoGram");
+                            destFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "NebulaGram");
                             destFile.mkdirs();
                             destFile = new File(destFile, AndroidUtilities.generateFileName(0, FileLoader.getFileExtension(sourceFile)));
                         } else if (type == 1) {
-                            destFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "NimarkoGram");
+                            destFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "NebulaGram");
                             destFile.mkdirs();
                             destFile = new File(destFile, AndroidUtilities.generateFileName(1, FileLoader.getFileExtension(sourceFile)));
                         } else {
@@ -5623,7 +5623,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                             } else {
                                 dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
                             }
-                            dir = new File(dir, "NimarkoGram");
+                            dir = new File(dir, "NebulaGram");
                             dir.mkdirs();
                             destFile = new File(dir, name);
                             if (destFile.exists()) {
@@ -5768,7 +5768,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     final String filename = AndroidUtilities.generateFileName(0, "jpg");
                     final ContentValues cv = new ContentValues();
                     final Uri uriToInsert = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-                    final File dirDest = new File(Environment.DIRECTORY_PICTURES, "NimarkoGram");
+                    final File dirDest = new File(Environment.DIRECTORY_PICTURES, "NebulaGram");
                     cv.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                     cv.put(MediaStore.Images.Media.DISPLAY_NAME, filename);
                     cv.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
@@ -5790,7 +5790,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         }
                     }
                 } else {
-                    final File destDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "NimarkoGram");
+                    final File destDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "NebulaGram");
                     destDir.mkdirs();
                     File destFile = new File(destDir, AndroidUtilities.generateFileName(0, "jpg"));
                     if (!destFile.exists()) {
@@ -5921,7 +5921,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     filename = AndroidUtilities.generateFileName(0, extension);
                 }
                 uriToInsert = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-                File dirDest = new File(Environment.DIRECTORY_PICTURES, "NimarkoGram");
+                File dirDest = new File(Environment.DIRECTORY_PICTURES, "NebulaGram");
                 contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                 contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, filename);
                 contentValues.put(MediaStore.Images.Media.MIME_TYPE, mimeType);
@@ -5929,7 +5929,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 if (filename == null) {
                     filename = AndroidUtilities.generateFileName(1, extension);
                 }
-                File dirDest = new File(Environment.DIRECTORY_MOVIES, "NimarkoGram");
+                File dirDest = new File(Environment.DIRECTORY_MOVIES, "NebulaGram");
                 contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                 uriToInsert = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                 contentValues.put(MediaStore.Video.Media.DISPLAY_NAME, filename);
@@ -5937,7 +5937,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 if (filename == null) {
                     filename = sourceFile.getName();
                 }
-                File dirDest = new File(Environment.DIRECTORY_DOWNLOADS, "NimarkoGram");
+                File dirDest = new File(Environment.DIRECTORY_DOWNLOADS, "NebulaGram");
                 contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                 uriToInsert = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                 contentValues.put(MediaStore.Downloads.DISPLAY_NAME, filename);
@@ -5945,7 +5945,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 if (filename == null) {
                     filename = sourceFile.getName();
                 }
-                File dirDest = new File(Environment.DIRECTORY_MUSIC, "NimarkoGram");
+                File dirDest = new File(Environment.DIRECTORY_MUSIC, "NebulaGram");
                 contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, dirDest + File.separator);
                 uriToInsert = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                 contentValues.put(MediaStore.Audio.Media.DISPLAY_NAME, filename);
@@ -6227,9 +6227,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
             Cursor cursor = null;
             try {
-                // NimarkoGram (CG parity): use PermissionsUtils.isImagesPermissionGranted —
+                // NebulaGram (CG parity): use PermissionsUtils.isImagesPermissionGranted —
                 // matches CG's narrower per-content-type check.
-                if (Build.VERSION.SDK_INT < 23 || app.nimarkogram.messenger.utils.PermissionsUtils.isImagesPermissionGranted()) {
+                if (Build.VERSION.SDK_INT < 23 || app.nebulagram.messenger.utils.PermissionsUtils.isImagesPermissionGranted()) {
                     cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projectionPhotos, null, null, (Build.VERSION.SDK_INT > 28 ? MediaStore.Images.Media.DATE_MODIFIED : MediaStore.Images.Media.DATE_TAKEN) + " DESC");
                     if (cursor != null) {
                         int imageIdColumn = cursor.getColumnIndex(MediaStore.Images.Media._ID);
@@ -6315,8 +6315,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
 
             try {
-                // NimarkoGram (CG parity): use PermissionsUtils.isVideoPermissionGranted.
-                if (Build.VERSION.SDK_INT < 23 || app.nimarkogram.messenger.utils.PermissionsUtils.isVideoPermissionGranted()) {
+                // NebulaGram (CG parity): use PermissionsUtils.isVideoPermissionGranted.
+                if (Build.VERSION.SDK_INT < 23 || app.nebulagram.messenger.utils.PermissionsUtils.isVideoPermissionGranted()) {
                     cursor = MediaStore.Images.Media.query(ApplicationLoader.applicationContext.getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI, projectionVideo, null, null, (Build.VERSION.SDK_INT > 28 ? MediaStore.Video.Media.DATE_MODIFIED : MediaStore.Video.Media.DATE_TAKEN) + " DESC");
                     if (cursor != null) {
                         int imageIdColumn = cursor.getColumnIndex(MediaStore.Video.Media._ID);

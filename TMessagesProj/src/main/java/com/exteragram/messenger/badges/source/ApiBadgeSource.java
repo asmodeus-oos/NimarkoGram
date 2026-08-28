@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ApiBadgeSource extends com.exteragram.messenger.badges.ApiBadgeSource {
     public final ConcurrentHashMap<Long, BadgeEntry> cache;
 
-    public ApiBadgeSource(app.nimarkogram.messenger.badges.ApiBadgeSource real) {
+    public ApiBadgeSource(app.nebulagram.messenger.badges.ApiBadgeSource real) {
         super(real);
         this.cache = super.cache;
     }

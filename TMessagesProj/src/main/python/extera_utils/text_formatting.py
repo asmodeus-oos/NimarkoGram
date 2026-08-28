@@ -1,7 +1,7 @@
 """
 extera_utils.text_formatting — markdown / HTML helpers for plugins.
 
-Re-exports NimarkoGram's markdown engine and adds an ``HTML`` parser, so a
+Re-exports NebulaGram's markdown engine and adds an ``HTML`` parser, so a
 plugin can turn formatted text into a ``ParsedMessage`` (text + RawEntity list)
 ready to send. Each ``RawEntity`` exposes ``to_tlrpc_object()``.
 
@@ -29,7 +29,7 @@ def _utf16_len(text: str) -> int:
     return n
 
 class Markdown:
-    """Thin namespace over NimarkoGram's markdown engine."""
+    """Thin namespace over NebulaGram's markdown engine."""
 
     @staticmethod
     def parse(text: str) -> ParsedMessage:

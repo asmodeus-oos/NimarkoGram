@@ -86,7 +86,7 @@ public class ApplicationLoader extends Application {
         } catch (Throwable ignored) {
         }
         try {
-            app.nimarkogram.messenger.NimarkoCrashHandler.install(base);
+            app.nebulagram.messenger.NebulaCrashHandler.install(base);
         } catch (Throwable ignored) {
         }
     }
@@ -232,7 +232,7 @@ public class ApplicationLoader extends Application {
 
                     }
 
-                    boolean isSlow = isConnectionSlow() || app.nimarkogram.messenger.NimarkoConfig.slowNetworkMode;
+                    boolean isSlow = isConnectionSlow() || app.nebulagram.messenger.NebulaConfig.slowNetworkMode;
                     for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                         ConnectionsManager.getInstance(a).checkConnection();
                         FileLoader.getInstance(a).onNetworkChanged(isSlow);
@@ -270,9 +270,9 @@ public class ApplicationLoader extends Application {
             Utilities.globalQueue.postRunnable(ApplicationLoader::prewarmChatPreferences, 1500);
         } catch (Throwable ignored) {}
         try {
-            if (app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) {
-                app.nimarkogram.messenger.camera.CameraXUtils.warmUpAsync(applicationContext);
-                app.nimarkogram.messenger.camera.CameraXUtils.loadCameraXSizes();
+            if (app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) {
+                app.nebulagram.messenger.camera.CameraXUtils.warmUpAsync(applicationContext);
+                app.nebulagram.messenger.camera.CameraXUtils.loadCameraXSizes();
             }
         } catch (Throwable ignored) {}
         try {
@@ -311,7 +311,7 @@ public class ApplicationLoader extends Application {
         super();
     }
 
-    private volatile app.nimarkogram.messenger.icons.NimarkoIconResources nmAppResources;
+    private volatile app.nebulagram.messenger.icons.NebulaIconResources nmAppResources;
     private volatile android.content.res.AssetManager nmAppAssets;
     private static final ThreadLocal<Boolean> nmWrappingResources = new ThreadLocal<>();
     private final Object nmAppResourcesLock = new Object();
@@ -321,7 +321,7 @@ public class ApplicationLoader extends Application {
         android.content.res.Resources base = super.getResources();
         try {
             if (base == null || applicationContext == null
-                    || app.nimarkogram.messenger.NimarkoConfig.iconReplacement == app.nimarkogram.messenger.NimarkoConfig.ICON_REPLACE_NONE) {
+                    || app.nebulagram.messenger.NebulaConfig.iconReplacement == app.nebulagram.messenger.NebulaConfig.ICON_REPLACE_NONE) {
                 return base;
             }
             if (Boolean.TRUE.equals(nmWrappingResources.get())) {
@@ -332,7 +332,7 @@ public class ApplicationLoader extends Application {
                     if (nmAppAssets != base.getAssets()) {
                         nmWrappingResources.set(Boolean.TRUE);
                         try {
-                            nmAppResources = new app.nimarkogram.messenger.icons.NimarkoIconResources(base);
+                            nmAppResources = new app.nebulagram.messenger.icons.NebulaIconResources(base);
                         } finally {
                             nmWrappingResources.set(Boolean.FALSE);
                         }
@@ -368,7 +368,7 @@ public class ApplicationLoader extends Application {
     }
 
     private static final int NG_PINE_MAX_TESTED_SDK = 36;
-    private static final String NG_PINE_RUNTIME_PREFS = "nimarko_pine_runtime";
+    private static final String NG_PINE_RUNTIME_PREFS = "nebula_pine_runtime";
     private static final String NG_PINE_INIT_SIGNATURE = "init_signature";
     private static final String NG_PINE_INIT_STARTED_AT = "init_started_at";
     private static final String NG_PINE_BLOCKED_SIGNATURE = "blocked_signature";
@@ -456,7 +456,7 @@ public class ApplicationLoader extends Application {
             long initStartedAt = preferences.getLong(NG_PINE_INIT_STARTED_AT, 0L);
             boolean confirmedNativeInitCrash = signature.equals(initSignature)
                     && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-                    && app.nimarkogram.messenger.plugins.utils.NativeCrashHandler
+                    && app.nebulagram.messenger.plugins.utils.NativeCrashHandler
                             .lastExitWasLoadCrashAfter(initStartedAt);
             SharedPreferences.Editor editor = preferences.edit()
                     .remove(NG_PINE_INIT_SIGNATURE)
@@ -466,7 +466,7 @@ public class ApplicationLoader extends Application {
                 ngPineUnavailableReason =
                         "disabled after a native Pine initialization crash in this build";
                 editor.putString(NG_PINE_BLOCKED_SIGNATURE, signature);
-                FileLog.e("nimarko: Pine recovery guard blocked a confirmed native init crash loop");
+                FileLog.e("nebula: Pine recovery guard blocked a confirmed native init crash loop");
             } else {
                 editor.remove(NG_PINE_BLOCKED_SIGNATURE);
             }
@@ -511,7 +511,7 @@ public class ApplicationLoader extends Application {
                 throw new UnsupportedOperationException(reason);
             };
         } catch (Throwable t) {
-            FileLog.e("nimarko: unable to install unsupported-runtime Pine guard", t);
+            FileLog.e("nebula: unable to install unsupported-runtime Pine guard", t);
         } finally {
             ngPineRuntimeGuardInstalled = true;
             ngPineInitAttempted = true;
@@ -537,10 +537,10 @@ public class ApplicationLoader extends Application {
                             org.lsposed.hiddenapibypass.HiddenApiBypass
                                     .addHiddenApiExemptions("L");
                 } catch (Throwable bypassError) {
-                    FileLog.w("nimarko: HiddenApiBypass preflight failed: " + bypassError);
+                    FileLog.w("nebula: HiddenApiBypass preflight failed: " + bypassError);
                 }
                 if (!hiddenApiBypassReady) {
-                    FileLog.w("nimarko: hidden APIs remain enforced on this runtime");
+                    FileLog.w("nebula: hidden APIs remain enforced on this runtime");
                 }
             }
             top.canyie.pine.PineConfig.sdkLevel = android.os.Build.VERSION.SDK_INT;
@@ -556,7 +556,7 @@ public class ApplicationLoader extends Application {
             top.canyie.pine.Pine.ensureInitialized();
             if (!top.canyie.pine.Pine.isInitialized()) {
                 ngPineUnavailableReason = "Pine native initialization did not complete";
-                FileLog.w("nimarko: Pine native initialisation did not complete");
+                FileLog.w("nebula: Pine native initialisation did not complete");
                 return;
             }
             try {
@@ -576,14 +576,14 @@ public class ApplicationLoader extends Application {
             pineReady = top.canyie.pine.Pine.isInitialized();
             ngPineUnavailableReason = pineReady
                     ? null : "Pine reported an uninitialized backend";
-            org.telegram.messenger.FileLog.d("nimarko: Pine initialised (lazy), sdkLevel="
+            org.telegram.messenger.FileLog.d("nebula: Pine initialised (lazy), sdkLevel="
                     + top.canyie.pine.PineConfig.sdkLevel
                     + ", initialised=" + pineReady
                     + ", hookMode=" + top.canyie.pine.Pine.getHookMode());
         } catch (Throwable t) {
             ngPineUnavailableReason = t.getClass().getSimpleName()
                     + (t.getMessage() == null ? "" : ": " + t.getMessage());
-            org.telegram.messenger.FileLog.e("nimarko: Pine init failed", t);
+            org.telegram.messenger.FileLog.e("nebula: Pine init failed", t);
         } finally {
             ngPineInited = pineReady;
             if (!pineReady) {
@@ -778,7 +778,7 @@ public class ApplicationLoader extends Application {
         } catch (Throwable t) {
             Throwable cause = t instanceof java.lang.reflect.InvocationTargetException
                     && t.getCause() != null ? t.getCause() : t;
-            FileLog.e("nimarko: Pine runtime hook smoke test failed", cause);
+            FileLog.e("nebula: Pine runtime hook smoke test failed", cause);
         } finally {
             passed &= unhookPineRuntimeProbe(
                     constructorUnhook, "constructor");
@@ -796,7 +796,7 @@ public class ApplicationLoader extends Application {
             unhook.unhook();
             return true;
         } catch (Throwable t) {
-            FileLog.e("nimarko: Pine " + name
+            FileLog.e("nebula: Pine " + name
                     + " smoke-test unhook failed", t);
             return false;
         }
@@ -844,14 +844,14 @@ public class ApplicationLoader extends Application {
 
         }
         try {
-            app.nimarkogram.messenger.NimarkoCrashHandler.install(this);
+            app.nebulagram.messenger.NebulaCrashHandler.install(this);
         } catch (Throwable ignored) {}
         try {
             installPineRuntimeGuardIfNeeded();
         } catch (Throwable ignored) {
         }
         try { org.telegram.messenger.SharedConfig.loadConfig(); } catch (Throwable ignored) {}
-        try { int ignoredSel = app.nimarkogram.messenger.NimarkoConfig.iconReplacement; } catch (Throwable ignored) {}
+        try { int ignoredSel = app.nebulagram.messenger.NebulaConfig.iconReplacement; } catch (Throwable ignored) {}
         try {
             new Thread(() -> {
                 try { org.telegram.messenger.FileLog.getInstance().init(); } catch (Throwable ignored) {}
@@ -863,24 +863,24 @@ public class ApplicationLoader extends Application {
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                app.nimarkogram.messenger.plugins.utils.NativeCrashHandler
+                app.nebulagram.messenger.plugins.utils.NativeCrashHandler
                         .schedulePreviousExitDiagnostics();
             }
         } catch (Throwable t) {
-            FileLog.e("nimarko: unable to schedule previous-exit diagnostics", t);
+            FileLog.e("nebula: unable to schedule previous-exit diagnostics", t);
         }
 
         try {
-            app.nimarkogram.messenger.badges.BadgesController.getInstance()
+            app.nebulagram.messenger.badges.BadgesController.getInstance()
                     .init(applicationContext);
         } catch (Throwable t) {
-            FileLog.e("nimarko-badges: init failed", t);
+            FileLog.e("nebula-badges: init failed", t);
         }
 
         try {
-            app.nimarkogram.messenger.textanim.NimarkoTextAnim.initIfEnabled();
+            app.nebulagram.messenger.textanim.NebulaTextAnim.initIfEnabled();
         } catch (Throwable t) {
-            FileLog.e("nimarko-textanim: init failed", t);
+            FileLog.e("nebula-textanim: init failed", t);
         }
 
 
@@ -942,30 +942,30 @@ public class ApplicationLoader extends Application {
         ProxyRotationController.init();
 
         try {
-            app.nimarkogram.messenger.NimarkoFeatureHooks.setDiscussInsteadOfMute(
-                    app.nimarkogram.messenger.NimarkoConfig.discussInsteadOfMute);
+            app.nebulagram.messenger.NebulaFeatureHooks.setDiscussInsteadOfMute(
+                    app.nebulagram.messenger.NebulaConfig.discussInsteadOfMute);
         } catch (Throwable ignored) {}
 
         try {
-            if (app.nimarkogram.messenger.NimarkoConfig.pluginsEngine) {
-                app.nimarkogram.messenger.plugins.PluginsController.getInstance().init(() -> {
-                    if (!app.nimarkogram.messenger.plugins.PluginsController
+            if (app.nebulagram.messenger.NebulaConfig.pluginsEngine) {
+                app.nebulagram.messenger.plugins.PluginsController.getInstance().init(() -> {
+                    if (!app.nebulagram.messenger.plugins.PluginsController
                             .getInstance().isInitialized()) {
                         return;
                     }
-                    app.nimarkogram.messenger.plugins.PluginsController.getInstance()
-                            .executeOnAppEvent(app.nimarkogram.messenger.plugins.PluginsConstants.APP_START);
+                    app.nebulagram.messenger.plugins.PluginsController.getInstance()
+                            .executeOnAppEvent(app.nebulagram.messenger.plugins.PluginsConstants.APP_START);
                     org.telegram.messenger.Utilities.pluginsQueue.postRunnable(() -> {
                         try {
-                            app.nimarkogram.messenger.plugins.PluginsController.getInstance()
-                                    .executeOnAppEvent(app.nimarkogram.messenger.plugins.PluginsConstants.APP_RESUME);
+                            app.nebulagram.messenger.plugins.PluginsController.getInstance()
+                                    .executeOnAppEvent(app.nebulagram.messenger.plugins.PluginsConstants.APP_RESUME);
                         } catch (Throwable wt) {
-                            org.telegram.messenger.FileLog.e("nimarko: plugin warmup ping failed", wt);
+                            org.telegram.messenger.FileLog.e("nebula: plugin warmup ping failed", wt);
                         }
                     }, 2000L);
                 });
             } else {
-                FileLog.d("NimarkoGram: pluginsEngine disabled, skipping plugin init");
+                FileLog.d("NebulaGram: pluginsEngine disabled, skipping plugin init");
             }
         } catch (Throwable t) {
             FileLog.e("PluginsController.init failed at app start", t);
@@ -981,7 +981,7 @@ public class ApplicationLoader extends Application {
         } else {
             enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", false);
         }
-        boolean residentEnabled = app.nimarkogram.messenger.NimarkoConfig.residentNotification
+        boolean residentEnabled = app.nebulagram.messenger.NebulaConfig.residentNotification
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && Build.VERSION.SDK_INT < 35;
         if (residentEnabled) {

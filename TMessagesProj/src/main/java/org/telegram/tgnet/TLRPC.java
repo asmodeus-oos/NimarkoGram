@@ -61828,7 +61828,7 @@ public class TLRPC {
 
         public long document_id;
         public TLRPC.Document document; //custom
-        // NimarkoGram: transient client-only flag — marks an entity that was
+        // NebulaGram: transient client-only flag — marks an entity that was
         // reconstructed from a `tg://emoji?id=` text-URL (local premium emoji).
         // Deliberately NOT serialized (readParams/serializeToStream/JSON ignore
         // it) so it never crosses the wire or hits the DB.

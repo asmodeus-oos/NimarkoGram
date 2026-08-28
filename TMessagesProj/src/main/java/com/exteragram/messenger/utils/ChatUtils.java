@@ -6,9 +6,9 @@ import org.telegram.messenger.UserConfig;
 public final class ChatUtils {
 
     private final int account;
-    private final app.nimarkogram.messenger.utils.chats.ChatUtils real;
+    private final app.nebulagram.messenger.utils.chats.ChatUtils real;
 
-    private ChatUtils(int account, app.nimarkogram.messenger.utils.chats.ChatUtils real) {
+    private ChatUtils(int account, app.nebulagram.messenger.utils.chats.ChatUtils real) {
         this.account = account;
         this.real = real;
     }
@@ -18,7 +18,7 @@ public final class ChatUtils {
     }
 
     public static ChatUtils getInstance(int account) {
-        return new ChatUtils(account, app.nimarkogram.messenger.utils.chats.ChatUtils.getInstance(account));
+        return new ChatUtils(account, app.nebulagram.messenger.utils.chats.ChatUtils.getInstance(account));
     }
 
     public String getPathToMessage(MessageObject messageObject) {
@@ -26,7 +26,7 @@ public final class ChatUtils {
     }
 
     public CharSequence getMessageText(MessageObject selectedObject, MessageObject.GroupedMessages selectedObjectGroup) {
-        return app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.getInstance(account)
+        return app.nebulagram.messenger.utils.chats.NebulaChatHelper.getInstance(account)
                 .getMessageText(selectedObject, selectedObjectGroup);
     }
 }

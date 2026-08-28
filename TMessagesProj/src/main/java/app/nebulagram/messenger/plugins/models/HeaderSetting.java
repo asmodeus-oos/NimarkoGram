@@ -1,0 +1,12 @@
+package app.nebulagram.messenger.plugins.models;
+
+import app.nebulagram.messenger.plugins.PluginsConstants;
+
+public class HeaderSetting extends SettingItem {
+    public String text;
+
+    public HeaderSetting(String str) {
+        super(PluginsConstants.Settings.TYPE_HEADER);
+        this.text = str;
+    }
+}

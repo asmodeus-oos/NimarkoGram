@@ -549,7 +549,7 @@ public class SizeNotifierFrameLayout extends FrameLayout implements Theme.Colora
 
     private void checkSnowflake(Canvas canvas) {
         
-        boolean userForced = app.nimarkogram.messenger.NimarkoConfig.drawSnowInChat;
+        boolean userForced = app.nebulagram.messenger.NebulaConfig.drawSnowInChat;
         boolean wantSnow = userForced
                 || (Theme.canStartHolidayAnimation() && LiteMode.isEnabled(LiteMode.FLAG_CHAT_BACKGROUND));
         if (backgroundView != null && wantSnow) {

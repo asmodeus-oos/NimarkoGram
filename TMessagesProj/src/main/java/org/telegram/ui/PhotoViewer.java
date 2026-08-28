@@ -327,10 +327,10 @@ import org.telegram.ui.Stories.recorder.CaptionContainerView;
 import org.telegram.ui.Stories.recorder.HintView2;
 import org.telegram.ui.Stories.recorder.KeyboardNotifier;
 import org.telegram.ui.Stories.recorder.StoryEntry;
-import app.nimarkogram.messenger.components.ChooseSubtitlesLayout;
+import app.nebulagram.messenger.components.ChooseSubtitlesLayout;
 
-import app.nimarkogram.messenger.NimarkoConfig;
-import app.nimarkogram.messenger.utils.NimarkoPhotoViewerHelper;
+import app.nebulagram.messenger.NebulaConfig;
+import app.nebulagram.messenger.utils.NebulaPhotoViewerHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -478,7 +478,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 titleTextView[i].setTypeface(AndroidUtilities.bold());
                 titleTextView[i].setDrawablePadding(dp(4));
                 titleTextView[i].setScrollNonFitText(true);
-                // NimarkoGram: the photo-viewer author name must sit exactly like official Telegram. The
+                // NebulaGram: the photo-viewer author name must sit exactly like official Telegram. The
                 // centerChatTitle (chat-header) offset leaked in here and nudged the name DOWN dp(2) (with the
                 // date nudged UP dp(1) below), cramping the name against the time. Pin to 0 = official spacing.
                 titleLayout.addView(titleTextView[i], LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, centerTitle ? Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL : Gravity.LEFT | Gravity.CENTER_VERTICAL, centerTitle ? 96 : 0, 0, centerTitle ? 96 : 0, 0));
@@ -1104,7 +1104,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private boolean playerWasPlaying;
     private boolean playerAutoStarted;
     private boolean playerLooping;
-    // NimarkoGram (CG parity): set in onPause when autoPauseVideo paused a
+    // NebulaGram (CG parity): set in onPause when autoPauseVideo paused a
     // playing video; cleared in onResume to auto-resume. Mirrors CG's
     // PhotoViewer#pausedOnPause field.
     private boolean autoPausedOnPause;
@@ -1112,7 +1112,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private String shouldSavePositionForCurrentVideo;
     private String shouldSavePositionForCurrentVideoShortTerm;
     private static final int MAX_SAVED_VIDEO_POSITIONS = 128;
-    private static final String SAVED_VIDEO_LRU_KEY = "__nimarko_lru";
+    private static final String SAVED_VIDEO_LRU_KEY = "__nebula_lru";
     private static final Object savedVideoPreferencesLock = new Object();
     private static final Map<String, SavedVideoPosition> savedVideoPositions =
             Collections.synchronizedMap(new LinkedHashMap<String, SavedVideoPosition>(
@@ -1509,7 +1509,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         bottomSheet.scrollNavBar = true;
         bottomSheet.show();
         // NG: disableVibration gate (CG parity, PhotoViewer:1384).
-        if (!NimarkoConfig.disableVibration) {
+        if (!NebulaConfig.disableVibration) {
             try {
                 containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
@@ -1839,7 +1839,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
             if (isMediaGlowVideo()) {
-                app.nimarkogram.messenger.mediaglow.MediaGlowController.getInstance().onVideoFrameAvailable(PhotoViewer.this);
+                app.nebulagram.messenger.mediaglow.MediaGlowController.getInstance().onVideoFrameAvailable(PhotoViewer.this);
             }
             if (waitingForFirstTextureUpload == 1) {
                 checkChangedTextureView(true);
@@ -2142,7 +2142,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
     private void onMediaImageUpdated(ImageReceiver receiver) {
         if (receiver == centerImage && !isMediaGlowVideo()) {
-            app.nimarkogram.messenger.mediaglow.MediaGlowController.getInstance()
+            app.nebulagram.messenger.mediaglow.MediaGlowController.getInstance()
                     .onPhotoUpdated(this, receiver);
         }
     }
@@ -2301,7 +2301,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private final ArrayList<TLRPC.Message> imagesArrMessages = new ArrayList<>();
     private final ArrayList<SecureDocument> secureDocuments = new ArrayList<>();
     private final ArrayList<TLRPC.Photo> avatarsArr = new ArrayList<>();
-    private NimarkoPhotoViewerHelper photoViewerHelper;
+    private NebulaPhotoViewerHelper photoViewerHelper;
     private final ArrayList<Object> imagesArrLocals = new ArrayList<>();
     private ImageLocation currentAvatarLocation = null;
     private SavedState savedState = null;
@@ -4368,8 +4368,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     public static void onMediaGlowSettingChanged(boolean enabled) {
-        app.nimarkogram.messenger.mediaglow.MediaGlowController controller =
-                app.nimarkogram.messenger.mediaglow.MediaGlowController.getInstance();
+        app.nebulagram.messenger.mediaglow.MediaGlowController controller =
+                app.nebulagram.messenger.mediaglow.MediaGlowController.getInstance();
         if (!enabled) {
             controller.release();
             return;
@@ -5061,7 +5061,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         canvas.clipRect(transitionHole, Region.Op.DIFFERENCE);
                     }
                 }
-                app.nimarkogram.messenger.mediaglow.MediaGlowController.getInstance().draw(
+                app.nebulagram.messenger.mediaglow.MediaGlowController.getInstance().draw(
                         PhotoViewer.this, canvas, this, centerImage,
                         getMediaGlowVideoTexture(),
                         glowDismiss);
@@ -5666,7 +5666,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         }
                     }
 
-                    final boolean[] deleteForAll = {NimarkoConfig.deleteForAll};
+                    final boolean[] deleteForAll = {NebulaConfig.deleteForAll};
                     if (currentMessageObject != null && !currentMessageObject.scheduled) {
                         long dialogId = currentMessageObject.getDialogId();
                         if (!DialogObject.isEncryptedDialog(dialogId)) {
@@ -5697,9 +5697,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                         CheckBoxCell cell = new CheckBoxCell(parentActivity, 1, resourcesProvider);
                                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                         if (currentChat != null) {
-                                            cell.setText(getString("DeleteForAll", R.string.DeleteForAll), "", NimarkoConfig.deleteForAll, false);
+                                            cell.setText(getString("DeleteForAll", R.string.DeleteForAll), "", NebulaConfig.deleteForAll, false);
                                         } else {
-                                            cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), "", NimarkoConfig.deleteForAll, false);
+                                            cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), "", NebulaConfig.deleteForAll, false);
                                         }
                                         cell.setPadding(LocaleController.isRTL ? dp(16) : dp(8), 0, LocaleController.isRTL ? dp(8) : dp(16), 0);
                                         frameLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 0, 0, 0, 0));
@@ -7730,7 +7730,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             // the system long-press haptic is fired by View.performLongClick() before this callback
             // returns. Suppress the system haptic when disableVibration is on by toggling
             // hapticFeedbackEnabled on the button. ItemOptions itself does not emit additional haptics.
-            view.setHapticFeedbackEnabled(!NimarkoConfig.disableVibration);
+            view.setHapticFeedbackEnabled(!NebulaConfig.disableVibration);
             final boolean showSendAsFile = !canEdit && !isCurrentVideo && !captionEdit.hasTimer();
             final boolean showSchedule = !canEdit && canScheduleMessage && !hasTtl;
             final boolean showWithoutSound = !(canEdit && canReplace) && !userIsSelf;
@@ -11104,7 +11104,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
                     if (!isCurrent()) return;
                     if (isMediaGlowVideo()) {
-                        app.nimarkogram.messenger.mediaglow.MediaGlowController.getInstance().onVideoFrameAvailable(PhotoViewer.this);
+                        app.nebulagram.messenger.mediaglow.MediaGlowController.getInstance().onVideoFrameAvailable(PhotoViewer.this);
                     }
                     checkChangedTextureView(false);
 
@@ -11385,12 +11385,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         usedSurfaceView = false;
 
         if (imagesArrLocals.isEmpty()) {
-            // NimarkoGram: evaluate the surface decision LIVE here instead of using the cached
+            // NebulaGram: evaluate the surface decision LIVE here instead of using the cached
             // ALLOW_USE_SURFACE field. PhotoViewer is a process-lived singleton, so a field set once
             // at construction kept a SurfaceView in use after Media Glow was toggled ON later, leaving
-            // TextureView.getBitmap() unavailable until app restart. Reading NimarkoConfig.mediaGlow at
+            // TextureView.getBitmap() unavailable until app restart. Reading NebulaConfig.mediaGlow at
             // surface-creation time keeps the original intent (SurfaceView only when SDK >= 30 and glow off).
-            final boolean useSurfaceView = Build.VERSION.SDK_INT >= 30 && !app.nimarkogram.messenger.NimarkoConfig.mediaGlow;
+            final boolean useSurfaceView = Build.VERSION.SDK_INT >= 30 && !app.nebulagram.messenger.NebulaConfig.mediaGlow;
             if (useSurfaceView && injectingVideoPlayerSurface == null) {
                 videoSurfaceView = new SurfaceView(parentActivity);
                 usedSurfaceView = true;
@@ -11643,7 +11643,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 || (Build.VERSION.SDK_INT >= 17 && activity.isDestroyed())) {
             return;
         }
-        app.nimarkogram.messenger.utils.CGCompat.runOrAskBeforeDestructive(activity, currentAccount, () -> {
+        app.nebulagram.messenger.utils.CGCompat.runOrAskBeforeDestructive(activity, currentAccount, () -> {
             // A biometric result may arrive after viewer/activity teardown.
             // Never turn that lifecycle race into an unauthenticated delete.
             if (parentActivity != activity || activity.isFinishing()
@@ -15628,9 +15628,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 title = DialogObject.getName(avatarsDialogId);
                 menuItem.showSubItem(gallery_menu_report);
 
-                /** NimarkoGram start (CG PhotoViewerHelper port) */
+                /** NebulaGram start (CG PhotoViewerHelper port) */
                 if (parentFragment != null) {
-                    photoViewerHelper = new NimarkoPhotoViewerHelper(
+                    photoViewerHelper = new NebulaPhotoViewerHelper(
                             avatarsArr,
                             switchingToIndex,
                             avatarsDialogId,
@@ -15661,7 +15661,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         actionBarContainer.setSubtitle("", animated);
                     }
                 }
-                /** NimarkoGram finish */
+                /** NebulaGram finish */
             }
 
             if (dialogPhotos != null) {
@@ -16947,13 +16947,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 videoFrameBitmap = null;
             }
         }
-        // NimarkoGram: Media Glow — recapture the glow when the viewer page changes. MUST run AFTER
+        // NebulaGram: Media Glow — recapture the glow when the viewer page changes. MUST run AFTER
         // the center/left/right ImageReceiver swap above: on a swipe `centerImage` is reassigned to
         // the adjacent receiver, so calling this at the top of setImageIndex would bind the capture
         // to the OUTGOING photo's receiver (e.g. the dark neighbor), painting its glow under the new
         // photo. Reading `centerImage` here guarantees the freshly-committed photo is captured.
-        if (app.nimarkogram.messenger.NimarkoConfig.mediaGlow) {
-            app.nimarkogram.messenger.mediaglow.MediaGlowController.getInstance().onMediaChanged(
+        if (app.nebulagram.messenger.NebulaConfig.mediaGlow) {
+            app.nebulagram.messenger.mediaglow.MediaGlowController.getInstance().onMediaChanged(
                     this, centerImage, getMediaGlowVideoTexture());
         }
         detectFaces();
@@ -18359,9 +18359,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (parentActivity == null || isVisible || provider == null && checkAnimation() || messageObject == null && fileLocation == null && messages == null && photos == null && documents == null && imageLocation == null && pageBlocksAdapter == null) {
             return false;
         }
-        // NimarkoGram: pause the profile-banner video while the photo viewer is open.
-        if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
-            try { app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onOverlayOpen(); } catch (Throwable ignored) {}
+        // NebulaGram: pause the profile-banner video while the photo viewer is open.
+        if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
+            try { app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onOverlayOpen(); } catch (Throwable ignored) {}
         }
 
         final PlaceProviderObject object = provider.getPlaceForPhoto(messageObject, fileLocation, index, true, false);
@@ -19008,13 +19008,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     public void closePhoto(boolean animated, boolean fromEditMode) {
-        // NimarkoGram: Media Glow close ride-out is started LATER, only once this is a REAL close
+        // NebulaGram: Media Glow close ride-out is started LATER, only once this is a REAL close
         // (after the master guard below). Calling onClose() at the top fired it on every spurious
         // closePhoto() — edit-mode/quality early returns and checkAnimation() — fading the glow out
         // and freeing its bitmap while the photo stayed on screen.
-        // NimarkoGram: resume the profile-banner video when the photo viewer closes.
-        if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
-            try { app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onOverlayClose(); } catch (Throwable ignored) {}
+        // NebulaGram: resume the profile-banner video when the photo viewer closes.
+        if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
+            try { app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onOverlayClose(); } catch (Throwable ignored) {}
         }
         if (stickerMakerView != null) {
             stickerMakerView.isThanosInProgress = false;
@@ -19113,11 +19113,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         final int closeGeneration = openGeneration;
         final int closeAccount = currentAccount;
         claimCurrentAnimatingImageViews(closeGeneration);
-        // NimarkoGram: this is now a committed close. Freeze Media Glow BEFORE
+        // NebulaGram: this is now a committed close. Freeze Media Glow BEFORE
         // changing system-UI flags: some OEMs dispatch the resulting inset/layout
         // update immediately, which otherwise records one normal (unfrozen) frame
         // between Back and the close animation.
-        app.nimarkogram.messenger.mediaglow.MediaGlowController.getInstance().onClose(this);
+        app.nebulagram.messenger.mediaglow.MediaGlowController.getInstance().onClose(this);
         if (mediaGlowView != null) {
             mediaGlowView.invalidate();
         }
@@ -19636,7 +19636,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         // Media Glow capture state and restore the source receiver explicitly,
         // otherwise a deleted PiP/current item can leak a stale glow into the
         // next viewer and leave its thumbnail hidden.
-        app.nimarkogram.messenger.mediaglow.MediaGlowController.getInstance().release(this);
+        app.nebulagram.messenger.mediaglow.MediaGlowController.getInstance().release(this);
         if (currentPlaceObject != null && currentPlaceObject.imageReceiver != null) {
             currentPlaceObject.imageReceiver.setVisible(true, true);
         }
@@ -19669,7 +19669,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             Instance = null;
         }
         onHideView();
-        // NimarkoGram: CG parity — release the avatar-subtitle helper's cached state on viewer
+        // NebulaGram: CG parity — release the avatar-subtitle helper's cached state on viewer
         // destroy so it doesn't leak switchingToIndex / avatarsArr / avatarsDialogId across
         // re-opens. Mirrors CG PhotoViewer line ~18556 (photoViewerHelper.release()).
         if (photoViewerHelper != null) {
@@ -19871,11 +19871,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (photoPaintView != null) {
             photoPaintView.onResume();
         }
-        // NimarkoGram (CG parity): resume the video paused by autoPauseVideo when
+        // NebulaGram (CG parity): resume the video paused by autoPauseVideo when
         // the activity comes back to the foreground.
         if (autoPausedOnPause) {
             autoPausedOnPause = false;
-            if (app.nimarkogram.messenger.NimarkoConfig.autoPauseVideo
+            if (app.nebulagram.messenger.NebulaConfig.autoPauseVideo
                     && !isPlayingVideoOrWeb()) {
                 try { playVideoOrWeb(); } catch (Throwable ignored) {}
             }
@@ -19895,9 +19895,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (videoPlayer != null && playerLooping) {
             videoPlayer.setLooping(allowLoopingOnPause());
         }
-        // NimarkoGram (CG parity): pause inline videos when the screen leaves
+        // NebulaGram (CG parity): pause inline videos when the screen leaves
         // foreground. Track the pause so onResume can flip it back to playing.
-        if (app.nimarkogram.messenger.NimarkoConfig.autoPauseVideo
+        if (app.nebulagram.messenger.NebulaConfig.autoPauseVideo
                 && (isPlayingVideoOrWeb() || photoViewerWebView != null)
                 && !AndroidUtilities.isInPictureInPictureMode(parentActivity)) {
             // Only known/controllable players are auto-resumed. Generic embeds
@@ -22062,10 +22062,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         return current != C.TIME_UNSET && total > 15 * 1000 && (!forward || total - current > getDoubleTapDuration());
     }
 
-    // NimarkoGram (CG parity): seconds-to-seek on double-tap. Exposed via
-    // NimarkoConfig.videoSeekDuration; default 10 s matches stock Telegram.
+    // NebulaGram (CG parity): seconds-to-seek on double-tap. Exposed via
+    // NebulaConfig.videoSeekDuration; default 10 s matches stock Telegram.
     private int getDoubleTapDuration() {
-        return app.nimarkogram.messenger.NimarkoConfig.videoSeekDuration * 1000;
+        return app.nebulagram.messenger.NebulaConfig.videoSeekDuration * 1000;
     }
 
     long totalRewinding;
@@ -22855,10 +22855,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         int compressionsCount = this.compressionsCount;
-        // NimarkoGram (CG parity): sendVideosAtMaxQuality bumps the ceiling so
+        // NebulaGram (CG parity): sendVideosAtMaxQuality bumps the ceiling so
         // 4K-grade compression slots are reachable, mirroring CherrygramDebug's
         // sendVideosAtMaxQuality flag.
-        boolean maxQuality = app.nimarkogram.messenger.NimarkoConfig.sendVideosAtMaxQuality;
+        boolean maxQuality = app.nebulagram.messenger.NebulaConfig.sendVideosAtMaxQuality;
         int maxCompression = maxQuality ? 5 : 2;
         int compressionsLimit = maxQuality ? 8 : 5;
         while (compressionsCount < compressionsLimit) {
@@ -22874,9 +22874,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
     private void updateCompressionsCount(int h, int w) {
         int maxSize = Math.max(h, w);
-        // NimarkoGram (CG parity): extend the compression ladder to 4K when
+        // NebulaGram (CG parity): extend the compression ladder to 4K when
         // sendVideosAtMaxQuality is on.
-        if (app.nimarkogram.messenger.NimarkoConfig.sendVideosAtMaxQuality) {
+        if (app.nebulagram.messenger.NebulaConfig.sendVideosAtMaxQuality) {
             if (maxSize > 3840) {
                 compressionsCount = 7;
             } else if (maxSize > 2560) {

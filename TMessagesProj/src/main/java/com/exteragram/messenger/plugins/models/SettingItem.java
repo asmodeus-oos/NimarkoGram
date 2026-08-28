@@ -2,7 +2,7 @@ package com.exteragram.messenger.plugins.models;
 
 import com.chaquo.python.PyObject;
 
-public class SettingItem extends app.nimarkogram.messenger.plugins.models.SettingItem {
+public class SettingItem extends app.nebulagram.messenger.plugins.models.SettingItem {
     public SettingItem(String type, String icon, PyObject onLongClickCallback, String linkAlias) {
         super(type, icon, onLongClickCallback, linkAlias);
     }

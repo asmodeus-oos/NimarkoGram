@@ -14,11 +14,11 @@ public class ThemeColors {
     public static final int TELEGRAM_COLOR = 0xFF229AF0;        // -14509328
     public static final int TELEGRAM_COLOR_TEXT = 0xFF298ACF;   // -14054705
     public static final int DEFAULT_BLACK_TEXT = 0xFF1A1D21;   // -15065823
-    // NimarkoGram brand color — matches the dominant red of ic_launcher
+    // NebulaGram brand color — matches the dominant red of ic_launcher
     // (≈70% of icon pixels). Used in IntroActivity so the first-page logo
     // composition (paper-plane silhouette over a circle) is tinted NG red
     // instead of Telegram blue.
-    public static final int NIMARKOGRAM_COLOR = 0xFFB22A2E;
+    public static final int NEBULAGRAM_COLOR = 0xFFB22A2E;
 
     private static SparseArray<String> colorKeysMap;
     private static HashMap<String, Integer> colorKeysStringMap;
@@ -117,7 +117,7 @@ public class ThemeColors {
         defaultColors[key_windowBackgroundWhiteBlueHeader] = TELEGRAM_COLOR_TEXT;
         defaultColors[key_windowBackgroundWhiteInputField] = 0xffdbdbdb;
         defaultColors[key_windowBackgroundWhiteInputFieldActivated] = TELEGRAM_COLOR;
-        // NimarkoGram (CG parity): lighter off-track gray, matching Cherrygram's
+        // NebulaGram (CG parity): lighter off-track gray, matching Cherrygram's
         // ThemeColors default (upstream Telegram uses 0xffa6adb3).
         defaultColors[key_switchTrack] = 0xffb0b5ba;
         defaultColors[key_switchTrackChecked] = TELEGRAM_COLOR;
@@ -434,7 +434,7 @@ public class ThemeColors {
         defaultColors[key_chat_outFileProgress] = 0xffdaf5c3;
         defaultColors[key_chat_inFileProgressSelected] = 0xffcbeaf6;
         defaultColors[key_chat_outFileProgressSelected] = 0xffc5eca7;
-        // NimarkoGram (CG parity): pinned blue for incoming-file name text,
+        // NebulaGram (CG parity): pinned blue for incoming-file name text,
         // matching Cherrygram (upstream Telegram uses TELEGRAM_COLOR_TEXT).
         defaultColors[key_chat_inFileNameText] = 0xff4e9ad4;
         defaultColors[key_chat_outFileNameText] = 0xff55ab4f;
@@ -666,7 +666,7 @@ public class ThemeColors {
         defaultColors[key_chat_outTextSelectionCursor] = 0xFF419FE8;
         defaultColors[key_chat_outBubbleLocationPlaceholder] = 0x1e307311;
         defaultColors[key_chat_inBubbleLocationPlaceholder] = 0x1e506373;
-        defaultColors[key_chat_BlurAlpha] = app.nimarkogram.messenger.NimarkoConfig.forceBlur ? 0xCF000000 : 0xB2000000;
+        defaultColors[key_chat_BlurAlpha] = app.nebulagram.messenger.NebulaConfig.forceBlur ? 0xCF000000 : 0xB2000000;
         defaultColors[key_chat_BlurAlphaSlow] = 0xC1000000;
         defaultColors[key_chat_editMediaButton] = 0xff1A9CFF;
 

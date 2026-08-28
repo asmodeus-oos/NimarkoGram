@@ -1,8 +1,8 @@
 package com.exteragram.messenger.plugins.hooks;
 
-public interface PluginsHooks extends app.nimarkogram.messenger.plugins.hooks.PluginsHooks {
+public interface PluginsHooks extends app.nebulagram.messenger.plugins.hooks.PluginsHooks {
 
-    class PostRequestResult extends app.nimarkogram.messenger.plugins.hooks.PluginsHooks.PostRequestResult {
+    class PostRequestResult extends app.nebulagram.messenger.plugins.hooks.PluginsHooks.PostRequestResult {
 
         public PostRequestResult(org.telegram.tgnet.TLObject response, org.telegram.tgnet.TLRPC.TL_error error) {
             super(response, error);

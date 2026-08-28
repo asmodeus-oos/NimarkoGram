@@ -1,7 +1,7 @@
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 
 apply plugin: 'com.android.library'
-// NimarkoGram additions for ported extera (Kotlin + Python interop).
+// NebulaGram additions for ported extera (Kotlin + Python interop).
 // kotlin-kapt removed: Room *_Impl.java files were pre-generated during decompile,
 // so we don't need RoomProcessor at compile time.
 apply plugin: 'kotlin-android'
@@ -97,7 +97,7 @@ dependencies {
 //    implementation 'com.google.mlkit:translate:17.0.3'
 
     constraints {
-        // NimarkoGram: bumped 1.8.0 -> 1.9.0 to align with kotlin-gradle-plugin 1.9.0.
+        // NebulaGram: bumped 1.8.0 -> 1.9.0 to align with kotlin-gradle-plugin 1.9.0.
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0") {
             because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
         }
@@ -109,7 +109,7 @@ dependencies {
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 
-    // ---- NimarkoGram (ported extera) ----
+    // ---- NebulaGram (ported extera) ----
     // Kotlin stdlib pinned to 1.9.0 (matches buildscript classpath).
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0'
     // Pine xposed-style hooks (used by extera plugins.xposed). We keep the 0.3.0 AAR for its Java classes,
@@ -131,7 +131,7 @@ dependencies {
     // 6.1 is the current stable implementation. Unlike the old 4.3 build it
     // includes the latest ART/Unsafe compatibility fixes used on Android 15/16.
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.1'
-    // NimarkoGram: pine:enhances:0.1.0 not on mavenCentral — dropped (extera plugins.xposed will reflect on core only).
+    // NebulaGram: pine:enhances:0.1.0 not on mavenCentral — dropped (extera plugins.xposed will reflect on core only).
     // MVEL expression engine (extera plugins engine).
     implementation 'org.mvel:mvel2:2.5.2.Final'
     // Coil for NowPlaying album-art async loading.
@@ -139,8 +139,8 @@ dependencies {
     // Gson — extera api uses it heavily. Note: TG already pulls gson 2.11.0;
     // explicit pin keeps extera api/dto contract stable at 2.10.1 semantics.
     implementation 'com.google.code.gson:gson:2.10.1'
-    // Jackson — NimarkoJsonBottomSheet's "Switch to Jackson" toggle uses ObjectMapper
-    // for pretty-printing the TLRPC.Message when NimarkoConfig.jacksonJSON_Provider
+    // Jackson — NebulaJsonBottomSheet's "Switch to Jackson" toggle uses ObjectMapper
+    // for pretty-printing the TLRPC.Message when NebulaConfig.jacksonJSON_Provider
     // is on (default off). Mirrors CG's JsonBottomSheet behaviour.
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
     // Room — extera api/db. (kapt processor disabled; we use the pre-generated *_Impl.java.)
@@ -148,7 +148,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.7.0'
     implementation 'androidx.sqlite:sqlite:2.5.0'
 
-    // ---- NimarkoGram Phase 2 (re-port: restored 144 extera files) ----
+    // ---- NebulaGram Phase 2 (re-port: restored 144 extera files) ----
     // Retrofit (extera api/network/ApiService is a Retrofit interface).
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -164,7 +164,7 @@ dependencies {
     // WorkManager (extera api/worker/SyncWorker).
     implementation 'androidx.work:work-runtime-ktx:2.9.0'
 
-    // ---- NimarkoGram CameraX backend ----
+    // ---- NebulaGram CameraX backend ----
     // Keep every CameraX artifact on the same stable release. Concurrent
     // controllers are bound while inactive and activated only after the full
     // pair is registered, which is required for eager OEM camera services.
@@ -202,7 +202,7 @@ android {
     }
 
     compileOptions {
-        // NimarkoGram: bumped 1.8 -> 17 to match kotlinOptions jvmTarget (extera Kotlin code).
+        // NebulaGram: bumped 1.8 -> 17 to match kotlinOptions jvmTarget (extera Kotlin code).
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
 
@@ -236,24 +236,24 @@ android {
         buildConfigField "String", "GOOGLE_AUTH_CLIENT_ID", configString(privateValue('GOOGLE_AUTH_CLIENT_ID'))
         buildConfigField "String", "GOOGLE_SAFETYNET_KEY", configString(privateValue('GOOGLE_SAFETYNET_KEY'))
         buildConfigField "String", "HUAWEI_APP_ID", configString(privateValue('HUAWEI_APP_ID'))
-        buildConfigField "String", "NIMARKO_UPDATE_ENDPOINT", configString(privateValue('NIMARKO_UPDATE_ENDPOINT'))
-        buildConfigField "String", "NIMARKO_MEDIA_API_URL", configString(privateValue('NIMARKO_MEDIA_API_URL', 'https://api.nimarkogram.app'))
-        buildConfigField "String", "NIMARKO_API_BASE_URL", configString(privateValue('NIMARKO_API_BASE_URL', 'https://api.nimarkogram.app'))
-        buildConfigField "String", "NIMARKO_BANNER_API_URL", configString(privateValue('NIMARKO_BANNER_API_URL', 'https://api.nimarkogram.app'))
-        buildConfigField "String", "NIMARKO_BANNER_PLACEHOLDER_URL", configString(privateValue('NIMARKO_BANNER_PLACEHOLDER_URL'))
-        buildConfigField "String", "NIMARKO_INFOCARD_RATES_URL", configString(privateValue('NIMARKO_INFOCARD_RATES_URL'))
-        buildConfigField "String", "NIMARKO_ASIA_RELAY_HOST", configString(privateValue('NIMARKO_ASIA_RELAY_HOST'))
-        buildConfigField "String", "NIMARKO_SUPPORT_URL", configString(privateValue('NIMARKO_SUPPORT_URL'))
-        buildConfigField "String", "NIMARKO_TRUSTED_PLUGIN_IDS", configString(privateValue('NIMARKO_TRUSTED_PLUGIN_IDS'))
+        buildConfigField "String", "NEBULA_UPDATE_ENDPOINT", configString(privateValue('NEBULA_UPDATE_ENDPOINT'))
+        buildConfigField "String", "NEBULA_MEDIA_API_URL", configString(privateValue('NEBULA_MEDIA_API_URL', 'https://api.nebulagram.app'))
+        buildConfigField "String", "NEBULA_API_BASE_URL", configString(privateValue('NEBULA_API_BASE_URL', 'https://api.nebulagram.app'))
+        buildConfigField "String", "NEBULA_BANNER_API_URL", configString(privateValue('NEBULA_BANNER_API_URL', 'https://api.nebulagram.app'))
+        buildConfigField "String", "NEBULA_BANNER_PLACEHOLDER_URL", configString(privateValue('NEBULA_BANNER_PLACEHOLDER_URL'))
+        buildConfigField "String", "NEBULA_INFOCARD_RATES_URL", configString(privateValue('NEBULA_INFOCARD_RATES_URL'))
+        buildConfigField "String", "NEBULA_ASIA_RELAY_HOST", configString(privateValue('NEBULA_ASIA_RELAY_HOST'))
+        buildConfigField "String", "NEBULA_SUPPORT_URL", configString(privateValue('NEBULA_SUPPORT_URL'))
+        buildConfigField "String", "NEBULA_TRUSTED_PLUGIN_IDS", configString(privateValue('NEBULA_TRUSTED_PLUGIN_IDS'))
 
-        // NimarkoGram: lowered to 23 so apksigner verifies v1 (>=24 spec
+        // NebulaGram: lowered to 23 so apksigner verifies v1 (>=24 spec
         // skips v1 entirely → Play Protect treated APK as "modern-only"
         // and hard-blocked on Android 16). Chaquopy minSdk note was a
         // soft preference; actual native libs work on 23 fine.
         minSdkVersion 24
         targetSdkVersion 35
 
-        // NimarkoGram: hybrid — build BOTH arm64-v8a (modern) AND armeabi-v7a (old devices) so a
+        // NebulaGram: hybrid — build BOTH arm64-v8a (modern) AND armeabi-v7a (old devices) so a
         // single APK runs everywhere. CMake compiles the full native set for each ABI; prebuilt
         // static libs (ffmpeg/boringssl/tde2e) ship both. (Was arm64-only.)
         ndk {
@@ -387,16 +387,16 @@ chaquopy {
         // both release ABIs (arm64-v8a and armeabi-v7a). Python 3.13 would
         // silently make a combined ARM64 + ARMv7 release impossible.
         version = "3.11"
-        def nimarkoBuildPython = System.getenv("NIMARKO_BUILD_PYTHON")
-        if (!nimarkoBuildPython) {
-            nimarkoBuildPython = [
+        def nebulaBuildPython = System.getenv("NEBULA_BUILD_PYTHON")
+        if (!nebulaBuildPython) {
+            nebulaBuildPython = [
                     "/usr/bin/python3.11",
                     "/usr/local/bin/python3.11",
-                    "/opt/nimarko-python-3.11.14/bin/python3.11"
+                    "/opt/nebula-python-3.11.14/bin/python3.11"
             ].find { file(it).canExecute() }
         }
-        if (nimarkoBuildPython) {
-            buildPython nimarkoBuildPython
+        if (nebulaBuildPython) {
+            buildPython nebulaBuildPython
         } else if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
             buildPython "py", "-3.11"
         } else {
@@ -452,12 +452,12 @@ def getProps(String propName) {
         return "";
     }
 }
-// NimarkoGram: google-services plugin intentionally NOT applied on the
+// NebulaGram: google-services plugin intentionally NOT applied on the
 // library module. Its namespace is `org.telegram.messenger` (changing that
 // would re-package every R.java import across the codebase) which has no
-// matching client in our Firebase project nimarkogram-3a6f7. The plugin is
+// matching client in our Firebase project nebulagram-3a6f7. The plugin is
 // applied on `:TMessagesProj_AppStandalone` instead — that module's
-// applicationId override `app.nimarkogram.messenger` matches our JSON and
+// applicationId override `app.nebulagram.messenger` matches our JSON and
 // generates the runtime FirebaseApp config the final APK actually uses.
 // apply plugin: 'com.google.gms.google-services'
 

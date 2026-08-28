@@ -67,7 +67,7 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.FolderDrawable;
 import org.telegram.ui.Components.HintsController;
 import org.telegram.ui.Components.ItemOptions;
-import app.nimarkogram.messenger.preferences.BottomTabsPreferencesActivity;
+import app.nebulagram.messenger.preferences.BottomTabsPreferencesActivity;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 import org.telegram.ui.Components.blur3.BlurredBackgroundDrawableViewFactory;
@@ -99,25 +99,25 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
     private static final int INDEX_CALLS = 3;
 
     private static int posProfile() {
-        return app.nimarkogram.messenger.utils.ui.MainTabsManager.INSTANCE
-                .getPosition(app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType.PROFILE);
+        return app.nebulagram.messenger.utils.ui.MainTabsManager.INSTANCE
+                .getPosition(app.nebulagram.messenger.utils.ui.MainTabsManager.TabType.PROFILE);
     }
 
     private static int posChats() {
-        int p = app.nimarkogram.messenger.utils.ui.MainTabsManager.INSTANCE
-                .getPosition(app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType.CHATS);
+        int p = app.nebulagram.messenger.utils.ui.MainTabsManager.INSTANCE
+                .getPosition(app.nebulagram.messenger.utils.ui.MainTabsManager.TabType.CHATS);
         return p >= 0 ? p : FALLBACK_CHATS;
     }
 
     private static int posSettings() {
-        int p = app.nimarkogram.messenger.utils.ui.MainTabsManager.INSTANCE
-                .getPosition(app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType.SETTINGS);
+        int p = app.nebulagram.messenger.utils.ui.MainTabsManager.INSTANCE
+                .getPosition(app.nebulagram.messenger.utils.ui.MainTabsManager.TabType.SETTINGS);
         return p >= 0 ? p : FALLBACK_SETTINGS;
     }
 
-    private static app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType tabTypeAt(int position) {
-        java.util.List<app.nimarkogram.messenger.utils.ui.MainTabsManager.Tab> enabled =
-                app.nimarkogram.messenger.utils.ui.MainTabsManager.INSTANCE.getEnabledTabs();
+    private static app.nebulagram.messenger.utils.ui.MainTabsManager.TabType tabTypeAt(int position) {
+        java.util.List<app.nebulagram.messenger.utils.ui.MainTabsManager.Tab> enabled =
+                app.nebulagram.messenger.utils.ui.MainTabsManager.INSTANCE.getEnabledTabs();
         if (position < 0 || position >= enabled.size()) return null;
         return enabled.get(position).getType();
     }
@@ -425,7 +425,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
             tabsView.addView(tabs[index]);
             tabsView.setViewVisible(view, true, false);
-            tabs[index].setTitleVisible(app.nimarkogram.messenger.NimarkoConfig.showMainTabsTitle);
+            tabs[index].setTitleVisible(app.nebulagram.messenger.NebulaConfig.showMainTabsTitle);
         }
         checkUi_callTabVisible(getUserConfig().showCallsTab, false);
         applyEditorTabsVisibility(false);
@@ -458,7 +458,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
         tabsViewWrapper = new FrameLayout(context);
         tabsViewWrapper.setOnClickListener(v -> {});
         tabsViewWrapper.setClipToPadding(false);
-        if (app.nimarkogram.messenger.NimarkoConfig.showSearchInTabs) {
+        if (app.nebulagram.messenger.NebulaConfig.showSearchInTabs) {
             tabsContainer = new LinearLayout(context);
             tabsContainer.setOrientation(LinearLayout.HORIZONTAL);
             tabsContainer.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
@@ -477,7 +477,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
             );
             searchButton.setOnClickListener(v -> onSearchButtonClick());
             searchButton.setOnLongClickListener(v -> {
-                app.nimarkogram.messenger.chats.CGChatMenuInjector.INSTANCE.openArchivedChats(this);
+                app.nebulagram.messenger.chats.CGChatMenuInjector.INSTANCE.openArchivedChats(this);
                 return true;
             });
             searchButtonBackground = iBlur3FactoryGlass.create(
@@ -500,7 +500,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
                     DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS,
                     Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL));
         }
-        tabsViewWrapper.setVisibility(app.nimarkogram.messenger.NimarkoConfig.showMainTabs ? View.VISIBLE : View.GONE);
+        tabsViewWrapper.setVisibility(app.nebulagram.messenger.NebulaConfig.showMainTabs ? View.VISIBLE : View.GONE);
         contentView.addView(tabsViewWrapper, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM));
 
         updateLayoutWrapper = new UpdateLayoutWrapper(context);
@@ -521,7 +521,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
             return;
         }
 
-        if (app.nimarkogram.messenger.NimarkoConfig.tabsNoUnread) return;
+        if (app.nebulagram.messenger.NebulaConfig.tabsNoUnread) return;
 
         final int unreadCount = MessagesStorage.getInstance(currentAccount).getMainUnreadCount();
         if (unreadCount > 0) {
@@ -602,7 +602,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
             final int color = getMessagesController().folderTags ? folder.color : -1;
             String nmEmoticon = folder.isDefault() ? null : folder.emoticon;
             int nmFolderIcon = (nmEmoticon != null && !nmEmoticon.isEmpty())
-                    ? app.nimarkogram.messenger.preferences.folders.helpers.FolderIconHelper.getTabIcon(nmEmoticon)
+                    ? app.nebulagram.messenger.preferences.folders.helpers.FolderIconHelper.getTabIcon(nmEmoticon)
                     : R.drawable.msg_folders;
             folderItem.setTextAndIcon(title, 0, new FolderDrawable(getContext(), nmFolderIcon, color));
             folderItem.getTextView().setEmojiColor(getThemedColor(Theme.key_featuredStickers_addButton));
@@ -854,9 +854,9 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
                 dialogsActivity.scrollToFolder(pendingFolderId);
                 pendingFolderId = null;
             }
-            if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
+            if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
                 try {
-                    app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance()
+                    app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance()
                             .onTabVisibilityChanged(currentPosition == posProfile() ? 1f : 0f);
                 } catch (Throwable ignored) {}
             }
@@ -879,12 +879,12 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
             }
         }
 
-        if (app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
+        if (app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
             try {
                 float pos = viewPager.getPositionAnimated();
                 int profilePosition = posProfile();
                 float vis = profilePosition < 0 ? 0f : Math.max(0f, 1f - Math.abs(profilePosition - pos));
-                app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onTabVisibilityChanged(vis);
+                app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onTabVisibilityChanged(vis);
             } catch (Throwable ignored) {}
         }
 
@@ -896,7 +896,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
     @Override
     protected int getFragmentsCount() {
-        return app.nimarkogram.messenger.utils.ui.MainTabsManager.INSTANCE
+        return app.nebulagram.messenger.utils.ui.MainTabsManager.INSTANCE
                 .getEnabledTabs().size();
     }
 
@@ -927,7 +927,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
             bundle = new Bundle();
         }
 
-        bundle.putBoolean("hasMainTabs", app.nimarkogram.messenger.NimarkoConfig.showMainTabs);
+        bundle.putBoolean("hasMainTabs", app.nebulagram.messenger.NebulaConfig.showMainTabs);
         dialogsActivity = new DialogsActivity(bundle);
         dialogsActivity.setMainTabsActivityController(new MainTabsActivityControllerImpl());
         putFragmentAtPosition(posChats(), dialogsActivity);
@@ -936,8 +936,8 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
     @Override
     protected BaseFragment createBaseFragmentAt(int position) {
-        final boolean showTabsBar = app.nimarkogram.messenger.NimarkoConfig.showMainTabs;
-        app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType type = tabTypeAt(position);
+        final boolean showTabsBar = app.nebulagram.messenger.NebulaConfig.showMainTabs;
+        app.nebulagram.messenger.utils.ui.MainTabsManager.TabType type = tabTypeAt(position);
         if (type == null) return null;
         Bundle args = new Bundle();
         args.putBoolean("hasMainTabs", showTabsBar);
@@ -967,20 +967,20 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
     private void syncFragmentsWithSettings() {
         if (viewPager == null) return;
-        java.util.List<app.nimarkogram.messenger.utils.ui.MainTabsManager.Tab> enabled =
-                app.nimarkogram.messenger.utils.ui.MainTabsManager.INSTANCE.getEnabledTabs();
-        app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType currentType = null;
+        java.util.List<app.nebulagram.messenger.utils.ui.MainTabsManager.Tab> enabled =
+                app.nebulagram.messenger.utils.ui.MainTabsManager.INSTANCE.getEnabledTabs();
+        app.nebulagram.messenger.utils.ui.MainTabsManager.TabType currentType = null;
         if (viewPager != null) {
             org.telegram.ui.ViewPagerActivity.FragmentState curState =
                     fragmentsArr.get(viewPager.getCurrentPosition());
             if (curState != null && curState.fragment != null) {
                 org.telegram.ui.ActionBar.BaseFragment f = curState.fragment;
                 if (f instanceof DialogsActivity) {
-                    currentType = app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType.CHATS;
+                    currentType = app.nebulagram.messenger.utils.ui.MainTabsManager.TabType.CHATS;
                 } else if (f instanceof ProfileActivity) {
-                    currentType = app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType.PROFILE;
+                    currentType = app.nebulagram.messenger.utils.ui.MainTabsManager.TabType.PROFILE;
                 } else if (f instanceof SettingsActivity || f instanceof CallLogActivity) {
-                    currentType = app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType.SETTINGS;
+                    currentType = app.nebulagram.messenger.utils.ui.MainTabsManager.TabType.SETTINGS;
                 }
             }
         }
@@ -990,7 +990,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
         dialogsActivity = null;
         int targetPos = posChats();
         if (currentType != null) {
-            int p = app.nimarkogram.messenger.utils.ui.MainTabsManager.INSTANCE
+            int p = app.nebulagram.messenger.utils.ui.MainTabsManager.INSTANCE
                     .getPosition(currentType);
             if (p >= 0) targetPos = p;
         }
@@ -1059,12 +1059,12 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
     private boolean canScrollInternal(MotionEvent ev, boolean forward) {
         final BaseFragment fragment = getCurrentVisibleFragment();
 
-        if (app.nimarkogram.messenger.NimarkoConfig.showMainTabs) {
+        if (app.nebulagram.messenger.NebulaConfig.showMainTabs) {
             if (fragment instanceof TabFragmentDelegate) {
                 final TabFragmentDelegate delegate = (TabFragmentDelegate) fragment;
                 return delegate.canParentTabsSlide(ev, forward);
             }
-        } else if (app.nimarkogram.messenger.NimarkoConfig.openSettingsBySwipe || !app.nimarkogram.messenger.NimarkoConfig.showMainTabs) {
+        } else if (app.nebulagram.messenger.NebulaConfig.openSettingsBySwipe || !app.nebulagram.messenger.NebulaConfig.showMainTabs) {
             final int pos = viewPager != null ? viewPager.getCurrentPosition() : 0;
             final int count = getFragmentsCount();
             if (fragment instanceof DialogsActivity) {
@@ -1112,7 +1112,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
         ViewGroup.MarginLayoutParams lp;
         {
-            final int height = app.nimarkogram.messenger.NimarkoConfig.showMainTabs
+            final int height = app.nebulagram.messenger.NebulaConfig.showMainTabs
                     ? (navigationBarHeight + updateLayoutHeight + dp(DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS))
                     : 0;
             lp = (ViewGroup.MarginLayoutParams) fadeView.getLayoutParams();
@@ -1201,7 +1201,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
                 tabs[INDEX_PROFILE].updateUserAvatar(currentAccount);
             }
         } else if (id == NotificationCenter.cgTabsUpdated) {
-            boolean showMainTabsFlag = app.nimarkogram.messenger.NimarkoConfig.showMainTabs;
+            boolean showMainTabsFlag = app.nebulagram.messenger.NebulaConfig.showMainTabs;
             if (tabsViewWrapper != null) {
                 tabsViewWrapper.setVisibility(showMainTabsFlag ? View.VISIBLE : View.GONE);
             }
@@ -1210,7 +1210,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
             if (tabs != null) {
                 for (GlassTabView t : tabs) {
                     if (t != null) {
-                        t.setTitleVisible(app.nimarkogram.messenger.NimarkoConfig.showMainTabsTitle);
+                        t.setTitleVisible(app.nebulagram.messenger.NebulaConfig.showMainTabsTitle);
                     }
                 }
             }
@@ -1289,7 +1289,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
             return;
         }
 
-        final boolean showMainTabs = app.nimarkogram.messenger.NimarkoConfig.showMainTabs;
+        final boolean showMainTabs = app.nebulagram.messenger.NebulaConfig.showMainTabs;
 
         final float animatedPosition = viewPager.getPositionAnimated();
         final int profilePosition = posProfile();
@@ -1312,7 +1312,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
     private void checkUi_tabsPosition() {
         if (hiddenByOverlay) return;
-        if (!app.nimarkogram.messenger.NimarkoConfig.showMainTabs) {
+        if (!app.nebulagram.messenger.NebulaConfig.showMainTabs) {
             final View off = tabsContainer != null ? tabsContainer : tabsViewWrapper;
             off.setVisibility(View.GONE);
             off.setAlpha(0f);
@@ -1343,8 +1343,8 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
     private void checkUi_callTabVisible(boolean callTabsVisible, boolean animated) {
         if (tabsView != null) {
-            boolean settingsAllowed = app.nimarkogram.messenger.utils.ui.MainTabsManager.INSTANCE
-                    .hasTab(app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType.SETTINGS);
+            boolean settingsAllowed = app.nebulagram.messenger.utils.ui.MainTabsManager.INSTANCE
+                    .hasTab(app.nebulagram.messenger.utils.ui.MainTabsManager.TabType.SETTINGS);
             tabsView.setViewVisible(tabs[INDEX_SETTINGS], settingsAllowed, animated);
             tabsView.setViewVisible(tabs[INDEX_CALLS], false, animated);
         }
@@ -1352,14 +1352,14 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
     private void applyEditorTabsVisibility(boolean animated) {
         if (tabsView == null || tabs == null) return;
-        app.nimarkogram.messenger.utils.ui.MainTabsManager mgr =
-                app.nimarkogram.messenger.utils.ui.MainTabsManager.INSTANCE;
+        app.nebulagram.messenger.utils.ui.MainTabsManager mgr =
+                app.nebulagram.messenger.utils.ui.MainTabsManager.INSTANCE;
         tabsView.setViewVisible(tabs[INDEX_PROFILE],
-                mgr.hasTab(app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType.PROFILE), animated);
+                mgr.hasTab(app.nebulagram.messenger.utils.ui.MainTabsManager.TabType.PROFILE), animated);
         tabsView.setViewVisible(tabs[INDEX_CHATS],
-                mgr.hasTab(app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType.CHATS), animated);
+                mgr.hasTab(app.nebulagram.messenger.utils.ui.MainTabsManager.TabType.CHATS), animated);
         checkUi_callTabVisible(getUserConfig().showCallsTab, animated);
-        for (app.nimarkogram.messenger.utils.ui.MainTabsManager.Tab t : mgr.getAllTabs()) {
+        for (app.nebulagram.messenger.utils.ui.MainTabsManager.Tab t : mgr.getAllTabs()) {
             GlassTabView view = tabForType(t.getType());
             if (view != null && view.getParent() == tabsView) {
                 tabsView.bringChildToFront(view);
@@ -1367,7 +1367,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
         }
     }
 
-    private GlassTabView tabForType(app.nimarkogram.messenger.utils.ui.MainTabsManager.TabType type) {
+    private GlassTabView tabForType(app.nebulagram.messenger.utils.ui.MainTabsManager.TabType type) {
         switch (type) {
             case PROFILE: return tabs[INDEX_PROFILE];
             case CHATS: return tabs[INDEX_CHATS];
@@ -1562,7 +1562,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
 
     private void onSearchButtonClick() {
-        if (app.nimarkogram.messenger.NimarkoConfig.mainTabsForceOpenChats) {
+        if (app.nebulagram.messenger.NebulaConfig.mainTabsForceOpenChats) {
             openSearchChats();
             return;
         }

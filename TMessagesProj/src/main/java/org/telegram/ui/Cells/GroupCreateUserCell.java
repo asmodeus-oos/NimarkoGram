@@ -143,7 +143,7 @@ public class GroupCreateUserCell extends FrameLayout {
         avatarDrawable = new AvatarDrawable();
 
         avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(48));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(48));
         addView(avatarImageView, LayoutHelper.createFrame(46, 46, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : (13 + padding), 6, LocaleController.isRTL ? (13 + padding) : 0, 0));
 
         nameTextView = new SimpleTextView(context) {
@@ -540,7 +540,7 @@ public class GroupCreateUserCell extends FrameLayout {
             }
         }
 
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(48, currentChat != null && currentChat.forum));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(48, currentChat != null && currentChat.forum));
         if (currentStatus != null) {
             statusTextView.setText(currentStatus, true);
             statusTextView.setTag(Theme.key_windowBackgroundWhiteGrayText);

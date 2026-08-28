@@ -116,7 +116,7 @@ public class BlurredBackgroundProviderImpl {
     }
 
     /**
-     * Stable base for NimarkoGram's modern message menu.  Its specular pass is
+     * Stable base for NebulaGram's modern message menu.  Its specular pass is
      * intentionally short-lived, therefore the base must remain readable on
      * its own after that pass ends.  Keep a small amount of the captured scene
      * visible when blur is available and use an opaque fallback otherwise.

@@ -77,7 +77,7 @@ public class SendingFileDrawable extends StatusDrawable {
         Paint paint = currentPaint == null ? Theme.chat_statusRecordPaint : currentPaint;
         
         float startOffset = 0;
-        if (app.nimarkogram.messenger.NimarkoConfig.centerChatTitle && useCenteredOverride) {
+        if (app.nebulagram.messenger.NebulaConfig.centerChatTitle && useCenteredOverride) {
             float totalWidth = AndroidUtilities.dp(22);
             float centerX = getBounds().centerX() - AndroidUtilities.dp(2);
             startOffset = centerX - totalWidth / 2f;
@@ -118,7 +118,7 @@ public class SendingFileDrawable extends StatusDrawable {
     @Override
     public int getIntrinsicWidth() {
         
-        return AndroidUtilities.dp(app.nimarkogram.messenger.NimarkoConfig.centerChatTitle && useCenteredOverride ? 14 : 18);
+        return AndroidUtilities.dp(app.nebulagram.messenger.NebulaConfig.centerChatTitle && useCenteredOverride ? 14 : 18);
     }
 
     @Override

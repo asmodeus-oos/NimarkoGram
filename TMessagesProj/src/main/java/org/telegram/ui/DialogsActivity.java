@@ -280,9 +280,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import app.nimarkogram.messenger.NimarkoConfig;
-import app.nimarkogram.messenger.utils.chats.NimarkoChatMenuInjector;
-import app.nimarkogram.messenger.utils.folders.NimarkoFoldersHelper;
+import app.nebulagram.messenger.NebulaConfig;
+import app.nebulagram.messenger.utils.chats.NebulaChatMenuInjector;
+import app.nebulagram.messenger.utils.folders.NebulaFoldersHelper;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
@@ -528,9 +528,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private FragmentSearchField fragmentSearchField;
-    // NimarkoGram: when the home search bar is hidden (hideSearchBar), the info cards that normally live in
+    // NebulaGram: when the home search bar is hidden (hideSearchBar), the info cards that normally live in
     // the search field have no home — show them as a compact capsule in the action bar's free space instead.
-    private app.nimarkogram.messenger.infocards.InfoCardStripView homeInfoCards;
+    private app.nebulagram.messenger.infocards.InfoCardStripView homeInfoCards;
     // Fade+scale the home capsule in/out (via its visibilityFactor) instead of snapping visibility, so it
     // returns SMOOTHLY when the search closes (back from search with hideSearchBar on). homeInfoCardsShown is the
     // last-applied show state, to fire the transition only once.
@@ -755,7 +755,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /**
      * Nested dialog lists have their own navigation chrome.  Treating them as
-     * the home list makes NimarkoGram's home-only search/header customisations
+     * the home list makes NebulaGram's home-only search/header customisations
      * change their top inset while a transition is running.
      */
     public boolean isNestedDialogList() {
@@ -769,7 +769,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @Override
     public boolean isActionBarCrossfadeEnabled() {
         // Archive and Community already own a complete ActionBar. Drawing the
-        // parent list's bar as a second crossfade layer leaves "NimarkoGram"
+        // parent list's bar as a second crossfade layer leaves "NebulaGram"
         // above the nested title after resume/reconnect or an interrupted back.
         return !isNestedDialogList() && super.isActionBarCrossfadeEnabled();
     }
@@ -831,7 +831,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private Long statusDrawableGiftId;
     private Drawable logoDrawable;
     private AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable statusDrawable;
-    // NimarkoGram: remembered default action-bar title (logo + AppName ssb) so the
+    // NebulaGram: remembered default action-bar title (logo + AppName ssb) so the
     // folderNameInHeader feature can swap to a folder name and animate back when
     // returning to the All-Chats tab. Set when the default title is first installed.
     private CharSequence actionBarDefaultTitle;
@@ -1389,7 +1389,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 } else if (child instanceof ViewPage) {
                     childTop = 0;
                 } else if (child == topPanelLayout || child == topBubblesFadeView || child == filterTabsView) {
-                    // NimarkoGram: when foldersAtBottom is on, filterTabsView is added
+                    // NebulaGram: when foldersAtBottom is on, filterTabsView is added
                     // with Gravity.BOTTOM (see createView L5252). The BOTTOM branch of
                     // the verticalGravity switch already anchors childTop to the bottom
                     // edge; adding actionBar+searchField offset on top of that pushes
@@ -1636,7 +1636,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                     if (actionBar != null && filterTabsView != null) {
                                         FilterTabsView.Tab newTab = filterTabsView.findTabById(viewPages[0].selectedType);
                                         if (newTab != null) {
-                                            if (app.nimarkogram.messenger.NimarkoConfig.folderNameInHeader) {
+                                            if (app.nebulagram.messenger.NebulaConfig.folderNameInHeader) {
                                                 CharSequence newTitle;
                                                 if (newTab.isDefault) {
                                                     newTitle = actionBarDefaultTitle;
@@ -2339,11 +2339,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                             canReadCount = dialog.unread_count > 0 || dialog.unread_mark ? 1 : 0;
                                             performSelectedDialogsAction(selectedDialogs, read, true, false);
                                         } else if (SharedConfig.getChatSwipeAction(currentAccount) == SwipeGestureSettingsView.SWIPE_GESTURE_MUTE) {
-                                            // NimarkoGram (CG parity): when discussInsteadOfMute is on and the dialog is a
+                                            // NebulaGram (CG parity): when discussInsteadOfMute is on and the dialog is a
                                             // channel with a linked discussion group, open that group instead of muting.
                                             boolean ngDiscussHandled = false;
-                                            if (app.nimarkogram.messenger.NimarkoConfig.discussInsteadOfMute
-                                                    || app.nimarkogram.messenger.NimarkoFeatureHooks.isDiscussInsteadOfMute()) {
+                                            if (app.nebulagram.messenger.NebulaConfig.discussInsteadOfMute
+                                                    || app.nebulagram.messenger.NebulaFeatureHooks.isDiscussInsteadOfMute()) {
                                                 try {
                                                     if (dialogId < 0) {
                                                         TLRPC.Chat ngDiscussChat = getMessagesController().getChat(-dialogId);
@@ -2416,8 +2416,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 }
                                 if (!canShowHiddenArchive) {
                                     canShowHiddenArchive = true;
-                                    // NimarkoGram (CG parity): disableVibration suppresses the archive-reveal tap.
-                                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                                    // NebulaGram (CG parity): disableVibration suppresses the archive-reveal tap.
+                                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                         try {
                                             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                         } catch (Exception ignored) {}
@@ -2635,10 +2635,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     swipeFolderBack = false;
                     swipingFolder = (canSwipeBack && !DialogObject.isFolderDialogId(dialogCell.getDialogId())) || (SharedConfig.archiveHidden && DialogObject.isFolderDialogId(dialogCell.getDialogId()));
                     if (folderId == 1) {
-                        // NimarkoGram (CG parity): allow right-swipe inside the Archive folder to
+                        // NebulaGram (CG parity): allow right-swipe inside the Archive folder to
                         // unarchive a dialog when unarchiveOnSwipe is on. Without the flag the cell
                         // stays non-slidable, matching upstream Telegram behaviour.
-                        if (app.nimarkogram.messenger.NimarkoConfig.unarchiveOnSwipe
+                        if (app.nebulagram.messenger.NebulaConfig.unarchiveOnSwipe
                                 && !DialogObject.isFolderDialogId(dialogCell.getDialogId())) {
                             dialogCell.setSliding(true);
                             return makeMovementFlags(0, ItemTouchHelper.LEFT);
@@ -3022,10 +3022,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         searchAnimatorGeneration++;
         super.onFragmentCreate();
 
-        // NimarkoGram (CG parity): when message-filters are on AND the "hide blocked"
+        // NebulaGram (CG parity): when message-filters are on AND the "hide blocked"
         // sub-toggle is set, prime the blocked-peers list so first-render filtering works.
-        if (app.nimarkogram.messenger.NimarkoConfig.enableMsgFilters
-                && app.nimarkogram.messenger.NimarkoConfig.msgFiltersHideFromBlocked) {
+        if (app.nebulagram.messenger.NebulaConfig.enableMsgFilters
+                && app.nebulagram.messenger.NebulaConfig.msgFiltersHideFromBlocked) {
             getMessagesController().getBlockedPeers(false);
         }
 
@@ -3065,10 +3065,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             allowBots = arguments.getBoolean("allowBots", true);
             closeFragment = arguments.getBoolean("closeFragment", true);
             allowGlobalSearch = arguments.getBoolean("allowGlobalSearch", true);
-            // NimarkoGram: only honour the hasMainTabs argument when the user keeps the
+            // NebulaGram: only honour the hasMainTabs argument when the user keeps the
             // main bottom tabs visible. With showMainTabs off the host doesn't host any
             // tabs bar, so we must not reserve room for one (mirrors CG L2811).
-            if (NimarkoConfig.showMainTabs) {
+            if (NebulaConfig.showMainTabs) {
                 hasMainTabs = arguments.getBoolean("hasMainTabs", false);
             } else {
                 hasMainTabs = false;
@@ -3098,12 +3098,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             currentConnectionState = getConnectionsManager().getConnectionState();
 
             globalObserversGroup.add(NotificationCenter.emojiLoaded);
-            globalObserversGroup.add(NotificationCenter.customTitleUpdated);   // NimarkoGram: live custom-title refresh
+            globalObserversGroup.add(NotificationCenter.customTitleUpdated);   // NebulaGram: live custom-title refresh
             globalObserversGroup.add(NotificationCenter.pluginMenuItemsUpdated); // C5: rebuild the open overflow popup when plugins register/unregister
             if (!onlySelect) {
                 globalObserversGroup.add(NotificationCenter.closeSearchByActiveAction);
                 globalObserversGroup.add(NotificationCenter.proxySettingsChanged);
-                // NimarkoGram: info-cards master toggle / active-set flip. Fragment-scoped (not view-bound)
+                // NebulaGram: info-cards master toggle / active-set flip. Fragment-scoped (not view-bound)
                 // so it is delivered even while the info-cards settings screen is presented on top and this
                 // fragment's view is detached. Handler re-runs checkUi_searchFieldVisibility() so the home
                 // capsule (and the search-field strip's host) refresh the moment the toggle is enabled,
@@ -3138,7 +3138,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 .add(NotificationCenter.forceImportContactsStart)
                 .add(NotificationCenter.userEmojiStatusUpdated)
                 .add(NotificationCenter.currentUserPremiumStatusChanged)
-                // NimarkoGram: CG search-field visibility toggle.
+                // NebulaGram: CG search-field visibility toggle.
                 .add(NotificationCenter.cgUpdateSearchFiledVisibility);
 
             globalObserversGroup.add(NotificationCenter.didSetPasscode);
@@ -3193,7 +3193,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         BirthdayController.getInstance(currentAccount).check();
-        // NimarkoGram: reserve the MainTabs strip height (72dp nav / 64dp FAB) ONLY when the real
+        // NebulaGram: reserve the MainTabs strip height (72dp nav / 64dp FAB) ONLY when the real
         // main-tabs bar is actually shown. hasMainTabs is already forced false when showMainTabs is
         // off, so it is the single correct gate. The bottom folder strip (foldersAtBottom) is a
         // SEPARATE 50dp Gravity.BOTTOM view — it reserves its own 50dp below (list padding + the FAB
@@ -3518,7 +3518,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         ActionBarMenu menu = actionBar.createMenu();
         menu.setTranslationX(-dp(5));
-        boolean hideTopSearch = NimarkoConfig.showMainTabs && NimarkoConfig.showSearchInTabs && hasMainTabs;
+        boolean hideTopSearch = NebulaConfig.showMainTabs && NebulaConfig.showSearchInTabs && hasMainTabs;
         searchItem = menu.addItem(0, R.drawable.outline_header_search).setIsSearchField(true, false);
         if (hideTopSearch) {
             searchItem.setVisibility(View.GONE);
@@ -3812,7 +3812,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 updateUnreadBackBadge();
             }
             if (folderId != 0) {
-                // NimarkoGram CG-parity (CG DialogsActivity L3476): explicit gilroy=true
+                // NebulaGram CG-parity (CG DialogsActivity L3476): explicit gilroy=true
                 // so the Archive folder title renders in Gilroy ExtraBold like the main
                 // chat-list title set at L3564.
                 actionBar.setTitle(getString(R.string.ArchivedChats), null, true);
@@ -3849,14 +3849,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             } else {
                 statusDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(null, dp(26));
                 statusDrawable.center = true;
-                // NimarkoGram: upstream draws an ImageSpan over R.drawable.telegram_logo_2
+                // NebulaGram: upstream draws an ImageSpan over R.drawable.telegram_logo_2
                 // which is a vector path that spells out the word "Telegram". For NG we
                 // want the actual app name to render as plain text, so we skip the
                 // ImageSpan and let the SpannableStringBuilder show the localised
-                // R.string.AppName ("NimarkoGram") directly.
+                // R.string.AppName ("NebulaGram") directly.
                 // NG: custom main-screen title overrides the app name when set.
                 SpannableStringBuilder ssb = new SpannableStringBuilder(
-                        app.nimarkogram.messenger.NimarkoConfig.resolveMainTitle(getString(R.string.AppName)));
+                        app.nebulagram.messenger.NebulaConfig.resolveMainTitle(getString(R.string.AppName)));
                 actionBarDefaultTitle = ssb;
                 // NG: explicit gilroy=true so the initial chat-list title renders in Gilroy
                 // ExtraBold (weight 800), same as the per-folder titles set via the swipe/
@@ -3976,13 +3976,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (!tab.isDefault && (tab.id < 0 || tab.id >= dialogFilters.size())) {
                         return;
                     }
-                    // NimarkoGram (CG parity): folderNameInHeader — when switching folders via tab
+                    // NebulaGram (CG parity): folderNameInHeader — when switching folders via tab
                     // click, crossfade the action-bar title to the folder name (default tab
                     // restores the logo+AppName + premium status drawable). When the flag is
                     // OFF we snap-reset to the default title to clear any stale folder name
                     // from a previous toggle.
                     if (actionBar != null) {
-                        if (app.nimarkogram.messenger.NimarkoConfig.folderNameInHeader) {
+                        if (app.nebulagram.messenger.NebulaConfig.folderNameInHeader) {
                             // NG: in TAB_TYPE_ICON mode tab.title is empty — fall back to the
                             // default title to avoid passing "" to setTitleAnimatedX which
                             // later crashes holiday-drawable getTextBounds().
@@ -4045,8 +4045,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 @Override
                 public int getTabCounter(int tabId) {
-                    // NimarkoGram: tabsNoUnread global suppresses ALL folder badges.
-                    if (initialDialogsType == DIALOGS_TYPE_FORWARD || app.nimarkogram.messenger.NimarkoConfig.tabsNoUnread) {
+                    // NebulaGram: tabsNoUnread global suppresses ALL folder badges.
+                    if (initialDialogsType == DIALOGS_TYPE_FORWARD || app.nebulagram.messenger.NebulaConfig.tabsNoUnread) {
                         return 0;
                     }
                     int raw;
@@ -4060,8 +4060,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         raw = getMessagesController().getDialogFilters().get(tabId).unreadCount;
                     }
                     // Per-folder badge mode: NUMBER -> raw, DOT/HIDDEN -> 0 (caller renders
-                    // a dot separately via NimarkoFoldersHelper.shouldShowDot if needed).
-                    return app.nimarkogram.messenger.utils.folders.NimarkoFoldersHelper.filterTabCounter(tabId, raw);
+                    // a dot separately via NebulaFoldersHelper.shouldShowDot if needed).
+                    return app.nebulagram.messenger.utils.folders.NebulaFoldersHelper.filterTabCounter(tabId, raw);
                 }
 
                 @Override
@@ -4233,7 +4233,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             avatarDrawable.setTextSize(dp(12));
 
             BackupImageView imageView = new BackupImageView(context);
-            // NimarkoGram: the top-right account-switcher avatar stays a full circle (like official Telegram),
+            // NebulaGram: the top-right account-switcher avatar stays a full circle (like official Telegram),
             // it deliberately does NOT follow the avatarCorners setting — per user request.
             imageView.setRoundRadius(dp(18));
             switchItem.addView(imageView, LayoutHelper.createFrame(36, 36, Gravity.CENTER));
@@ -4705,8 +4705,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             if (canShowHiddenArchive != canShowInternal) {
                                 canShowHiddenArchive = canShowInternal;
                                 if (viewPage.archivePullViewState == ARCHIVE_ITEM_STATE_HIDDEN) {
-                                    // NimarkoGram (CG parity): disableVibration suppresses the archive-reveal tap.
-                                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                                    // NebulaGram (CG parity): disableVibration suppresses the archive-reveal tap.
+                                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                         try {
                                             viewPage.listView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                         } catch (Exception ignored) {}
@@ -5569,8 +5569,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (filterTabsView != null) {
-            if (NimarkoFoldersHelper.moveFoldersToBottom()) {
-                NimarkoFoldersHelper.setupFilterTabs(
+            if (NebulaFoldersHelper.moveFoldersToBottom()) {
+                NebulaFoldersHelper.setupFilterTabs(
                         getContext(),
                         contentView,
                         getFilterTabsView(),
@@ -5754,7 +5754,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         dialogStoriesCell.setActionBar(actionBar);
         dialogStoriesCell.setMenuItemsOffset(isArchive() ? dp(68) : dpf2(16.66f));
         dialogStoriesCell.allowGlobalUpdates = false;
-        // NimarkoGram: mirror the resolved custom main title into the stories brand slot so the collapsed
+        // NebulaGram: mirror the resolved custom main title into the stories brand slot so the collapsed
         // stories header shows the custom title (not raw AppName) on scroll-with-stories. Main list only
         // (folderId 0); actionBarDefaultTitle is already resolveMainTitle at this point.
         if (folderId == 0 && actionBarDefaultTitle != null) {
@@ -5780,13 +5780,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (fragmentSearchField != null) {
             contentView.addView(fragmentSearchField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP, 7, -2, 7, 0));
         }
-        // NimarkoGram: a fallback home for the info cards when the search bar is hidden. Placed BELOW the
+        // NebulaGram: a fallback home for the info cards when the search bar is hidden. Placed BELOW the
         // action bar (never inside it — the toolbar hosts the search/menu icons and transient indicators
         // like the download-speed item, so the action bar's free space is not ours to take), right-aligned,
         // as a compact capsule over the top of the chat list. Visibility + Y are driven from
         // checkUi_searchFieldVisibility so it only shows in the idle home list with hideSearchBar on.
         if (!onlySelect && initialDialogsType == DIALOGS_TYPE_DEFAULT && folderId == 0 && communityId == 0) {
-            homeInfoCards = new app.nimarkogram.messenger.infocards.InfoCardStripView(context, resourceProvider);
+            homeInfoCards = new app.nebulagram.messenger.infocards.InfoCardStripView(context, resourceProvider);
             homeInfoCards.setOpaqueCards(true); // floats over the chat list -> flat cards must be opaque
             homeInfoCards.setVisibilityFactor(0f); // start hidden (factor 0 => alpha 0 + GONE); fades in via checkUi
             // v7276 placement: the strip is added DIRECTLY to contentView, right-aligned, WRAP width. Its
@@ -5804,7 +5804,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         if (hasMainTabs) {
             actionBar.getTitlesContainer().setTranslationX(dp(4));
-            // NimarkoGram CG-parity (CG DialogsActivity L5374): explicit gilroy=true so
+            // NebulaGram CG-parity (CG DialogsActivity L5374): explicit gilroy=true so
             // the lazy-created tab title text view uses Gilroy ExtraBold typeface.
             actionBar.setTitleColor(getThemedColor(Theme.key_telegram_color_dialogsLogo), true);
         }
@@ -6251,7 +6251,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return folderId == 0
                 && communityId == 0
                 && initialDialogsType == DIALOGS_TYPE_DEFAULT
-                && app.nimarkogram.messenger.NimarkoConfig.hideSearchBar
+                && app.nebulagram.messenger.NebulaConfig.hideSearchBar
                 && searchString == null;
     }
 
@@ -7435,9 +7435,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 filterTabsView.removeTabs();
                 for (int a = 0, N = filters.size(); a < N; a++) {
                     if (filters.get(a).isDefault()) {
-                        // NimarkoGram: tabsHideAllChats removes the "All Chats" folder tab.
-                        if (!app.nimarkogram.messenger.NimarkoConfig.tabsHideAllChats) {
-                            // NimarkoGram: pass emoticon for CG-parity folder-tab icon rendering.
+                        // NebulaGram: tabsHideAllChats removes the "All Chats" folder tab.
+                        if (!app.nebulagram.messenger.NebulaConfig.tabsHideAllChats) {
+                            // NebulaGram: pass emoticon for CG-parity folder-tab icon rendering.
                             filterTabsView.addTab(a, 0, LocaleController.getString(R.string.FilterAllChats), null, false, true, filters.get(a).locked, filters.get(a).emoticon);
                         }
                     } else {
@@ -7445,7 +7445,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         filterTabsView.addTab(a, filter.localId, filter.name, filter.entities, filter.title_noanimate, false, filters.get(a).locked, filter.emoticon);
                     }
                 }
-                if (app.nimarkogram.messenger.NimarkoConfig.tabsHideAllChats && stableId <= 0) {
+                if (app.nebulagram.messenger.NebulaConfig.tabsHideAllChats && stableId <= 0) {
                     id = filterTabsView.getFirstTabId();
                     updateCurrentTab = true;
                     viewPages[0].selectedType = id;
@@ -7503,7 +7503,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     FilterTabsView.Tab coldStartTab = filterTabsView.findTabById(viewPages[0].selectedType);
                     if (coldStartTab != null) {
                         CharSequence desiredTitle;
-                        if (app.nimarkogram.messenger.NimarkoConfig.folderNameInHeader && !coldStartTab.isDefault) {
+                        if (app.nebulagram.messenger.NebulaConfig.folderNameInHeader && !coldStartTab.isDefault) {
                             // NG: TAB_TYPE_ICON forces title="" — prefer realTitle (CG-parity),
                             // then fall back to title, then the cached default.
                             if (coldStartTab.realTitle != null && coldStartTab.realTitle.length() > 0) {
@@ -7561,13 +7561,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 filterTabsView.resetTabId();
 
-                // NimarkoGram (CG parity): when the filter strip disappears (only the default
+                // NebulaGram (CG parity): when the filter strip disappears (only the default
                 // tab is left), restore the action-bar title. If folderNameInHeader is on we
                 // crossfade animate; otherwise we snap to the default to clear any stale name.
                 if (actionBar != null && actionBarDefaultTitle != null) {
                     CharSequence current = actionBar.getTitle();
                     if (current == null || !actionBarDefaultTitle.toString().contentEquals(current)) {
-                        if (app.nimarkogram.messenger.NimarkoConfig.folderNameInHeader) {
+                        if (app.nebulagram.messenger.NebulaConfig.folderNameInHeader) {
                             // Bug-3 fix: 250ms crossfade felt sluggish on restore; CG/Telegram default is near-instant.
                             actionBar.setTitleAnimatedX(actionBarDefaultTitle, statusDrawable, false, 80, true);
                         } else {
@@ -7678,7 +7678,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         // The archive can itself be the top protected surface while the host
         // Activity stays resumed. Re-evaluate FLAG_SECURE on fragment changes,
         // not only in LaunchActivity.onResume().
-        LaunchActivity.invalidateNimarkoSecureFlag();
+        LaunchActivity.invalidateNebulaSecureFlag();
         if (dialogStoriesCell != null) {
             dialogStoriesCell.onResume();
         }
@@ -7701,7 +7701,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (searchViewPager != null) {
             searchViewPager.onResume();
         }
-        // NimarkoGram: returning from the info-cards settings screen (where the master toggle may have just
+        // NebulaGram: returning from the info-cards settings screen (where the master toggle may have just
         // been enabled) must re-evaluate the capsule's visibility gate even if the infoCardsLayoutChanged
         // post was delayed by a transition animation lock. checkUi self-guards when there is no search field.
         checkUi_searchFieldVisibility();
@@ -8808,7 +8808,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             // Telegram 12.9's two-column forum container duplicates the whole dialogs
             // list during its transition. On phones that copy cannot stay aligned with
-            // NimarkoGram's configurable search/header/tabs and hidden archive row,
+            // NebulaGram's configurable search/header/tabs and hidden archive row,
             // producing a sideways/downward jump and a ghost archive. Keep the useful
             // split view on compatible tablet layouts; phones use the regular fragment
             // stack, whose lifecycle and back navigation are deterministic.
@@ -9587,7 +9587,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             return previewPresented;
         } else if (getMessagesController().checkCanOpenChat(args, DialogsActivity.this)) {
-            // NimarkoGram: CG parity — gate the chat-preview behind a biometric prompt when the
+            // NebulaGram: CG parity — gate the chat-preview behind a biometric prompt when the
             // target dialog is in LockedChats or is an encrypted chat with the matching toggle.
             // Mirrors CG DialogsActivity line ~8788 (shouldRequireBiometrics(userID, chatID, encID)).
             final Bundle _ngPreviewArgs = args;
@@ -9620,16 +9620,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             };
             if (getParentActivity() != null
-                    && app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+                    && app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                             .shouldRequireBiometrics(_ngPreviewUserId, _ngPreviewChatId, _ngPreviewEncId, currentAccount)
-                    && !app.nimarkogram.messenger.security.NimarkoBiometricPrompt
+                    && !app.nebulagram.messenger.security.NebulaBiometricPrompt
                             .isRecentlyVerified(currentAccount, _ngPreviewUserId, _ngPreviewChatId, _ngPreviewEncId)) {
                 final int _ngAcc = currentAccount;
-                app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(
+                app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(
                         getParentActivity(),
                         _ngAcc,
                         () -> {
-                            app.nimarkogram.messenger.security.NimarkoBiometricPrompt.markVerified(_ngAcc, _ngPreviewUserId, _ngPreviewChatId, _ngPreviewEncId);
+                            app.nebulagram.messenger.security.NebulaBiometricPrompt.markVerified(_ngAcc, _ngPreviewUserId, _ngPreviewChatId, _ngPreviewEncId);
                             _ngDoPresentPreview.run();
                         },
                         null
@@ -9653,19 +9653,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             floatingButton3.setButtonVisible(isVisible, animated);
         }
 
-        NimarkoFoldersHelper.updateFoldersOffset(this, onlySelect);
+        NebulaFoldersHelper.updateFoldersOffset(this, onlySelect);
 
         if (floatingButtonStories != null) {
-            // NG: when the user disabled stories via NimarkoConfig.hideStories the
+            // NG: when the user disabled stories via NebulaConfig.hideStories the
             // stories-camera floating button must stay hidden even if the geometric
             // isVisible gate would normally show it (e.g. on the main chat list).
-            boolean storiesFabVisible = isVisible && !app.nimarkogram.messenger.NimarkoConfig.hideStories;
+            boolean storiesFabVisible = isVisible && !app.nebulagram.messenger.NebulaConfig.hideStories;
             floatingButtonStories.setButtonVisible(storiesFabVisible, animated);
         }
     }
 
     private void updateFloatingButtonOffset() {
-        float floatingButtonsOffset = NimarkoFoldersHelper.getFloatingButtonsOffset(filterTabsView);
+        float floatingButtonsOffset = NebulaFoldersHelper.getFloatingButtonsOffset(filterTabsView);
 
         final float top = -navigationBarHeight - additionFloatingButtonOffset - additionalFloatingTranslation;
         final float baseTranslationY = top
@@ -9675,7 +9675,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             floatingButton3.setTranslationY(baseTranslationY - floatingButtonsOffset);
         }
 
-        NimarkoFoldersHelper.updateFoldersOffset(this, onlySelect);
+        NebulaFoldersHelper.updateFoldersOffset(this, onlySelect);
 
         if (floatingButtonStories != null) {
             floatingButtonStories.setTranslationY(baseTranslationY - dp(52) - floatingButtonsOffset);
@@ -9685,11 +9685,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    public boolean storiesEnabled = !app.nimarkogram.messenger.NimarkoConfig.hideStories;
+    public boolean storiesEnabled = !app.nebulagram.messenger.NebulaConfig.hideStories;
     private void updateStoriesPosting() {
-        // NimarkoGram: hideStories forces the stories row off regardless of
+        // NebulaGram: hideStories forces the stories row off regardless of
         // server-side capability.
-        final boolean storiesEnabled = !app.nimarkogram.messenger.NimarkoConfig.hideStories
+        final boolean storiesEnabled = !app.nebulagram.messenger.NebulaConfig.hideStories
                 && getMessagesController().storiesEnabled();
         if (this.storiesEnabled != storiesEnabled) {
             updateFloatingButtonOffset();
@@ -9713,7 +9713,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private boolean supportsArchivePull() {
-        return !NimarkoConfig.hideArchiveFromChatsList
+        return !NebulaConfig.hideArchiveFromChatsList
                 && !onlySelect
                 && initialDialogsType == DIALOGS_TYPE_DEFAULT
                 && communityId == 0
@@ -9721,12 +9721,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private boolean openHiddenArchiveFromSearch() {
-        if (!NimarkoConfig.hideArchiveFromChatsList
+        if (!NebulaConfig.hideArchiveFromChatsList
                 || isArchive()
                 || initialDialogsType == DIALOGS_TYPE_FORWARD) {
             return false;
         }
-        NimarkoChatMenuInjector.openArchivedChats(this);
+        NebulaChatMenuInjector.openArchivedChats(this);
         return true;
     }
 
@@ -10303,12 +10303,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             hideActionMode(false);
                         });
                         builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
-                        // NimarkoGram: CG parity — gate the PSA delete dialog behind a biometric
+                        // NebulaGram: CG parity — gate the PSA delete dialog behind a biometric
                         // prompt when askPasscodeBeforeDelete is enabled. Mirrors CG DialogsActivity
                         // line ~9371 (getChatsPasswordHelper().askPasscodeBeforeDelete()).
                         if (getParentActivity() != null
-                                && app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.askPasscodeBeforeDelete()) {
-                            app.nimarkogram.messenger.security.NimarkoBiometricPrompt.prompt(
+                                && app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.askPasscodeBeforeDelete()) {
+                            app.nebulagram.messenger.security.NebulaBiometricPrompt.prompt(
                                     getParentActivity(),
                                     currentAccount,
                                     () -> showDialog(builder.create()),
@@ -11412,7 +11412,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return;
         }
         if (id == NotificationCenter.infoCardsLayoutChanged) {
-            // NimarkoGram: the info-cards master toggle (or active set) just changed. Re-evaluate the host
+            // NebulaGram: the info-cards master toggle (or active set) just changed. Re-evaluate the host
             // visibility gate so the home capsule flips GONE->VISIBLE (and the search-field strip's host
             // re-measures) without a client restart. Each strip rebuilds its OWN pills via its
             // onAttachedToWindow / didReceivedNotification(infoCardsLayoutChanged); this owns only the host.
@@ -11427,13 +11427,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             // injected plugin rows appear/relabel/disappear without reopening
             // (mirror ChatActivity's pluginMenuItemsUpdated observer).
             try {
-                if (nimarkoOpenItemOptions != null && nimarkoOpenItemOptions.isShown()) {
-                    nimarkoOpenItemOptions.dismiss();
-                    nimarkoOpenItemOptions = null;
+                if (nebulaOpenItemOptions != null && nebulaOpenItemOptions.isShown()) {
+                    nebulaOpenItemOptions.dismiss();
+                    nebulaOpenItemOptions = null;
                     showItemOptions();
                 }
             } catch (Throwable t) {
-                FileLog.e("nimarko: DialogsActivity pluginMenuItemsUpdated rebuild failed", t);
+                FileLog.e("nebula: DialogsActivity pluginMenuItemsUpdated rebuild failed", t);
             }
             return;
         }
@@ -11676,13 +11676,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         } else if (id == NotificationCenter.dialogFiltersUpdated) {
             updateFilterTabs(true, true);
-            // NimarkoGram: when folderNameInHeader toggle flips while on a non-default
+            // NebulaGram: when folderNameInHeader toggle flips while on a non-default
             // tab, the actionBar title was stuck on the previous value. Refresh it
             // here so the toggle takes effect immediately without tab change.
             if (actionBar != null && actionBarDefaultTitle != null && filterTabsView != null && viewPages != null && viewPages[0] != null) {
                 FilterTabsView.Tab currentTab = filterTabsView.findTabById(viewPages[0].selectedType);
                 if (currentTab != null) {
-                    if (app.nimarkogram.messenger.NimarkoConfig.folderNameInHeader && !currentTab.isDefault) {
+                    if (app.nebulagram.messenger.NebulaConfig.folderNameInHeader && !currentTab.isDefault) {
                         // NG: TAB_TYPE_ICON yields empty currentTab.title — prefer
                         // realTitle (CG-parity), then fall back to title, then default.
                         CharSequence newTitle;
@@ -11700,15 +11700,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         } else if (id == NotificationCenter.customTitleUpdated) {
-            // NimarkoGram: custom main-title changed in settings — recompute the cached default title and
+            // NebulaGram: custom main-title changed in settings — recompute the cached default title and
             // re-apply it live (layout-independent, unlike the old rebuildAllFragmentViews path which skipped
             // DialogsActivity on tablet/split-layout). Respect folderNameInHeader on non-default tabs.
             if (!onlySelect && folderId == 0 && communityId == 0 && actionBar != null) {
                 actionBarDefaultTitle = new SpannableStringBuilder(
-                        app.nimarkogram.messenger.NimarkoConfig.resolveMainTitle(getString(R.string.AppName)));
+                        app.nebulagram.messenger.NebulaConfig.resolveMainTitle(getString(R.string.AppName)));
                 FilterTabsView.Tab currentTab = (filterTabsView != null && viewPages != null && viewPages[0] != null)
                         ? filterTabsView.findTabById(viewPages[0].selectedType) : null;
-                if (app.nimarkogram.messenger.NimarkoConfig.folderNameInHeader && currentTab != null && !currentTab.isDefault) {
+                if (app.nebulagram.messenger.NebulaConfig.folderNameInHeader && currentTab != null && !currentTab.isDefault) {
                     CharSequence newTitle;
                     if (currentTab.realTitle != null && currentTab.realTitle.length() > 0) {
                         newTitle = currentTab.realTitle;
@@ -11721,7 +11721,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 } else {
                     actionBar.setTitle(actionBarDefaultTitle, statusDrawable, true);
                 }
-                // NimarkoGram: also push the new title into the stories brand slot so the collapsed stories
+                // NebulaGram: also push the new title into the stories brand slot so the collapsed stories
                 // header (revealed on scroll-with-stories) stays in sync. The brand slot mirrors the no-folder
                 // main title; folder names live only in the ActionBar title, not the brand.
                 if (dialogStoriesCell != null) {
@@ -13660,10 +13660,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (SharedConfig.getDevicePerformanceClass() <= SharedConfig.PERFORMANCE_CLASS_LOW && !BuildVars.DEBUG_PRIVATE_VERSION) {
             return;
         }
-        // NimarkoGram: springAnimation == SPRING_CLASSIC skips the spring animator and
+        // NebulaGram: springAnimation == SPRING_CLASSIC skips the spring animator and
         // animates the slide-back via the classic translation progress instead.
         if (isSlideBackTransition && slideBackTransitionAnimator == null
-                && app.nimarkogram.messenger.NimarkoConfig.springAnimation == app.nimarkogram.messenger.NimarkoConfig.SPRING_CLASSIC) {
+                && app.nebulagram.messenger.NebulaConfig.springAnimation == app.nebulagram.messenger.NebulaConfig.SPRING_CLASSIC) {
             setSlideTransitionProgress(progress);
         }
     }
@@ -13792,7 +13792,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return true;
     }
 
-    // NimarkoGram: helpers consumed by {@link MainTabsActivity#canScrollInternal} when
+    // NebulaGram: helpers consumed by {@link MainTabsActivity#canScrollInternal} when
     // OpenSettingsBySwipe is enabled and the main tabs bar is hidden. Mirrors CG's
     // {@code DialogsActivity.getFilterTabsView()/getRightSlidingProgress()/searching}
     // exposure without leaking the private fields.
@@ -13811,10 +13811,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (StoryRecorder.isVisible() || (getLastStoryViewer() != null && getLastStoryViewer().isFullyVisible())) {
             animated = false;
         }
-        // NimarkoGram: hideStories forces the stories row off. Don't early-return —
+        // NebulaGram: hideStories forces the stories row off. Don't early-return —
         // we must still run the flip-to-hidden path so a previously-visible cell
         // collapses when the toggle is flipped on at runtime.
-        final boolean hideStories = app.nimarkogram.messenger.NimarkoConfig.hideStories;
+        final boolean hideStories = app.nebulagram.messenger.NebulaConfig.hideStories;
         boolean onlySelfStories = !hideStories && !isArchive() && getStoriesController().hasOnlySelfStories();
         boolean newVisibility;
         if (hideStories || communityId != 0) {
@@ -14693,11 +14693,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     // C5: handle to the currently open overflow popup so the
     // pluginMenuItemsUpdated observer can dismiss + rebuild it live when a
     // plugin registers/unregisters menu items (mirror ChatActivity).
-    private ItemOptions nimarkoOpenItemOptions;
+    private ItemOptions nebulaOpenItemOptions;
 
     private void showItemOptions() {
         ItemOptions io = ItemOptions.makeOptions(this, optionsItem);
-        nimarkoOpenItemOptions = io;
+        nebulaOpenItemOptions = io;
         io.setColors(getThemedColor(Theme.key_actionBarDefaultTitle), getThemedColor(Theme.key_actionBarDefaultTitle));
         io.setDimAlpha(0x08);
 
@@ -14797,7 +14797,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         io.add(R.drawable.outline_saved_24, getString(R.string.SavedMessages), () -> {
             // NG: honour the custom-chat-for-saved-messages setting (CG parity).
             Bundle args = new Bundle();
-            long savedId = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2
+            long savedId = app.nebulagram.messenger.utils.chats.NebulaChatHelper2
                     .getCustomChatID(UserConfig.getInstance(currentAccount).getClientUserId());
             if (savedId > 0) {
                 args.putLong("user_id", savedId);
@@ -14806,15 +14806,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             presentFragment(new ChatActivity(args));
         });
-        // NimarkoGram: CG-parity drawer shortcuts (Archived / Calls / Scan QR /
+        // NebulaGram: CG-parity drawer shortcuts (Archived / Calls / Scan QR /
         // New Channel / Buy a Gift / Proxy Settings). Each row is internally
-        // gated; see NimarkoChatMenuInjector for per-row CG-derived conditions.
-        app.nimarkogram.messenger.utils.chats.NimarkoChatMenuInjector.injectArchived(io, this);
-        app.nimarkogram.messenger.utils.chats.NimarkoChatMenuInjector.injectCalls(io, this);
-        app.nimarkogram.messenger.utils.chats.NimarkoChatMenuInjector.injectScanQR(io, this);
-        app.nimarkogram.messenger.utils.chats.NimarkoChatMenuInjector.injectCreateChannel(io, this);
-        app.nimarkogram.messenger.utils.chats.NimarkoChatMenuInjector.injectGifts(io, currentAccount, getContext());
-        app.nimarkogram.messenger.utils.chats.NimarkoChatMenuInjector.injectProxySettings(io, this);
+        // gated; see NebulaChatMenuInjector for per-row CG-derived conditions.
+        app.nebulagram.messenger.utils.chats.NebulaChatMenuInjector.injectArchived(io, this);
+        app.nebulagram.messenger.utils.chats.NebulaChatMenuInjector.injectCalls(io, this);
+        app.nebulagram.messenger.utils.chats.NebulaChatMenuInjector.injectScanQR(io, this);
+        app.nebulagram.messenger.utils.chats.NebulaChatMenuInjector.injectCreateChannel(io, this);
+        app.nebulagram.messenger.utils.chats.NebulaChatMenuInjector.injectGifts(io, currentAccount, getContext());
+        app.nebulagram.messenger.utils.chats.NebulaChatMenuInjector.injectProxySettings(io, this);
         if (ApplicationLoader.applicationLoaderInstance != null) {
             ApplicationLoader.applicationLoaderInstance.addItemOptions(io);
         }
@@ -14842,11 +14842,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         }
-        // NimarkoGram: CG-parity. Settings entry is unconditional (CG keeps it
+        // NebulaGram: CG-parity. Settings entry is unconditional (CG keeps it
         // outside the showCallsTab gate) and routes to MainPreferencesActivity —
         // the NG settings hub — instead of the stock Telegram SettingsActivity.
         io.add(R.drawable.msg_settings_solar, getString(R.string.Settings), () -> {
-            presentFragment(new app.nimarkogram.messenger.preferences.MainPreferencesActivity());
+            presentFragment(new app.nebulagram.messenger.preferences.MainPreferencesActivity());
         });
 
         if (proxyMenuSubItem != null) {
@@ -14878,30 +14878,30 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
 
-        // NimarkoGram: inject plugin-registered menu items (DRAWER_MENU + MAIN_MENU + CHAT_ACTION_MENU)
+        // NebulaGram: inject plugin-registered menu items (DRAWER_MENU + MAIN_MENU + CHAT_ACTION_MENU)
         // into the chat-list overflow popup. DialogsActivity uses ItemOptions
         // not ActionBarMenuItem.toggleSubMenu, so the dynamic Pine hook in
         // ApplicationLoader doesn't catch it — explicit inject here.
         try {
-            final java.util.Map<String, Object> nimarkoCtx = new java.util.HashMap<>();
-            nimarkoCtx.put("fragment", "DialogsActivity");
-            java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> nimarkoItems =
+            final java.util.Map<String, Object> nebulaCtx = new java.util.HashMap<>();
+            nebulaCtx.put("fragment", "DialogsActivity");
+            java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> nebulaItems =
                     new java.util.ArrayList<>();
             for (String loc : new String[]{"drawer_menu", "main_menu", "chat_action_menu"}) {
                 try {
-                    java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> part =
-                            app.nimarkogram.messenger.plugins.PluginsController.getInstance()
-                                    .getMenuItemsForLocation(loc, nimarkoCtx);
-                    if (part != null) nimarkoItems.addAll(part);
+                    java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> part =
+                            app.nebulagram.messenger.plugins.PluginsController.getInstance()
+                                    .getMenuItemsForLocation(loc, nebulaCtx);
+                    if (part != null) nebulaItems.addAll(part);
                 } catch (Throwable t) {
-                    FileLog.e("nimarko: getMenuItemsForLocation(" + loc + ") in DialogsActivity failed", t);
+                    FileLog.e("nebula: getMenuItemsForLocation(" + loc + ") in DialogsActivity failed", t);
                 }
             }
-            if (!nimarkoItems.isEmpty()) {
+            if (!nebulaItems.isEmpty()) {
                 io.addGap();
                 java.util.Set<String> seen = new java.util.HashSet<>();
                 // Controller already pre-filtered via checkCondition; skip duplicate eval.
-                for (final app.nimarkogram.messenger.plugins.hooks.MenuItemRecord rec : nimarkoItems) {
+                for (final app.nebulagram.messenger.plugins.hooks.MenuItemRecord rec : nebulaItems) {
                     if (rec == null || android.text.TextUtils.isEmpty(rec.text)) continue;
                     // C4: dedupe by stable plugin identity (pluginId:itemId), not the
                     // visible label — two plugins may share a caption (mirror ChatActivity).
@@ -14914,18 +14914,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             // C3: re-check the owning plugin is still active right
                             // before crossing into Python — the menu was built when
                             // the popup opened and the plugin may have been disabled.
-                            if (!app.nimarkogram.messenger.plugins.PluginsController.getInstance().isPluginActive(rec.pluginId)) {
+                            if (!app.nebulagram.messenger.plugins.PluginsController.getInstance().isPluginActive(rec.pluginId)) {
                                 return;
                             }
-                            rec.onClickCallback.call(nimarkoCtx);
+                            rec.onClickCallback.call(nebulaCtx);
                         } catch (Throwable t) {
-                            FileLog.e("nimarko: plugin menu click failed in DialogsActivity", t);
+                            FileLog.e("nebula: plugin menu click failed in DialogsActivity", t);
                         }
                     });
                 }
             }
         } catch (Throwable t) {
-            FileLog.e("nimarko: DialogsActivity plugin inject failed", t);
+            FileLog.e("nebula: DialogsActivity plugin inject failed", t);
         }
 
         io.show();
@@ -14976,7 +14976,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
 
-        // NimarkoGram: when foldersAtBottom is on, filterTabsView is anchored to the
+        // NebulaGram: when foldersAtBottom is on, filterTabsView is anchored to the
         // contentView bottom edge with bottomMargin=0 (see createView ~L5260). The
         // contentView extends behind both the system nav bar inset and the host's
         // MainTabs strip, so we must push the tabs up by navigationBarHeight +
@@ -15149,7 +15149,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private void checkUi_searchPagesPaddings(boolean doNotRequestLayout) {
         if (searchViewPager != null && actionBar != null) {
             final int bottom = AndroidUtilities.navigationBarHeight;
-            // NimarkoGram: the call bar (topPanelLayout) layout childTop in ContentView.onLayout adds
+            // NebulaGram: the call bar (topPanelLayout) layout childTop in ContentView.onLayout adds
             // getSearchFieldReservedHeight() (see L1310). Under hideSearchBar that reserved term collapses
             // dp(SEARCH_FIELD_HEIGHT) -> 0, so the call bar rides up by SEARCH_FIELD_HEIGHT during open search,
             // while this padding (which carries no reserved-field term and is calibrated for the reserved=48
@@ -15229,11 +15229,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         fragmentSearchField.setVisibility(alpha > 0 ? View.VISIBLE : View.GONE);
         animatorSearchButtonVisible.setValue(alpha <= 0.01f, true);
 
-        // NimarkoGram: home info-cards capsule — visible only when the search field (and thus its own cards)
+        // NebulaGram: home info-cards capsule — visible only when the search field (and thus its own cards)
         // is hidden in the idle home list with hideSearchBar on. Position itself is computed in
         // positionHomeInfoCards() (also called every dispatchDraw frame so it tracks the header on scroll).
         if (homeInfoCards != null) {
-            final boolean show = app.nimarkogram.messenger.infocards.InfoCardsConfig.isEnabled()
+            final boolean show = app.nebulagram.messenger.infocards.InfoCardsConfig.isEnabled()
                     && hideHomeSearchField
                     && alpha <= 0.01f
                     && actionModeVisible <= 0.01f
@@ -15392,7 +15392,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         final float factor3 = 1f - animatorDoneButtonVisible.getFloatValue();
         float factor = 0f;
 
-        // NimarkoGram: hide the action-bar magnifier when search lives in the bottom
+        // NebulaGram: hide the action-bar magnifier when search lives in the bottom
         // tabs row (showSearchInTabs && showMainTabs) — duplicate entry points otherwise.
         // Forward picker and archive folder still need the icon (mirrors CG L13815).
         if (shouldShowSearchIcon()) {
@@ -15447,7 +15447,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         iBlur3Positions.add(iBlur3PositionMainTabs);
     }
 
-    // NimarkoGram: read NimarkoConfig live each access. The previous `final` capture
+    // NebulaGram: read NebulaConfig live each access. The previous `final` capture
     // went stale when the user toggled the flag from FoldersPreferencesActivity —
     // rebuildAllFragmentViews clears views but does NOT re-run field initializers,
     // so any code path that read this captured value (blur3_InvalidateBlur,
@@ -15456,7 +15456,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     // both fight for the screen bottom). In DIALOGS_TYPE_FORWARD the bottom is owned by the comment bar,
     // so treat foldersAtBottom as OFF there → the folder tabs stay at the TOP (stock layout, no overlap).
     // Single source of truth: every foldersAtBottom branch in this fragment routes through here.
-    private boolean foldersAtBottom() { return NimarkoConfig.foldersAtBottom && initialDialogsType != DIALOGS_TYPE_FORWARD; }
+    private boolean foldersAtBottom() { return NebulaConfig.foldersAtBottom && initialDialogsType != DIALOGS_TYPE_FORWARD; }
 
     public FilterTabsView getFilterTabsView() {
         return filterTabsView;
@@ -15488,7 +15488,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (foldersAtBottom()) {
-            NimarkoFoldersHelper.blur3_InvalidateBlur(
+            NebulaFoldersHelper.blur3_InvalidateBlur(
                     this,
                     iBlur3Capture, iBlur3PositionActionBar, iBlur3PositionFolders, iBlur3PositionMainTabs, iBlur3Positions,
                     scrollableViewNoiseSuppressor
@@ -15547,7 +15547,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return navigationBarHeight + dp(12 + 48 + 12);
         } else {
             int padding = navigationBarHeight + additionNavigationBarHeight;
-            // NimarkoGram: foldersAtBottom anchors filterTabsView to the bottom edge,
+            // NebulaGram: foldersAtBottom anchors filterTabsView to the bottom edge,
             // sitting above MainTabs / nav bar. Reserve its 36 + 7 + 7 dp so the last
             // chat row isn't hidden under the strip.
             if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && foldersAtBottom()) {
@@ -15683,7 +15683,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             avatarView.setScaleX(0.833f);
             avatarView.setScaleY(0.833f);
         }
-        avatarView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(32));
+        avatarView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(32));
         avatarView.getImageReceiver().setCurrentAccount(account);
         avatarView.setForUserOrChat(user, avatarDrawable);
         avatarContainer.addView(avatarView, LayoutHelper.createLinear(32, 32, Gravity.CENTER, 1, 1, 1, 1));

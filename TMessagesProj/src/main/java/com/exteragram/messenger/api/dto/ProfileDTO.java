@@ -40,15 +40,15 @@ public final class ProfileDTO {
         return canChangeBadge;
     }
 
-    public app.nimarkogram.messenger.api.dto.ProfileDTO toReal() {
-        return new app.nimarkogram.messenger.api.dto.ProfileDTO(
+    public app.nebulagram.messenger.api.dto.ProfileDTO toReal() {
+        return new app.nebulagram.messenger.api.dto.ProfileDTO(
                 id,
                 badge != null ? badge.toReal() : null,
                 status != null ? status.toReal() : null,
                 canChangeBadge);
     }
 
-    public static ProfileDTO fromReal(app.nimarkogram.messenger.api.dto.ProfileDTO real) {
+    public static ProfileDTO fromReal(app.nebulagram.messenger.api.dto.ProfileDTO real) {
         if (real == null) return null;
         return new ProfileDTO(
                 real.getId(),

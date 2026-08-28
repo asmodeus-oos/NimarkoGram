@@ -2375,11 +2375,11 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private void acquireBannerOverlay() {
-        if (bannerOverlayPaused || !app.nimarkogram.messenger.banners.NimarkoBannerConfig.enabled) {
+        if (bannerOverlayPaused || !app.nebulagram.messenger.banners.NebulaBannerConfig.enabled) {
             return;
         }
         try {
-            app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onOverlayOpen(this);
+            app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onOverlayOpen(this);
             bannerOverlayPaused = true;
         } catch (Throwable ignored) {
         }
@@ -2391,7 +2391,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
         }
         bannerOverlayPaused = false;
         try {
-            app.nimarkogram.messenger.banners.NimarkoBannerRenderer.getInstance().onOverlayClose(this);
+            app.nebulagram.messenger.banners.NebulaBannerRenderer.getInstance().onOverlayClose(this);
         } catch (Throwable ignored) {
         }
     }

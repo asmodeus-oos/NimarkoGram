@@ -130,7 +130,7 @@ public class ZoomControlView extends View {
             } else if (x >= minusCx - AndroidUtilities.dp(16) && x <= minusCx + AndroidUtilities.dp(16) && y >= minusCy - AndroidUtilities.dp(16) && y <= minusCy + AndroidUtilities.dp(16)) {
                 if (action == MotionEvent.ACTION_UP && animateToZoom((float) Math.floor(getZoom() / 0.25f) * 0.25f - 0.25f)) {
                     
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                         } catch (Exception ignored) {}
@@ -142,7 +142,7 @@ public class ZoomControlView extends View {
             } else if (x >= plusCx - AndroidUtilities.dp(16) && x <= plusCx + AndroidUtilities.dp(16) && y >= plusCy - AndroidUtilities.dp(16) && y <= plusCy + AndroidUtilities.dp(16)) {
                 if (action == MotionEvent.ACTION_UP && animateToZoom((float) Math.floor(getZoom() / 0.25f) * 0.25f + 0.25f)) {
                     
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                         } catch (Exception ignored) {}

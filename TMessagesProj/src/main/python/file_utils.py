@@ -3,7 +3,7 @@ import traceback
 from typing import List, Optional
 from java.io import File
 from org.telegram.messenger import FileLoader
-from app.nimarkogram.messenger.plugins import PluginsController
+from app.nebulagram.messenger.plugins import PluginsController
 from android_utils import log
 from plugin_runtime import capture_callback_owner, run_owned_callback
 
@@ -226,7 +226,7 @@ class _FilesController:
             raise
         except Exception:
             return None
-        log(f"nimarko files: registered file hook {handler_id} for {plugin_id} exts={exts}")
+        log(f"nebula files: registered file hook {handler_id} for {plugin_id} exts={exts}")
         return _FileHandlerHandle(handler_id)
 
     def unregister(self, handle_or_id):
@@ -280,7 +280,7 @@ class _FilesController:
                 rec.get('runtime_token'), rec['on_click'], fi, default=False
             ) is True
         except Exception:
-            log(f"nimarko files: on_click failed: {traceback.format_exc()}")
+            log(f"nebula files: on_click failed: {traceback.format_exc()}")
             return False
 
 class FilesController:
@@ -338,5 +338,5 @@ def _dispatch_open_from_java(path, name=None, mime=None):
         )
         return _FILES_INSTANCE.dispatch_open(fi)
     except Exception:
-        log(f"nimarko files: dispatch_open failed: {traceback.format_exc()}")
+        log(f"nebula files: dispatch_open failed: {traceback.format_exc()}")
         return False

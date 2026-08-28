@@ -83,9 +83,9 @@ public class LocaleController {
                         lang = "en";
                     }
                     lang = lang.toLowerCase();
-                    if (app.nimarkogram.messenger.NimarkoConfig.showSeconds) {
+                    if (app.nebulagram.messenger.NebulaConfig.showSeconds) {
                         formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, is24HourFormat ? "HH:mm:ss" : "h:mm:ss a", is24HourFormat ? "HH:mm:ss" : "h:mm:ss a");
-                    } else if (app.nimarkogram.messenger.NimarkoConfig.oldTimeStyle) {
+                    } else if (app.nebulagram.messenger.NebulaConfig.oldTimeStyle) {
                         formatterDay = createFormatter(Locale.US, is24HourFormat ? "HH:mm" : "h:mm a", is24HourFormat ? "HH:mm" : "h:mm a");
                     } else {
                         formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H), is24HourFormat ? "HH:mm" : "h:mm a");
@@ -1439,7 +1439,7 @@ public class LocaleController {
     }
 
     private String getStringInternal(String key, String fallback, int fallbackRes, int res) {
-        boolean forceLocal = isNimarkoBrandedKey(key) || isNimarkoBrandedKey(fallback);
+        boolean forceLocal = isNebulaBrandedKey(key) || isNebulaBrandedKey(fallback);
         String value = (!forceLocal && BuildVars.USE_CLOUD_STRINGS) ? localeValues.get(key) : null;
         if (value == null) {
             if (!forceLocal && BuildVars.USE_CLOUD_STRINGS && fallback != null) {
@@ -1464,7 +1464,7 @@ public class LocaleController {
         return value;
     }
 
-    private static boolean isNimarkoBrandedKey(String key) {
+    private static boolean isNebulaBrandedKey(String key) {
         if (key == null) return false;
         switch (key) {
             case "TelegramVersion":
@@ -1709,7 +1709,7 @@ public class LocaleController {
 
     public static String formatString(String key, String fallback, int res, int fallbackRes, Object... args) {
         try {
-            boolean forceLocal = isNimarkoBrandedKey(key) || isNimarkoBrandedKey(fallback);
+            boolean forceLocal = isNebulaBrandedKey(key) || isNebulaBrandedKey(fallback);
             String value = (!forceLocal && BuildVars.USE_CLOUD_STRINGS) ? getInstance().localeValues.get(key) : null;
             if (value == null) {
                 if (!forceLocal && BuildVars.USE_CLOUD_STRINGS && fallback != null) {
@@ -2228,7 +2228,7 @@ public class LocaleController {
 
     public static String appendChatWeekday(String formatted, long dateMs) {
         try {
-            if (formatted == null || !app.nimarkogram.messenger.NimarkoConfig.weekdayNearDate) {
+            if (formatted == null || !app.nebulagram.messenger.NebulaConfig.weekdayNearDate) {
                 return formatted;
             }
             Locale locale = getInstance().currentLocale == null ? Locale.getDefault() : getInstance().currentLocale;
@@ -2997,7 +2997,7 @@ public class LocaleController {
     }
 
     public static String formatShortNumber(int number, int[] rounded) {
-        if (app.nimarkogram.messenger.NimarkoConfig.noRounding) {
+        if (app.nebulagram.messenger.NebulaConfig.noRounding) {
             if (rounded != null) {
                 rounded[0] = number;
             }

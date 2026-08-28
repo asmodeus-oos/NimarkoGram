@@ -408,7 +408,7 @@ public class EditWidgetActivity extends BaseFragment {
                                     } else {
                                         innerMessage = message.messageText.toString();
                                         if (innerMessage.contains("$")) {
-                                            innerMessage = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(innerMessage);
+                                            innerMessage = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(innerMessage);
                                         }
                                     }
                                     innerMessage = innerMessage.replace('\n', ' ');
@@ -421,7 +421,7 @@ public class EditWidgetActivity extends BaseFragment {
                                 } else if (message.messageOwner.message != null) {
                                     String mess = message.messageOwner.message;
                                     if (mess.contains("$")) {
-                                        mess = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(mess);
+                                        mess = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(mess);
                                     }
                                     if (mess.length() > 150) {
                                         mess = mess.substring(0, 150);

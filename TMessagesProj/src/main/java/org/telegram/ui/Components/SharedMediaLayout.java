@@ -3860,9 +3860,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     }
 
     protected boolean includeStories() {
-        // NimarkoGram: master toggle hides the profile Stories tab (self profile
+        // NebulaGram: master toggle hides the profile Stories tab (self profile
         // still keeps it so users can manage their own posted stories — matches CG).
-        if (app.nimarkogram.messenger.NimarkoConfig.hideStories) {
+        if (app.nebulagram.messenger.NebulaConfig.hideStories) {
             return isSelf();
         }
         return true;
@@ -10647,7 +10647,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     }
 
     private boolean shouldHideArchivedStoriesTab() {
-        return app.nimarkogram.messenger.NimarkoConfig.hideArchivedStories
+        return app.nebulagram.messenger.NebulaConfig.hideArchivedStories
                 && !isArchivedOnlyStoriesView();
     }
 

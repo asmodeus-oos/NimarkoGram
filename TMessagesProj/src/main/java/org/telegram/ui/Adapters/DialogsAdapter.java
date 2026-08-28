@@ -1598,7 +1598,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
                 || folderId != 0
                 || dialogsType != DialogsActivity.DIALOGS_TYPE_DEFAULT
                 || isOnlySelect
-                || !app.nimarkogram.messenger.NimarkoConfig.hideArchiveFromChatsList) {
+                || !app.nebulagram.messenger.NebulaConfig.hideArchiveFromChatsList) {
             return source;
         }
         for (int i = 0; i < source.size(); i++) {

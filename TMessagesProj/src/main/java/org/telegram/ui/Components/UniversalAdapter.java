@@ -402,7 +402,7 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
                 } else {
                     view = new HeaderCell(context, resourcesProvider);
                 }
-                // NimarkoGram: keep section headers OUT of the rounded card — exteraGram-style. The section
+                // NebulaGram: keep section headers OUT of the rounded card — exteraGram-style. The section
                 // predicate (RecyclerListView.setSections) excludes TAG_NOT_SECTION views, so the header now
                 // floats as a plain label ABOVE the card instead of sitting inside it as a separate "облачко".
                 view.setTag(RecyclerListView.TAG_NOT_SECTION);
@@ -699,7 +699,7 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
                         cell.setTextAndValueAndIcon(item.text, item.textValue, item.iconResId, divider);
                     }
                 }
-                // NimarkoGram: re-style the leading icon as a rounded gradient badge when requested. The text
+                // NebulaGram: re-style the leading icon as a rounded gradient badge when requested. The text
                 // was already set above; setColorfulIcon only touches the imageView (badge + white glyph).
                 if (item.colorfulIcon && item.iconResId != 0) {
                     cell.setColorfulIcon(item.iconColorTop, item.iconColorBottom, item.iconResId);
@@ -797,7 +797,7 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
                     }
                     cell3 = btn;
                 }
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableDividers) {
+                if (!app.nebulagram.messenger.NebulaConfig.disableDividers) {
                     final boolean prev = prevItem != null && !isShadow(prevItem.viewType);
                     final boolean next = nextItem != null && !isShadow(nextItem.viewType);
                     if (listView.hasSections()) {

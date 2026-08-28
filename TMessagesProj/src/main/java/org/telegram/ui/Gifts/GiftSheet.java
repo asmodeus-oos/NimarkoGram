@@ -251,7 +251,7 @@ public class GiftSheet extends BottomSheetWithRecyclerListView implements Notifi
         final StarParticlesView particlesView = StarsIntroActivity.makeParticlesView(context, 70, 0);
         topView.addView(particlesView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(84));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(84));
         topView.addView(avatarImageView, LayoutHelper.createFrame(84, 84, Gravity.CENTER, 0, 15, 0, 17));
         ScaleStateListAnimator.apply(avatarImageView);
         avatarImageView.setOnClickListener(v -> {

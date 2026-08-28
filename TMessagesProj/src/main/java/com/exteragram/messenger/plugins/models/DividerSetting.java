@@ -1,6 +1,6 @@
 package com.exteragram.messenger.plugins.models;
 
-public class DividerSetting extends app.nimarkogram.messenger.plugins.models.DividerSetting {
+public class DividerSetting extends app.nebulagram.messenger.plugins.models.DividerSetting {
     public DividerSetting(String text) {
         super(text);
     }

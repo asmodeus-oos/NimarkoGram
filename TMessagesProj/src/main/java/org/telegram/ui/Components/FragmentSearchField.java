@@ -67,7 +67,7 @@ public class FragmentSearchField extends FrameLayout implements FactorAnimator.T
     private final ImageView closeIcon;
     private final LinearLayout additionalIconsLayout;
     
-    private app.nimarkogram.messenger.infocards.InfoCardStripView infoCards;
+    private app.nebulagram.messenger.infocards.InfoCardStripView infoCards;
     private final boolean withInfoCards;
     private boolean closeButtonForcedVisible;
     public final EditTextBoldCursor editText;
@@ -184,7 +184,7 @@ public class FragmentSearchField extends FrameLayout implements FactorAnimator.T
             
             setClipChildren(false);
             setClipToPadding(false);
-            infoCards = new app.nimarkogram.messenger.infocards.InfoCardStripView(context, resourcesProvider);
+            infoCards = new app.nebulagram.messenger.infocards.InfoCardStripView(context, resourcesProvider);
             infoCards.setVisibilityFactor(1f);
             
             addView(infoCards, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT,

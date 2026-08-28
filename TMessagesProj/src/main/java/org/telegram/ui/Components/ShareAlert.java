@@ -442,7 +442,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         this.resourcesProvider = theme;
         
-        this.includeStory = app.nimarkogram.messenger.NimarkoConfig.shareDrawStoryButton && includeStory;
+        this.includeStory = app.nebulagram.messenger.NebulaConfig.shareDrawStoryButton && includeStory;
 
         parentActivity = AndroidUtilities.findActivity(context);
 
@@ -2245,7 +2245,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         return containerView.getMeasuredHeight() - containerViewTop;
     }
 
-    private boolean showSendersName = !app.nimarkogram.messenger.NimarkoConfig.forwardWithoutAuthor;
+    private boolean showSendersName = !app.nebulagram.messenger.NebulaConfig.forwardWithoutAuthor;
     private ActionBarPopupWindow sendPopupWindow;
     private boolean onSendLongClick(View view) {
         if (parentActivity == null) {
@@ -2289,7 +2289,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             sendPopupLayout1.addView(showSendersNameView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
             showSendersNameView.setTextAndIcon(false ? LocaleController.getString(R.string.ShowSenderNames) : LocaleController.getString(R.string.ShowSendersName), 0);
             
-            showSendersName = !app.nimarkogram.messenger.NimarkoConfig.forwardWithoutAuthor;
+            showSendersName = !app.nebulagram.messenger.NebulaConfig.forwardWithoutAuthor;
             showSendersNameView.setChecked(showSendersName);
 
             ActionBarMenuSubItem hideSendersNameView = new ActionBarMenuSubItem(getContext(), true, false, true, resourcesProvider);
@@ -2508,8 +2508,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                     }
                     
-                    boolean ngStripAuthor = !showSendersName || !app.nimarkogram.messenger.NimarkoConfig.forwardAuthorship;
-                    boolean ngStripCaption = !app.nimarkogram.messenger.NimarkoConfig.forwardCaptions;
+                    boolean ngStripAuthor = !showSendersName || !app.nebulagram.messenger.NebulaConfig.forwardAuthorship;
+                    boolean ngStripCaption = !app.nebulagram.messenger.NebulaConfig.forwardCaptions;
                     result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, ngStripAuthor, ngStripCaption, withSound, 0, 0, replyTopMsg, video_timestamp, price == null ? 0 : price, monoForumPeerId, null);
                     if (result != 0) {
                         removeKeys.add(key);
@@ -2656,7 +2656,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     if (foldersView.filterTabsView.currentTabIsDefault()) {
                         listAdapter.fetchDialogs();
                     } else {
-                        if (!app.nimarkogram.messenger.NimarkoConfig.tabsHideAllChats) foldersView.applyFilter(foldersView.filterTabsView.getFirstTabId());
+                        if (!app.nebulagram.messenger.NebulaConfig.tabsHideAllChats) foldersView.applyFilter(foldersView.filterTabsView.getFirstTabId());
                     }
                 } else {
                     listAdapter.fetchDialogs();
@@ -2998,7 +2998,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         public void setDialogs(List<TLRPC.Dialog> newDialogs) {
             dialogs.clear();
             dialogsMap.clear();
-            if (app.nimarkogram.messenger.NimarkoConfig.tabsHideAllChats && foldersView != null && foldersView.filterTabsView != null && hasFolders() && includeStory) {
+            if (app.nebulagram.messenger.NebulaConfig.tabsHideAllChats && foldersView != null && foldersView.filterTabsView != null && hasFolders() && includeStory) {
                 MyStoryDialog d = new MyStoryDialog();
                 dialogs.add(d);
                 dialogsMap.put(d.id, d);
@@ -4193,13 +4193,13 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     filterTabsView.removeTabs();
                     for (int a = 0, N = filters.size(); a < N; a++) {
                         if (filters.get(a).isDefault()) {
-                            if (!app.nimarkogram.messenger.NimarkoConfig.tabsHideAllChats) filterTabsView.addTab(a, 0, LocaleController.getString(R.string.FilterAllChats), null, false, true, filters.get(a).locked, filters.get(a).emoticon);
+                            if (!app.nebulagram.messenger.NebulaConfig.tabsHideAllChats) filterTabsView.addTab(a, 0, LocaleController.getString(R.string.FilterAllChats), null, false, true, filters.get(a).locked, filters.get(a).emoticon);
                         } else {
                             final MessagesController.DialogFilter filter = filters.get(a);
                             filterTabsView.addTab(a, filter.localId, filter.name, filter.entities, filter.title_noanimate, false, filters.get(a).locked, filter.emoticon);
                         }
                     }
-                    if (app.nimarkogram.messenger.NimarkoConfig.tabsHideAllChats && stableId <= 0) {
+                    if (app.nebulagram.messenger.NebulaConfig.tabsHideAllChats && stableId <= 0) {
                         id = filterTabsView.getFirstTabId();
                         filterTabsView.selectTabWithStableId(filterTabsView.getStableId(0));
                     } else if (stableId >= 0) {

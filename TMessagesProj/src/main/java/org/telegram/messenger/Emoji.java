@@ -108,7 +108,7 @@ public class Emoji {
     }
 
     /**
-     * NimarkoGram: render a standard emoji to a Bitmap SYNCHRONOUSLY (for notification icons,
+     * NebulaGram: render a standard emoji to a Bitmap SYNCHRONOUSLY (for notification icons,
      * where the device font renders some glyphs broken). Loads + alpha-masks the atlas page on
      * the calling thread if needed (mirrors {@link #loadEmoji}), so it never paints the async
      * placeholder. Returns null if the code isn't a known emoji or the atlas can't be read.
@@ -457,10 +457,10 @@ public class Emoji {
                 b = getBounds();
             }
 
-            // NimarkoGram: render system emoji typeface when systemEmoji flag is on.
-            if (app.nimarkogram.messenger.NimarkoConfig.systemEmoji) {
+            // NebulaGram: render system emoji typeface when systemEmoji flag is on.
+            if (app.nebulagram.messenger.NebulaConfig.systemEmoji) {
                 String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
-                textPaint.setTypeface(app.nimarkogram.messenger.utils.ui.FontHelper.getSystemEmojiTypeface());
+                textPaint.setTypeface(app.nebulagram.messenger.utils.ui.FontHelper.getSystemEmojiTypeface());
                 textPaint.setTextSize(b.height() * 0.8f);
                 canvas.drawText(emoji, 0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
                 return;
@@ -1029,7 +1029,7 @@ public class Emoji {
         if (count == null) {
             count = 0;
         }
-        int cap = Math.max(1, app.nimarkogram.messenger.NimarkoConfig.recentEmojisAmplifier);
+        int cap = Math.max(1, app.nebulagram.messenger.NebulaConfig.recentEmojisAmplifier);
         if (count == 0 && emojiUseHistory.size() >= cap) {
             String emoji = recentEmoji.get(recentEmoji.size() - 1);
             emojiUseHistory.remove(emoji);
@@ -1067,7 +1067,7 @@ public class Emoji {
             }
             return 0;
         });
-        int sortCap = Math.max(1, app.nimarkogram.messenger.NimarkoConfig.recentEmojisAmplifier);
+        int sortCap = Math.max(1, app.nebulagram.messenger.NebulaConfig.recentEmojisAmplifier);
         while (recentEmoji.size() > sortCap) {
             recentEmoji.remove(recentEmoji.size() - 1);
         }

@@ -107,7 +107,7 @@ class _FakeJavaOwnedProxy:
 
     def __init__(self, target, interfaces, owner, controller):
         self._target = target
-        self._nimarko_runtime_token = owner
+        self._nebula_runtime_token = owner
         self._controller = controller
         self._methods = {}
         for interface in interfaces:
@@ -134,7 +134,7 @@ class _FakeJavaOwnedProxy:
             raise AttributeError(name)
 
         def invoke(*args):
-            token = self._nimarko_runtime_token
+            token = self._nebula_runtime_token
             default = self._default(method)
             if not self._controller.isPluginRuntimeCallbackAllowed(token):
                 return default
@@ -152,7 +152,7 @@ class _FakeJavaOwnedProxy:
                 watchdog.onPluginExecutionFinished(plugin_id)
                 self._controller.exitPluginRuntime(token)
 
-        invoke._nimarko_runtime_token = self._nimarko_runtime_token
+        invoke._nebula_runtime_token = self._nebula_runtime_token
         return invoke
 
 class ProxyRuntimeIsolationTest(unittest.TestCase):
@@ -167,9 +167,9 @@ class ProxyRuntimeIsolationTest(unittest.TestCase):
 
         module_names = (
             'app',
-            'app.nimarkogram',
-            'app.nimarkogram.messenger',
-            'app.nimarkogram.messenger.plugins',
+            'app.nebulagram',
+            'app.nebulagram.messenger',
+            'app.nebulagram.messenger.plugins',
             'java',
             'plugin_runtime',
             'extera_utils',
@@ -338,13 +338,13 @@ class ProxyRuntimeIsolationTest(unittest.TestCase):
             if '__init__' in base.__dict__)
         self.assertFalse(getattr(
             implementation.__dict__['__init__'],
-            '_nimarko_proxy_runtime_guarded', False))
+            '_nebula_proxy_runtime_guarded', False))
         self.assertFalse(getattr(
             implementation.__dict__['helper'],
-            '_nimarko_proxy_runtime_guarded', False))
+            '_nebula_proxy_runtime_guarded', False))
         self.assertFalse(getattr(
             implementation.__dict__['onEvent'],
-            '_nimarko_proxy_runtime_guarded', False))
+            '_nebula_proxy_runtime_guarded', False))
 
     def test_ownerless_proxy_fails_closed_at_construction(self):
         calls = []
@@ -394,7 +394,7 @@ class ProxyRuntimeIsolationTest(unittest.TestCase):
     def test_java_bridge_is_revocable_and_exact_runtime_scoped(self):
         java = (
             REPO / 'TMessagesProj/src/main/java/'
-            'app/nimarkogram/messenger/plugins/bridge/'
+            'app/nebulagram/messenger/plugins/bridge/'
             'PythonInterfaceProxy.java'
         ).read_text(encoding='utf-8')
         classes = (

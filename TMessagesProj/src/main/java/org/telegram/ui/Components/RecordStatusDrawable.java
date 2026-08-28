@@ -83,7 +83,7 @@ public class RecordStatusDrawable extends StatusDrawable {
         }
         canvas.save();
         
-        if (app.nimarkogram.messenger.NimarkoConfig.centerChatTitle && useCenteredOverride) {
+        if (app.nebulagram.messenger.NebulaConfig.centerChatTitle && useCenteredOverride) {
             float centerX = getBounds().centerX() - AndroidUtilities.dp(8);
             float centerY = getIntrinsicHeight() / 2f + AndroidUtilities.dp(isChat ? 1 : 2);
             canvas.translate(centerX, centerY);
@@ -126,7 +126,7 @@ public class RecordStatusDrawable extends StatusDrawable {
     @Override
     public int getIntrinsicWidth() {
         
-        return AndroidUtilities.dp(app.nimarkogram.messenger.NimarkoConfig.centerChatTitle && useCenteredOverride ? 14 : 18);
+        return AndroidUtilities.dp(app.nebulagram.messenger.NebulaConfig.centerChatTitle && useCenteredOverride ? 14 : 18);
     }
 
     @Override

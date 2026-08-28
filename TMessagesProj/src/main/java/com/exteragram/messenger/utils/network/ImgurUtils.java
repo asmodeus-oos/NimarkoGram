@@ -4,15 +4,15 @@ import java.io.File;
 
 public abstract class ImgurUtils {
 
-    public static class ImgurResponse extends app.nimarkogram.messenger.utils.network.ImgurUtils.ImgurResponse {
+    public static class ImgurResponse extends app.nebulagram.messenger.utils.network.ImgurUtils.ImgurResponse {
         public ImgurResponse(String imageUrl, String imageId, String deleteHash) {
             super(imageUrl, imageId, deleteHash);
         }
     }
 
     public static ImgurResponse uploadImage(File file) {
-        app.nimarkogram.messenger.utils.network.ImgurUtils.ImgurResponse r =
-                app.nimarkogram.messenger.utils.network.ImgurUtils.uploadImage(file);
+        app.nebulagram.messenger.utils.network.ImgurUtils.ImgurResponse r =
+                app.nebulagram.messenger.utils.network.ImgurUtils.uploadImage(file);
         if (r == null) {
             return null;
         }
@@ -20,6 +20,6 @@ public abstract class ImgurUtils {
     }
 
     public static boolean deleteImage(String deleteHash) {
-        return app.nimarkogram.messenger.utils.network.ImgurUtils.deleteImage(deleteHash);
+        return app.nebulagram.messenger.utils.network.ImgurUtils.deleteImage(deleteHash);
     }
 }

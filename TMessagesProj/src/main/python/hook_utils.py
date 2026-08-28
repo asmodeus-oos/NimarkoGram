@@ -14,7 +14,7 @@ _MAX_FIELD_CACHE_SIZE = 256
 # exteraGram plugins resolve a class by its `com.exteragram.messenger.*` name
 # and then Xposed-hook its methods/constructors or use it as a reflection
 # parameter type. The running app, however, instantiates the REAL
-# `app.nimarkogram.messenger.*` classes; the `com.exteragram.*` twins are
+# `app.nebulagram.messenger.*` classes; the `com.exteragram.*` twins are
 # either subclass ALIASES (so a hook installed on the alias' Method/Constructor
 # never fires on the real instance's dispatch) or do not exist at all. For
 # these specific classes we resolve and return the REAL class so hooks fire and
@@ -38,32 +38,32 @@ _MAX_FIELD_CACHE_SIZE = 256
 # not affect resolution of the PluginsController class itself.
 _HOOK_TARGET_REMAP = {
     'com.exteragram.messenger.plugins.ui.PluginsActivity':
-        'app.nimarkogram.messenger.plugins.ui.PluginsActivity',
+        'app.nebulagram.messenger.plugins.ui.PluginsActivity',
     'com.exteragram.messenger.plugins.ui.PluginSettingsActivity':
-        'app.nimarkogram.messenger.plugins.ui.PluginSettingsActivity',
+        'app.nebulagram.messenger.plugins.ui.PluginSettingsActivity',
     'com.exteragram.messenger.plugins.ui.components.PluginCell':
-        'app.nimarkogram.messenger.plugins.ui.components.PluginCell',
+        'app.nebulagram.messenger.plugins.ui.components.PluginCell',
     'com.exteragram.messenger.plugins.ui.components.PluginCellDelegate':
-        'app.nimarkogram.messenger.plugins.ui.components.PluginCellDelegate',
+        'app.nebulagram.messenger.plugins.ui.components.PluginCellDelegate',
     'com.exteragram.messenger.plugins.ui.components.InstallPluginBottomSheet':
-        'app.nimarkogram.messenger.plugins.ui.components.InstallPluginBottomSheet',
+        'app.nebulagram.messenger.plugins.ui.components.InstallPluginBottomSheet',
     'com.exteragram.messenger.plugins.ui.components.InstallPluginBottomSheet$PluginInstallParams':
-        'app.nimarkogram.messenger.plugins.ui.components.InstallPluginBottomSheet$PluginInstallParams',
+        'app.nebulagram.messenger.plugins.ui.components.InstallPluginBottomSheet$PluginInstallParams',
     'com.exteragram.messenger.plugins.ui.components.SafeModeBottomSheet':
-        'app.nimarkogram.messenger.plugins.ui.components.SafeModeBottomSheet',
+        'app.nebulagram.messenger.plugins.ui.components.SafeModeBottomSheet',
     'com.exteragram.messenger.plugins.PythonPluginsEngine':
-        'app.nimarkogram.messenger.plugins.PythonPluginsEngine',
+        'app.nebulagram.messenger.plugins.PythonPluginsEngine',
     'com.exteragram.messenger.plugins.PluginsController$PluginValidationResult':
-        'app.nimarkogram.messenger.plugins.PluginsController$PluginValidationResult',
+        'app.nebulagram.messenger.plugins.PluginsController$PluginValidationResult',
     # Plugin: used as a class-typed param in PluginCell.getDeclaredMethod("set",
-    # Plugin, PluginCellDelegate) — the real signature uses app.nimarkogram.Plugin,
+    # Plugin, PluginCellDelegate) — the real signature uses app.nebulagram.Plugin,
     # so find_class("...Plugin") MUST return the real class for the lookup to match.
     'com.exteragram.messenger.plugins.Plugin':
-        'app.nimarkogram.messenger.plugins.Plugin',
+        'app.nebulagram.messenger.plugins.Plugin',
     # TranslateCallback: used as a dynamic_proxy() base, then the proxy is passed
     # to the real TranslatorUtils.translate(...) — must be the real interface.
     'com.exteragram.messenger.utils.text.TranslatorUtils$TranslateCallback':
-        'app.nimarkogram.messenger.utils.text.TranslatorUtils$TranslateCallback',
+        'app.nebulagram.messenger.utils.text.TranslatorUtils$TranslateCallback',
 }
 
 def find_class(class_name: str) -> Optional[JavaClass]:
@@ -93,12 +93,12 @@ def find_class(class_name: str) -> Optional[JavaClass]:
         return clazz
     except Exception as original_error:
         # Generic namespace fallback for old plugins which reference a class
-        # that moved unchanged from exteraGram to NimarkoGram. Explicit
+        # that moved unchanged from exteraGram to NebulaGram. Explicit
         # entries above still win, and an existing com.exteragram bridge is
         # always preferred, so adapter classes keep their translation logic.
         prefix = 'com.exteragram.messenger.'
         if class_name.startswith(prefix):
-            current_name = 'app.nimarkogram.messenger.' + class_name[len(prefix):]
+            current_name = 'app.nebulagram.messenger.' + class_name[len(prefix):]
             try:
                 clazz = jclass(current_name)
                 _CLASS_CACHE[class_name] = clazz

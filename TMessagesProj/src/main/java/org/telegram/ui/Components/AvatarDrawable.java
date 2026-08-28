@@ -594,7 +594,7 @@ public class AvatarDrawable extends Drawable {
             } else {
                 // NG avatar-corners: letter avatars follow the global setting so they
                 // match photo avatars (a circle at max, rounded-square below it).
-                int avc = app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(size, true);
+                int avc = app.nebulagram.messenger.NebulaConfig.getAvatarCorners(size, true);
                 AndroidUtilities.rectTmp.set(0, 0, size, size);
                 canvas.drawRoundRect(AndroidUtilities.rectTmp, avc, avc, backgroundPaint);
             }

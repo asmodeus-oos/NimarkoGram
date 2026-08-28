@@ -88,7 +88,7 @@ public class EntityView extends FrameLayout {
     private final Runnable longPressRunnable = () -> {
         recognizedLongPress = true;
         if (delegate != null) {
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 } catch (Exception ignored) {}
@@ -458,7 +458,7 @@ public class EntityView extends FrameLayout {
         if (stickyXRunnableValue == STICKY_NONE) {
             runStickyXAnimator(1, 0);
         } else {
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignored) {}
@@ -482,7 +482,7 @@ public class EntityView extends FrameLayout {
         if (stickyYRunnableValue == STICKY_NONE) {
             runStickyYAnimator(1, 0);
         } else {
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignored) {}
@@ -603,7 +603,7 @@ public class EntityView extends FrameLayout {
         float newScale = Math.max(this.scale, 0.1f);
         newScale = Utilities.clamp(newScale, getMaxScale(), getMinScale());
         if (allowHaptic() && (newScale >= getMaxScale() || newScale <= getMinScale()) != (oldScale >= getMaxScale() || oldScale <= getMinScale())) {
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
@@ -640,7 +640,7 @@ public class EntityView extends FrameLayout {
                         AndroidUtilities.runOnUIThread(setStickyAngleRunnable = () -> {
                             currentStickyAngle = stickyAngle;
                             hasStickyAngle = true;
-                            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                 try {
                                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 } catch (Exception ignored) {}

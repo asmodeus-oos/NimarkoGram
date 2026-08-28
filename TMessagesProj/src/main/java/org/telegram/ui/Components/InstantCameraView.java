@@ -106,7 +106,7 @@ import org.telegram.ui.Stories.recorder.DualCameraView;
 import org.telegram.ui.Stories.recorder.FlashViews;
 import org.telegram.ui.Stories.recorder.StoryEntry;
 
-import app.nimarkogram.messenger.camera.SlideControlView;
+import app.nebulagram.messenger.camera.SlideControlView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -188,11 +188,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private TextureView textureView;
     private BackupImageView textureOverlayView;
     private final boolean useCameraX =
-            app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX();
+            app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX();
     private final boolean useCamera2 =
-            app.nimarkogram.messenger.NimarkoConfig.cameraType == app.nimarkogram.messenger.camera.CameraXUtils.CAMERA_2;
-    private final app.nimarkogram.messenger.camera.NimarkoVideoMessagesHelper videoMessagesHelper =
-            new app.nimarkogram.messenger.camera.NimarkoVideoMessagesHelper();
+            app.nebulagram.messenger.NebulaConfig.cameraType == app.nebulagram.messenger.camera.CameraXUtils.CAMERA_2;
+    private final app.nebulagram.messenger.camera.NebulaVideoMessagesHelper videoMessagesHelper =
+            new app.nebulagram.messenger.camera.NebulaVideoMessagesHelper();
     private CameraSession cameraSession;
     private boolean bothCameras;
     private Camera2Session[] camera2Sessions = new Camera2Session[2];
@@ -221,7 +221,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     public void onCameraXSessionReady(
-            app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession session,
+            app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession session,
             int width, int height) {
         if (!useCameraX || session == null) return;
         int index = videoMessagesHelper.getSessionIndex(session);
@@ -240,8 +240,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 // texture still contains the final frame of the old lens.
                 // Consume both atomically on the first replacement frame.
                 pendingCameraXSingleSession = session;
-                if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-                    app.nimarkogram.messenger.NimarkoCameraLog.log(
+                if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+                    app.nebulagram.messenger.NebulaCameraLog.log(
                             "InstantRound CX replacement session ready"
                                     + " front=" + session.isFrontFacing()
                                     + " size=" + width + 'x' + height
@@ -272,7 +272,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
      * accept the graph but never fulfill a repeating preview request.
      */
     public void onCameraXAttemptStarting(boolean dual) {
-        if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+        if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                 "InstantRound CX attempt dual=" + dual + " cancelled=" + cancelled
                         + " front=" + isFrontface);
         nmCancelCameraXDualFrameWatchdog();
@@ -286,7 +286,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         // used by the single-camera path; otherwise dual mode visibly starts
         // on 1x and jumps to the ultra-wide lens about a second later.
         cameraXInitialWideWaitActive = (!isFrontface || dual)
-                && app.nimarkogram.messenger.NimarkoConfig.startFromUltraWideCam;
+                && app.nebulagram.messenger.NebulaConfig.startFromUltraWideCam;
         cameraXInitialWideWaitStartedMs = cameraXInitialWideWaitActive
                 ? SystemClock.elapsedRealtime() : 0L;
         cameraXInitialWideWaitTimeoutMs = dual
@@ -314,7 +314,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (cancelled || !bothCameras || nmCameraXActiveFrameObserved) {
                 return;
             }
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                     "InstantRound CX watchdog: no active frame mask=" + nmCameraXFrameMask
                             + " surfaceIndex=" + surfaceIndex);
             // Keep dual camera enabled on capable devices. First retry the
@@ -329,7 +329,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     public void onCameraXDualUnavailable() {
-        if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+        if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                 "InstantRound CX dual unavailable/collapsing frameMask="
                         + nmCameraXFrameMask);
         nmCancelCameraXDualFrameWatchdog();
@@ -469,7 +469,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     private boolean flipAnimationInProgress;
     private volatile boolean cameraXSingleSwitchAwaitingBind;
-    private volatile app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession
+    private volatile app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession
             pendingCameraXSingleSession;
     // Preserve a switch tap made while an advertised dual graph has only one
     // live stream. The intent is replayed after the surviving single CameraX
@@ -521,7 +521,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     boolean isInPinchToZoomTouchMode;
     boolean maybePinchToZoomTouchMode;
 
-    // NimarkoGram: single-finger vertical drag-to-zoom for round video. Unlike
+    // NebulaGram: single-finger vertical drag-to-zoom for round video. Unlike
     // the stock 2-finger pinch (which springs back to min on release), this sets
     // a PERSISTENT zoom you keep recording at — drag up to zoom in, drag down to
     // zoom out (onto the ultra-wide lens when the device exposes a <1.0x zoom
@@ -632,7 +632,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         buttonsLayout.setPadding(dp(6), dp(6), dp(6), dp(6));
 
         buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
-        if (app.nimarkogram.messenger.NimarkoConfig.centerCameraControlButtons) {
+        if (app.nebulagram.messenger.NebulaConfig.centerCameraControlButtons) {
             buttonsLayout.setGravity(Gravity.CENTER);
             addView(buttonsLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 56, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 0));
         } else {
@@ -646,20 +646,20 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         switchCameraButton.setOnClickListener(v -> {
             final boolean concurrentReady = useCameraX && bothCameras
                     && videoMessagesHelper.isConcurrentDualReady();
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                     "InstantRound switch CLICK ready=" + cameraReady
                             + " initiated=" + isCameraSessionInitiated()
                             + " thread=" + (cameraThread != null)
                             + " flip=" + flipAnimationInProgress
                             + " c2Pending=" + nmCamera2SwitchPending
                             + " useCX=" + useCameraX + " dual=" + bothCameras
-                            + " startWide=" + app.nimarkogram.messenger.NimarkoConfig.startFromUltraWideCam
+                            + " startWide=" + app.nebulagram.messenger.NebulaConfig.startFromUltraWideCam
                             + " front=" + isFrontface + " surface=" + surfaceIndex
                             + " frameMask=" + nmCameraXFrameMask
                             + " concurrentReady=" + concurrentReady);
             if (!cameraReady || !isCameraSessionInitiated() || cameraThread == null
                     || flipAnimationInProgress || nmCamera2SwitchPending) {
-                if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+                if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                         "InstantRound switch CLICK rejected by readiness gate");
                 return;
             }
@@ -673,7 +673,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 // after the single stream is genuinely visible.
                 pendingCameraXSwitchAfterDualCollapse =
                         !pendingCameraXSwitchAfterDualCollapse;
-                if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+                if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                         "InstantRound switch queued until dual collapse pending="
                                 + pendingCameraXSwitchAfterDualCollapse);
                 videoMessagesHelper.fallbackCameraXDualToSingle(this);
@@ -765,8 +765,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         flashButton.setOnClickListener(v -> {
             flashing = !flashing;
             updateFlash();
-            // NimarkoGram (CG parity): consume one round-video flash hint per toggle.
-            app.nimarkogram.messenger.NimarkoConfig.decrementVideoMessagesHintCount();
+            // NebulaGram (CG parity): consume one round-video flash hint per toggle.
+            app.nebulagram.messenger.NebulaConfig.decrementVideoMessagesHintCount();
         });
         updateFlash();
 
@@ -832,7 +832,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
-        // NimarkoGram: rear-cam torch intensity (0..100, default 100) applied via
+        // NebulaGram: rear-cam torch intensity (0..100, default 100) applied via
         // Android 13+ CameraManager.turnOnTorchWithStrengthLevel.
         final boolean rearTorchOn = flashing && !isFrontface && recording;
         final int rearTorchIntensity = 100;
@@ -980,7 +980,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     public void destroy(boolean async) {
-        nmCancelRoundFrameWatchdog();   // NimarkoGram: never let the no-frame watchdog fire after teardown
+        nmCancelRoundFrameWatchdog();   // NebulaGram: never let the no-frame watchdog fire after teardown
         nmCancelCameraXDualFrameWatchdog();
         nmCancelCamera2SwitchFrameWatchdog();
         ++nmCamera2SwitchGeneration;
@@ -1014,7 +1014,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 CameraController.getInstance().close(cameraSession, !async ? new CountDownLatch(1) : null, null);
             }
         }
-        // NimarkoGram: cancel pending EV auto-hide so it doesn't fire after the
+        // NebulaGram: cancel pending EV auto-hide so it doesn't fire after the
         // round-video panel is torn down (would NPE on a detached evControlView).
         if (evControlHideRunnable != null) {
             AndroidUtilities.cancelRunOnUIThread(evControlHideRunnable);
@@ -1075,7 +1075,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
-    // NimarkoGram: (re)show the round-video EV slider and arm its 5s auto-hide. The hide drops the view to
+    // NebulaGram: (re)show the round-video EV slider and arm its 5s auto-hide. The hide drops the view to
     // GONE (not just alpha 0) so a faded-out slider never keeps stealing touches from the buttons row / preview
     // underneath it. The view is reused across camera opens, so this also restores VISIBLE/alpha on each show.
     private void nmShowEvControl() {
@@ -1162,7 +1162,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         switchCameraButton.setImageDrawable(switchCameraDrawable);
 
-        // NimarkoGram: the EV slider auto-hides to GONE after 5s; restore + re-arm it on each panel show.
+        // NebulaGram: the EV slider auto-hides to GONE after 5s; restore + re-arm it on each panel show.
         nmShowEvControl();
 
         textureOverlayView.animate().cancel();
@@ -1193,8 +1193,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (!useCameraX && !useCamera2) {
                 isFrontface = true;
             }
-            // NimarkoGram: round-video camera (front / rear / ask) resolved just before recording.
-            isFrontface = app.nimarkogram.messenger.NimarkoConfig.pendingRoundFront;
+            // NebulaGram: round-video camera (front / rear / ask) resolved just before recording.
+            isFrontface = app.nebulagram.messenger.NebulaConfig.pendingRoundFront;
             updateFlash();
             recordedTime = 0;
             progress = 0;
@@ -1244,13 +1244,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             nmCameraXActiveFrameObserved = false;
             nmCameraXFrameMask = 0;
             bothCameras = DualCameraView.roundDualAvailableStatic(getContext())
-                    && app.nimarkogram.messenger.NimarkoConfig.useDualCamera;
-            int cameraSize = app.nimarkogram.messenger.NimarkoConfig.getVideoMessagesResolutionPx(512);
+                    && app.nebulagram.messenger.NebulaConfig.useDualCamera;
+            int cameraSize = app.nebulagram.messenger.NebulaConfig.getVideoMessagesResolutionPx(512);
             int captureSize = Math.min(1200, Math.max(cameraSize, cameraSize * 2));
             previewSize[0] = new Size(captureSize, captureSize);
             previewSize[1] = bothCameras ? new Size(captureSize, captureSize) : null;
         } else if (useCamera2) {
-            bothCameras = DualCameraView.roundDualAvailableStatic(getContext()) && app.nimarkogram.messenger.NimarkoConfig.useDualCamera;
+            bothCameras = DualCameraView.roundDualAvailableStatic(getContext()) && app.nebulagram.messenger.NebulaConfig.useDualCamera;
             if (bothCameras) {
                 for (int a = 0; a < 2; ++a) {
                     if (camera2Sessions[a] == null) {
@@ -1258,7 +1258,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         if (camera2Sessions[a] != null) {
                             final Camera2Session session = camera2Sessions[a];
                             session.setRecordingVideo(true);
-                            final int idx = a;   // NimarkoGram: hybrid — logical for wide-angle, fall back to physical if it can't open
+                            final int idx = a;   // NebulaGram: hybrid — logical for wide-angle, fall back to physical if it can't open
                             session.whenError(err -> nmHandleRoundCamError(
                                     idx, session, err == null ? -1 : err));
                             previewSize[a] = new Size(session.getPreviewWidth(), session.getPreviewHeight());
@@ -1267,7 +1267,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 updateFlash();
                 camera2SessionCurrent = camera2Sessions[isFrontface ? 0 : 1];
-                // NimarkoGram: in dual mode the PRIMARY (big + recorded) camera is chosen by surfaceIndex,
+                // NebulaGram: in dual mode the PRIMARY (big + recorded) camera is chosen by surfaceIndex,
                 // not by camera2SessionCurrent. It defaults to 0 (front) and was only ever changed by the
                 // flip button — so picking "Rear" from the chooser had no effect. Seed it from the choice
                 // (front surface = 0, rear surface = 1) before the GL thread starts.
@@ -1276,7 +1276,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     bothCameras = false;
                 }
                 if (camera2SessionCurrent == null) {
-                    // NimarkoGram: the SELECTED facing failed to open. The other index may still have opened —
+                    // NebulaGram: the SELECTED facing failed to open. The other index may still have opened —
                     // bailing here without tearing it down leaks its tg_camera2 HandlerThread and keeps a view
                     // reference alive through its whenError callback, which the next attempt reuses. Destroy
                     // every surviving session and clear its previewSize before giving up.
@@ -1295,11 +1295,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 if (camera2SessionCurrent == null) return;
                 final Camera2Session session = camera2SessionCurrent;
                 session.setRecordingVideo(true);
-                final int nmSlot = isFrontface ? 0 : 1;   // NimarkoGram: hybrid — recover to a physical lens if the logical one can't open
+                final int nmSlot = isFrontface ? 0 : 1;   // NebulaGram: hybrid — recover to a physical lens if the logical one can't open
                 session.whenError(err -> nmHandleRoundCamError(
                         nmSlot, session, err == null ? -1 : err));
                 previewSize[0] = new Size(session.getPreviewWidth(), session.getPreviewHeight());
-                // NimarkoGram: complement to whenError — a logical multi-camera can configure WITHOUT error yet
+                // NebulaGram: complement to whenError — a logical multi-camera can configure WITHOUT error yet
                 // never deliver a frame (or deliver too slowly to feed the encoder), so the circle silently never
                 // records. whenError only fires on an actual error, so this no-error/no-frame stall is otherwise
                 // unobserved. Arm a watchdog: if no real frame has been drawn (cameraReady still false) within
@@ -1681,17 +1681,17 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         cameraContainer.setImageReceiver(null);
     }
 
-    // NimarkoGram: create a round-video session preferring the LOGICAL (wide-angle) camera, but if that
+    // NebulaGram: create a round-video session preferring the LOGICAL (wide-angle) camera, but if that
     // selection yields nothing usable on this device, remember it and fall back to a plain physical lens so the
     // circle still records. This is the create-time half of the hybrid (handles a null/no-usable-size return);
     // the runtime half is nmHandleRoundCamError, which catches open/configure failures that only surface async.
-    // NimarkoGram: capped capture height for the round-video circle. The round circle must NEVER honor the
+    // NebulaGram: capped capture height for the round-video circle. The round circle must NEVER honor the
     // global Stories cameraResolution — on a logical multi-camera that selects the full-sensor square output
     // (e.g. 2464x2464 for a 384px circle), which configures in ~5s and can stall frame delivery. Capping at
     // ~720 (and never below 2x the encode size) makes chooseQualityAwareSize land on a small ~720x720 output
     // so the logical lens configures fast and still drives the ultra-wide via its sub-1.0 zoom range.
     private static int nmRoundCaptureHeight(int roundVideoSize) {
-        // NimarkoGram: derive the round-video CAPTURE height from the user's round-quality picker
+        // NebulaGram: derive the round-video CAPTURE height from the user's round-quality picker
         // (roundVideoSize: AUTO=384 / HD=512 / FHD=720), NOT the global Stories cameraResolution. Oversample
         // ~2x for a clean GL downscale (clears the bilinear-shader 0.7 floor: 1024*0.7=717 >= 512), and cap at
         // the legacy round ceiling (1200, the allowBigSizeCamera()? 1440 : 1200 non-big value, Samsung-safe) so
@@ -1700,26 +1700,26 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     private Camera2Session nmCreateRoundSession(boolean front) {
-        // NimarkoGram: pin the user's round-quality preset BEFORE deriving the session size. On the first
+        // NebulaGram: pin the user's round-quality preset BEFORE deriving the session size. On the first
         // cold-start round, mc.roundVideoSize still holds the server-injected round_video_encoding diameter
         // (384); reading it raw would size the camera session for 384 while the encoder (startRecording re-reads
         // getVideoMessagesResolutionPx) writes the user preset — a resolution desync on the very first circle.
         final MessagesController mc = MessagesController.getInstance(UserConfig.selectedAccount);
-        mc.roundVideoSize = app.nimarkogram.messenger.NimarkoConfig.getVideoMessagesResolutionPx(512);
+        mc.roundVideoSize = app.nebulagram.messenger.NebulaConfig.getVideoMessagesResolutionPx(512);
         final int size = mc.roundVideoSize;
         final int capH = nmRoundCaptureHeight(size);
-        final boolean preferLogical = !app.nimarkogram.messenger.NimarkoConfig.roundCamLogicalDisabled && !nmRoundLogicalSlowThisSession;
+        final boolean preferLogical = !app.nebulagram.messenger.NebulaConfig.roundCamLogicalDisabled && !nmRoundLogicalSlowThisSession;
         Camera2Session s = Camera2Session.create(front, size, size, preferLogical, capH, true);   // true: no JPEG still stream -> faster configure
         if (s == null && preferLogical) {
             // The logical multi-camera produced no usable record size here — remember it and retry on the
             // physical main lens (the one the legacy Camera1 path records with, id=0 / OIS).
-            app.nimarkogram.messenger.NimarkoConfig.setRoundCamLogicalDisabled(true);
+            app.nebulagram.messenger.NebulaConfig.setRoundCamLogicalDisabled(true);
             s = Camera2Session.create(front, size, size, false, capH, true);   // physical retry, still no JPEG stream
         }
         return s;
     }
 
-    // NimarkoGram: round-video camera HYBRID error handler. The camera opens the LOGICAL multi-camera by
+    // NebulaGram: round-video camera HYBRID error handler. The camera opens the LOGICAL multi-camera by
     // default so the ultra-wide lens works (reached via its sub-1.0 zoom-ratio range). If that logical camera
     // can't actually RECORD on this device — whether it refuses to open (ERROR_MAX_CAMERAS_IN_USE: it fuses
     // several physical lenses past the concurrent-camera limit) or opens but can't configure the record stream
@@ -1737,7 +1737,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         Camera2Session s = expectedSession;
         final boolean wasLogical = s != null && s.isLogical();
-        if (wasLogical && !app.nimarkogram.messenger.NimarkoConfig.roundCamLogicalDisabled) {
+        if (wasLogical && !app.nebulagram.messenger.NebulaConfig.roundCamLogicalDisabled) {
             // Persist "logical can't record round video here" only for a STRUCTURAL failure — the framework
             // refusing the fused camera (ERROR_MAX_CAMERAS_IN_USE) or our own open/configure/closed/no-size path
             // (surfaced as code -1). A transient external grab (in-use/disabled/service) still recovers this
@@ -1746,7 +1746,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     errorCode == android.hardware.camera2.CameraDevice.StateCallback.ERROR_MAX_CAMERAS_IN_USE
                     || errorCode == -1;
             if (structural) {
-                app.nimarkogram.messenger.NimarkoConfig.setRoundCamLogicalDisabled(true);
+                app.nebulagram.messenger.NebulaConfig.setRoundCamLogicalDisabled(true);
             }
             if (!bothCameras) {
                 nmReopenSinglePhysical();
@@ -1756,9 +1756,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         fallbackToSingleCamera(slot, errorCode);
     }
 
-    // NimarkoGram: watchdog for the silent slow/no-frame logical-camera stall. Set true only on real frames
+    // NebulaGram: watchdog for the silent slow/no-frame logical-camera stall. Set true only on real frames
     // (in onDraw, same as cameraReady). The runnable, if still pending, reopens on the physical lens.
-    // NimarkoGram: an AMBIGUOUS no-frame watchdog timeout demotes the logical lens for THIS app session only
+    // NebulaGram: an AMBIGUOUS no-frame watchdog timeout demotes the logical lens for THIS app session only
     // (in-memory, NOT persisted to disk) so a one-off slow cold start is retried next launch instead of
     // permanently killing the ultra-wide. Only the STRUCTURAL error path (nmHandleRoundCamError) persists.
     private static volatile boolean nmRoundLogicalSlowThisSession;
@@ -1769,7 +1769,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private int nmCameraXDualWatchdogGeneration;
     private volatile boolean nmCameraXActiveFrameObserved;
     private volatile int nmCameraXFrameMask;
-    // NimarkoGram: the window is armed at SETUP (covers TextureView attach + EGL + MediaCodec start, not just
+    // NebulaGram: the window is armed at SETUP (covers TextureView attach + EGL + MediaCodec start, not just
     // camera configure). With the capture capped to ~1024 (was the 2464 square that stalled ~5s) a healthy
     // logical lens flips cameraReady in well under 1s and no-ops this; 2500ms leaves headroom for a cold/
     // throttled-but-capable lens without falsely bumping it, and stays far below the old ~5s pathological stall.
@@ -1787,7 +1787,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private static final long NM_CAMERAX_SINGLE_BLUR_IN_MS = 100;
     private static final long NM_CAMERAX_SINGLE_REVEAL_MS = 180;
 
-    // NimarkoGram: arm the no-frame watchdog for the current round session. Only logical sessions are watched —
+    // NebulaGram: arm the no-frame watchdog for the current round session. Only logical sessions are watched —
     // a physical lens that stalls has no better fallback, and the timeout must not loop on it.
     private void nmArmRoundFrameWatchdog() {
         nmCancelRoundFrameWatchdog();
@@ -1802,7 +1802,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (cancelled || cameraReady || bothCameras
                     || camera2SessionCurrent != watched
                     || camera2SessionCurrent == null || !camera2SessionCurrent.isLogical()
-                    || app.nimarkogram.messenger.NimarkoConfig.roundCamLogicalDisabled || nmRoundLogicalSlowThisSession) {
+                    || app.nebulagram.messenger.NebulaConfig.roundCamLogicalDisabled || nmRoundLogicalSlowThisSession) {
                 return;
             }
             // Slow/silent logical camera: treat exactly like the structural error path.
@@ -1873,8 +1873,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         cameraXInitialWideTimeoutRenderPending = !isFrontface;
                         shouldRender = cameraXInitialWideTimeoutRenderPending;
                     }
-                    if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-                        app.nimarkogram.messenger.NimarkoCameraLog.log(
+                    if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+                        app.nebulagram.messenger.NebulaCameraLog.log(
                                 "InstantRound CX initial-wide deadline release waitMs="
                                         + (SystemClock.elapsedRealtime()
                                         - cameraXInitialWideWaitStartedMs)
@@ -1921,7 +1921,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         int oldMask = nmCameraXFrameMask;
         nmCameraXFrameMask |= 1 << index;
         if (oldMask != nmCameraXFrameMask) {
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                     "InstantRound CX first frame index=" + index + " mask="
                             + nmCameraXFrameMask + " active=" + surfaceIndex);
         }
@@ -1947,7 +1947,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
      */
     private boolean nmShouldHoldCameraXInitialWideFrame() {
         if (!cameraXInitialWideWaitActive) return false;
-        app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession session =
+        app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession session =
                 videoMessagesHelper.getRearSession();
         boolean lensReady = session != null && session.isInitialLensReady();
         long waitMs = SystemClock.elapsedRealtime()
@@ -1958,8 +1958,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             // physical id, so the OES texture being revealed cannot still be
             // the final frame from the main sensor.
             cameraXInitialWideConfirmedFrame = true;
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-                app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+                app.nebulagram.messenger.NebulaCameraLog.log(
                         "InstantRound CX initial-wide confirmed; holding next frame"
                                 + " waitMs=" + waitMs
                                 + " observed=" + (session == null ? "null"
@@ -1973,8 +1973,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         if (lensReady || waitMs >= cameraXInitialWideWaitTimeoutMs) {
             nmReleaseCameraXInitialWideWait();
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-                app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+                app.nebulagram.messenger.NebulaCameraLog.log(
                         "InstantRound CX initial-wide release ready=" + lensReady
                                 + " waitMs=" + waitMs
                                 + " observed=" + (session == null ? "null"
@@ -1988,8 +1988,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         if (!cameraXInitialWideWaitLogged) {
             cameraXInitialWideWaitLogged = true;
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-                app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+                app.nebulagram.messenger.NebulaCameraLog.log(
                         "InstantRound CX holding initial-wide frame waitMs="
                                 + waitMs + " observed=" + (session == null ? "null"
                                 : session.getObservedZoomRatio())
@@ -2041,11 +2041,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
-    // NimarkoGram: reopen the single round-video camera on a PHYSICAL lens (used when the logical one failed).
+    // NebulaGram: reopen the single round-video camera on a PHYSICAL lens (used when the logical one failed).
     private void nmReopenSinglePhysical() {
         try {
             if (!useCamera2) return;
-            nmCancelRoundFrameWatchdog();   // NimarkoGram: the logical session is being torn down; stop watching it
+            nmCancelRoundFrameWatchdog();   // NebulaGram: the logical session is being torn down; stop watching it
             nmCancelCamera2SwitchFrameWatchdog();
             bothCameras = false;
             final int generation = ++nmPhysicalReopenGeneration;
@@ -2090,7 +2090,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         cameraThread.reinitForNewCamera();
                     }
                 } catch (Throwable t) {
-                    FileLog.e("nimarko: round-cam physical reopen failed", t);
+                    FileLog.e("nebula: round-cam physical reopen failed", t);
                 }
             };
             if (previous != null) {
@@ -2099,11 +2099,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 reopen.run();
             }
         } catch (Throwable t) {
-            FileLog.e("nimarko: round-cam physical reopen failed", t);
+            FileLog.e("nebula: round-cam physical reopen failed", t);
         }
     }
 
-    // NimarkoGram: a dual round-video camera failed to open (e.g. ERROR_MAX_CAMERAS_IN_USE on a device that
+    // NebulaGram: a dual round-video camera failed to open (e.g. ERROR_MAX_CAMERAS_IN_USE on a device that
     // can't run two cameras at once). Collapse to a SINGLE camera using the surviving session — no black, no
     // crash — remember the device can't do dual, and tell the user once via a bulletin. Runs on the UI thread.
     private void fallbackToSingleCamera(final int failedIndex, final int errorCode) {
@@ -2119,7 +2119,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         camera2SessionCurrent = (keep >= 0 && keep < camera2Sessions.length) ? camera2Sessions[keep] : null;
         isFrontface = (keep == 0);
         if (cameraThread != null) {
-            // NimarkoGram: pin the drawn/recorded surface to the survivor on the GL thread itself. We must NOT
+            // NebulaGram: pin the drawn/recorded surface to the survivor on the GL thread itself. We must NOT
             // branch on the UI-visible surfaceIndex here — it's only mutated by the GL thread in DO_FLIP, and a
             // flip may still be queued, so the UI could see a stale value and post a redundant/missing flip,
             // leaving surfaceIndex on the destroyed slot (frozen/black recording). Post an authoritative,
@@ -2127,11 +2127,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             cameraThread.setSurfaceIndex(keep);
             if (camera2SessionCurrent != null) {
                 cameraThread.setCurrentSession(camera2SessionCurrent);   // fix rotation/flash for the survivor
-                nmArmRoundFrameWatchdog();   // NimarkoGram: surviving session may be LOGICAL — watch for a silent stall
+                nmArmRoundFrameWatchdog();   // NebulaGram: surviving session may be LOGICAL — watch for a silent stall
             }
         }
         updateFlash();
-        // NimarkoGram: only PERSIST the "no dual on this device" flag for a genuine, structural incompatibility
+        // NebulaGram: only PERSIST the "no dual on this device" flag for a genuine, structural incompatibility
         // (the framework refused a second simultaneous camera). Any other/transient failure (in-use, service,
         // disabled, configure-failed) collapses this recording to a single camera but leaves dual available for
         // the next attempt — otherwise one transient hiccup killed dual round-video permanently.
@@ -2146,7 +2146,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     private void switchCamera() {
-        if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+        if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                 "InstantRound switch useCX=" + useCameraX + " dual=" + bothCameras
                         + " front=" + isFrontface + " ready=" + cameraReady
                         + " frameMask=" + nmCameraXFrameMask);
@@ -2159,7 +2159,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             // back to a close/rebind cycle: the next tap will be an immediate
             // GL-only switch as soon as the concurrent graph is ready.
             flipAnimationInProgress = false;
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                     "InstantRound switch blocked: concurrent pair/frame not ready");
             return;
         }
@@ -2171,7 +2171,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             // surface. Keep the proven GL surface, rebind CameraX in place and
             // only swap slots when both concurrent cameras already exist.
             videoMessagesHelper.switchCameraX(this);
-            app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession current =
+            app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession current =
                     videoMessagesHelper.getCurrentSession();
             if (current != null && cameraThread != null) {
                 if (bothCameras) {
@@ -2353,11 +2353,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     private void startCameraXVideoTransition() {
         clearCameraXVideoTransition();
-        if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-            app.nimarkogram.messenger.NimarkoCameraLog.log(
+        if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+            app.nebulagram.messenger.NebulaCameraLog.log(
                     "InstantRound CX transition start front=" + isFrontface
                             + " startWide="
-                            + app.nimarkogram.messenger.NimarkoConfig.startFromUltraWideCam);
+                            + app.nebulagram.messenger.NebulaConfig.startFromUltraWideCam);
         }
         cameraXVideoTransitionActive = true;
         cameraXSingleSwitchProgress = 0f;
@@ -2385,8 +2385,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         cameraXVideoBlurAnimator.start();
         cameraXVideoBlurTimeout = () -> {
             cameraXVideoBlurTimeout = null;
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-                app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+                app.nebulagram.messenger.NebulaCameraLog.log(
                         "InstantRound CX transition TIMEOUT front=" + isFrontface
                                 + " pending=" + (pendingCameraXSingleSession != null)
                                 + " newFrame=" + cameraXSingleSwitchNewFrame
@@ -2415,8 +2415,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             return;
         }
         cameraXSingleSwitchFinishing = true;
-        if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-            app.nimarkogram.messenger.NimarkoCameraLog.log(
+        if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+            app.nebulagram.messenger.NebulaCameraLog.log(
                     "InstantRound CX transition finish start front=" + isFrontface
                             + " progress=" + cameraXSingleSwitchProgress
                             + " blur=" + cameraXSingleSwitchBlur
@@ -2455,8 +2455,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 cameraXSingleSwitchNewFrame = false;
                 cameraXSingleSwitchFinishing = false;
                 flipAnimationInProgress = false;
-                if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-                    app.nimarkogram.messenger.NimarkoCameraLog.log(
+                if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+                    app.nebulagram.messenger.NebulaCameraLog.log(
                             "InstantRound CX transition finish end front="
                                     + isFrontface);
                 }
@@ -2499,7 +2499,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         if (useCameraX && !bothCameras
                 && pendingCameraXSwitchAfterDualCollapse) {
             pendingCameraXSwitchAfterDualCollapse = false;
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                     "InstantRound executing queued switch after dual collapse"
                             + " front=" + isFrontface + " surface=" + surfaceIndex);
             // Let the current publication finish before the switch captures
@@ -2679,7 +2679,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 FileLog.d("InstantCamera create camera session " + index);
             }
 
-            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                     "InstantRound create index=" + index + " useCX=" + useCameraX
                             + " useCamera2=" + useCamera2 + " dual=" + bothCameras
                             + " front=" + isFrontface + " generation=" + expectedGeneration
@@ -2711,7 +2711,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
                 } else {
                     if (index == 1) return;
-                    // NimarkoGram: camera2SessionCurrent can be nulled between scheduling this UI-thread lambda
+                    // NebulaGram: camera2SessionCurrent can be nulled between scheduling this UI-thread lambda
                     // and its execution. The async error handler (nmHandleRoundCamError) and the no-frame
                     // watchdog both tear the logical session down and reopen on a physical lens — and
                     // nmReopenSinglePhysical() leaves camera2SessionCurrent == null when its physical create()
@@ -2882,7 +2882,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private final int DO_REINIT_MESSAGE = 2;
         private final int DO_SETSESSION_MESSAGE = 3;
         private final int DO_FLIP = 4;
-        private final int DO_SET_SURFACE_INDEX = 5;   // NimarkoGram: authoritative absolute set of surfaceIndex (fallback to single)
+        private final int DO_SET_SURFACE_INDEX = 5;   // NebulaGram: authoritative absolute set of surfaceIndex (fallback to single)
         private final int DO_DUAL_SWITCH_BEGIN = 6;
         private final int DO_DUAL_SWITCH_PROGRESS = 7;
         private final int DO_DUAL_SWITCH_FINISH = 8;
@@ -3341,7 +3341,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void setCurrentSession(
-                app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession session) {
+                app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession session) {
             Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(DO_SETSESSION_MESSAGE, session), 0);
@@ -3406,7 +3406,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
-        // NimarkoGram: set surfaceIndex to an ABSOLUTE value on the GL thread (unlike DO_FLIP, which toggles).
+        // NebulaGram: set surfaceIndex to an ABSOLUTE value on the GL thread (unlike DO_FLIP, which toggles).
         // Posted through the same handler queue, so it always runs AFTER any pending DO_FLIP — used when
         // collapsing a dual round video to its surviving single camera, where toggling from a UI-stale index
         // could leave us pointed at the destroyed slot.
@@ -3419,9 +3419,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         private int getSessionSurfaceIndex(Object session) {
-            if (session instanceof app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) {
+            if (session instanceof app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) {
                 int index = videoMessagesHelper.getSessionIndex(
-                        (app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) session);
+                        (app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) session);
                 if (index >= 0) return index;
             } else if (session instanceof Camera2Session) {
                 // A normal single-camera Camera2 graph always binds the
@@ -3447,8 +3447,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 rotationAngle = ((CameraSession) session).getWorldAngle();
             } else if (session instanceof Camera2Session) {
                 rotationAngle = ((Camera2Session) session).getWorldAngle();
-            } else if (session instanceof app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) {
-                rotationAngle = ((app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) session)
+            } else if (session instanceof app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) {
+                rotationAngle = ((app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) session)
                         .getWorldAngle();
             } else {
                 rotationAngle = 0;
@@ -3457,9 +3457,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (rotationAngle != 0) {
                 android.opengl.Matrix.rotateM(matrix, 0, rotationAngle, 0, 0, 1);
             }
-            if (session instanceof app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) {
-                app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession cameraXSession =
-                        (app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) session;
+            if (session instanceof app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) {
+                app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession cameraXSession =
+                        (app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) session;
                 // With an intermediate/effect Surface the camera transform is
                 // absent from SurfaceTexture, so mirror screen X after the
                 // explicit vertex rotation. Direct CameraX surfaces already
@@ -3694,7 +3694,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
             if (useCameraX && !bothCameras && updateTexImage1
                     && cameraXSingleSwitchAwaitingBind) {
-                app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession pending =
+                app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession pending =
                         pendingCameraXSingleSession;
                 if (pending != null && pending.isFrontFacing() == isFrontface) {
                     long lensWaitMs = SystemClock.elapsedRealtime()
@@ -3709,7 +3709,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     if (!lensReady && lensWaitMs < 1450L) {
                         if (!cameraXSingleSwitchZoomWaitLogged) {
                             cameraXSingleSwitchZoomWaitLogged = true;
-                            if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+                            if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                                     "InstantRound CX holding transition observedZoom="
                                             + pending.getObservedZoomRatio()
                                             + " activePhysical="
@@ -3718,7 +3718,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                             + pending.getExpectedInitialPhysicalCameraId());
                         }
                     } else {
-                        if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+                        if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                                 "InstantRound CX lens transition ready=" + lensReady
                                         + " waitMs=" + lensWaitMs
                                         + " observed=" + pending.getObservedZoomRatio()
@@ -3894,7 +3894,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             // strongest possible proof that a real camera frame is visible.
             if (useCameraX && !cameraReady && !cameraXSingleSwitchAwaitingBind) {
                 cameraReady = true;
-                if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) app.nimarkogram.messenger.NimarkoCameraLog.log(
+                if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) app.nebulagram.messenger.NebulaCameraLog.log(
                         "InstantRound CX preview published after swap index="
                                 + surfaceIndex + " frameMask=" + nmCameraXFrameMask);
                 postToUiIfCurrent(InstantCameraView.this::onCameraPreviewReady);
@@ -3955,7 +3955,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     break;
                 }
                 case DO_REINIT_MESSAGE: {
-                    // NimarkoGram: single-camera reinit always rebuilds slot 0 only, so the draw/encoder must
+                    // NebulaGram: single-camera reinit always rebuilds slot 0 only, so the draw/encoder must
                     // sample slot 0. After a dual->single fallback on the REAR camera surfaceIndex was left at 1;
                     // without this reset the next flip would keep reading the destroyed cameraSurface[1] and the
                     // preview/recording would freeze/black out. DO_REINIT only runs in single context, so this is safe.
@@ -4029,7 +4029,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     break;
                 }
                 case DO_SET_SURFACE_INDEX: {
-                    // NimarkoGram: absolute, GL-thread-authoritative surfaceIndex set (fallback to single camera).
+                    // NebulaGram: absolute, GL-thread-authoritative surfaceIndex set (fallback to single camera).
                     // Runs after any queued DO_FLIP, so it pins us to the surviving slot regardless of prior flips.
                     surfaceIndex = inputMessage.arg1;
                     dualSurfaceSwitching = false;
@@ -4099,8 +4099,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 case DO_CAMERA_X_SINGLE_SNAPSHOT: {
                     boolean captured = captureCameraXSingleSwitchSnapshot();
-                    if (app.nimarkogram.messenger.NimarkoCameraLog.DEBUG) {
-                        app.nimarkogram.messenger.NimarkoCameraLog.log(
+                    if (app.nebulagram.messenger.NebulaCameraLog.DEBUG) {
+                        app.nebulagram.messenger.NebulaCameraLog.log(
                                 "InstantRound CX snapshot captured=" + captured
                                         + " front=" + isFrontface
                                         + " surface=" + surfaceIndex
@@ -4567,9 +4567,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             // `round_video_encoding.{diameter,video_bitrate,audio_bitrate}`
             // would otherwise overwrite our preferred values at login.
             MessagesController mc = MessagesController.getInstance(currentAccount);
-            mc.roundVideoSize = app.nimarkogram.messenger.NimarkoConfig.getVideoMessagesResolutionPx(512);
-            mc.roundVideoBitrate = app.nimarkogram.messenger.NimarkoConfig.videoMessagesBitrateKbps;
-            mc.roundAudioBitrate = app.nimarkogram.messenger.NimarkoConfig.videoMessagesAudioBitrateKbps;
+            mc.roundVideoSize = app.nebulagram.messenger.NebulaConfig.getVideoMessagesResolutionPx(512);
+            mc.roundVideoBitrate = app.nebulagram.messenger.NebulaConfig.videoMessagesBitrateKbps;
+            mc.roundAudioBitrate = app.nebulagram.messenger.NebulaConfig.videoMessagesAudioBitrateKbps;
             int resolution = mc.roundVideoSize;
             int bitrate = mc.roundVideoBitrate * 1024;
             AndroidUtilities.runOnUIThread(() -> {
@@ -4587,8 +4587,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             // which dynamically falls back to 30 fps still produces a correct
             // 30 fps file. Camera1/Camera2 keep Telegram's proven 30 fps path.
             frameRate = useCameraX
-                    && app.nimarkogram.messenger.NimarkoConfig.cameraXFpsRange
-                    == app.nimarkogram.messenger.NimarkoConfig.CameraXFpsRange30to60
+                    && app.nebulagram.messenger.NebulaConfig.cameraXFpsRange
+                    == app.nebulagram.messenger.NebulaConfig.CameraXFpsRange30to60
                     ? HIGH_FRAME_RATE : DEFAULT_FRAME_RATE;
             sharedEglContext = sharedContext;
 
@@ -5854,7 +5854,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 skippedTime = 0;
 
                 audioRecorder = createStartedAudioRecorder(
-                        app.nimarkogram.messenger.NimarkoConfig.getMediaRecorderAudioSource(), bufferSize);
+                        app.nebulagram.messenger.NebulaConfig.getMediaRecorderAudioSource(), bufferSize);
                 if (audioRecorder == null) {
                     throw new IllegalStateException("No usable AudioRecord source");
                 }
@@ -5911,7 +5911,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     if (cancelled) {
                         return;
                     }
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         } catch (Exception ignore) {}

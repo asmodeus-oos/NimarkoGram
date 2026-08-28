@@ -106,9 +106,9 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
 
         module_names = (
             'app',
-            'app.nimarkogram',
-            'app.nimarkogram.messenger',
-            'app.nimarkogram.messenger.plugins',
+            'app.nebulagram',
+            'app.nebulagram.messenger',
+            'app.nebulagram.messenger.plugins',
         )
         cls.previous_modules = {
             name: sys.modules.get(name) for name in module_names
@@ -123,7 +123,7 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
 
         source = REPO / 'TMessagesProj/src/main/python/plugin_runtime.py'
         spec = importlib.util.spec_from_file_location(
-            'nimarko_plugin_runtime_under_test', source)
+            'nebula_plugin_runtime_under_test', source)
         cls.runtime = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.runtime)
 
@@ -147,7 +147,7 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
     @staticmethod
     def _owned_callback(token, body):
         namespace = {
-            '__nimarko_runtime_token__': token,
+            '__nebula_runtime_token__': token,
             '_body': body,
         }
         exec('def callback(*args):\n    return _body(*args)', namespace)
@@ -226,7 +226,7 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
         token = _RuntimeToken('preparing-subclass')
         called = threading.Event()
         namespace = {
-            '__nimarko_runtime_token__': token,
+            '__nebula_runtime_token__': token,
             'threading': threading,
             '_called': called,
         }
@@ -430,8 +430,8 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
         token = _RuntimeToken('nested-worker')
         current = threading.current_thread()
         previous = getattr(
-            current, '_nimarko_runtime_token', self.runtime._UNSET)
-        current._nimarko_runtime_token = token
+            current, '_nebula_runtime_token', self.runtime._UNSET)
+        current._nebula_runtime_token = token
         try:
             
             namespace = {}
@@ -442,9 +442,9 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
             )
         finally:
             if previous is self.runtime._UNSET:
-                del current._nimarko_runtime_token
+                del current._nebula_runtime_token
             else:
-                current._nimarko_runtime_token = previous
+                current._nebula_runtime_token = previous
 
     def test_executor_worker_propagates_owner_without_holding_callback_scope(self):
         token = _RuntimeToken('executor')
@@ -461,11 +461,11 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
 
     def test_java_retirement_waits_for_real_return_and_quiescence(self):
         engine = (
-            REPO / 'TMessagesProj/src/main/java/app/nimarkogram/messenger/'
+            REPO / 'TMessagesProj/src/main/java/app/nebulagram/messenger/'
                    'plugins/PythonPluginsEngine.java'
         ).read_text()
         controller = (
-            REPO / 'TMessagesProj/src/main/java/app/nimarkogram/messenger/'
+            REPO / 'TMessagesProj/src/main/java/app/nebulagram/messenger/'
                    'plugins/PluginsController.java'
         ).read_text()
         self.assertIn('actuallyReturned', engine)
@@ -571,7 +571,7 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
             controller,
         )
         pip = (
-            REPO / 'TMessagesProj/src/main/java/app/nimarkogram/messenger/'
+            REPO / 'TMessagesProj/src/main/java/app/nebulagram/messenger/'
                    'plugins/pip/PipController.java'
         ).read_text()
         self.assertIn('isPythonRuntimeUsable()', pip)
@@ -580,7 +580,7 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
             pip,
         )
         intents = (
-            REPO / 'TMessagesProj/src/main/java/app/nimarkogram/messenger/'
+            REPO / 'TMessagesProj/src/main/java/app/nebulagram/messenger/'
                    'plugins/intents/IntentsController.java'
         ).read_text()
         self.assertLess(
@@ -589,7 +589,7 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
         )
 
         settings_activity = (
-            REPO / 'TMessagesProj/src/main/java/app/nimarkogram/messenger/'
+            REPO / 'TMessagesProj/src/main/java/app/nebulagram/messenger/'
                    'plugins/ui/PluginSettingsActivity.java'
         ).read_text()
         callback_gate = settings_activity[
@@ -602,7 +602,7 @@ class PluginLifecycleIsolationTest(unittest.TestCase):
         self.assertIn('resultMapper.map(result)', callback_gate)
 
         edit_cell = (
-            REPO / 'TMessagesProj/src/main/java/app/nimarkogram/messenger/'
+            REPO / 'TMessagesProj/src/main/java/app/nebulagram/messenger/'
                    'plugins/ui/components/PluginEditTextCell.java'
         ).read_text()
         save_gate = edit_cell[

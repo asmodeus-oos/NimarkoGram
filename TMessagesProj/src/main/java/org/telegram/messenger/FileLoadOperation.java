@@ -291,12 +291,12 @@ public class FileLoadOperation {
     }
 
     private void updateParams() {
-        int boost = app.nimarkogram.messenger.NimarkoConfig.downloadSpeedBoost;
+        int boost = app.nebulagram.messenger.NebulaConfig.downloadSpeedBoost;
         boolean telegramRequestsLargeChunks = preloadPrefixSize > 0
                 || MessagesController.getInstance(currentAccount).getfileExperimentalParams;
         wsBypassDownloadProfile = false;
-        app.nimarkogram.messenger.DownloadSpeedPolicy.Profile profile =
-                app.nimarkogram.messenger.DownloadSpeedPolicy.resolve(
+        app.nebulagram.messenger.DownloadSpeedPolicy.Profile profile =
+                app.nebulagram.messenger.DownloadSpeedPolicy.resolve(
                         boost, telegramRequestsLargeChunks, wsBypassDownloadProfile);
         downloadChunkSizeBig = profile.chunkSize;
         maxDownloadRequests = profile.maxRequests;

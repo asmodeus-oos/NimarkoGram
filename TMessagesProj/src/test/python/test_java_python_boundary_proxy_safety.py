@@ -4,7 +4,7 @@ import unittest
 REPO = pathlib.Path(__file__).resolve().parents[4]
 JAVA = (
     REPO / 'TMessagesProj/src/main/java/'
-    'app/nimarkogram/messenger/plugins'
+    'app/nebulagram/messenger/plugins'
 )
 
 class JavaPythonBoundaryProxySafetyTest(unittest.TestCase):

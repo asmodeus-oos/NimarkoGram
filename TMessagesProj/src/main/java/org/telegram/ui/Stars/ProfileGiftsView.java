@@ -257,7 +257,7 @@ public class ProfileGiftsView extends View implements NotificationCenter.Notific
 
     public void update() {
         
-        if (app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) return;
+        if (app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) return;
         if (!MessagesController.getInstance(currentAccount).enableGiftsInProfile) {
             return;
         }

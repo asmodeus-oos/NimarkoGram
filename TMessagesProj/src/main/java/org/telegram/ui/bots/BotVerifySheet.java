@@ -46,7 +46,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.EditTextSuggestionsFix;
 import org.telegram.ui.Components.LayoutHelper;
 
-import app.nimarkogram.messenger.NimarkoConfig;
+import app.nebulagram.messenger.NebulaConfig;
 import org.telegram.ui.Components.OutlineTextContainerView;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
@@ -207,7 +207,7 @@ public class BotVerifySheet {
         editTextContainer.attachEditText(editText);
         editTextContainer.addView(editText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, 12, 4, 12, 4));
         linearLayout.addView(editTextContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        if (NimarkoConfig.editTextSuggestionsFix) editText.addTextChangedListener(new EditTextSuggestionsFix());
+        if (NebulaConfig.editTextSuggestionsFix) editText.addTextChangedListener(new EditTextSuggestionsFix());
         editText.addTextChangedListener(new TextWatcher() {
             boolean ignoreEditText;
             @Override

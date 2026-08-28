@@ -3880,9 +3880,9 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
             }
             final Object photoSession = cameraView.getCameraSessionObject();
             final boolean cameraXPhoto = photoSession instanceof
-                    app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession;
+                    app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession;
             final boolean cameraXWithoutImageCapture = cameraXPhoto
-                    && !((app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) photoSession)
+                    && !((app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) photoSession)
                     .canTakePicture();
             final boolean requiresTextureCapture = cameraView.isDual()
                     || collageLayoutView.hasLayout() || cameraXWithoutImageCapture;
@@ -4084,7 +4084,7 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
 
         private void applyCameraXStoryPhotoQuality(StoryEntry entry) {
             int configuredShortSide =
-                    app.nimarkogram.messenger.NimarkoConfig.cameraResolution;
+                    app.nebulagram.messenger.NebulaConfig.cameraResolution;
             if (entry == null || configuredShortSide < 1440
                     || Math.min(entry.width, entry.height) < 1440) {
                 return;
@@ -7091,7 +7091,7 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
             }
             updateActionBarButtons(true);
         });
-        if (app.nimarkogram.messenger.NimarkoConfig.useDualCamera
+        if (app.nebulagram.messenger.NebulaConfig.useDualCamera
                 && cameraView.dualAvailable()) {
             cameraView.enableDualWhenReady();
         }
@@ -7543,8 +7543,8 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
     }
 
     private boolean getCameraFace() {
-        // NimarkoGram: optionally force the rear camera on first launch.
-        if (app.nimarkogram.messenger.NimarkoConfig.rearCam) {
+        // NebulaGram: optionally force the rear camera on first launch.
+        if (app.nebulagram.messenger.NebulaConfig.rearCam) {
             return false;
         }
         return MessagesController.getGlobalMainSettings().getBoolean("stories_camera", false);

@@ -3,7 +3,7 @@ import unittest
 
 REPO = pathlib.Path(__file__).resolve().parents[4]
 JAVA = (
-    REPO / 'TMessagesProj/src/main/java/app/nimarkogram/messenger/plugins'
+    REPO / 'TMessagesProj/src/main/java/app/nebulagram/messenger/plugins'
 )
 PYTHON = REPO / 'TMessagesProj/src/main/python'
 

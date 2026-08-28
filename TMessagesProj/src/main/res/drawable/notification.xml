@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- NimarkoGram: status-bar notification icon = OUR paper plane, taken from the splash animated
+<!-- NebulaGram: status-bar notification icon = OUR paper plane, taken from the splash animated
      icon's planeBody outline (the FULL plane silhouette incl. the tail notch; planeWing is only the
      shaded facet) rendered as a solid white alpha mask. Replaces the stock Telegram plane webp.
      bbox 583x585 -> scale 0.034188 + translate centers an ~20dp glyph in the 24dp canvas (~2dp padding),

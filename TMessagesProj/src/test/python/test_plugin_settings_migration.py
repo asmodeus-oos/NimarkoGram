@@ -239,7 +239,7 @@ class PluginSettingsMigrationTest(unittest.TestCase):
             self.settings.reload_settings()
         self.assertEqual('dark', self.settings.get_setting('foo', 'theme', None))
 
-    def test_nimarkoprivacy_settings_survive_save_and_reload_with_types(self):
+    def test_nebulaprivacy_settings_survive_save_and_reload_with_types(self):
         self.settings.init(self.temp.name, _Prefs())
         expected = {
             'stealth_toggle': True,
@@ -247,43 +247,43 @@ class PluginSettingsMigrationTest(unittest.TestCase):
             'mute_send': 2,
         }
         for key, value in expected.items():
-            self.settings.set_setting('nimarkoprivacy', key, value)
+            self.settings.set_setting('nebulaprivacy', key, value)
 
         self.settings._settings_cache = {}
         self.assertTrue(self.settings.reload_settings())
 
         self.assertEqual(
-            expected, self.settings.get_all_settings('nimarkoprivacy'))
+            expected, self.settings.get_all_settings('nebulaprivacy'))
         self.assertIs(
             True,
-            self.settings.get_setting('nimarkoprivacy', 'stealth_toggle', False))
+            self.settings.get_setting('nebulaprivacy', 'stealth_toggle', False))
         self.assertEqual(
-            2, self.settings.get_setting('nimarkoprivacy', 'mute_send', 0))
+            2, self.settings.get_setting('nebulaprivacy', 'mute_send', 0))
 
     def test_failed_setting_write_rolls_process_cache_back(self):
         self.settings.init(self.temp.name, _Prefs())
         self.assertTrue(
-            self.settings.set_setting('nimarkoprivacy', 'mode', 'old'))
+            self.settings.set_setting('nebulaprivacy', 'mode', 'old'))
         with mock.patch.object(
                 self.settings, '_save_settings_to_file',
                 side_effect=OSError('disk full')):
             self.assertFalse(
                 self.settings.set_setting(
-                    'nimarkoprivacy', 'mode', 'new'))
+                    'nebulaprivacy', 'mode', 'new'))
         self.assertEqual(
             'old',
             self.settings.get_setting(
-                'nimarkoprivacy', 'mode', None))
+                'nebulaprivacy', 'mode', None))
 
     def test_revoked_runtime_cannot_write_replacement_settings_bucket(self):
         self.settings.init(self.temp.name, _Prefs())
         self.assertTrue(
             self.settings.set_setting(
-                'nimarkoprivacy', 'mode', 'current'))
+                'nebulaprivacy', 'mode', 'current'))
 
         class _Token:
             def getPluginId(self):
-                return 'nimarkoprivacy'
+                return 'nebulaprivacy'
 
         runtime = types.SimpleNamespace(
             capture_callback_owner=lambda: _Token(),
@@ -292,11 +292,11 @@ class PluginSettingsMigrationTest(unittest.TestCase):
         with mock.patch.dict(sys.modules, {'plugin_runtime': runtime}):
             self.assertFalse(
                 self.settings.set_setting(
-                    'nimarkoprivacy', 'mode', 'stale'))
+                    'nebulaprivacy', 'mode', 'stale'))
         self.assertEqual(
             'current',
             self.settings.get_setting(
-                'nimarkoprivacy', 'mode', None))
+                'nebulaprivacy', 'mode', None))
 
 if __name__ == '__main__':
     unittest.main()

@@ -13,23 +13,23 @@ public final class ApiClient {
     private ApiClient() {}
 
     public static List<ProfileDTO> getAllProfiles() {
-        List<app.nimarkogram.messenger.api.dto.ProfileDTO> real =
-                app.nimarkogram.messenger.api.network.ApiClient.getAllProfiles();
+        List<app.nebulagram.messenger.api.dto.ProfileDTO> real =
+                app.nebulagram.messenger.api.network.ApiClient.getAllProfiles();
         List<ProfileDTO> out = new ArrayList<>(real != null ? real.size() : 0);
         if (real != null) {
-            for (app.nimarkogram.messenger.api.dto.ProfileDTO p : real) {
+            for (app.nebulagram.messenger.api.dto.ProfileDTO p : real) {
                 out.add(ProfileDTO.fromReal(p));
             }
         }
         return out;
     }
 
-    public static Map<Long, BadgeDTO> getNimarkoBadges() {
-        Map<Long, app.nimarkogram.messenger.api.dto.BadgeDTO> real =
-                app.nimarkogram.messenger.api.network.ApiClient.getNimarkoBadges();
+    public static Map<Long, BadgeDTO> getNebulaBadges() {
+        Map<Long, app.nebulagram.messenger.api.dto.BadgeDTO> real =
+                app.nebulagram.messenger.api.network.ApiClient.getNebulaBadges();
         Map<Long, BadgeDTO> out = new HashMap<>(real != null ? real.size() : 0);
         if (real != null) {
-            for (Map.Entry<Long, app.nimarkogram.messenger.api.dto.BadgeDTO> e : real.entrySet()) {
+            for (Map.Entry<Long, app.nebulagram.messenger.api.dto.BadgeDTO> e : real.entrySet()) {
                 out.put(e.getKey(), BadgeDTO.fromReal(e.getValue()));
             }
         }

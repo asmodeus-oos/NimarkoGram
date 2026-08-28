@@ -395,11 +395,11 @@ public abstract class BaseFragment {
     public void setParentFragment(BaseFragment fragment) {
         setParentLayout(fragment.parentLayout);
         fragmentView = createView(parentLayout.getView().getContext());
-        // NimarkoGram (CG parity): when the user disabled vibration, recursively
+        // NebulaGram (CG parity): when the user disabled vibration, recursively
         // mute haptic feedback on every child of this fragment's view so framework
         // gestures don't bypass our per-callsite guards.
-        if (fragmentView != null && app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-            app.nimarkogram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
+        if (fragmentView != null && app.nebulagram.messenger.NebulaConfig.disableVibration) {
+            app.nebulagram.messenger.utils.VibrateUtils.disableHapticFeedback(fragmentView);
         }
     }
 
@@ -544,7 +544,7 @@ public abstract class BaseFragment {
             }
         }
 
-        // NimarkoGram leak fix (verified via hprof): a Chaquopy plugin can set a dynamic_proxy OnClickListener
+        // NebulaGram leak fix (verified via hprof): a Chaquopy plugin can set a dynamic_proxy OnClickListener
         // on an action-bar menu item whose Python closure captures the fragment itself. The Java proxy holds a
         // JNI global to its Python peer and the closure holds a JNI global back to the fragment -> a cross-
         // runtime cycle that NEITHER GC collects. A plugin that re-injects on every fragment generation (e.g.
@@ -1383,7 +1383,7 @@ public abstract class BaseFragment {
 
     public void setTitleOverlayText(String title, int titleId, Runnable action) {
         if (actionBar != null) {
-            // NimarkoGram: pass gilroy=true so the connection-state overlay
+            // NebulaGram: pass gilroy=true so the connection-state overlay
             // ("Connecting...", "Updating...", etc.) preserves Gilroy ExtraBold
             // and doesn't flicker back to AndroidUtilities.bold() when shown/cleared
             // over a folder title also set with gilroy=true (CG-parity).

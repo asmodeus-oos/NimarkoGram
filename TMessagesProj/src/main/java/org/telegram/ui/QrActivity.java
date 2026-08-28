@@ -388,7 +388,7 @@ public class QrActivity extends BaseFragment {
         rootLayout.addView(logoImageView);
 
         avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(84));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(84));
         avatarImageView.setSize(AndroidUtilities.dp(84), AndroidUtilities.dp(84));
         rootLayout.addView(avatarImageView, LayoutHelper.createFrame(84, 84, Gravity.LEFT | Gravity.TOP));
         avatarImageView.setImage(imageLocation, "84_84", imageLocationSmall, "50_50", avatarDrawable, null, null, 0, null);

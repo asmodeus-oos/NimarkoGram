@@ -648,8 +648,8 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
                 replySelectorRect
             );
 
-            // NimarkoGram (CG parity): replyBackground toggle removes the rounded backdrop on reply lines.
-            messageView.replyLine.drawBackground(canvas, replySelectorRect, alphaProgress, messageView.isReplyQuote, messageView.getMessageObject().shouldDrawWithoutBackground() || !app.nimarkogram.messenger.NimarkoConfig.replyBackground);
+            // NebulaGram (CG parity): replyBackground toggle removes the rounded backdrop on reply lines.
+            messageView.replyLine.drawBackground(canvas, replySelectorRect, alphaProgress, messageView.isReplyQuote, messageView.getMessageObject().shouldDrawWithoutBackground() || !app.nebulagram.messenger.NebulaConfig.replyBackground);
             messageView.replyLine.drawLine(canvas, replySelectorRect, alphaProgress);
 
             float replyImageSz = 0;

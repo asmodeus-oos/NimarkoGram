@@ -1183,7 +1183,7 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
                     View child = currentChildView;
                     if (onItemLongClickListener != null) {
                         if (onItemLongClickListener.onItemClick(currentChildView, currentChildPosition)) {
-                            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                 try {
                                     child.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                                 } catch (Exception ignored) {}
@@ -1192,7 +1192,7 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
                         }
                     } else {
                         if (onItemLongClickListenerExtended.onItemClick(currentChildView, currentChildPosition, event.getX() - currentChildView.getX(), event.getY() - currentChildView.getY())) {
-                            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                 try {
                                     child.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                                 } catch (Exception ignored) {}

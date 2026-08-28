@@ -1114,10 +1114,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     protected RecyclerListView buttonsRecyclerView;
 
     // extera-verbatim round bottom-right camera FAB (hideCameraTile companion)
-    protected FrameLayout nimarkoFloatingButton;
+    protected FrameLayout nebulaFloatingButton;
 
-    private boolean shouldShowNimarkoFloatingCamera() {
-        return nimarkoFloatingButton != null
+    private boolean shouldShowNebulaFloatingCamera() {
+        return nebulaFloatingButton != null
                 && currentAttachLayout != null && currentAttachLayout == photoLayout
                 && (photosEnabled || videosEnabled);
     }
@@ -1131,11 +1131,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     private static final int NM_FAB_REST_MARGIN_DP = 16;  // FAB inset from sheet bottom with no panel below
     private static final int NM_FAB_PANEL_GAP_DP = 13;    // breathing room between FAB and the panel top
     // The FAB's target Y (relative to its laid-out margin), anchored to the bottom panel's real geometry.
-    private float computeNimarkoFloatingCameraTranslationY() {
+    private float computeNebulaFloatingCameraTranslationY() {
         // The FAB's laid-out bottom margin is its anchor; translationY shifts it relative to that.
         int laidOutMargin = dp(83);
-        if (nimarkoFloatingButton != null && nimarkoFloatingButton.getLayoutParams() instanceof FrameLayout.LayoutParams) {
-            laidOutMargin = ((FrameLayout.LayoutParams) nimarkoFloatingButton.getLayoutParams()).bottomMargin;
+        if (nebulaFloatingButton != null && nebulaFloatingButton.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+            laidOutMargin = ((FrameLayout.LayoutParams) nebulaFloatingButton.getLayoutParams()).bottomMargin;
         }
 
         // Only the avatar / story pickers genuinely have NO bottom panel (typeButtonsAvailable is false there by
@@ -1156,11 +1156,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         return laidOutMargin - targetMargin;
     }
 
-    private void updateNimarkoFloatingCameraOffset() {
-        if (nimarkoFloatingButton == null) {
+    private void updateNebulaFloatingCameraOffset() {
+        if (nebulaFloatingButton == null) {
             return;
         }
-        nimarkoFloatingButton.setTranslationY(computeNimarkoFloatingCameraTranslationY());
+        nebulaFloatingButton.setTranslationY(computeNebulaFloatingCameraTranslationY());
     }
 
     private LinearLayoutManager buttonsLayoutManager;
@@ -1257,7 +1257,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         // NG (CG parity): overload using a static drawable resource for buttons
         // without a matching TabAnimation entry (e.g. the cameraButton row added
-        // when NimarkoConfig.disableAttachCamera is on — the camera icon is a
+        // when NebulaConfig.disableAttachCamera is on — the camera icon is a
         // simple drawable, not an animated tab glyph).
         public void setTextAndIcon(int id, CharSequence text, @androidx.annotation.DrawableRes int drawableRes) {
             glassTabView.setText(text);
@@ -2663,27 +2663,27 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         containerView.addView(doneItem, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 48, Gravity.TOP | Gravity.RIGHT));
 
         // extera-verbatim floating round camera button (bottom-right)
-        nimarkoFloatingButton = new FrameLayout(context);
+        nebulaFloatingButton = new FrameLayout(context);
         int fabBgColor = getThemedColor(Theme.key_chats_actionBackground);
         int fabBgPressed = getThemedColor(Theme.key_chats_actionPressedBackground);
-        nimarkoFloatingButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(dp(100), fabBgColor, fabBgPressed));
-        nimarkoFloatingButton.setVisibility(View.GONE);
+        nebulaFloatingButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(dp(100), fabBgColor, fabBgPressed));
+        nebulaFloatingButton.setVisibility(View.GONE);
         android.animation.StateListAnimator fabSla = new android.animation.StateListAnimator();
-        fabSla.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(nimarkoFloatingButton, "translationZ", dp(2), dp(4)).setDuration(200));
-        fabSla.addState(new int[]{}, ObjectAnimator.ofFloat(nimarkoFloatingButton, "translationZ", dp(4), dp(2)).setDuration(200));
-        nimarkoFloatingButton.setStateListAnimator(fabSla);
-        nimarkoFloatingButton.setOutlineProvider(new android.view.ViewOutlineProvider() {
+        fabSla.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(nebulaFloatingButton, "translationZ", dp(2), dp(4)).setDuration(200));
+        fabSla.addState(new int[]{}, ObjectAnimator.ofFloat(nebulaFloatingButton, "translationZ", dp(4), dp(2)).setDuration(200));
+        nebulaFloatingButton.setStateListAnimator(fabSla);
+        nebulaFloatingButton.setOutlineProvider(new android.view.ViewOutlineProvider() {
             @SuppressLint("NewApi")
             @Override
             public void getOutline(View view, android.graphics.Outline outline) {
                 outline.setOval(0, 0, dp(56), dp(56));
             }
         });
-        nimarkoFloatingButton.setOnClickListener(v -> {
+        nebulaFloatingButton.setOnClickListener(v -> {
             if (!photosEnabled && !videosEnabled && checkCanRemoveRestrictionsByBoosts()) {
                 return;
             }
-            if (app.nimarkogram.messenger.NimarkoConfig.cameraType != app.nimarkogram.messenger.NimarkoConfig.CAMERA_SYSTEM) {
+            if (app.nebulagram.messenger.NebulaConfig.cameraType != app.nebulagram.messenger.NebulaConfig.CAMERA_SYSTEM) {
                 if (currentAttachLayout != null && currentAttachLayout != photoLayout) {
                     showLayout(photoLayout);
                 }
@@ -2692,18 +2692,18 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 onLongClickCameraButton();
             }
         });
-        nimarkoFloatingButton.setOnLongClickListener(v -> {
+        nebulaFloatingButton.setOnLongClickListener(v -> {
             if (delegate != null) {
                 delegate.didPressedButton(0, false, true, 0, 0, 0, isCaptionAbove(), false, 0);
             }
             return true;
         });
-        ImageView nimarkoFloatingIcon = new ImageView(context);
-        nimarkoFloatingIcon.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
-        nimarkoFloatingIcon.setImageResource(R.drawable.outline_header_camera_plus_24);
-        nimarkoFloatingButton.addView(nimarkoFloatingIcon, LayoutHelper.createFrame(24, 24, Gravity.CENTER));
+        ImageView nebulaFloatingIcon = new ImageView(context);
+        nebulaFloatingIcon.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
+        nebulaFloatingIcon.setImageResource(R.drawable.outline_header_camera_plus_24);
+        nebulaFloatingButton.addView(nebulaFloatingIcon, LayoutHelper.createFrame(24, 24, Gravity.CENTER));
         // 84+14=98 dp in extera; user asked to lower by ~15% → 83 dp
-        containerView.addView(nimarkoFloatingButton, LayoutHelper.createFrame(56, 56, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 8 : 0, 0, LocaleController.isRTL ? 0 : 8, 83));
+        containerView.addView(nebulaFloatingButton, LayoutHelper.createFrame(56, 56, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 8 : 0, 0, LocaleController.isRTL ? 0 : 8, 83));
 
         //actionBarShadow = new View(context);
         //actionBarShadow.setAlpha(0.0f);
@@ -2906,11 +2906,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     // CAMERA_SYSTEM dispatches to onLongClickCameraButton()
                     // which fires the system Intent.ACTION_IMAGE_CAPTURE via
                     // delegate.didPressedButton(0, …) — same path as the
-                    // existing nimarkoFloatingButton long-press at L2570.
+                    // existing nebulaFloatingButton long-press at L2570.
                     if (!photosEnabled && !videosEnabled && checkCanRemoveRestrictionsByBoosts()) {
                         return;
                     }
-                    if (app.nimarkogram.messenger.NimarkoConfig.cameraType != app.nimarkogram.messenger.NimarkoConfig.CAMERA_SYSTEM) {
+                    if (app.nebulagram.messenger.NebulaConfig.cameraType != app.nebulagram.messenger.NebulaConfig.CAMERA_SYSTEM) {
                         if (currentAttachLayout != null && currentAttachLayout != photoLayout) {
                             showLayout(photoLayout);
                         }
@@ -4198,8 +4198,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
             messageSendPreview.show();
 
-            // NimarkoGram: gate haptic on disableVibration.
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            // NebulaGram: gate haptic on disableVibration.
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignored) {}
@@ -4329,7 +4329,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     private void checkUi_writeButtonContainerY() {
-        updateNimarkoFloatingCameraOffset();
+        updateNebulaFloatingCameraOffset();
         if (topCommentContainer == null || topCommentContainer.getVisibility() != View.VISIBLE || topCommentContainer.getAlpha() == 0) {
             writeButtonContainer.setTranslationY(bottomPannelTranslation);
             writeButton.setAlpha(1f);
@@ -4768,23 +4768,23 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         }
         int t = currentAttachLayout.getFirstOffset() - dp(11) - scrollOffsetY[0];
         nextAttachLayout = layout;
-        if (nimarkoFloatingButton != null) {
+        if (nebulaFloatingButton != null) {
             boolean toPhoto = nextAttachLayout == photoLayout && (photosEnabled || videosEnabled);
             if (toPhoto) {
-                nimarkoFloatingButton.setVisibility(View.VISIBLE);
+                nebulaFloatingButton.setVisibility(View.VISIBLE);
             }
-            // NG: animate translationY together with scale/alpha. Previously updateNimarkoFloatingCameraOffset()
+            // NG: animate translationY together with scale/alpha. Previously updateNebulaFloatingCameraOffset()
             // snapped translationY instantly while the FAB was mid scale-animation on a layout/folder switch,
             // so it visibly jumped. Folding it into this same chain makes the whole transition smooth.
-            nimarkoFloatingButton.animate()
+            nebulaFloatingButton.animate()
                     .alpha(toPhoto ? 1f : 0f)
                     .scaleX(toPhoto ? 1f : 0.2f)
                     .scaleY(toPhoto ? 1f : 0.2f)
-                    .translationY(computeNimarkoFloatingCameraTranslationY())
+                    .translationY(computeNebulaFloatingCameraTranslationY())
                     .setDuration(150)
                     .withEndAction(() -> {
-                        if (nimarkoFloatingButton.getAlpha() <= 0.01f) {
-                            nimarkoFloatingButton.setVisibility(View.GONE);
+                        if (nebulaFloatingButton.getAlpha() <= 0.01f) {
+                            nebulaFloatingButton.setVisibility(View.GONE);
                         }
                     })
                     .start();
@@ -4886,7 +4886,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int width = Math.max(nextAttachLayout.getWidth(), currentAttachLayout.getWidth());
             if (nextAttachLayout instanceof ChatAttachAlertPhotoLayoutPreview) {
                 nextAttachLayout.setTranslationX(width);
-                if (currentAttachLayout instanceof ChatAttachAlertPhotoLayout && !app.nimarkogram.messenger.NimarkoConfig.disableAttachCamera) {
+                if (currentAttachLayout instanceof ChatAttachAlertPhotoLayout && !app.nebulagram.messenger.NebulaConfig.disableAttachCamera) {
                     ChatAttachAlertPhotoLayout photoLayout = (ChatAttachAlertPhotoLayout) currentAttachLayout;
                     if (photoLayout.cameraView != null) {
                         photoLayout.cameraView.setVisibility(View.INVISIBLE);
@@ -4894,7 +4894,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 }
             } else {
                 currentAttachLayout.setTranslationX(-width);
-                if (nextAttachLayout == photoLayout && !app.nimarkogram.messenger.NimarkoConfig.disableAttachCamera) {
+                if (nextAttachLayout == photoLayout && !app.nebulagram.messenger.NebulaConfig.disableAttachCamera) {
                     ChatAttachAlertPhotoLayout photoLayout = (ChatAttachAlertPhotoLayout) nextAttachLayout;
                     if (photoLayout.cameraView != null) {
                         photoLayout.cameraView.setVisibility(View.VISIBLE);
@@ -6394,13 +6394,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         getCommentView().setText("");
         buttonsLayoutManager.scrollToPositionWithOffset(0, 1000000);
 
-        if (nimarkoFloatingButton != null) {
+        if (nebulaFloatingButton != null) {
             boolean showFab = currentAttachLayout == photoLayout && (photosEnabled || videosEnabled);
-            updateNimarkoFloatingCameraOffset();
-            nimarkoFloatingButton.setVisibility(showFab ? View.VISIBLE : View.GONE);
-            nimarkoFloatingButton.setAlpha(showFab ? 1f : 0f);
-            nimarkoFloatingButton.setScaleX(showFab ? 1f : 0.2f);
-            nimarkoFloatingButton.setScaleY(showFab ? 1f : 0.2f);
+            updateNebulaFloatingCameraOffset();
+            nebulaFloatingButton.setVisibility(showFab ? View.VISIBLE : View.GONE);
+            nebulaFloatingButton.setAlpha(showFab ? 1f : 0f);
+            nebulaFloatingButton.setScaleX(showFab ? 1f : 0.2f);
+            nebulaFloatingButton.setScaleY(showFab ? 1f : 0.2f);
         }
     }
 
@@ -6788,7 +6788,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         private Context mContext;
         private int galleryButton;
         // NG (CG parity): cameraButton appears right next to galleryButton in
-        // the attach buttons row when NimarkoConfig.disableAttachCamera is on
+        // the attach buttons row when NebulaConfig.disableAttachCamera is on
         // (CG default). User asked: "кнопка камеры правее от слова Галерея".
         private int cameraButton;
 

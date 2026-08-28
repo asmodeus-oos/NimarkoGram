@@ -594,7 +594,7 @@ public class DualCameraView extends CameraView {
     }
 
     public static boolean dualAvailableStatic(Context context) {
-        if (app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) {
+        if (app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()) {
             
             return dualAvailableDefault(context, true);
         }
@@ -603,14 +603,14 @@ public class DualCameraView extends CameraView {
     }
 
     public static boolean roundDualAvailableStatic(Context context) {
-        final String key = app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
+        final String key = app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
                 ? "rounddual_available_camerax" : "rounddual_available";
         return MessagesController.getGlobalMainSettings().getBoolean(
                 key, roundDualAvailableDefault(context));
     }
 
     public static void disableRoundDual() {
-        final String key = app.nimarkogram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
+        final String key = app.nebulagram.messenger.camera.CameraXUtils.isCurrentCameraCameraX()
                 ? "rounddual_available_camerax" : "rounddual_available";
         MessagesController.getGlobalMainSettings().edit().putBoolean(key, false).apply();
     }

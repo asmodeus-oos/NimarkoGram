@@ -44,7 +44,7 @@ public abstract class BaseCell extends ViewGroup implements SizeNotifierFrameLay
                 checkingForLongPress = false;
                 if (onLongPress()) {
                     
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                         } catch (Exception ignore) {}
@@ -67,7 +67,7 @@ public abstract class BaseCell extends ViewGroup implements SizeNotifierFrameLay
         setWillNotDraw(false);
         setFocusable(true);
         
-        setHapticFeedbackEnabled(!app.nimarkogram.messenger.NimarkoConfig.disableVibration);
+        setHapticFeedbackEnabled(!app.nebulagram.messenger.NebulaConfig.disableVibration);
     }
 
     public static void setDrawableBounds(Drawable drawable, int x, int y) {

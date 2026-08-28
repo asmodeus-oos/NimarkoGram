@@ -706,8 +706,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             if (emojiTabs.recentTab != null) {
                 emojiTabs.recentTab.setOnLongClickListener(e -> {
                     onRecentLongClick();
-                    // NimarkoGram: gate haptic on disableVibration.
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    // NebulaGram: gate haptic on disableVibration.
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                         } catch (Exception ignore) {
@@ -970,8 +970,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                 if (type == TYPE_TAGS || type == TYPE_STICKER_SET_EMOJI || !isLongPressEnabled) return false;
                 if (view instanceof ImageViewEmoji && (type == TYPE_REACTIONS || type == TYPE_EXPANDABLE_REACTIONS)) {
                     incrementHintUse();
-                    // NimarkoGram: gate haptic on disableVibration.
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    // NebulaGram: gate haptic on disableVibration.
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                         } catch (Exception ignored) {}
@@ -1041,8 +1041,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                     };
                     dialog.show();
 
-                    // NimarkoGram: gate haptic on disableVibration.
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    // NebulaGram: gate haptic on disableVibration.
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                         } catch (Exception ignore) {}
@@ -1085,16 +1085,16 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                 } else {
                     onEmojiClick(viewEmoji, viewEmoji.span);
                 }
-                if (type != TYPE_REACTIONS && type != TYPE_TAGS && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-                    // NimarkoGram: gate haptic on disableVibration.
+                if (type != TYPE_REACTIONS && type != TYPE_TAGS && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
+                    // NebulaGram: gate haptic on disableVibration.
                     try {
                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignore) {}
                 }
             } else if (view instanceof ImageView) {
                 onEmojiClick(view, null);
-                if (type != TYPE_REACTIONS && type != TYPE_TAGS && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-                    // NimarkoGram: gate haptic on disableVibration.
+                if (type != TYPE_REACTIONS && type != TYPE_TAGS && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
+                    // NebulaGram: gate haptic on disableVibration.
                     try {
                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignore) {}
@@ -1102,8 +1102,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             } else if (view instanceof EmojiPackExpand) {
                 EmojiPackExpand button = (EmojiPackExpand) view;
                 expand(position, button);
-                if (type != TYPE_REACTIONS && type != TYPE_TAGS && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
-                    // NimarkoGram: gate haptic on disableVibration.
+                if (type != TYPE_REACTIONS && type != TYPE_TAGS && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
+                    // NebulaGram: gate haptic on disableVibration.
                     try {
                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignore) {}
@@ -6143,8 +6143,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                 }
             }, () -> {
                 if (date != null) {
-                    // NimarkoGram: gate haptic on disableVibration.
-                    if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                    // NebulaGram: gate haptic on disableVibration.
+                    if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                         try {
                             performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                         } catch (Exception ignore) {}

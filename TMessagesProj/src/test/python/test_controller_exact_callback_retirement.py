@@ -4,7 +4,7 @@ import unittest
 REPO = pathlib.Path(__file__).resolve().parents[4]
 JAVA = (
     REPO
-    / "TMessagesProj/src/main/java/app/nimarkogram/messenger/plugins"
+    / "TMessagesProj/src/main/java/app/nebulagram/messenger/plugins"
 )
 
 def read(relative):

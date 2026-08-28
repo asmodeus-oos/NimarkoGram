@@ -8,71 +8,71 @@ import org.telegram.tgnet.TLRPC;
 public abstract class TranslatorUtils {
 
     public interface TranslateCallback
-            extends app.nimarkogram.messenger.utils.text.TranslatorUtils.TranslateCallback {
+            extends app.nebulagram.messenger.utils.text.TranslatorUtils.TranslateCallback {
     }
 
     public static boolean isTargetLanguageFollowApp() {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.isTargetLanguageFollowApp();
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.isTargetLanguageFollowApp();
     }
 
     public static void setTargetLanguage(String str) {
-        app.nimarkogram.messenger.utils.text.TranslatorUtils.setTargetLanguage(str);
+        app.nebulagram.messenger.utils.text.TranslatorUtils.setTargetLanguage(str);
     }
 
     public static String normalizeLanguageCode(String str) {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.normalizeLanguageCode(str);
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.normalizeLanguageCode(str);
     }
 
     public static String primaryLanguageOf(String str) {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.primaryLanguageOf(str);
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.primaryLanguageOf(str);
     }
 
     public static String getResolvedTargetLanguageCode(String str) {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.getResolvedTargetLanguageCode(str);
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.getResolvedTargetLanguageCode(str);
     }
 
     public static String getResolvedTargetLanguageCode() {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.getResolvedTargetLanguageCode();
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.getResolvedTargetLanguageCode();
     }
 
     public static String getLanguageDisplayName(String str) {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.getLanguageDisplayName(str);
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.getLanguageDisplayName(str);
     }
 
     public static String getLanguageTitleSystem(String str) {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.getLanguageTitleSystem(str);
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.getLanguageTitleSystem(str);
     }
 
     public static String getTargetLanguageTitle() {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.getTargetLanguageTitle();
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.getTargetLanguageTitle();
     }
 
     public static CharSequence[] getTargetLanguageTitles() {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.getTargetLanguageTitles();
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.getTargetLanguageTitles();
     }
 
     public static String getTargetLanguageCodeByIndex(int i) {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.getTargetLanguageCodeByIndex(i);
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.getTargetLanguageCodeByIndex(i);
     }
 
     public static int getTargetLanguageIndexByCode(String str) {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.getTargetLanguageIndexByCode(str);
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.getTargetLanguageIndexByCode(str);
     }
 
     public static String getCurrentTranslatorName() {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.getCurrentTranslatorName();
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.getCurrentTranslatorName();
     }
 
     public static boolean isTargetLanguageSupportedForCurrentProvider(String str) {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.isTargetLanguageSupportedForCurrentProvider(str);
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.isTargetLanguageSupportedForCurrentProvider(str);
     }
 
     public static boolean isRestrictedLanguage(String str) {
-        return app.nimarkogram.messenger.utils.text.TranslatorUtils.isRestrictedLanguage(str);
+        return app.nebulagram.messenger.utils.text.TranslatorUtils.isRestrictedLanguage(str);
     }
 
     public static void ensureTargetLanguageCompatibleWithProvider() {
-        app.nimarkogram.messenger.utils.text.TranslatorUtils.ensureTargetLanguageCompatibleWithProvider();
+        app.nebulagram.messenger.utils.text.TranslatorUtils.ensureTargetLanguageCompatibleWithProvider();
     }
 
     public static void translate(CharSequence charSequence,
@@ -80,7 +80,7 @@ public abstract class TranslatorUtils {
                                  String toLang,
                                  ArrayList<TLRPC.MessageEntity> entities,
                                  final TranslateCallback callback) {
-        app.nimarkogram.messenger.utils.text.TranslatorUtils.translate(
+        app.nebulagram.messenger.utils.text.TranslatorUtils.translate(
                 charSequence, fromLang, toLang, entities, callback);
     }
 
@@ -88,11 +88,11 @@ public abstract class TranslatorUtils {
                                  String toLang,
                                  final ArrayList<TLRPC.MessageEntity> entities,
                                  final TranslateCallback callback) {
-        app.nimarkogram.messenger.utils.text.TranslatorUtils.translate(
+        app.nebulagram.messenger.utils.text.TranslatorUtils.translate(
                 charSequence, toLang, entities, callback);
     }
 
     public static void translate(CharSequence charSequence, String toLang, TranslateCallback callback) {
-        app.nimarkogram.messenger.utils.text.TranslatorUtils.translate(charSequence, toLang, callback);
+        app.nebulagram.messenger.utils.text.TranslatorUtils.translate(charSequence, toLang, callback);
     }
 }

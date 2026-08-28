@@ -33,8 +33,8 @@ import me.vkryl.android.AnimatorUtils;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 
-import app.nimarkogram.messenger.NimarkoConfig;
-import app.nimarkogram.messenger.NimarkoResourcesHelper;
+import app.nebulagram.messenger.NebulaConfig;
+import app.nebulagram.messenger.NebulaResourcesHelper;
 
 @SuppressLint("ViewConstructor")
 public class ChatActivityActionsButtonsLayout extends LinearLayout {
@@ -64,9 +64,9 @@ public class ChatActivityActionsButtonsLayout extends LinearLayout {
         forwardButton.button.setOnClickListener(v -> {});
         ScaleStateListAnimator.apply(forwardButton.button, .065f, 2f);
 
-        int replyButtonIcon = NimarkoResourcesHelper.getLeftActionButtonDrawable(noForwards);
-        String replyButtonText = NimarkoResourcesHelper.getLeftActionButtonText(noForwards);
-        boolean replyIconLeft = NimarkoConfig.actionsBarLeftButton != NimarkoConfig.ACTIONS_LEFT_REPLY;
+        int replyButtonIcon = NebulaResourcesHelper.getLeftActionButtonDrawable(noForwards);
+        String replyButtonText = NebulaResourcesHelper.getLeftActionButtonText(noForwards);
+        boolean replyIconLeft = NebulaConfig.actionsBarLeftButton != NebulaConfig.ACTIONS_LEFT_REPLY;
 
         addTextView(replyButton, replyButtonText, replyButtonIcon, replyIconLeft);
         addTextView(forwardButton, LocaleController.getString(R.string.Forward), R.drawable.input_forward, !replyIconLeft);
@@ -100,7 +100,7 @@ public class ChatActivityActionsButtonsLayout extends LinearLayout {
         forwardButton.setTextColor(Theme.getColor(Theme.key_glass_defaultText, resourcesProvider));
         forwardButton.setTypeface(AndroidUtilities.bold());
 
-        if (button == replyButton && NimarkoConfig.actionsBarLeftButton != NimarkoConfig.ACTIONS_LEFT_REPLY) {
+        if (button == replyButton && NebulaConfig.actionsBarLeftButton != NebulaConfig.ACTIONS_LEFT_REPLY) {
             forwardButton.setSingleLine(true);
             forwardButton.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             forwardButton.setMarqueeRepeatLimit(-1);

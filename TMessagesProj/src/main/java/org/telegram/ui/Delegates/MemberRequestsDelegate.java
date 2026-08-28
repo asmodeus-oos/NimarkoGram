@@ -500,7 +500,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                     onImportersChanged(query, false, true);
                     if (isApproved) {
                         Bulletin.MultiLineLayout layout = new Bulletin.MultiLineLayout(fragment.getParentActivity(), fragment.getResourceProvider());
-                        layout.imageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(30));
+                        layout.imageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(30));
                         layout.imageView.setForUserOrChat(user, new AvatarDrawable(user));
                         String userName = UserObject.getFirstName(user);
                         String message = isChannel

@@ -96,12 +96,12 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
     private BlurredBackgroundDrawable glassDrawableBack;
     private BlurredBackgroundDrawable glassDrawableMenu;
     private INavigationLayout.BackButtonState backButtonState = INavigationLayout.BackButtonState.BACK;
-    // NimarkoGram (CG-port): Cherrygram exposes the unread-chats badge by wrapping
+    // NebulaGram (CG-port): Cherrygram exposes the unread-chats badge by wrapping
     // backButtonImageView in an UnreadImageView (extends ImageView) that owns a
     // sibling CounterView in the enclosing ActionBar FrameLayout. ChatActivity
     // listens to NotificationCenter.dialogsUnreadCounterChanged and pushes the
     // global main unread count via backButtonImageView.checkUnreadView(...).
-    // Rendering is gated on NimarkoConfig.unreadBadgeOnBackButton — verbatim CG.
+    // Rendering is gated on NebulaConfig.unreadBadgeOnBackButton — verbatim CG.
     public UnreadImageView backButtonImageView;
     private BackupImageView avatarSearchImageView;
     private Drawable backButtonDrawable;
@@ -192,7 +192,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
     public ActionBar(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.resourcesProvider = resourcesProvider;
-        // NimarkoGram: titles use widthWrapContent (getMeasuredWidth()==textWidth, for positional centring),
+        // NebulaGram: titles use widthWrapContent (getMeasuredWidth()==textWidth, for positional centring),
         // so a title's right drawable (verified badge / emoji / status) is drawn just PAST the view's narrow
         // layout rect. Don't clip children so that badge stays visible (glass bars already do this).
         setClipChildren(false);
@@ -481,7 +481,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
                         && !((String) titleView.getText()).isEmpty()) {
                     TextPaint textPaint = titleView.getTextPaint();
                     textPaint.getFontMetricsInt(fontMetricsInt);
-                    // NimarkoGram: guard against empty title — happens when user hides
+                    // NebulaGram: guard against empty title — happens when user hides
                     // folder names (tabsHideAllChats / folderNameInHeader=false), the
                     // holiday-drawable measurement called getTextBounds(text, 0, 1)
                     // which throws IndexOutOfBoundsException on length=0 strings.
@@ -498,17 +498,17 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
                 }
             }
 
-            // NimarkoGram: draw snowflakes year-round when user-flag is on,
+            // NebulaGram: draw snowflakes year-round when user-flag is on,
             // independent of whether the holiday drawable is loaded.
-            boolean nimarkoSnow = app.nimarkogram.messenger.NimarkoConfig.drawSnowInActionBar;
-            boolean wantSnow = Theme.canStartHolidayAnimation() || nimarkoSnow;
+            boolean nebulaSnow = app.nebulagram.messenger.NebulaConfig.drawSnowInActionBar;
+            boolean wantSnow = Theme.canStartHolidayAnimation() || nebulaSnow;
             if (wantSnow) {
                 if (snowflakesEffect == null) {
                     snowflakesEffect = new SnowflakesEffect(0);
                 }
                 // Ensure the effect ignores LiteMode FLAG_CHAT_BACKGROUND when the
-                // user explicitly opted in via the NimarkoGram toggle.
-                snowflakesEffect.bypassLiteMode = nimarkoSnow;
+                // user explicitly opted in via the NebulaGram toggle.
+                snowflakesEffect.bypassLiteMode = nebulaSnow;
             } else if (!manualStart) {
                 if (snowflakesEffect != null) {
                     snowflakesEffect = null;
@@ -556,7 +556,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
             return;
         }
         subtitleTextView = new SimpleTextView(getContext());
-        // NimarkoGram: honour isCenterTitle for subtitle so it stays in sync with title.
+        // NebulaGram: honour isCenterTitle for subtitle so it stays in sync with title.
         subtitleTextView.setGravity(getSubtitleGravity());
         subtitleTextView.setVisibility(GONE);
         subtitleTextView.setTextColor(getThemedColor(Theme.key_actionBarDefaultSubtitle));
@@ -569,7 +569,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
             return;
         }
         additionalSubtitleTextView = new SimpleTextView(getContext());
-        // NimarkoGram: honour isCenterTitle for subtitle so it stays in sync with title.
+        // NebulaGram: honour isCenterTitle for subtitle so it stays in sync with title.
         additionalSubtitleTextView.setGravity(getSubtitleGravity());
         additionalSubtitleTextView.setVisibility(GONE);
         additionalSubtitleTextView.setTextColor(getThemedColor(Theme.key_actionBarDefaultSubtitle));
@@ -608,13 +608,13 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         }
     }
 
-    // NimarkoGram: CG-parity — default delegating helper keeps gilroy=false so lazy
+    // NebulaGram: CG-parity — default delegating helper keeps gilroy=false so lazy
     // title creation (e.g. via setTitleColor before setTitle) matches CG default.
     private void createTitleTextView(int i) {
         createTitleTextView(i, false);
     }
 
-    // NimarkoGram: gilroy-aware overload ported from CG ActionBar to back setTitleAnimatedX().
+    // NebulaGram: gilroy-aware overload ported from CG ActionBar to back setTitleAnimatedX().
     // The existing single-arg createTitleTextView() delegates here so all other call sites stay identical.
     private void createTitleTextView(int i, boolean gilroy) {
         if (titleTextView[i] != null) {
@@ -629,18 +629,18 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         }
         titleTextView[i].setEmojiColor(titleTextView[i].getTextColor());
         if (gilroy) {
-            titleTextView[i].setTypeface(app.nimarkogram.messenger.utils.ui.FontHelper.createTypeface2(app.nimarkogram.messenger.utils.ui.FontHelper.TYPEFACE_GILROY_EXTRABOLD));
+            titleTextView[i].setTypeface(app.nebulagram.messenger.utils.ui.FontHelper.createTypeface2(app.nebulagram.messenger.utils.ui.FontHelper.TYPEFACE_GILROY_EXTRABOLD));
         } else {
             titleTextView[i].setTypeface(AndroidUtilities.bold());
         }
         titleTextView[i].setDrawablePadding(dp(4));
         titleTextView[i].setPadding(0, dp(8), 0, dp(8));
         titleTextView[i].setRightDrawableTopPadding(-dp(1));
-        // NimarkoGram: wrapContent shrinks getMeasuredWidth() to actual text width so the
+        // NebulaGram: wrapContent shrinks getMeasuredWidth() to actual text width so the
         // leftX = centerX - mw/2 formula in onLayout centres the text exactly on centerX.
         // With gravity always LEFT (see getTitleGravity), no CENTER-gravity offsetX is added.
         titleTextView[i].setWidthWrapContent(true);
-        // NimarkoGram (bug: NFT/emoji status missing right of the dialogs title). With wrapContent the
+        // NebulaGram (bug: NFT/emoji status missing right of the dialogs title). With wrapContent the
         // measured width EXCLUDES an *inside* right drawable, so the badge was painted past the view's
         // right bound. A static premium star survived (drawn once on layout) but an animated collectible
         // (SwapAnimatedEmojiDrawable) invalidates only its own [0,textWidth] bounds — which don't cover a
@@ -656,8 +656,8 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         }
     }
 
-    // NimarkoGram: per-bar FORCE-ON latch ONLY (set by centerTitle(); no external callers today). Must default
-    // FALSE so shouldCenterTitle() == the LIVE NimarkoConfig.centerTitle. Snapshotting the config here made it
+    // NebulaGram: per-bar FORCE-ON latch ONLY (set by centerTitle(); no external callers today). Must default
+    // FALSE so shouldCenterTitle() == the LIVE NebulaConfig.centerTitle. Snapshotting the config here made it
     // sticky-true (config defaults true): a bar opened while centred kept isCenterTitle=true, so DISABLING the
     // toggle left shouldCenterTitle() true (isCenterTitle||config) -> target stayed centred -> no slide. This is
     // the "re-enter settings, then disable doesn't animate" bug. Pairs with the widthWrapContent centring fix.
@@ -700,7 +700,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         if (forceDisableCenterTitle) {
             return false;
         }
-        return isCenterTitle || app.nimarkogram.messenger.NimarkoConfig.centerTitle;
+        return isCenterTitle || app.nebulagram.messenger.NebulaConfig.centerTitle;
     }
 
     private boolean shouldUseAdaptiveCenterTitle() {
@@ -712,7 +712,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
     }
 
     private int getTitleGravity() {
-        // NimarkoGram: gravity is permanently LEFT — centering is done purely by position
+        // NebulaGram: gravity is permanently LEFT — centering is done purely by position
         // (leftX = centerX - getMeasuredWidth()/2 with widthWrapContent=true, so mw = textWidth).
         // Keeping gravity fixed avoids the instantaneous CENTER→LEFT snap on a live toggle
         // (which would add/remove offsetX = (fullWidth - textWidth)/2 mid-animation).
@@ -720,7 +720,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
     }
 
     private int getSubtitleGravity() {
-        // NimarkoGram: same rationale as getTitleGravity() — positional centering, not gravity centering.
+        // NebulaGram: same rationale as getTitleGravity() — positional centering, not gravity centering.
         return Gravity.LEFT;
     }
 
@@ -757,7 +757,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         return Math.min(cap, Math.max(0, Math.min(half - textLeft, bound - half)) * 2);
     }
 
-    // The original NimarkoGram left-aligned title width formula (used when not centred / when sliding back left).
+    // The original NebulaGram left-aligned title width formula (used when not centred / when sliding back left).
     private int getLeftAlignedTitleAvailableWidth(int width, int textLeft) {
         return width - (menu != null ? menu.getMeasuredWidth() : 0) - dp(16) - textLeft - titleRightMargin;
     }
@@ -786,7 +786,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         centerTitleSlidePending = false;
     }
 
-    // NimarkoGram-specific SEED: called by the appearance toggle BEFORE flipping NimarkoConfig.centerTitle, so the
+    // NebulaGram-specific SEED: called by the appearance toggle BEFORE flipping NebulaConfig.centerTitle, so the
     // first centred onLayout has a FROM value (the current visible centre/width) to slide AWAY from instead of
     // snapping. This is what makes the live (non-rebuilt) bar actually animate on the very first toggle.
     public void prepareCenterTitleAnimation() {
@@ -902,7 +902,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         titleRightMargin = value;
     }
 
-    // NimarkoGram: CG-parity — defaults stay gilroy=false. Per-call-site explicit
+    // NebulaGram: CG-parity — defaults stay gilroy=false. Per-call-site explicit
     // gilroy=true is sprinkled at the same locations CG does (DialogsActivity etc.).
     public void setTitle(CharSequence value) {
         setTitle(value, null, false);
@@ -912,7 +912,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         setTitle(value, rightDrawable, false);
     }
 
-    // NimarkoGram: gilroy-aware setTitle ported from CG. Used by setTitleAnimatedX().
+    // NebulaGram: gilroy-aware setTitle ported from CG. Used by setTitleAnimatedX().
     public void setTitle(CharSequence value, Drawable rightDrawable, boolean gilroy) {
         if (value != null && titleTextView[0] == null) {
             createTitleTextView(0, gilroy);
@@ -946,7 +946,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         setTitleColor(color, false);
     }
 
-    // NimarkoGram CG-parity: gilroy-aware overload ported from CG ActionBar. Used by
+    // NebulaGram CG-parity: gilroy-aware overload ported from CG ActionBar. Used by
     // DialogsActivity to lazy-create the title text view in Gilroy ExtraBold when the
     // chat-list logo color is applied before setTitle().
     public void setTitleColor(int color, boolean gilroy) {
@@ -1833,7 +1833,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
 
         for (int i = 0; i < 2; i++) {
             if (titleTextView[0] != null && titleTextView[0].getVisibility() != GONE || subtitleTextView != null && subtitleTextView.getVisibility() != GONE) {
-                // NimarkoGram (extera port): when centred, measure against the ANIMATED width budget so the box width
+                // NebulaGram (extera port): when centred, measure against the ANIMATED width budget so the box width
                 // morphs in lock-step with the centre point (no width pop). While sliding back to left keep the
                 // animated budget; only the steady non-centred state uses the raw left-aligned formula.
                 int availableWidth;
@@ -1952,7 +1952,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
             menu.layout(menuLeft, additionalTop, menuLeft + menu.getMeasuredWidth(), additionalTop + menu.getMeasuredHeight());
         }
 
-        // NimarkoGram (extera port): drive the centred-title slide from onLayout by detecting a target change.
+        // NebulaGram (extera port): drive the centred-title slide from onLayout by detecting a target change.
         // centerX is the animated CENTRE POINT; every centred view is placed as (centerX - measuredWidth/2).
         int barWidth = getMeasuredWidth();
         boolean centerTitleNow = shouldCenterTitle();
@@ -1982,7 +1982,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
                         textTop = (getCurrentActionBarHeight() - titleTextView[i].getTextHeight()) / 2;
                     }
                 }
-                // NimarkoGram (extera port): place the box on the animated centre POINT (left = centerX - mw/2).
+                // NebulaGram (extera port): place the box on the animated centre POINT (left = centerX - mw/2).
                 // measuredWidth already includes side drawables, so no manual sideExtra math. At rest this equals
                 // the old left branch (centerX == textLeft + mw/2) or the centred branch.
                 {
@@ -2109,14 +2109,14 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
 
     boolean overlayTitleAnimationInProgress;
 
-    // NimarkoGram: CG-parity — 3-arg overlay default stays gilroy=false. BaseFragment
+    // NebulaGram: CG-parity — 3-arg overlay default stays gilroy=false. BaseFragment
     // calls the 4-arg overload with explicit true to bold connection-state overlays
     // ("Connecting...", "Updating...") matching CG behaviour.
     public void setTitleOverlayText(String title, int titleId, Runnable action) {
         setTitleOverlayText(title, titleId, false, action);
     }
 
-    // NimarkoGram: gilroy-aware overload ported from CG ActionBar. The connection-state
+    // NebulaGram: gilroy-aware overload ported from CG ActionBar. The connection-state
     // title overlay ("Connecting...", "Updating...", etc.) used to rebuild titleTextView
     // via createTitleTextView() without the gilroy flag, dropping Gilroy ExtraBold (w800)
     // back to AndroidUtilities.bold() (w500) and causing the visible bold flicker as the
@@ -2415,7 +2415,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         requestLayout();
     }
 
-    // NimarkoGram: horizontal title crossfade ported verbatim from Cherrygram ActionBar.
+    // NebulaGram: horizontal title crossfade ported verbatim from Cherrygram ActionBar.
     // Swaps titleTextView[0] for a new title that slides in from the chosen side while
     // the old title slides out the opposite way. Pivot, translation magnitude (20dp),
     // interpolator (default ViewPropertyAnimator) and duration all match CG so the
@@ -3186,13 +3186,13 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         }
     }
 
-    /** NimarkoGram start (ported from Cherrygram, GPL-2.0) */
+    /** NebulaGram start (ported from Cherrygram, GPL-2.0) */
     // CG-port: unread-chats badge painted to the right of the back arrow.
     // CounterView is added as a sibling of backButtonImageView in the
     // enclosing ActionBar FrameLayout (an unqualified addView() inside the
     // UnreadImageView inner class resolves to ActionBar#addView, exactly
     // like CG). Reverse-gravity makes it line up to the upper-right of the
-    // 54x54 back-button slot. Visibility is gated on NimarkoConfig at the
+    // 54x54 back-button slot. Visibility is gated on NebulaConfig at the
     // checkUnreadView() entry point; ChatActivity drives count updates via
     // NotificationCenter.dialogsUnreadCounterChanged.
     private CounterView countLayout;
@@ -3232,11 +3232,11 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         }
 
         public void checkUnreadView(int count) {
-            // NimarkoGram deviation from CG: when the flag is OFF, also hide the existing
+            // NebulaGram deviation from CG: when the flag is OFF, also hide the existing
             // CounterView. CG simply early-returns (leaves a stale badge), but we want
             // onResume() to act as the cheap refresh path for runtime toggles without
             // forcing a full fragment rebuild from the settings screen.
-            if (!app.nimarkogram.messenger.NimarkoConfig.unreadBadgeOnBackButton) {
+            if (!app.nebulagram.messenger.NebulaConfig.unreadBadgeOnBackButton) {
                 if (countLayout != null) {
                     countLayout.setVisibility(GONE);
                     countLayout.setCount(0, false);
@@ -3278,5 +3278,5 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
     public int getItemsColor() {
         return itemsColor;
     }
-    /** NimarkoGram finish */
+    /** NebulaGram finish */
 }

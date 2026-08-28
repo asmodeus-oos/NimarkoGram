@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/assets/nimarkogram-icon.png" width="128" height="128" alt="NimarkoGram 图标">
+  <img src="docs/assets/nebulagram-icon.png" width="128" height="128" alt="NebulaGram 图标">
 </p>
 
-<h1 align="center">NimarkoGram</h1>
+<h1 align="center">NebulaGram</h1>
 
 <p align="center">
   <a href="README.md">English</a> · <a href="README.ru.md">Русский</a> · <strong>简体中文</strong>
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img alt="NimarkoGram 12.9.2" src="https://img.shields.io/badge/NimarkoGram-12.9.2-ff4fa3">
+  <img alt="NebulaGram 12.9.2" src="https://img.shields.io/badge/NebulaGram-12.9.2-ff4fa3">
   <a href="LICENSE"><img alt="GPL-2.0 许可证" src="https://img.shields.io/badge/license-GPL--2.0-6f42c1"></a>
   <img alt="Android 7.0 及更高版本" src="https://img.shields.io/badge/Android-7.0%2B-3DDC84?logo=android&logoColor=white">
   <img alt="Telegram 12.9.2" src="https://img.shields.io/badge/Telegram-12.9.2-26A5E4?logo=telegram&logoColor=white">
@@ -24,15 +24,15 @@
   <a href="#从源码构建">构建</a> ·
   <a href="#插件平台">插件</a> ·
   <a href="CONTRIBUTING.md">参与贡献</a> ·
-  <a href="https://github.com/Ettacent/NimarkoGram/issues">问题反馈</a>
+  <a href="https://github.com/Ettacent/NebulaGram/issues">问题反馈</a>
 </p>
 
 > [!IMPORTANT]
-> NimarkoGram 是基于官方 Telegram Android 源码的独立项目，与 Telegram Messenger Inc. 不存在隶属关系，也未获得其官方认可。
+> NebulaGram 是基于官方 Telegram Android 源码的独立项目，与 Telegram Messenger Inc. 不存在隶属关系，也未获得其官方认可。
 
 ## 项目简介
 
-NimarkoGram 在保留官方客户端使用体验的基础上扩展了 [Telegram for Android](https://github.com/DrKLO/Telegram)。项目重点包括灵活的界面定制、更完善的相机与媒体流程、隐私与网络工具，以及完整的扩展平台。
+NebulaGram 在保留官方客户端使用体验的基础上扩展了 [Telegram for Android](https://github.com/DrKLO/Telegram)。项目重点包括灵活的界面定制、更完善的相机与媒体流程、隐私与网络工具，以及完整的扩展平台。
 
 ## 功能
 
@@ -58,8 +58,8 @@ NimarkoGram 在保留官方客户端使用体验的基础上扩展了 [Telegram 
 克隆仓库及所有原生子模块：
 
 ```bash
-git clone --recursive https://github.com/Ettacent/NimarkoGram.git
-cd NimarkoGram
+git clone --recursive https://github.com/Ettacent/NebulaGram.git
+cd NebulaGram
 ```
 
 创建本地配置文件：
@@ -86,9 +86,9 @@ TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk
 
 ## 插件平台
 
-插件实现位于 `TMessagesProj/src/main/java/app/nimarkogram/messenger/plugins` 和 `TMessagesProj/src/main/python`。其中包含 Python 运行时、钩子桥接、包管理、插件 UI 模型、DEX 加载以及生命周期协调。
+插件实现位于 `TMessagesProj/src/main/java/app/nebulagram/messenger/plugins` 和 `TMessagesProj/src/main/python`。其中包含 Python 运行时、钩子桥接、包管理、插件 UI 模型、DEX 加载以及生命周期协调。
 
-`com.exteragram` 命名空间下的包和相关 Python 别名仅用于兼容现有第三方插件，不会改变 NimarkoGram 的应用 ID 或品牌。
+`com.exteragram` 命名空间下的包和相关 Python 别名仅用于兼容现有第三方插件，不会改变 NebulaGram 的应用 ID 或品牌。
 
 ## Telegram API
 
@@ -98,12 +98,12 @@ TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk
 
 | 路径 | 用途 |
 | --- | --- |
-| `TMessagesProj` | Telegram 核心、NimarkoGram 功能和 Android 资源 |
+| `TMessagesProj` | Telegram 核心、NebulaGram 功能和 Android 资源 |
 | `TMessagesProj/src/main/python` | Python 插件 API 与运行时 |
-| `TMessagesProj_AppStandalone` | NimarkoGram standalone 应用 |
+| `TMessagesProj_AppStandalone` | NebulaGram standalone 应用 |
 | `TMessagesProj/jni` | 原生代码与第三方原生库 |
 | `third_party/pine` | 固定版本的 Pine 钩子引擎源码 |
-| `patches/pine-nimarkogram.patch` | 可复现的 NimarkoGram Pine 修改 |
+| `patches/pine-nebulagram.patch` | 可复现的 NebulaGram Pine 修改 |
 
 ## 贡献与安全
 
@@ -118,4 +118,4 @@ TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk
 
 ## 许可证
 
-NimarkoGram 采用 [GNU General Public License v2.0](LICENSE) 发布。Telegram 与随附的第三方组件保留各自的版权和许可证声明。
+NebulaGram 采用 [GNU General Public License v2.0](LICENSE) 发布。Telegram 与随附的第三方组件保留各自的版权和许可证声明。

@@ -283,15 +283,15 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
 
     }
 
-    // NimarkoGram: one-shot recursive invalidate so a plugin custom view's deeply-nested children
+    // NebulaGram: one-shot recursive invalidate so a plugin custom view's deeply-nested children
     // (esp. Chaquopy TextViews whose GradientDrawable backgrounds recorded empty bounds on first
     // draw) each re-record their display-list with correct bounds. A one-level invalidate is not
     // enough — it dirties only the top node; nested children keep their stale display-lists.
-    private static void nimarkoInvalidateSubtree(View view) {
+    private static void nebulaInvalidateSubtree(View view) {
         if (view == null) {
             return;
         }
-        // NimarkoGram: a background Drawable attached from Python (Chaquopy) sometimes never has
+        // NebulaGram: a background Drawable attached from Python (Chaquopy) sometimes never has
         // its bounds set — the view's first background draw, which normally calls
         // Drawable.setBounds(0,0,w,h), is missed for deeply-nested children, so the drawable keeps
         // empty [0,0] bounds and its fill is invisible (observed: plugin button GradientDrawables).
@@ -302,7 +302,7 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
             if (bg != null && bg.getBounds().isEmpty() && view.getWidth() > 0 && view.getHeight() > 0) {
                 bg.setBounds(0, 0, view.getWidth(), view.getHeight());
             }
-            // NimarkoGram: a plugin (Chaquopy) TextView whose setTextColor() didn't take falls back
+            // NebulaGram: a plugin (Chaquopy) TextView whose setTextColor() didn't take falls back
             // to the bare platform-default text colour — semi-transparent BLACK (e.g. 0x8a000000) —
             // which is invisible on a themed (dark) sheet: the observed cause of "plugin buttons have
             // no visible text". Detect that default (pure black, non-opaque alpha) and replace it with
@@ -323,17 +323,17 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) view;
             for (int i = 0, n = group.getChildCount(); i < n; i++) {
-                nimarkoInvalidateSubtree(group.getChildAt(i));
+                nebulaInvalidateSubtree(group.getChildAt(i));
             }
         }
     }
 
-    // NimarkoGram: same drawable-bounds / text-colour fix as above, but for views a plugin ADDS to the
+    // NebulaGram: same drawable-bounds / text-colour fix as above, but for views a plugin ADDS to the
     // customView ASYNCHRONOUSLY (after the one-shot pass already ran) — e.g. an exteraGram verdict
     // injector that adds its chip views once a network check returns. Unlike the one-shot it invalidates
     // ONLY nodes it actually fixes, so wiring it to a per-layout listener converges to a cheap no-op
     // traversal (no blanket re-invalidate / redraw storm) once everything is corrected.
-    private static void nimarkoFixLateViews(View view) {
+    private static void nebulaFixLateViews(View view) {
         if (view == null) {
             return;
         }
@@ -382,7 +382,7 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) view;
             for (int i = 0, n = group.getChildCount(); i < n; i++) {
-                nimarkoFixLateViews(group.getChildAt(i));
+                nebulaFixLateViews(group.getChildAt(i));
             }
         }
     }
@@ -1467,9 +1467,9 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
 
                 @Override
                 protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                    // NimarkoGram: isolate a plugin customView's draw — a Chaquopy view that throws in
+                    // NebulaGram: isolate a plugin customView's draw — a Chaquopy view that throws in
                     // onDraw (e.g. a malformed wide-gamut colour) must not abort the whole window's draw
-                    // and blank/crash the sheet. nimarkoFixLateViews prevents the known colour case; this
+                    // and blank/crash the sheet. nebulaFixLateViews prevents the known colour case; this
                     // is defence-in-depth for any other plugin draw fault.
                     try {
                         return super.drawChild(canvas, child, drawingTime);
@@ -1551,7 +1551,7 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
                 ViewGroup viewGroup = (ViewGroup) customView.getParent();
                 viewGroup.removeView(customView);
             }
-            // NimarkoGram: plugin custom views (chatexport export dialog) are built in
+            // NebulaGram: plugin custom views (chatexport export dialog) are built in
             // Chaquopy/Python. A GradientDrawable background attached from Python AFTER the
             // TextView is constructed records EMPTY bounds into its (hardware) display-list on the
             // first draw and is never marked dirty again, so the rounded button backgrounds stay
@@ -1562,11 +1562,11 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
             // to re-rasterise). Posted on customView so it runs after this layout pass. Scoped to
             // customView != null so app Builder/setItems sheets are untouched.
             if (!nativeCustomView) {
-                final View nimarkoCustomView = customView;
-                nimarkoCustomView.post(() -> nimarkoInvalidateSubtree(nimarkoCustomView));
+                final View nebulaCustomView = customView;
+                nebulaCustomView.post(() -> nebulaInvalidateSubtree(nebulaCustomView));
                 try {
-                    nimarkoCustomView.getViewTreeObserver().addOnGlobalLayoutListener(
-                            () -> nimarkoFixLateViews(nimarkoCustomView));
+                    nebulaCustomView.getViewTreeObserver().addOnGlobalLayoutListener(
+                            () -> nebulaFixLateViews(nebulaCustomView));
                 } catch (Throwable ignored) {}
             }
             if (!useBackgroundTopPadding) {
@@ -1855,7 +1855,7 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
         containerView.setVisibility(View.VISIBLE);
 
         if (!onCustomOpenAnimation()) {
-            // NimarkoGram: do NOT promote a custom-view sheet (chatexport's export dialog is the
+            // NebulaGram: do NOT promote a custom-view sheet (chatexport's export dialog is the
             // ONLY setCustomView user) into a hardware layer. Its Chaquopy/Python TextViews compute
             // their text Layout + GradientDrawable draw-ops lazily on first onDraw, which happens
             // AFTER this promotion -> they get baked BLANK into the open-animation layer texture and
@@ -1920,7 +1920,7 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
                         if (delegate != null) {
                             delegate.onOpenAnimationEnd();
                         }
-                        // NimarkoGram: symmetric with the promote guard above. Tear down the layer
+                        // NebulaGram: symmetric with the promote guard above. Tear down the layer
                         // only for sheets that were actually promoted (customView == null). A
                         // custom-view sheet was never put into a layer, so there is nothing to undo.
                         if (useHardwareLayer && (customView == null || nativeCustomView)) {

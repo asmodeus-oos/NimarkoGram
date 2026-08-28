@@ -7,15 +7,15 @@ import org.telegram.ui.Components.UniversalAdapter;
 
 import java.util.ArrayList;
 
-import app.nimarkogram.messenger.plugins.PluginsController;
-import app.nimarkogram.messenger.plugins.ui.components.templates.PluginRuntimeDelegate;
+import app.nebulagram.messenger.plugins.PluginsController;
+import app.nebulagram.messenger.plugins.ui.components.templates.PluginRuntimeDelegate;
 
-public class UniversalFragment extends app.nimarkogram.messenger.plugins.ui.components.templates.UniversalFragment {
+public class UniversalFragment extends app.nebulagram.messenger.plugins.ui.components.templates.UniversalFragment {
     private GuardedDelegate bridgeDelegate;
 
     public UniversalFragment(UniversalFragmentDelegate delegate) {
         super(adapt(delegate));
-        app.nimarkogram.messenger.plugins.ui.components.templates
+        app.nebulagram.messenger.plugins.ui.components.templates
                 .UniversalFragment.UniversalFragmentDelegate guardedDelegate =
                 super.getDelegate();
         if (guardedDelegate instanceof GuardedDelegate) {
@@ -36,7 +36,7 @@ public class UniversalFragment extends app.nimarkogram.messenger.plugins.ui.comp
         default void onMenuItemClick(int id) {}
     }
 
-    private static app.nimarkogram.messenger.plugins.ui.components.templates.UniversalFragment.UniversalFragmentDelegate
+    private static app.nebulagram.messenger.plugins.ui.components.templates.UniversalFragment.UniversalFragmentDelegate
             adapt(final UniversalFragmentDelegate d) {
         if (d == null) return null;
         return new GuardedDelegate(
@@ -54,7 +54,7 @@ public class UniversalFragment extends app.nimarkogram.messenger.plugins.ui.comp
 
     private static final class GuardedDelegate implements
             UniversalFragmentDelegate,
-            app.nimarkogram.messenger.plugins.ui.components.templates
+            app.nebulagram.messenger.plugins.ui.components.templates
                     .UniversalFragment.UniversalFragmentDelegate {
         private UniversalFragmentDelegate delegate;
         private final PluginsController.PluginRuntimeToken runtimeToken;

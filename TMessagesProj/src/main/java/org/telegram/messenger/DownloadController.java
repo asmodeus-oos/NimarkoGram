@@ -606,7 +606,7 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public boolean canDownloadMedia(MessageObject messageObject) {
-        if (!nimarkoCanDownload(null, messageObject)) return false;
+        if (!nebulaCanDownload(null, messageObject)) return false;
         if (messageObject.type == MessageObject.TYPE_STORY) {
             if (!SharedConfig.isAutoplayVideo()) return false;
             TLRPC.TL_messageMediaStory mediaStory = (TLRPC.TL_messageMediaStory) MessageObject.getMedia(messageObject);
@@ -650,7 +650,7 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public int canDownloadMediaType(MessageObject messageObject) {
-        if (!nimarkoCanDownload(null, messageObject)) return 0;
+        if (!nebulaCanDownload(null, messageObject)) return 0;
         if (messageObject.type == MessageObject.TYPE_STORY) {
             if (!SharedConfig.isAutoplayVideo()) return 0;
             TLRPC.TL_messageMediaStory mediaStory = (TLRPC.TL_messageMediaStory) MessageObject.getMedia(messageObject);
@@ -669,7 +669,7 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public int canDownloadMediaType(MessageObject messageObject, long overrideSize) {
-        if (!nimarkoCanDownload(null, messageObject)) return 0;
+        if (!nebulaCanDownload(null, messageObject)) return 0;
         if (messageObject.type == MessageObject.TYPE_STORY) {
             if (!SharedConfig.isAutoplayVideo()) return 0;
             TLRPC.TL_messageMediaStory mediaStory = (TLRPC.TL_messageMediaStory) MessageObject.getMedia(messageObject);
@@ -782,7 +782,7 @@ public class DownloadController extends BaseController implements NotificationCe
         if (message.messageOwner.media instanceof TLRPC.TL_messageMediaStory) {
             return canPreloadStories() ? 2 : 0;
         }
-        if (!nimarkoCanDownload(null, message)) return 0;
+        if (!nebulaCanDownload(null, message)) return 0;
         TLRPC.Message msg = message.messageOwner;
         int type;
         boolean isVideo;
@@ -865,7 +865,7 @@ public class DownloadController extends BaseController implements NotificationCe
         if (message == null || message.media instanceof TLRPC.TL_messageMediaStory) {
             return canPreloadStories() ? 2 : 0;
         }
-        if (!nimarkoCanDownload(message, null)) return 0;
+        if (!nebulaCanDownload(message, null)) return 0;
         int type;
         boolean isVideo;
         if ((isVideo = MessageObject.isVideoMessage(message)) || MessageObject.isGifMessage(message) || MessageObject.isRoundVideoMessage(message) || MessageObject.isGameMessage(message)) {
@@ -947,7 +947,7 @@ public class DownloadController extends BaseController implements NotificationCe
         if (message == null || media instanceof TLRPC.TL_messageMediaStory) {
             return canPreloadStories() ? 2 : 0;
         }
-        if (!nimarkoCanDownload(message, null)) return 0;
+        if (!nebulaCanDownload(message, null)) return 0;
         int type;
         boolean isVideo = false;
         if (MessageObject.isVideoDocument(media.document)) {
@@ -1811,8 +1811,8 @@ public class DownloadController extends BaseController implements NotificationCe
         return preset.preloadStories;
     }
 
-    private boolean nimarkoCanDownload(TLRPC.Message message, MessageObject messageObject) {
-        if (app.nimarkogram.messenger.NimarkoConfig.enableMsgFilters) {
+    private boolean nebulaCanDownload(TLRPC.Message message, MessageObject messageObject) {
+        if (app.nebulagram.messenger.NebulaConfig.enableMsgFilters) {
             if (messageObject == null) {
                 if (message == null) return true;
                 messageObject = new MessageObject(currentAccount, message, false, false);

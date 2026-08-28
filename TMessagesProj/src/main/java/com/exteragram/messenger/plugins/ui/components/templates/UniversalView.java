@@ -7,10 +7,10 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import org.telegram.messenger.Utilities;
 
-import app.nimarkogram.messenger.plugins.PluginsController;
-import app.nimarkogram.messenger.plugins.ui.components.templates.PluginRuntimeDelegate;
+import app.nebulagram.messenger.plugins.PluginsController;
+import app.nebulagram.messenger.plugins.ui.components.templates.PluginRuntimeDelegate;
 
-public class UniversalView extends app.nimarkogram.messenger.plugins.ui.components.templates.UniversalView {
+public class UniversalView extends app.nebulagram.messenger.plugins.ui.components.templates.UniversalView {
 
     private UniversalViewDelegate bridgeDelegate;
 
@@ -75,7 +75,7 @@ public class UniversalView extends app.nimarkogram.messenger.plugins.ui.componen
 
     private static final class GuardedDelegate implements
             UniversalViewDelegate,
-            app.nimarkogram.messenger.plugins.ui.components.templates
+            app.nebulagram.messenger.plugins.ui.components.templates
                     .UniversalView.UniversalViewDelegate {
         private UniversalViewDelegate delegate;
         private final PluginsController.PluginRuntimeToken runtimeToken;

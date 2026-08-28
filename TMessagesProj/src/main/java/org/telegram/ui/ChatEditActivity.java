@@ -694,7 +694,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 super.invalidate(l, t, r, b);
             }
         };
-        avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(64, forum));
+        avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(64, forum));
 
         if (currentUser != null || ChatObject.canChangeChatInfo(currentChat)) {
             frameLayout.addView(avatarImage, LayoutHelper.createFrame(64, 64, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), LocaleController.isRTL ? 0 : 16, 12, LocaleController.isRTL ? 16 : 0, 8));
@@ -1292,27 +1292,27 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             }
 
             infoContainer.addView(reactionsCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-            if (!app.nimarkogram.messenger.NimarkoConfig.adminsReactions) {
+            if (!app.nebulagram.messenger.NebulaConfig.adminsReactions) {
                 reactionsCell.setVisibility(View.GONE);
             }
             if (welcomeMessagesCell != null) {
                 infoContainer.addView(welcomeMessagesCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             }
 
-            // NimarkoGram: Permissions / Administrators / Members admin rows are filtered
-            // via NimarkoConfig flags so power users can declutter the chat-edit screen.
+            // NebulaGram: Permissions / Administrators / Members admin rows are filtered
+            // via NebulaConfig flags so power users can declutter the chat-edit screen.
             if (!isChannel && !currentChat.gigagroup) {
-                if (app.nimarkogram.messenger.NimarkoConfig.adminsPermissions) {
+                if (app.nebulagram.messenger.NebulaConfig.adminsPermissions) {
                     infoContainer.addView(blockCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
                 }
             }
             if (!isChannel) {
                 infoContainer.addView(inviteLinksCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             }
-            if (app.nimarkogram.messenger.NimarkoConfig.adminsAdministrators) {
+            if (app.nebulagram.messenger.NebulaConfig.adminsAdministrators) {
                 infoContainer.addView(adminCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             }
-            if (app.nimarkogram.messenger.NimarkoConfig.adminsMembers) {
+            if (app.nebulagram.messenger.NebulaConfig.adminsMembers) {
                 infoContainer.addView(membersCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             }
             if (memberRequestsCell != null && info != null && info.requests_pending > 0) {
@@ -1322,14 +1322,14 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 infoContainer.addView(inviteLinksCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             }
             if (isChannel || currentChat.gigagroup) {
-                if (app.nimarkogram.messenger.NimarkoConfig.adminsPermissions) {
+                if (app.nebulagram.messenger.NebulaConfig.adminsPermissions) {
                     infoContainer.addView(blockCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
                 }
             }
-            if (statsAndBoosts != null && app.nimarkogram.messenger.NimarkoConfig.adminsStatistics) {
+            if (statsAndBoosts != null && app.nebulagram.messenger.NebulaConfig.adminsStatistics) {
                 infoContainer.addView(statsAndBoosts, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             }
-            if (logCell != null && app.nimarkogram.messenger.NimarkoConfig.adminsRecentActions) {
+            if (logCell != null && app.nebulagram.messenger.NebulaConfig.adminsRecentActions) {
                 infoContainer.addView(logCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             }
             if (channelAffiliateProgramsCell != null) {
@@ -2466,7 +2466,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 }
                 adminCell.setTextAndIcon(getString("ChannelAdministrators", R.string.ChannelAdministrators), R.drawable.msg_admins, true);
             }
-            reactionsCell.setVisibility(ChatObject.canChangeChatInfo(currentChat) && app.nimarkogram.messenger.NimarkoConfig.adminsReactions ? View.VISIBLE : View.GONE);
+            reactionsCell.setVisibility(ChatObject.canChangeChatInfo(currentChat) && app.nebulagram.messenger.NebulaConfig.adminsReactions ? View.VISIBLE : View.GONE);
             updateReactionsCell(animated);
             if (info == null || !ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_INVITE) || (!isPrivate && currentChat.creator)) {
                 inviteLinksCell.setVisibility(View.GONE);

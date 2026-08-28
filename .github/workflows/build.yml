@@ -40,7 +40,7 @@ jobs:
     - name: Upload Debug APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: NimarkoGram-Afat-Debug-APK
+        name: NebulaGram-Afat-Debug-APK
         path: |
           TMessagesProj_App/build/outputs/apk/**/*.apk
           TMessagesProj_AppStandalone/build/outputs/apk/**/*.apk

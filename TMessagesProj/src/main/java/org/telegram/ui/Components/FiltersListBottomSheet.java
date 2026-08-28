@@ -416,7 +416,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
                 int icon;
                 
                 int customIcon = filter.emoticon != null
-                        ? app.nimarkogram.messenger.preferences.folders.helpers.FolderIconHelper.getTabIcon(filter.emoticon)
+                        ? app.nebulagram.messenger.preferences.folders.helpers.FolderIconHelper.getTabIcon(filter.emoticon)
                         : 0;
                 if (customIcon != 0) {
                     icon = customIcon;

@@ -11,7 +11,7 @@ import java.util.concurrent.CountDownLatch;
 public class CameraSessionWrapper {
     public CameraSession camera1Session;
     public Camera2Session camera2Session;
-    public app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession cameraXSession;
+    public app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession cameraXSession;
 
     public boolean isInitiated() {
         if (cameraXSession != null) {
@@ -236,7 +236,7 @@ public class CameraSessionWrapper {
         return wrapper;
     }
 
-    public static CameraSessionWrapper of(app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession session) {
+    public static CameraSessionWrapper of(app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession session) {
         CameraSessionWrapper wrapper = new CameraSessionWrapper();
         wrapper.cameraXSession = session;
         return wrapper;
@@ -248,7 +248,7 @@ public class CameraSessionWrapper {
             return obj == camera1Session;
         } else if (obj instanceof Camera2Session) {
             return obj == camera2Session;
-        } else if (obj instanceof app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) {
+        } else if (obj instanceof app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) {
             return obj == cameraXSession;
         } else if (obj instanceof CameraSessionWrapper) {
             CameraSessionWrapper wrapper = (CameraSessionWrapper) obj;

@@ -31,11 +31,11 @@ public final class BadgeDTO {
         return new BadgeDTO(documentId, text);
     }
 
-    public app.nimarkogram.messenger.api.dto.BadgeDTO toReal() {
-        return new app.nimarkogram.messenger.api.dto.BadgeDTO(documentId, text);
+    public app.nebulagram.messenger.api.dto.BadgeDTO toReal() {
+        return new app.nebulagram.messenger.api.dto.BadgeDTO(documentId, text);
     }
 
-    public static BadgeDTO fromReal(app.nimarkogram.messenger.api.dto.BadgeDTO real) {
+    public static BadgeDTO fromReal(app.nebulagram.messenger.api.dto.BadgeDTO real) {
         if (real == null) return null;
         return new BadgeDTO(real.getDocumentId(), real.getText());
     }

@@ -83,8 +83,8 @@ import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PopupNotificationActivity;
 import org.telegram.ui.Stories.recorder.StoryEntry;
 
-import app.nimarkogram.messenger.NimarkoConfig;
-import app.nimarkogram.messenger.chats.filters.MessagesFilterHelper;
+import app.nebulagram.messenger.NebulaConfig;
+import app.nebulagram.messenger.chats.filters.MessagesFilterHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1188,15 +1188,15 @@ public class NotificationsController extends BaseController implements Notificat
                 long topicId = MessageObject.getTopicId(currentAccount, messageObject.messageOwner, getMessagesController().isForum(messageObject));
                 if (dialogId == openedDialogId && ApplicationLoader.isScreenOn && !messageObject.isStoryReactionPush && !messageObject.isOauthPush) {
                     if (!isFcm) {
-                        // NimarkoGram: CG parity — only play the in-chat sound when notificationSound isn't disabled.
-                        if (NimarkoConfig.notificationSound != NimarkoConfig.NOTIF_SOUND_DISABLE) {
+                        // NebulaGram: CG parity — only play the in-chat sound when notificationSound isn't disabled.
+                        if (NebulaConfig.notificationSound != NebulaConfig.NOTIF_SOUND_DISABLE) {
                             playInChatSound();
                         }
-                        // NimarkoGram: CG-style in-chat vibration when a new message arrives in the open chat.
-                        if (!NimarkoConfig.disableVibration
-                                && NimarkoConfig.vibrateInChats != NimarkoConfig.VIBRATE_DISABLE) {
+                        // NebulaGram: CG-style in-chat vibration when a new message arrives in the open chat.
+                        if (!NebulaConfig.disableVibration
+                                && NebulaConfig.vibrateInChats != NebulaConfig.VIBRATE_DISABLE) {
                             try {
-                                app.nimarkogram.messenger.utils.VibrateUtils.vibrateForChatMode(NimarkoConfig.vibrateInChats);
+                                app.nebulagram.messenger.utils.VibrateUtils.vibrateForChatMode(NebulaConfig.vibrateInChats);
                             } catch (Throwable ignored) {}
                         }
                     }
@@ -2490,7 +2490,7 @@ public class NotificationsController extends BaseController implements Notificat
         // NM_MF: layer ported CG spoiler entities so notification previews mask filtered keywords too.
         java.util.ArrayList<TLRPC.MessageEntity> entities = MessagesFilterHelper.INSTANCE.addSpoilerEntities(messageObject);
         // NM_PWD: also mask the entire body when the dialog is locked / encrypted-gated.
-        entities = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+        entities = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                 .checkLockedChatsEntities(messageObject, entities);
         for (int i = 0; i < entities.size(); i++) {
             if (entities.get(i) instanceof TLRPC.TL_messageEntitySpoiler) {
@@ -3372,10 +3372,10 @@ public class NotificationsController extends BaseController implements Notificat
                             }
                         });
                     }
-                    // NimarkoGram: pick resource based on user choice, and invalidate
+                    // NebulaGram: pick resource based on user choice, and invalidate
                     // the cached SoundPool entry when the choice changes at runtime so
                     // the user doesn't keep hearing the previous variant.
-                    int desiredSound = NimarkoConfig.notificationSound == NimarkoConfig.NOTIF_SOUND_IOS ? R.raw.sound_in_ios : R.raw.sound_in;
+                    int desiredSound = NebulaConfig.notificationSound == NebulaConfig.NOTIF_SOUND_IOS ? R.raw.sound_in_ios : R.raw.sound_in;
                     if (soundIn != 0 && lastLoadedInSoundRes != desiredSound) {
                         try { soundPool.unload(soundIn); } catch (Exception ignored) {}
                         soundIn = 0;
@@ -4326,7 +4326,7 @@ public class NotificationsController extends BaseController implements Notificat
                 if (message == null) {
                     return;
                 }
-                message = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(message);
+                message = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(message);
                 lastMessage = message;
                 if (replace) {
                     if (chat != null && allowSummary) {
@@ -4353,7 +4353,7 @@ public class NotificationsController extends BaseController implements Notificat
                 for (int i = 0; i < count; i++) {
                     MessageObject messageObject = pushMessages.get(i);
                     String message = getStringForMessage(messageObject, false, text, null);
-                    message = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(message);
+                    message = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(message);
                     if (message == null || !messageObject.isStoryPush && messageObject.messageOwner.date <= dismissDate) {
                         continue;
                     }
@@ -4384,8 +4384,8 @@ public class NotificationsController extends BaseController implements Notificat
                 notifyDisabled = true;
             }
 
-            // NimarkoGram (CherryGram-derived): silence notifications from non-contacts
-            if (NimarkoConfig.silenceNonContacts && userId != 0 && getContactsController().contactsDict.get(userId) == null) {
+            // NebulaGram (CherryGram-derived): silence notifications from non-contacts
+            if (NebulaConfig.silenceNonContacts && userId != 0 && getContactsController().contactsDict.get(userId) == null) {
                 notifyDisabled = true;
             }
 
@@ -5306,7 +5306,7 @@ public class NotificationsController extends BaseController implements Notificat
                         continue;
                     }
                     String message = getShortStringForMessage(messageObject, senderName, preview);
-                    message = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(message);
+                    message = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(message);
                     if (dialogId == UserObject.OAUTH) {
                         senderName[0] = LocaleController.getString(R.string.BotAuthNotificationTitle);
                     } else if (dialogId == UserObject.VERIFY && messageObject.getForwardedFromId() != null) {
@@ -5492,11 +5492,11 @@ public class NotificationsController extends BaseController implements Notificat
                                         // NM_PWD: braille-mask captions for locked / encrypted dialog notifications.
                                         CharSequence captionPreview = messageObject.caption;
                                         if (captionPreview != null && captionPreview.toString().contains("$")) {
-                                            captionPreview = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(captionPreview.toString());
+                                            captionPreview = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(captionPreview.toString());
                                         }
-                                        if (app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isChatLocked(messageObject)
-                                                || app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper.isEncryptedChat(messageObject)) {
-                                            captionPreview = app.nimarkogram.messenger.utils.chats.NimarkoChatsPasswordHelper
+                                        if (app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isChatLocked(messageObject)
+                                                || app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper.isEncryptedChat(messageObject)) {
+                                            captionPreview = app.nebulagram.messenger.utils.chats.NebulaChatsPasswordHelper
                                                     .replaceStringToSpoilers(messageObject.caption, true);
                                         }
                                         messagingStyle.addMessage(captionPreview, ((long) messageObject.messageOwner.date) * 1000, person);
@@ -5701,10 +5701,10 @@ public class NotificationsController extends BaseController implements Notificat
                     builder.addAction(readAction);
                 }
                 // NG: quick-react from the notification with the user's default reaction.
-                if (app.nimarkogram.messenger.NimarkoConfig.notificationReactions
+                if (app.nebulagram.messenger.NebulaConfig.notificationReactions
                         && !waitingForPasscode && !dialogKey.story && maxId != 0
                         && (lastMessageObject == null || !lastMessageObject.isStoryReactionPush)) {
-                    String dtReaction = app.nimarkogram.messenger.NimarkoConfig.getNotificationReaction(currentAccount);
+                    String dtReaction = app.nebulagram.messenger.NebulaConfig.getNotificationReaction(currentAccount);
                     if (dtReaction == null || dtReaction.isEmpty()) {
                         dtReaction = MediaDataController.getInstance(currentAccount).getDoubleTapReaction();
                     }
@@ -5733,8 +5733,8 @@ public class NotificationsController extends BaseController implements Notificat
                             // Prefer the base emoji stored when the user picked it (reliable on a cold
                             // push when the custom-emoji document isn't cached); fall back to a live
                             // document lookup. Every premium emoji maps to a standard base emoji (alt).
-                            reactEmojiChar = dtReaction.equals(app.nimarkogram.messenger.NimarkoConfig.getNotificationReaction(currentAccount))
-                                    ? app.nimarkogram.messenger.NimarkoConfig.getNotificationReactionEmoji(currentAccount) : null;
+                            reactEmojiChar = dtReaction.equals(app.nebulagram.messenger.NebulaConfig.getNotificationReaction(currentAccount))
+                                    ? app.nebulagram.messenger.NebulaConfig.getNotificationReactionEmoji(currentAccount) : null;
                             if (reactEmojiChar == null || reactEmojiChar.isEmpty()) {
                                 try {
                                     long docId = Long.parseLong(dtReaction.substring("animated_".length()));

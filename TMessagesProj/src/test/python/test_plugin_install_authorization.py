@@ -6,7 +6,7 @@ import unittest
 REPO = pathlib.Path(__file__).resolve().parents[4]
 JAVA = (
     REPO / 'TMessagesProj/src/main/java/'
-    'app/nimarkogram/messenger/plugins'
+    'app/nebulagram/messenger/plugins'
 )
 PYTHON = REPO / 'TMessagesProj/src/main/python'
 
@@ -399,12 +399,12 @@ class PluginInstallAuthorizationTest(unittest.TestCase):
         self.assertIn('finally {', dismiss)
         self.assertIn('revokeUnqueuedAuthority();', dismiss)
 
-    def test_nimarkoprivacy_keeps_exact_runtime_self_update(self):
+    def test_nebulaprivacy_keeps_exact_runtime_self_update(self):
         for path in (
-                pathlib.Path('/root/plugins/NimarkoPrivacy.plugin'),
+                pathlib.Path('/root/plugins/NebulaPrivacy.plugin'),
                 pathlib.Path(
-                    '/root/claude_plugins/nimarkoplugins/'
-                    'NimarkoPrivacy.plugin')):
+                    '/root/claude_plugins/nebulaplugins/'
+                    'NebulaPrivacy.plugin')):
             source = _source(path)
             self.assertIn(
                 'plugin_runtime.run_owned_callback(', source)

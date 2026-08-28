@@ -6,7 +6,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import com.exteragram.messenger.plugins.PluginsController;
 
 public final class InstallPluginBottomSheet
-        extends app.nimarkogram.messenger.plugins.ui.components.InstallPluginBottomSheet {
+        extends app.nebulagram.messenger.plugins.ui.components.InstallPluginBottomSheet {
 
     public InstallPluginBottomSheet(BaseFragment fragment,
                                     PluginsController.PluginValidationResult validationResult,
@@ -14,20 +14,20 @@ public final class InstallPluginBottomSheet
         super(fragment, adaptResult(validationResult), adaptParams(params));
     }
 
-    private static app.nimarkogram.messenger.plugins.PluginsController.PluginValidationResult
+    private static app.nebulagram.messenger.plugins.PluginsController.PluginValidationResult
             adaptResult(PluginsController.PluginValidationResult r) {
         if (r == null) {
-            return new app.nimarkogram.messenger.plugins.PluginsController.PluginValidationResult(null, null);
+            return new app.nebulagram.messenger.plugins.PluginsController.PluginValidationResult(null, null);
         }
-        return new app.nimarkogram.messenger.plugins.PluginsController.PluginValidationResult(
+        return new app.nebulagram.messenger.plugins.PluginsController.PluginValidationResult(
                 r.getPlugin(), r.getError());
     }
 
-    private static app.nimarkogram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams
+    private static app.nebulagram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams
             adaptParams(PluginInstallParams p) {
         
         String path = p != null ? p.getFilePath() : null;
-        return new app.nimarkogram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams(
+        return new app.nebulagram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams(
                 path, false);
     }
 
@@ -57,8 +57,8 @@ public final class InstallPluginBottomSheet
         }
 
         public static PluginInstallParams of(MessageObject message) {
-            app.nimarkogram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams real =
-                    app.nimarkogram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams.of(message);
+            app.nebulagram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams real =
+                    app.nebulagram.messenger.plugins.ui.components.InstallPluginBottomSheet.PluginInstallParams.of(message);
             
             return new PluginInstallParams(real != null ? real.filePath : null,
                     real == null || !real.incompatible);

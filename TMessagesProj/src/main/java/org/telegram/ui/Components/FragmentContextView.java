@@ -591,7 +591,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
                 AndroidUtilities.runOnUIThread(toggleMicRunnable, 90);
                 
-                if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                     try {
                         muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     } catch (Exception ignore) {}
@@ -689,7 +689,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             Theme.getFragmentContextViewWavesDrawable().updateState(true);
             capsuleBlobDrawable.updateState(true);
             
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {}

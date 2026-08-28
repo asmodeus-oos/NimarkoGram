@@ -95,7 +95,7 @@ public class BackButtonMenu {
             if (chat == null && user == null) {
                 imageView.setRoundRadius(0);
             } else {
-                imageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(32, chat != null && chat.forum));
+                imageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(32, chat != null && chat.forum));
             }
             cell.addView(imageView, LayoutHelper.createFrameRelatively(32, 32, Gravity.START | Gravity.CENTER_VERTICAL, 8, 0, 0, 0));
 

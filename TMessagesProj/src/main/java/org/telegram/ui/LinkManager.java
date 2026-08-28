@@ -296,25 +296,25 @@ public class LinkManager {
         final String fifth  = segments.size() > 4 ? segments.get(4) : null;
 
         try {
-            app.nimarkogram.messenger.preferences.utils.SettingsRegistry registry =
-                    app.nimarkogram.messenger.preferences.utils.SettingsRegistry.getInstance();
+            app.nebulagram.messenger.preferences.utils.SettingsRegistry registry =
+                    app.nebulagram.messenger.preferences.utils.SettingsRegistry.getInstance();
             registry.createEntriesIfNeeded();
-            app.nimarkogram.messenger.preferences.utils.SettingsRegistry.Entry entry =
+            app.nebulagram.messenger.preferences.utils.SettingsRegistry.Entry entry =
                     registry.entriesStringAlias.get(first);
             if (entry != null && entry.fragmentClass != null
                     && BaseFragment.class.isAssignableFrom(entry.fragmentClass)) {
                 BaseFragment target = (BaseFragment) entry.fragmentClass.getDeclaredConstructor().newInstance();
                 presentFragment(target);
-                if (target instanceof app.nimarkogram.messenger.preferences.BasePreferencesActivity) {
+                if (target instanceof app.nebulagram.messenger.preferences.BasePreferencesActivity) {
                     final int itemId = entry.itemId;
                     AndroidUtilities.runOnUIThread(() ->
-                            ((app.nimarkogram.messenger.preferences.BasePreferencesActivity) target)
+                            ((app.nebulagram.messenger.preferences.BasePreferencesActivity) target)
                                     .scrollToItem(itemId), 250);
                 }
                 return true;
             }
         } catch (Throwable t) {
-            FileLog.e("nimarko settings link failed", t);
+            FileLog.e("nebula settings link failed", t);
         }
 
         if ("theme".equalsIgnoreCase(first) || "themes".equalsIgnoreCase(first)) { 
@@ -415,7 +415,7 @@ public class LinkManager {
 
         if ("saved-messages".equalsIgnoreCase(first)) {
             
-            long savedId = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper2
+            long savedId = app.nebulagram.messenger.utils.chats.NebulaChatHelper2
                     .getCustomChatID(getUserConfig().getClientUserId());
             presentFragment(ChatActivity.of(savedId));
             return true;

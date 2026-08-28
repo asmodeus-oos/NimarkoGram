@@ -23,11 +23,11 @@ public abstract class FontUtils {
     }
 
     public static Typeface getTypeface(String name) {
-        return app.nimarkogram.messenger.utils.ui.FontUtils.getTypeface(name);
+        return app.nebulagram.messenger.utils.ui.FontUtils.getTypeface(name);
     }
 
     public static Typeface getTypefaceFromFile(String path) {
-        return app.nimarkogram.messenger.utils.ui.FontUtils.getTypefaceFromFile(path);
+        return app.nebulagram.messenger.utils.ui.FontUtils.getTypefaceFromFile(path);
     }
 
     public static Typeface getSystemTypeface(String family) {

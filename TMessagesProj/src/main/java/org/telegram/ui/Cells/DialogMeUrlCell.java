@@ -61,7 +61,7 @@ public class DialogMeUrlCell extends BaseCell {
         super(context);
 
         Theme.createDialogsResources(context);
-        avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(52));
+        avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(52));
     }
 
     public void setRecentMeUrl(TLRPC.RecentMeUrl url) {

@@ -91,7 +91,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.padding = padding;
 
         avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(42));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(42));
 
         avatarDrawable = new AvatarDrawable();
 

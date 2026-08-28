@@ -403,7 +403,7 @@ def _repair_underscore_ids(known_ids, schemas=None):
 
 def _invalidate_java_cache(plugin_id, key=None):
     try:
-        from app.nimarkogram.messenger.plugins import PluginsController
+        from app.nebulagram.messenger.plugins import PluginsController
         engine = PluginsController.engines.get('python')
         if engine is not None:
             engine.invalidatePluginSettingCache(plugin_id, key)

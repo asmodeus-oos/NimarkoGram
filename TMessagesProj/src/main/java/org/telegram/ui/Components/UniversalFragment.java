@@ -47,7 +47,7 @@ public abstract class UniversalFragment extends BaseFragment {
                 org.telegram.messenger.LocaleController.getString(org.telegram.messenger.R.string.NM_Restart),
                 () -> {
                     android.content.Context ctx = getParentActivity() != null ? getParentActivity() : getContext();
-                    app.nimarkogram.messenger.utils.AppRestartHelper.triggerRebirth(ctx);
+                    app.nebulagram.messenger.utils.AppRestartHelper.triggerRebirth(ctx);
                 }
         ).show();
     }

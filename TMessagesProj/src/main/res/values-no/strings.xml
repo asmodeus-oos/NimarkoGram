@@ -2,7 +2,7 @@
 <resources>
     <string name="NM_Menu_TelegramPlus">Moderne meldingsmeny</string>
     <string name="NM_Menu_TelegramPlus_Desc">En kompakt Liquid Glass-meny med grupperte handlinger, fjæranimasjoner og responsive effekter. Kompakt oppsett er fortsatt tilgjengelig.</string>
-    <!-- NimarkoGram plugin strings ported from exteraGram (values-nb) -->
+    <!-- NebulaGram plugin strings ported from exteraGram (values-nb) -->
     <string name="EnableAfterInstallation">Aktiver etter installasjon</string>
     <string name="EnablePluginsEngine">Aktiver plugin-motor</string>
     <string name="EnterValue">Skriv inn en verdi</string>

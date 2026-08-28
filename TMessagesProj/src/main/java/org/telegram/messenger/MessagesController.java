@@ -119,7 +119,7 @@ import org.telegram.ui.bots.WebViewRequestProps;
 import org.telegram.ui.community.CommunityChatType;
 import org.telegram.ui.community.CommunityUtils;
 
-import app.nimarkogram.messenger.NimarkoConfig;
+import app.nebulagram.messenger.NebulaConfig;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -1280,7 +1280,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public static class DialogFilter {
         public int id;
         public String name;
-        // NimarkoGram: CG-parity per-filter emoticon. Drives the folder-tab
+        // NebulaGram: CG-parity per-filter emoticon. Drives the folder-tab
         // icon picked by FolderIconHelper. Null until the server (TL flag) or
         // local picker fills it in.
         public String emoticon;
@@ -1427,9 +1427,9 @@ public class MessagesController extends BaseController implements NotificationCe
                 return 0;
             }
         }
-        // NimarkoGram (CG parity): sortByUnread promotes dialogs with unread
+        // NebulaGram (CG parity): sortByUnread promotes dialogs with unread
         // messages above read ones, keeping pinned/folder ordering intact.
-        if (app.nimarkogram.messenger.NimarkoConfig.sortByUnread) {
+        if (app.nebulagram.messenger.NebulaConfig.sortByUnread) {
             boolean unread1 = dialog1.unread_count > 0 || dialog1.unread_mark;
             boolean unread2 = dialog2.unread_count > 0 || dialog2.unread_mark;
             if (unread1 && !unread2) return -1;
@@ -1471,9 +1471,9 @@ public class MessagesController extends BaseController implements NotificationCe
                 return 0;
             }
         }
-        // NimarkoGram (CG parity): sortByUnread promotes dialogs with unread
+        // NebulaGram (CG parity): sortByUnread promotes dialogs with unread
         // messages above read ones, keeping folder/pinned ordering intact.
-        if (app.nimarkogram.messenger.NimarkoConfig.sortByUnread) {
+        if (app.nebulagram.messenger.NebulaConfig.sortByUnread) {
             boolean unread1 = dialog1.unread_count > 0 || dialog1.unread_mark;
             boolean unread2 = dialog2.unread_count > 0 || dialog2.unread_mark;
             if (unread1 && !unread2) return -1;
@@ -1670,9 +1670,9 @@ public class MessagesController extends BaseController implements NotificationCe
         // NG defaults: 512 / 2200 / 96 (HD, ~2.2 Mbps, 96 kbps AAC). The
         // InstantCameraView.startRecording path re-applies the live config
         // value on each recording so changes propagate without restart.
-        roundVideoSize = mainPreferences.getInt("roundVideoSize", app.nimarkogram.messenger.NimarkoConfig.getVideoMessagesResolutionPx(512));
-        roundVideoBitrate = mainPreferences.getInt("roundVideoBitrate", app.nimarkogram.messenger.NimarkoConfig.videoMessagesBitrateKbps);
-        roundAudioBitrate = mainPreferences.getInt("roundAudioBitrate", app.nimarkogram.messenger.NimarkoConfig.videoMessagesAudioBitrateKbps);
+        roundVideoSize = mainPreferences.getInt("roundVideoSize", app.nebulagram.messenger.NebulaConfig.getVideoMessagesResolutionPx(512));
+        roundVideoBitrate = mainPreferences.getInt("roundVideoBitrate", app.nebulagram.messenger.NebulaConfig.videoMessagesBitrateKbps);
+        roundAudioBitrate = mainPreferences.getInt("roundAudioBitrate", app.nebulagram.messenger.NebulaConfig.videoMessagesAudioBitrateKbps);
         pendingSuggestions = mainPreferences.getStringSet("pendingSuggestions", null);
         dismissedSuggestions = mainPreferences.getStringSet("dismissedSuggestions", null);
         channelsLimitDefault = mainPreferences.getInt("channelsLimitDefault", 500);
@@ -5876,7 +5876,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC.TL_userForeign_old2 user = new TLRPC.TL_userForeign_old2();
         user.phone = "333";
         user.id = 333000;
-        user.first_name = "NimarkoGram";
+        user.first_name = "NebulaGram";
         user.last_name = "";
         user.status = null;
         user.photo = new TLRPC.TL_userProfilePhotoEmpty();
@@ -5886,7 +5886,7 @@ public class MessagesController extends BaseController implements NotificationCe
         user.phone = "42777";
         user.id = 777000;
         user.verified = true;
-        user.first_name = "NimarkoGram";
+        user.first_name = "NebulaGram";
         user.last_name = "Notifications";
         user.status = null;
         user.photo = new TLRPC.TL_userProfilePhotoEmpty();
@@ -10920,7 +10920,7 @@ public class MessagesController extends BaseController implements NotificationCe
         String proxySecret = preferences.getString("proxy_secret", "");
         int removeCurrent = 0;
         if (promoDialogId != 0 && promoDialogType == PROMO_TYPE_PROXY
-                && (NimarkoConfig.hideProxySponsor
+                && (NebulaConfig.hideProxySponsor
                 || proxyDialogAddress != null && !proxyDialogAddress.equals(proxyAddress + proxySecret))) {
             removeCurrent = 1;
         }
@@ -11263,7 +11263,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             // CG-parity: when the chat title is centered, the typing
                             // line under it is constrained — drop the "is recording …"
                             // verbiage and just show the user name.
-                            if (NimarkoConfig.centerChatTitle) text = getUserNameForTyping(user);
+                            if (NebulaConfig.centerChatTitle) text = getUserNameForTyping(user);
                         } else {
                             text = LocaleController.getString(R.string.RecordingAudio);
                         }
@@ -11271,7 +11271,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     } else if (pu.action instanceof TLRPC.TL_sendMessageRecordRoundAction) {
                         if (isGroup) {
                             text = LocaleController.formatString("IsRecordingRound", R.string.IsRecordingRound, getUserNameForTyping(user));
-                            if (NimarkoConfig.centerChatTitle) text = getUserNameForTyping(user);
+                            if (NebulaConfig.centerChatTitle) text = getUserNameForTyping(user);
                         } else {
                             text = LocaleController.getString(R.string.RecordingRound);
                         }
@@ -11300,7 +11300,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     } else if (pu.action instanceof TLRPC.TL_sendMessageRecordVideoAction) {
                         if (isGroup) {
                             text = LocaleController.formatString("IsRecordingVideo", R.string.IsRecordingVideo, getUserNameForTyping(user));
-                            if (NimarkoConfig.centerChatTitle) text = getUserNameForTyping(user);
+                            if (NebulaConfig.centerChatTitle) text = getUserNameForTyping(user);
                         } else {
                             text = LocaleController.getString(R.string.RecordingVideoStatus);
                         }
@@ -11358,7 +11358,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     } else {
                         if (isGroup) {
                             text = LocaleController.formatString("IsTypingGroup", R.string.IsTypingGroup, getUserNameForTyping(user));
-                            if (NimarkoConfig.centerChatTitle) text = getUserNameForTyping(user);
+                            if (NebulaConfig.centerChatTitle) text = getUserNameForTyping(user);
                         } else {
                             text = LocaleController.getString(R.string.Typing);
                         }
@@ -11381,7 +11381,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         }
                     }
                     if (label.length() != 0) {
-                        if (NimarkoConfig.centerChatTitle) {
+                        if (NebulaConfig.centerChatTitle) {
                             // CG-parity: compact form for centered titles — short
                             // labels just show comma-separated names; longer ones
                             // collapse to "<first>, +N typing".
@@ -17939,10 +17939,10 @@ public class MessagesController extends BaseController implements NotificationCe
 
     // must be run from Utilities.stageQueue
     public void processUpdates(final TLRPC.Updates updatesIn, boolean fromQueue) {
-        // NimarkoGram: updates hook
+        // NebulaGram: updates hook
         TLRPC.Updates hookedUpdates = updatesIn;
         try {
-            TLRPC.Updates hooked = app.nimarkogram.messenger.plugins.PluginsController.getInstance()
+            TLRPC.Updates hooked = app.nebulagram.messenger.plugins.PluginsController.getInstance()
                     .executeUpdatesHook(updatesIn.getClass().getSimpleName(), currentAccount, updatesIn);
             if (hooked != null) {
                 hookedUpdates = hooked;
@@ -17951,7 +17951,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 return;
             }
         } catch (Throwable t) {
-            FileLog.e("nimarko: executeUpdatesHook threw", t);
+            FileLog.e("nebula: executeUpdatesHook threw", t);
         }
         final TLRPC.Updates updates = hookedUpdates;
         ArrayList<Long> needGetChannelsDiff = null;
@@ -18576,10 +18576,10 @@ public class MessagesController extends BaseController implements NotificationCe
 
         for (int c = 0, size3 = updates.size(); c < size3; c++) {
             TLRPC.Update baseUpdate = updates.get(c);
-            // NimarkoGram: per-update plugin hook
+            // NebulaGram: per-update plugin hook
             if (baseUpdate != null) {
                 try {
-                    TLRPC.Update hookedUpdate = app.nimarkogram.messenger.plugins.PluginsController.getInstance()
+                    TLRPC.Update hookedUpdate = app.nebulagram.messenger.plugins.PluginsController.getInstance()
                             .executeUpdateHook(baseUpdate.getClass().getSimpleName(), currentAccount, baseUpdate);
                     if (hookedUpdate != null) {
                         baseUpdate = hookedUpdate;
@@ -18588,7 +18588,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         continue;
                     }
                 } catch (Throwable t) {
-                    FileLog.e("nimarko: executeUpdateHook threw", t);
+                    FileLog.e("nebula: executeUpdateHook threw", t);
                 }
             }
             if (BuildVars.LOGS_ENABLED && baseUpdate != null) {
@@ -20038,8 +20038,8 @@ public class MessagesController extends BaseController implements NotificationCe
                         toDbUser.id = update.user_id;
                         toDbUser.status = update.status;
                         dbUsersStatus.add(toDbUser);
-                        // NimarkoGram: feed the sliding-window last-seen tracker.
-                        app.nimarkogram.messenger.utils.LastSeenTracker.recordStatus(currentAccount, update.user_id, update.status);
+                        // NebulaGram: feed the sliding-window last-seen tracker.
+                        app.nebulagram.messenger.utils.LastSeenTracker.recordStatus(currentAccount, update.user_id, update.status);
                         if (update.user_id == getUserConfig().getClientUserId()) {
                             getNotificationsController().setLastOnlineFromOtherDevice(update.status.expires);
                         }
@@ -22365,7 +22365,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 try {
                     Collections.sort(allDialogs, dialogDateComparator);
                 } catch (Exception e) {
-                    NimarkoConfig.setSortByUnread(false);
+                    NebulaConfig.setSortByUnread(false);
                     try {
                         Collections.sort(allDialogs, dialogDateComparator);
                     } catch (Exception ex) {
@@ -22405,7 +22405,7 @@ public class MessagesController extends BaseController implements NotificationCe
             Collections.sort(allDialogs, dialogComparator);
         } catch (Exception e) {
             // CG-parity: same fallback for the second sort pass.
-            NimarkoConfig.setSortByUnread(false);
+            NebulaConfig.setSortByUnread(false);
             try {
                 Collections.sort(allDialogs, dialogComparator);
             } catch (Exception ex) {
@@ -23722,8 +23722,8 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean storiesEnabled() {
-        // NimarkoGram: hideStories master toggle kills story posting outright.
-        if (NimarkoConfig.hideStories) return false;
+        // NebulaGram: hideStories master toggle kills story posting outright.
+        if (NebulaConfig.hideStories) return false;
         switch (storiesPosting) {
             case "premium":
                 return getUserConfig().isPremium();
@@ -25267,16 +25267,16 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isWebBrowserInAppEnabled() {
-        if (app.nimarkogram.messenger.NimarkoConfig.inappBrowser) return true;   // NimarkoGram local toggle (default ON)
+        if (app.nebulagram.messenger.NebulaConfig.inappBrowser) return true;   // NebulaGram local toggle (default ON)
         return webBrowserSettings != null && !webBrowserSettings.open_external_browser;
     }
 
     public boolean isWebBrowserOpenInApp(String url) {
         if (url == null) return false;
-        // NimarkoGram: a local toggle (default ON) forces the built-in browser. DrKLO 12.8 defaults the in-app
+        // NebulaGram: a local toggle (default ON) forces the built-in browser. DrKLO 12.8 defaults the in-app
         // browser OFF (server-synced WebBrowserSettings, open_external_browser=true, and null until the config
         // round-trip completes), which sent every link to an external browser. Off -> upstream behaviour.
-        if (app.nimarkogram.messenger.NimarkoConfig.inappBrowser) return true;
+        if (app.nebulagram.messenger.NebulaConfig.inappBrowser) return true;
         return webBrowserSettings != null && !isWebBrowserOpenInExternal(webBrowserSettings, url);
     }
 
@@ -25541,11 +25541,11 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void toggleWebBrowserInAppEnabled() {
-        // NimarkoGram: the toggle drives the local default (works even before the server config loads), and
+        // NebulaGram: the toggle drives the local default (works even before the server config loads), and
         // mirrors to the server setting when it's available.
-        app.nimarkogram.messenger.NimarkoConfig.setInappBrowser(!app.nimarkogram.messenger.NimarkoConfig.inappBrowser);
+        app.nebulagram.messenger.NebulaConfig.setInappBrowser(!app.nebulagram.messenger.NebulaConfig.inappBrowser);
         if (webBrowserSettings != null) {
-            updateWebBrowserSettings(!app.nimarkogram.messenger.NimarkoConfig.inappBrowser, webBrowserSettings.display_close_button);
+            updateWebBrowserSettings(!app.nebulagram.messenger.NebulaConfig.inappBrowser, webBrowserSettings.display_close_button);
         }
     }
 

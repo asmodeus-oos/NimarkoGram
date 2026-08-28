@@ -108,12 +108,12 @@ class PluginUiLifecycleIsolationTest(unittest.TestCase):
 
     def test_native_plugin_screens_gate_async_ui_by_lifecycle_and_operation(self):
         activity = read_java(
-            'app/nimarkogram/messenger/plugins/ui/PluginsActivity.java')
+            'app/nebulagram/messenger/plugins/ui/PluginsActivity.java')
         install_sheet = read_java(
-            'app/nimarkogram/messenger/plugins/ui/components/'
+            'app/nebulagram/messenger/plugins/ui/components/'
             'InstallPluginBottomSheet.java')
         registry = read_java(
-            'app/nimarkogram/messenger/plugins/ui/PluginUiRegistry.java')
+            'app/nebulagram/messenger/plugins/ui/PluginUiRegistry.java')
 
         self.assertIn('lifecycleEpoch', activity)
         self.assertIn('pluginUiOperationEpochs', activity)
@@ -195,7 +195,7 @@ class PluginUiLifecycleIsolationTest(unittest.TestCase):
 
     def test_registry_uses_weak_ui_owners_and_deferred_teardown(self):
         registry = read_java(
-            'app/nimarkogram/messenger/plugins/ui/PluginUiRegistry.java')
+            'app/nebulagram/messenger/plugins/ui/PluginUiRegistry.java')
         dialog_entry = registry[
             registry.index('private static final class DialogEntry'):
             registry.index('private static final class BulletinEntry')
@@ -209,7 +209,7 @@ class PluginUiLifecycleIsolationTest(unittest.TestCase):
 
     def test_universal_owners_survive_detach_and_clear_on_revoke_or_destroy(self):
         base = (
-            'app/nimarkogram/messenger/plugins/ui/components/templates/')
+            'app/nebulagram/messenger/plugins/ui/components/templates/')
         view = read_java(base + 'UniversalView.java')
         frame = read_java(base + 'UniversalFrameLayout.java')
         fragment = read_java(base + 'UniversalFragment.java')
@@ -239,7 +239,7 @@ class PluginUiLifecycleIsolationTest(unittest.TestCase):
 
     def test_super_capability_is_one_shot_and_callback_scoped(self):
         base = (
-            'app/nimarkogram/messenger/plugins/ui/components/templates/')
+            'app/nebulagram/messenger/plugins/ui/components/templates/')
         runtime = read_java(base + 'PluginRuntimeDelegate.java')
         view = read_java(base + 'UniversalView.java')
         frame = read_java(base + 'UniversalFrameLayout.java')
@@ -265,16 +265,16 @@ class PluginUiLifecycleIsolationTest(unittest.TestCase):
         client_utils = (PYTHON / 'client_utils.py').read_text()
         dev_server = (PYTHON / 'dev_server.py').read_text()
         dialog_callback = read_java(
-            'app/nimarkogram/messenger/plugins/ui/'
+            'app/nebulagram/messenger/plugins/ui/'
             'PluginDialogCallback.java')
         view_listener = read_java(
-            'app/nimarkogram/messenger/plugins/ui/'
+            'app/nebulagram/messenger/plugins/ui/'
             'PluginViewListener.java')
         request_delegate = read_java(
-            'app/nimarkogram/messenger/plugins/utils/'
+            'app/nebulagram/messenger/plugins/utils/'
             'PythonRequestDelegate.java')
         notification_delegate = read_java(
-            'app/nimarkogram/messenger/plugins/utils/'
+            'app/nebulagram/messenger/plugins/utils/'
             'PythonNotificationDelegate.java')
 
         self.assertNotIn('dynamic_proxy(', alert)

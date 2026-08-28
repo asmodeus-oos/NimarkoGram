@@ -400,8 +400,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         if (sessionObject == null) {
             return false;
         }
-        if (sessionObject instanceof app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) {
-            return ((app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) sessionObject)
+        if (sessionObject instanceof app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) {
+            return ((app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) sessionObject)
                     .takePicture(path, callback);
         } else if (sessionObject instanceof CameraSession) {
             CameraSession session = (CameraSession) sessionObject;
@@ -666,9 +666,9 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                     } else if (sessionObject instanceof Camera2Session) {
                         Camera2Session session = (Camera2Session) sessionObject;
                         session.setRecordingVideo(true);
-                    } else if (sessionObject instanceof app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) {
-                        app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession session =
-                                (app.nimarkogram.messenger.camera.NimarkoCameraXSurfaceSession) sessionObject;
+                    } else if (sessionObject instanceof app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) {
+                        app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession session =
+                                (app.nebulagram.messenger.camera.NebulaCameraXSurfaceSession) sessionObject;
                         session.enableTorch(Camera.Parameters.FLASH_MODE_ON.equals(
                                 session.getCurrentFlashMode()));
                     }

@@ -362,7 +362,7 @@ public class MessageSeenView extends FrameLayout {
         public UserCell(Context context) {
             super(context);
             avatarImageView = new BackupImageView(context);
-            avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(36));
+            avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(36));
 
             nameView = new SimpleTextView(context);
             nameView.setTextSize(16);

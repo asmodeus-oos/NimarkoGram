@@ -212,7 +212,7 @@ public class ProfileChannelCell extends FrameLayout implements Theme.Colorable {
         return loadingDrawable == who || super.verifyDrawable(who);
     }
 
-    public void setNimarko() {
+    public void setNebula() {
         subscribersView.cancelAnimation();
         subscribersView.setPivotX(0);
         subscribersView.setAlpha(1f);
@@ -227,7 +227,7 @@ public class ProfileChannelCell extends FrameLayout implements Theme.Colorable {
         ArrayList<DialogCell.CustomDialog> dialogs = new ArrayList<>();
 
         DialogCell.CustomDialog customDialog = new DialogCell.CustomDialog();
-        customDialog.name = "NimarkoGram 💎";
+        customDialog.name = "NebulaGram 💎";
         customDialog.message = LocaleController.getString(R.string.NM_MP_PreviewChannelMessage);
         customDialog.id = 1390;
         customDialog.unread_count = 0;

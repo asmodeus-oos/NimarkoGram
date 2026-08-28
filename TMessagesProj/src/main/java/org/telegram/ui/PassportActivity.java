@@ -1527,7 +1527,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         linearLayout2.addView(passwordAvatarContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 100));
 
         BackupImageView avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(64));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(64));
         passwordAvatarContainer.addView(avatarImageView, LayoutHelper.createFrame(64, 64, Gravity.CENTER, 0, 8, 0, 0));
 
         AvatarDrawable avatarDrawable = new AvatarDrawable(botUser);
@@ -2002,7 +2002,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             linearLayout2.addView(avatarContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 100));
 
             BackupImageView avatarImageView = new BackupImageView(context);
-            avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(64));
+            avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(64));
             avatarContainer.addView(avatarImageView, LayoutHelper.createFrame(64, 64, Gravity.CENTER, 0, 8, 0, 0));
 
             AvatarDrawable avatarDrawable = new AvatarDrawable(botUser);

@@ -1,4 +1,4 @@
-"""Runtime ownership helpers for NimarkoGram plugins.
+"""Runtime ownership helpers for NebulaGram plugins.
 
 Every imported plugin module receives an immutable Java PluginRuntimeToken.
 The helpers in this module propagate that token into queued work and reject
@@ -10,7 +10,7 @@ changes.
 import functools
 import sys
 
-_MODULE_TOKEN_KEY = "__nimarko_runtime_token__"
+_MODULE_TOKEN_KEY = "__nebula_runtime_token__"
 
 _UNSET = globals().get("_UNSET", object())
 _THREAD_PATCHED = globals().get("_THREAD_PATCHED", False)
@@ -27,7 +27,7 @@ def _token_from_globals(namespace):
 def _token_from_object(value):
     if value is None:
         return None
-    for name in ("_runtime_token", "_nimarko_runtime_token"):
+    for name in ("_runtime_token", "_nebula_runtime_token"):
         try:
             token = getattr(value, name, None)
         except Exception:
@@ -95,14 +95,14 @@ def capture_callback_owner(callback=None):
     try:
         import threading
         token = getattr(
-            threading.current_thread(), "_nimarko_runtime_token", None)
+            threading.current_thread(), "_nebula_runtime_token", None)
         if token is not None:
             return token
     except Exception:
         pass
 
     try:
-        from app.nimarkogram.messenger.plugins import PluginsController
+        from app.nebulagram.messenger.plugins import PluginsController
         return PluginsController.getInstance().captureCurrentPluginRuntime()
     except Exception:
         return None
@@ -111,7 +111,7 @@ def is_callback_allowed(token):
     if token is None:
         return False
     try:
-        from app.nimarkogram.messenger.plugins import PluginsController
+        from app.nebulagram.messenger.plugins import PluginsController
         return bool(PluginsController.getInstance().isPluginRuntimeCallbackAllowed(token))
     except Exception:
         return False
@@ -133,7 +133,7 @@ def _await_worker_runtime(token):
         return False
     try:
         import time
-        from app.nimarkogram.messenger.plugins import PluginsController
+        from app.nebulagram.messenger.plugins import PluginsController
         controller = PluginsController.getInstance()
         decision_for = getattr(
             controller, "getPluginRuntimeTaskDecision", None)
@@ -195,7 +195,7 @@ def _run_owned_callback(token, callback, args, kwargs, default):
     if callback is None or token is None:
         return default
     try:
-        from app.nimarkogram.messenger.plugins import PluginsController
+        from app.nebulagram.messenger.plugins import PluginsController
         controller = PluginsController.getInstance()
     except Exception:
         return default
@@ -252,7 +252,7 @@ def guard_proxy_callback(callback, owner=_UNSET, default=None):
     """
     if owner is _UNSET:
         owner = capture_callback_owner(callback)
-    if getattr(callback, "_nimarko_proxy_runtime_guarded", False):
+    if getattr(callback, "_nebula_proxy_runtime_guarded", False):
         return callback
 
     @functools.wraps(callback)
@@ -260,8 +260,8 @@ def guard_proxy_callback(callback, owner=_UNSET, default=None):
         return _run_owned_callback(
             owner, callback, args, kwargs, default)
 
-    guarded._nimarko_proxy_runtime_guarded = True
-    guarded._nimarko_runtime_token = owner
+    guarded._nebula_proxy_runtime_guarded = True
+    guarded._nebula_runtime_token = owner
     return guarded
 
 def run_owned_worker(token, callback, *args, default=None, **kwargs):
@@ -280,18 +280,18 @@ def run_owned_worker(token, callback, *args, default=None, **kwargs):
         return default
     import threading
     current = threading.current_thread()
-    previous = getattr(current, "_nimarko_runtime_token", _UNSET)
-    current._nimarko_runtime_token = token
+    previous = getattr(current, "_nebula_runtime_token", _UNSET)
+    current._nebula_runtime_token = token
     try:
         return callback(*args, **kwargs)
     finally:
         if previous is _UNSET:
             try:
-                del current._nimarko_runtime_token
+                del current._nebula_runtime_token
             except AttributeError:
                 pass
         else:
-            current._nimarko_runtime_token = previous
+            current._nebula_runtime_token = previous
 
 def make_runnable(callback, owner=_UNSET):
     """Create the Java one-shot Runnable while preserving plugin ownership."""
@@ -300,7 +300,7 @@ def make_runnable(callback, owner=_UNSET):
     if owner is None:
         raise RuntimeError(
             "Plugin Runnable requires an exact runtime owner")
-    from app.nimarkogram.messenger.plugins.utils import PythonRunnable
+    from app.nebulagram.messenger.plugins.utils import PythonRunnable
     return PythonRunnable(callback, owner)
 
 def make_interface_proxy(target, interfaces, owner=_UNSET):
@@ -320,7 +320,7 @@ def make_interface_proxy(target, interfaces, owner=_UNSET):
         raise ValueError("At least one Java callback interface is required")
 
     from java import jarray, jclass
-    from app.nimarkogram.messenger.plugins.bridge import PythonInterfaceProxy
+    from app.nebulagram.messenger.plugins.bridge import PythonInterfaceProxy
 
     resolved = []
     for interface in interfaces:
@@ -359,11 +359,11 @@ def _install_thread_propagation():
                 token = capture_callback_owner(target)
                 original_init(self, *args, **kwargs)
                 if token is not None:
-                    self._nimarko_runtime_token = token
+                    self._nebula_runtime_token = token
 
             @functools.wraps(original_bootstrap_inner)
             def owned_bootstrap_inner(self, *args, **kwargs):
-                token = getattr(self, "_nimarko_runtime_token", None)
+                token = getattr(self, "_nebula_runtime_token", None)
                 original_run = None
                 if token is not None:
                     
@@ -408,7 +408,7 @@ def _install_thread_propagation():
                 original_timer_init(
                     self, interval, guarded_function,
                     args=args, kwargs=kwargs)
-                self._nimarko_runtime_token = token
+                self._nebula_runtime_token = token
 
             threading.Timer.__init__ = owned_timer_init
             _TIMER_PATCHED = True

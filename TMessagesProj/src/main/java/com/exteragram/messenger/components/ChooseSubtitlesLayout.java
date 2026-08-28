@@ -4,9 +4,9 @@ import android.content.Context;
 
 import org.telegram.ui.Components.PopupSwipeBackLayout;
 
-public class ChooseSubtitlesLayout extends app.nimarkogram.messenger.components.ChooseSubtitlesLayout {
+public class ChooseSubtitlesLayout extends app.nebulagram.messenger.components.ChooseSubtitlesLayout {
     public ChooseSubtitlesLayout(Context context, PopupSwipeBackLayout popupSwipeBackLayout,
-                                 app.nimarkogram.messenger.components.ChooseSubtitlesLayout.Callback callback) {
+                                 app.nebulagram.messenger.components.ChooseSubtitlesLayout.Callback callback) {
         super(context, popupSwipeBackLayout, callback);
     }
 }

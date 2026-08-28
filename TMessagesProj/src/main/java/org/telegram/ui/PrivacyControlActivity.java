@@ -1790,7 +1790,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                             oldAvatarView.measure(MeasureSpec.makeMeasureSpec(dp(30), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(dp(30), MeasureSpec.EXACTLY));
-                            oldAvatarView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(60));
+                            oldAvatarView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(60));
                         }
 
                         @Override

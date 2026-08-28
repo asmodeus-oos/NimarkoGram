@@ -497,7 +497,7 @@ public class GlassTabView extends FrameLayout implements MainTabsLayout.Tab, Fac
     public static GlassTabView createStaticTab(Context context, Theme.ResourcesProvider resourcesProvider,
                                                @DrawableRes int iconRes, @StringRes int stringRes) {
         return createStaticTab(context, resourcesProvider, iconRes, stringRes,
-                app.nimarkogram.messenger.NimarkoConfig.showMainTabsTitle);
+                app.nebulagram.messenger.NebulaConfig.showMainTabsTitle);
     }
 
     public static GlassTabView createStaticTab(Context context, Theme.ResourcesProvider resourcesProvider,

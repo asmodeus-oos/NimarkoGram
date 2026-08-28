@@ -121,8 +121,8 @@ public class FileUploadOperation {
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo", Activity.MODE_PRIVATE);
             
             slowNetwork = ApplicationLoader.isConnectionSlow()
-                    && !app.nimarkogram.messenger.NimarkoConfig.uploadSpeedBoost
-                    || app.nimarkogram.messenger.NimarkoConfig.slowNetworkMode;
+                    && !app.nebulagram.messenger.NebulaConfig.uploadSpeedBoost
+                    || app.nebulagram.messenger.NebulaConfig.slowNetworkMode;
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("start upload on slow network = " + slowNetwork);
             }
@@ -312,7 +312,7 @@ public class FileUploadOperation {
                 if (AccountInstance.getInstance(currentAccount).getUserConfig().isPremium() && totalFileSize > FileLoader.DEFAULT_MAX_FILE_SIZE) {
                     maxUploadParts = MessagesController.getInstance(currentAccount).uploadMaxFilePartsPremium;
                 }
-                uploadChunkSize = (int) Math.max(slowNetwork ? minUploadChunkSlowNetworkSize : (app.nimarkogram.messenger.NimarkoConfig.uploadSpeedBoost ? minUploadChunkSizeBoost : minUploadChunkSize), (totalFileSize + 1024L * maxUploadParts - 1) / (1024L * maxUploadParts));
+                uploadChunkSize = (int) Math.max(slowNetwork ? minUploadChunkSlowNetworkSize : (app.nebulagram.messenger.NebulaConfig.uploadSpeedBoost ? minUploadChunkSizeBoost : minUploadChunkSize), (totalFileSize + 1024L * maxUploadParts - 1) / (1024L * maxUploadParts));
                 if (1024 % uploadChunkSize != 0) {
                     int chunkSize = 64;
                     while (uploadChunkSize > chunkSize) {

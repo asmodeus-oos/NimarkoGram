@@ -30,8 +30,8 @@ public class NotificationsService extends Service {
 
         if (allowResidentNotification()) {
             try {
-                NotificationChannelCompat channel = new NotificationChannelCompat.Builder("nimarkoPush", NotificationManagerCompat.IMPORTANCE_DEFAULT)
-                        .setName("NimarkoGram")
+                NotificationChannelCompat channel = new NotificationChannelCompat.Builder("nebulaPush", NotificationManagerCompat.IMPORTANCE_DEFAULT)
+                        .setName("NebulaGram")
                         .setLightsEnabled(false)
                         .setVibrationEnabled(false)
                         .setSound(null, null)
@@ -81,11 +81,11 @@ public class NotificationsService extends Service {
         );
 
         startForeground(1390,
-                new NotificationCompat.Builder(this, "nimarkoPush")
+                new NotificationCompat.Builder(this, "nebulaPush")
                         .setSmallIcon(R.drawable.notification)
                         .setShowWhen(false)
                         .setOngoing(true)
-                        .setContentText("NimarkoGram")
+                        .setContentText("NebulaGram")
                         .setCategory(NotificationCompat.CATEGORY_STATUS)
                         .setContentIntent(pendingIntent)
                         .build());
@@ -94,6 +94,6 @@ public class NotificationsService extends Service {
     private boolean allowResidentNotification() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && Build.VERSION.SDK_INT < 35
-                && app.nimarkogram.messenger.NimarkoConfig.residentNotification;
+                && app.nebulagram.messenger.NebulaConfig.residentNotification;
     }
 }

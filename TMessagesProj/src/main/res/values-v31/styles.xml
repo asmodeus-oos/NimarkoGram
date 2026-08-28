@@ -23,7 +23,7 @@
         <!-- NG: Android 12+ Monet (Material You) palette. system_neutral1_50
              is the lightest neutral tinted by user's wallpaper — splash blends
              with system theme. system_accent1_600 = primary accent (used for
-             status-bar/nav-bar). NimarkoGram icon renders on top, keeping its
+             status-bar/nav-bar). NebulaGram icon renders on top, keeping its
              own colors. Devices without Monet auto-fall back to gray neutrals. -->
         <item name="android:colorBackground">@android:color/system_neutral1_50</item>
         <item name="android:windowBackground">@android:color/system_neutral1_50</item>

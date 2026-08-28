@@ -470,7 +470,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             if (messageObject.hasHighlightedWords() && !TextUtils.isEmpty(message.messageOwner.message)) {
                 String rawDocMsg = message.messageOwner.message;
                 if (rawDocMsg.contains("$")) {
-                    rawDocMsg = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(rawDocMsg);
+                    rawDocMsg = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(rawDocMsg);
                 }
                 String str = rawDocMsg.replace("\n", " ").replaceAll(" +", " ").trim();
                 caption = AndroidUtilities.highlightText(str, message.highlightedWords, resourcesProvider);

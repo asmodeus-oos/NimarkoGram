@@ -2,21 +2,21 @@ package com.exteragram.messenger.plugins;
 
 public class PluginsController {
 
-    public final java.util.LinkedHashMap<String, app.nimarkogram.messenger.plugins.Plugin> plugins;
+    public final java.util.LinkedHashMap<String, app.nebulagram.messenger.plugins.Plugin> plugins;
      
     public final android.content.SharedPreferences preferences;
      
     public final java.io.File pluginsDir;
      
-    public final java.util.LinkedHashMap<String, java.util.List<app.nimarkogram.messenger.plugins.models.SettingItem>> settings;
+    public final java.util.LinkedHashMap<String, java.util.List<app.nebulagram.messenger.plugins.models.SettingItem>> settings;
      
-    public static final java.util.concurrent.ConcurrentHashMap<String, app.nimarkogram.messenger.plugins.PluginsController.PluginsEngine> engines =
-            app.nimarkogram.messenger.plugins.PluginsController.engines;
+    public static final java.util.concurrent.ConcurrentHashMap<String, app.nebulagram.messenger.plugins.PluginsController.PluginsEngine> engines =
+            app.nebulagram.messenger.plugins.PluginsController.engines;
 
-    private final app.nimarkogram.messenger.plugins.PluginsController real;
+    private final app.nebulagram.messenger.plugins.PluginsController real;
 
     private PluginsController() {
-        this.real = app.nimarkogram.messenger.plugins.PluginsController.getInstance();
+        this.real = app.nebulagram.messenger.plugins.PluginsController.getInstance();
         
         this.plugins = new java.util.LinkedHashMap<>(this.real.plugins);
         this.preferences = this.real.preferences;
@@ -28,7 +28,7 @@ public class PluginsController {
         return new PluginsController();
     }
 
-    public java.util.HashMap<String, app.nimarkogram.messenger.plugins.Plugin> getPluginsSnapshot() {
+    public java.util.HashMap<String, app.nebulagram.messenger.plugins.Plugin> getPluginsSnapshot() {
         return new java.util.HashMap<>(this.real.plugins);
     }
 
@@ -37,7 +37,7 @@ public class PluginsController {
         boolean exists;
         try { exists = result != null && new java.io.File(result).exists(); }
         catch (Throwable t) { exists = false; }
-        org.telegram.messenger.FileLog.d("nimarko: getPluginPath(" + pluginId + ") -> " + result + " exists=" + exists);
+        org.telegram.messenger.FileLog.d("nebula: getPluginPath(" + pluginId + ") -> " + result + " exists=" + exists);
         return result;
     }
 
@@ -59,12 +59,12 @@ public class PluginsController {
             int exported = 0;
             try (java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(
                     new java.io.FileOutputStream(outFile))) {
-                for (java.util.Map.Entry<String, app.nimarkogram.messenger.plugins.Plugin> e
+                for (java.util.Map.Entry<String, app.nebulagram.messenger.plugins.Plugin> e
                         : real.plugins.entrySet()) {
                     String pid = e.getKey();
                     if (pid == null) continue;
                     if (excludeId != null && excludeId.equals(pid)) continue;
-                    app.nimarkogram.messenger.plugins.Plugin plugin = e.getValue();
+                    app.nebulagram.messenger.plugins.Plugin plugin = e.getValue();
                     if (plugin == null) continue;
                     if (!includeDisabled && !plugin.isEnabled()) continue;
 
@@ -106,14 +106,14 @@ public class PluginsController {
                 zos.closeEntry();
             }
             org.telegram.messenger.FileLog.d(
-                    "nimarko: exportPluginsToZip wrote " + exported + " plugins to " + outFile);
+                    "nebula: exportPluginsToZip wrote " + exported + " plugins to " + outFile);
             if (exported == 0) {
                 outFile.delete();
                 return null;
             }
             return outFile.getAbsolutePath();
         } catch (Throwable t) {
-            org.telegram.messenger.FileLog.e("nimarko: exportPluginsToZip failed", t);
+            org.telegram.messenger.FileLog.e("nebula: exportPluginsToZip failed", t);
             return null;
         }
     }
@@ -142,7 +142,7 @@ public class PluginsController {
         real.loadPluginSettings(pluginId);
     }
 
-    public app.nimarkogram.messenger.plugins.PluginsController.PluginsEngine getPluginEngine(String pluginId) {
+    public app.nebulagram.messenger.plugins.PluginsController.PluginsEngine getPluginEngine(String pluginId) {
         return real.getPluginEngine(pluginId);
     }
 
@@ -161,83 +161,83 @@ public class PluginsController {
 
     public boolean isPluginEnabled(String id) {
         if (id == null) return false;
-        app.nimarkogram.messenger.plugins.Plugin p = plugins.get(id);
+        app.nebulagram.messenger.plugins.Plugin p = plugins.get(id);
         return p != null && p.isEnabled();
     }
 
-    public java.util.List<app.nimarkogram.messenger.plugins.models.SettingItem> getPluginSettingsList(String pluginId) {
+    public java.util.List<app.nebulagram.messenger.plugins.models.SettingItem> getPluginSettingsList(String pluginId) {
         return real.getPluginSettingsList(pluginId);
     }
 
     public static final class PluginValidationResult {
-        private app.nimarkogram.messenger.plugins.Plugin plugin;
+        private app.nebulagram.messenger.plugins.Plugin plugin;
         private String error;
 
-        public PluginValidationResult(app.nimarkogram.messenger.plugins.Plugin plugin, String error) {
+        public PluginValidationResult(app.nebulagram.messenger.plugins.Plugin plugin, String error) {
             this.plugin = plugin;
             this.error = error;
         }
 
-        public app.nimarkogram.messenger.plugins.Plugin getPlugin() { return plugin; }
+        public app.nebulagram.messenger.plugins.Plugin getPlugin() { return plugin; }
         public String getError() { return error; }
-        public void setPlugin(app.nimarkogram.messenger.plugins.Plugin plugin) { this.plugin = plugin; }
+        public void setPlugin(app.nebulagram.messenger.plugins.Plugin plugin) { this.plugin = plugin; }
         public void setError(String error) { this.error = error; }
     }
 
-    public app.nimarkogram.messenger.plugins.PluginsController getReal() {
+    public app.nebulagram.messenger.plugins.PluginsController getReal() {
         return real;
     }
 
-    public static java.util.concurrent.ConcurrentHashMap<String, app.nimarkogram.messenger.plugins.PluginsController.PluginsEngine> getEngines() {
+    public static java.util.concurrent.ConcurrentHashMap<String, app.nebulagram.messenger.plugins.PluginsController.PluginsEngine> getEngines() {
         return engines;
     }
 
     public static boolean isPluginEngineSupported() {
-        try { return app.nimarkogram.messenger.plugins.PluginsController.isPluginEngineSupported(); }
+        try { return app.nebulagram.messenger.plugins.PluginsController.isPluginEngineSupported(); }
         catch (Throwable t) { return false; }
     }
 
     public static boolean isPluginEngineAvailable() {
-        try { return app.nimarkogram.messenger.plugins.PluginsController.isPluginEngineAvailable(); }
+        try { return app.nebulagram.messenger.plugins.PluginsController.isPluginEngineAvailable(); }
         catch (Throwable t) { return false; }
     }
 
     public static boolean isPlugin(org.telegram.messenger.MessageObject messageObject) {
-        try { return app.nimarkogram.messenger.plugins.PluginsController.isPlugin(messageObject); }
+        try { return app.nebulagram.messenger.plugins.PluginsController.isPlugin(messageObject); }
         catch (Throwable t) { return false; }
     }
 
     public static boolean isPlugin(java.io.File file, org.telegram.messenger.MessageObject messageObject) {
-        try { return app.nimarkogram.messenger.plugins.PluginsController.isPlugin(file); }
+        try { return app.nebulagram.messenger.plugins.PluginsController.isPlugin(file); }
         catch (Throwable t) { return false; }
     }
 
     public static boolean isPluginPinned(String pluginId) {
-        try { return app.nimarkogram.messenger.plugins.PluginsController.isPluginPinned(pluginId); }
+        try { return app.nebulagram.messenger.plugins.PluginsController.isPluginPinned(pluginId); }
         catch (Throwable t) { return false; }
     }
 
     public static void setPluginPinned(String pluginId, boolean isPinned) {
-        try { app.nimarkogram.messenger.plugins.PluginsController.setPluginPinned(pluginId, isPinned); }
+        try { app.nebulagram.messenger.plugins.PluginsController.setPluginPinned(pluginId, isPinned); }
         catch (Throwable ignored) {}
     }
 
-    public static app.nimarkogram.messenger.plugins.PluginsController.PluginsEngine getPluginEngine(java.io.File file) {
-        try { return app.nimarkogram.messenger.plugins.PluginsController.getPluginEngine(file); }
+    public static app.nebulagram.messenger.plugins.PluginsController.PluginsEngine getPluginEngine(java.io.File file) {
+        try { return app.nebulagram.messenger.plugins.PluginsController.getPluginEngine(file); }
         catch (Throwable t) { return null; }
     }
 
     public static void openPluginSettings(String pluginId) {
-        try { app.nimarkogram.messenger.plugins.PluginsController.openPluginSetting(pluginId, null); }
+        try { app.nebulagram.messenger.plugins.PluginsController.openPluginSetting(pluginId, null); }
         catch (Throwable ignored) {}
     }
 
     public static void openPluginSettings(String pluginId, String linkAlias) {
-        try { app.nimarkogram.messenger.plugins.PluginsController.openPluginSetting(pluginId, linkAlias); }
+        try { app.nebulagram.messenger.plugins.PluginsController.openPluginSetting(pluginId, linkAlias); }
         catch (Throwable ignored) {}
     }
 
-    public java.util.concurrent.ConcurrentHashMap<String, app.nimarkogram.messenger.plugins.Plugin> getPlugins() {
+    public java.util.concurrent.ConcurrentHashMap<String, app.nebulagram.messenger.plugins.Plugin> getPlugins() {
         return real.plugins;
     }
 
@@ -250,11 +250,11 @@ public class PluginsController {
         catch (Throwable t) { return real.pluginsDir; }
     }
 
-    public java.util.concurrent.ConcurrentHashMap<String, java.util.List<app.nimarkogram.messenger.plugins.models.SettingItem>> getSettings() {
+    public java.util.concurrent.ConcurrentHashMap<String, java.util.List<app.nebulagram.messenger.plugins.models.SettingItem>> getSettings() {
         return real.settings;
     }
 
-    public app.nimarkogram.messenger.plugins.utils.PluginsWatchdog getWatchdog() {
+    public app.nebulagram.messenger.plugins.utils.PluginsWatchdog getWatchdog() {
         try { return real.getWatchdog(); }
         catch (Throwable t) { return null; }
     }
@@ -343,7 +343,7 @@ public class PluginsController {
         try { real.removeMenuItemsByPluginId(pluginId); } catch (Throwable ignored) {}
     }
 
-    public java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> getMenuItemsForLocation(
+    public java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> getMenuItemsForLocation(
             String menuType, java.util.Map<String, Object> contextData) {
         try {
             return real.getMenuItemsForLocation(menuType,
@@ -353,8 +353,8 @@ public class PluginsController {
         }
     }
 
-    public java.util.List<app.nimarkogram.messenger.plugins.hooks.MenuItemRecord> getMenuItemsForLocation(
-            String menuType, app.nimarkogram.messenger.plugins.utils.MenuContextBuilder builder) {
+    public java.util.List<app.nebulagram.messenger.plugins.hooks.MenuItemRecord> getMenuItemsForLocation(
+            String menuType, app.nebulagram.messenger.plugins.utils.MenuContextBuilder builder) {
         try { return real.getMenuItemsForLocation(menuType, builder); }
         catch (Throwable t) { return new java.util.ArrayList<>(); }
     }
@@ -396,7 +396,7 @@ public class PluginsController {
         catch (Throwable t) { return request; }
     }
 
-    public app.nimarkogram.messenger.plugins.hooks.PluginsHooks.PostRequestResult executePostRequestHook(
+    public app.nebulagram.messenger.plugins.hooks.PluginsHooks.PostRequestResult executePostRequestHook(
             String requestName, int account, org.telegram.tgnet.TLObject response, org.telegram.tgnet.TLRPC.TL_error error) {
         try { return real.executePostRequestHook(requestName, account, response, error); }
         catch (Throwable t) { return null; }

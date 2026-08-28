@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Callable, Any, Optional
 from android.view import View
-from app.nimarkogram.messenger.plugins import PluginsConstants
+from app.nebulagram.messenger.plugins import PluginsConstants
 
 @dataclass
 class Switch:

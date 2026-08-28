@@ -1316,10 +1316,10 @@ public class StarsController {
                     return;
                 }
                 final boolean[] purchased = new boolean[] { false };
-                // NimarkoGram (CG parity, CherrygramCoreConfig.allowSafeStars):
+                // NebulaGram (CG parity, CherrygramCoreConfig.allowSafeStars):
                 // optimistically fire whenDone(true) so the caller can dismiss its
                 // sheet before the StarsNeededSheet is presented. CG default OFF.
-                if (whenDone != null && app.nimarkogram.messenger.NimarkoConfig.allowSafeStars) {
+                if (whenDone != null && app.nebulagram.messenger.NebulaConfig.allowSafeStars) {
                     whenDone.run(true);
                 }
                 StarsIntroActivity.StarsNeededSheet sheet = new StarsIntroActivity.StarsNeededSheet(context, currentAccount, resourcesProvider, stars, isBiz ? StarsIntroActivity.StarsNeededSheet.TYPE_BIZ : StarsIntroActivity.StarsNeededSheet.TYPE_BOT, bot, () -> {
@@ -2293,7 +2293,7 @@ public class StarsController {
                 // NG: re-inject the curated "deleted gifts" list (no-op when the
                 // toggle is off). Cached branch — runs before the remote
                 // refresh fires.
-                app.nimarkogram.messenger.gifts.NimarkoDeletedGiftsManager.maybeInject(currentAccount);
+                app.nebulagram.messenger.gifts.NebulaDeletedGiftsManager.maybeInject(currentAccount);
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.starGiftsLoaded);
 
                 loadStarGifts();
@@ -2323,7 +2323,7 @@ public class StarsController {
                     // we notify listeners or persist the cache. saveStarGiftsCached
                     // below uses res.gifts (server-only), so our entries never
                     // end up on disk.
-                    app.nimarkogram.messenger.gifts.NimarkoDeletedGiftsManager.maybeInject(currentAccount);
+                    app.nebulagram.messenger.gifts.NebulaDeletedGiftsManager.maybeInject(currentAccount);
                     NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.starGiftsLoaded);
                     saveStarGiftsCached(res.gifts, giftsHash, giftsRemoteTime);
                 } else if (giftsRemote instanceof TL_stars.TL_starGiftsNotModified) {

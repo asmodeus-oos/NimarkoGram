@@ -1146,7 +1146,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
     private void performVibration() {
         if (vibrationPattern != null && allowVibration) {
             Integer force = vibrationPattern.get(currentFrame - 1);
-            if (force != null && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (force != null && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     Activity activity = LaunchActivity.instance;
                     if (activity == null) activity = BubbleActivity.instance;

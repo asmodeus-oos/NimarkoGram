@@ -80,7 +80,7 @@ public class RoundStatusDrawable extends StatusDrawable {
         paint.setAlpha(55 + (int) (200 * progress));
         
         float cx, cy;
-        if (app.nimarkogram.messenger.NimarkoConfig.centerChatTitle && useCenteredOverride) {
+        if (app.nebulagram.messenger.NebulaConfig.centerChatTitle && useCenteredOverride) {
             cx = getBounds().centerX() - AndroidUtilities.dp(1);
             cy = AndroidUtilities.dp(isChat ? 8 : 9);
         } else {
@@ -110,7 +110,7 @@ public class RoundStatusDrawable extends StatusDrawable {
 
     @Override
     public int getIntrinsicWidth() {
-        return AndroidUtilities.dp(app.nimarkogram.messenger.NimarkoConfig.centerChatTitle && useCenteredOverride ? 8 : 12);
+        return AndroidUtilities.dp(app.nebulagram.messenger.NebulaConfig.centerChatTitle && useCenteredOverride ? 8 : 12);
     }
 
     @Override

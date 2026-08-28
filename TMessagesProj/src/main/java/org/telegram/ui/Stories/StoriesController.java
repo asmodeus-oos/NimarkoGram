@@ -249,8 +249,8 @@ public class StoriesController {
     }
 
     public boolean hasStories(long dialogId) {
-        // NimarkoGram: master toggle.
-        if (app.nimarkogram.messenger.NimarkoConfig.hideStories) return false;
+        // NebulaGram: master toggle.
+        if (app.nebulagram.messenger.NebulaConfig.hideStories) return false;
         if (dialogId == 0) {
             return false;
         }
@@ -284,8 +284,8 @@ public class StoriesController {
     }
 
     public boolean hasStories() {
-        // NimarkoGram: master toggle.
-        if (app.nimarkogram.messenger.NimarkoConfig.hideStories) return false;
+        // NebulaGram: master toggle.
+        if (app.nebulagram.messenger.NebulaConfig.hideStories) return false;
         return (dialogListStories != null && dialogListStories.size() > 0) || hasSelfStories();
     }
 
@@ -498,8 +498,8 @@ public class StoriesController {
                     if (user == null) {
                         continue;
                     }
-                    // NimarkoGram: auto-archive new user stories when the flag is on.
-                    if (app.nimarkogram.messenger.NimarkoConfig.archiveStoriesFromUsers && !user.stories_hidden) {
+                    // NebulaGram: auto-archive new user stories when the flag is on.
+                    if (app.nebulagram.messenger.NebulaConfig.archiveStoriesFromUsers && !user.stories_hidden) {
                         toggleHidden(dialogId, true, true, true);
                     }
                     if (user.stories_hidden) {
@@ -513,8 +513,8 @@ public class StoriesController {
                     if (chat == null) {
                         continue;
                     }
-                    // NimarkoGram: auto-archive new channel stories when the flag is on.
-                    if (app.nimarkogram.messenger.NimarkoConfig.archiveStoriesFromChannels && !chat.stories_hidden) {
+                    // NebulaGram: auto-archive new channel stories when the flag is on.
+                    if (app.nebulagram.messenger.NebulaConfig.archiveStoriesFromChannels && !chat.stories_hidden) {
                         toggleHidden(dialogId, true, true, true);
                     }
                     if (chat.stories_hidden) {
@@ -1083,8 +1083,8 @@ public class StoriesController {
     }
 
     public boolean hasSelfStories() {
-        // NimarkoGram: master toggle.
-        if (app.nimarkogram.messenger.NimarkoConfig.hideStories) return false;
+        // NebulaGram: master toggle.
+        if (app.nebulagram.messenger.NebulaConfig.hideStories) return false;
         long clientUserId = UserConfig.getInstance(currentAccount).clientUserId;
         TL_stories.PeerStories storyItem = allStoriesMap.get(clientUserId);
         if (storyItem != null && !storyItem.stories.isEmpty()) {

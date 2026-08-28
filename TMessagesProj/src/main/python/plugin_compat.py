@@ -21,7 +21,7 @@ _INSTALLED = False
 _MAX_BINARY_SIZE = 64 * 1024 * 1024
 _BINARY_SUFFIXES = (".dex", ".jar", ".apk", ".zip", ".so", ".bin")
 _EXTERA_PREFIX = "com.exteragram.messenger."
-_NIMARKO_PREFIX = "app.nimarkogram.messenger."
+_NEBULA_PREFIX = "app.nebulagram.messenger."
 _HEAD_CACHE_LIMIT = 4 * 1024 * 1024
 _HEAD_CACHE_TTL = 60.0
 _HEAD_CACHE_LOCK = threading.Lock()
@@ -125,7 +125,7 @@ def _install_jclass_compat():
         import java
 
         original = java.jclass
-        if getattr(original, "__nimarko_extera_class_compat__", False):
+        if getattr(original, "__nebula_extera_class_compat__", False):
             return
         aliases = {}
 
@@ -139,13 +139,13 @@ def _install_jclass_compat():
             except Exception:
                 if not name.startswith(_EXTERA_PREFIX):
                     raise
-                current_name = _NIMARKO_PREFIX + name[len(_EXTERA_PREFIX):]
+                current_name = _NEBULA_PREFIX + name[len(_EXTERA_PREFIX):]
                 result = original(current_name)
                 aliases[name] = current_name
                 return result
 
-        jclass_with_compat.__nimarko_extera_class_compat__ = True
-        jclass_with_compat.__nimarko_original_jclass__ = original
+        jclass_with_compat.__nebula_extera_class_compat__ = True
+        jclass_with_compat.__nebula_original_jclass__ = original
         java.jclass = jclass_with_compat
     except Exception:
         return
@@ -164,7 +164,7 @@ def install():
 
         session_type = requests.sessions.Session
         original = session_type.request
-        if getattr(original, "__nimarko_gitverse_binary_compat__", False):
+        if getattr(original, "__nebula_gitverse_binary_compat__", False):
             _INSTALLED = True
             return True
 
@@ -229,8 +229,8 @@ def install():
             except Exception:
                 return original(session, method, url, *args, **kwargs)
 
-        request_with_binary_compat.__nimarko_gitverse_binary_compat__ = True
-        request_with_binary_compat.__nimarko_original_request__ = original
+        request_with_binary_compat.__nebula_gitverse_binary_compat__ = True
+        request_with_binary_compat.__nebula_original_request__ = original
         session_type.request = request_with_binary_compat
         _INSTALLED = True
         return True

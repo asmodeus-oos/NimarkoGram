@@ -128,8 +128,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import app.nimarkogram.messenger.NimarkoConfig;
-import app.nimarkogram.messenger.utils.SleepHelper;
+import app.nebulagram.messenger.NebulaConfig;
+import app.nebulagram.messenger.utils.SleepHelper;
 
 public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, DownloadController.FileDownloadProgressListener {
 
@@ -3755,7 +3755,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 );
             }
 
-            NimarkoConfig.setSleepTimer(true);
+            NebulaConfig.setSleepTimer(true);
 
             String formattedTime;
             if (seconds < 3600) {
@@ -3770,12 +3770,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     .createSimpleBulletin(R.raw.done, AndroidUtilities.replaceTags(LocaleController.formatString(R.string.CG_Sleep_Timer, formattedTime)))
                     .show();
         } else {
-            if (NimarkoConfig.sleepTimer) {
+            if (NebulaConfig.sleepTimer) {
                 BulletinFactory.of((FrameLayout) containerView, resourcesProvider)
                         .createSimpleBulletin(R.raw.done, getString(R.string.CG_Sleep_Disabled))
                         .show();
             }
-            NimarkoConfig.setSleepTimer(false);
+            NebulaConfig.setSleepTimer(false);
         }
     }
     /** NG sleep timer finish */

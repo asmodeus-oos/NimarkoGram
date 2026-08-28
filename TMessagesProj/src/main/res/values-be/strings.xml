@@ -2,7 +2,7 @@
 <resources>
     <string name="NM_Menu_TelegramPlus">Сучаснае меню паведамленняў</string>
     <string name="NM_Menu_TelegramPlus_Desc">Кампактнае меню ў стылі Liquid Glass з групаваннем дзеянняў, спружыннымі анімацыямі і жывым водгукам. Кампактная кампаноўка застаецца даступнай.</string>
-    <!-- NimarkoGram plugin strings ported from exteraGram (values-be) -->
+    <!-- NebulaGram plugin strings ported from exteraGram (values-be) -->
     <string name="EnableAfterInstallation">Уключыць пасля ўстаноўкі</string>
     <string name="EnablePluginsEngine">Уключыць рухавік плагінаў</string>
     <string name="EnterValue">Увядзіце значэнне</string>

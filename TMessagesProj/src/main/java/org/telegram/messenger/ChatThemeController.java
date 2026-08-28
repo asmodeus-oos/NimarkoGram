@@ -366,7 +366,7 @@ public class ChatThemeController extends BaseController {
 
     public TLRPC.WallPaper getDialogWallpaper(long dialogId) {
         
-        boolean custom = app.nimarkogram.messenger.NimarkoConfig.customWallpapers;
+        boolean custom = app.nebulagram.messenger.NebulaConfig.customWallpapers;
         if (dialogId >= 0) {
             TLRPC.UserFull userFull = getMessagesController().getUserFull(dialogId);
             if (userFull != null && userFull.wallpaper != null) {

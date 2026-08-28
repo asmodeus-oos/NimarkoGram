@@ -162,7 +162,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 return;
             }
             
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 } catch (Exception e) {
@@ -287,7 +287,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 return false;
             }
             
-            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 } catch (Exception e) {
@@ -1380,7 +1380,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                     showPin(true);
                     AndroidUtilities.runOnUIThread(() -> {
                         
-                        if (app.nimarkogram.messenger.NimarkoConfig.disableVibration) return;
+                        if (app.nebulagram.messenger.NebulaConfig.disableVibration) return;
                         try {
                             imageView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         } catch (Exception ignore) {}

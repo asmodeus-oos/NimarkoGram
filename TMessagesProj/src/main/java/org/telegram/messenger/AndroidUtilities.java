@@ -2552,7 +2552,7 @@ public class AndroidUtilities {
     }
 
     public static Typeface getTypeface(String assetPath) {
-        // NimarkoGram: mirror Cherrygram's AndroidUtilities.getTypeface verbatim —
+        // NebulaGram: mirror Cherrygram's AndroidUtilities.getTypeface verbatim —
         // delegate to FontHelper so the user's "systemFonts" preference picks
         // sans-serif-medium (weight 500) instead of the previous inline path
         // that promoted every "medium" asset to weight 700 (visibly heavier
@@ -2562,10 +2562,10 @@ public class AndroidUtilities {
             if (cached != null) return cached;
             try {
                 Typeface t;
-                if (app.nimarkogram.messenger.NimarkoConfig.systemFonts) {
-                    t = app.nimarkogram.messenger.utils.ui.FontHelper.createTypeface(assetPath);
+                if (app.nebulagram.messenger.NebulaConfig.systemFonts) {
+                    t = app.nebulagram.messenger.utils.ui.FontHelper.createTypeface(assetPath);
                 } else {
-                    t = app.nimarkogram.messenger.utils.ui.FontHelper.createTypefaceFromAsset(assetPath);
+                    t = app.nebulagram.messenger.utils.ui.FontHelper.createTypefaceFromAsset(assetPath);
                 }
                 if (t != null) typefaceCache.put(assetPath, t);
                 return t;
@@ -2606,7 +2606,7 @@ public class AndroidUtilities {
     }
 
     public static int getShadowHeight() {
-        if (app.nimarkogram.messenger.NimarkoConfig.disableDividers) {
+        if (app.nebulagram.messenger.NebulaConfig.disableDividers) {
             return 0;
         }
         if (density >= 4.0f) {
@@ -3171,15 +3171,15 @@ public class AndroidUtilities {
     }
 
     public static boolean isTabletForce() {
-        // NimarkoGram: tabletMode override flows through here so every caller
+        // NebulaGram: tabletMode override flows through here so every caller
         // (cache, LaunchActivity.isTabletForce() checks, getWasTablet comparisons)
         // sees the user's choice. Mirrors CherryGram's design.
         //   TABLET_AUTO    = 0 (use OS resource flag)
         //   TABLET_ENABLE  = 1 (force tablet)
         //   TABLET_DISABLE = 2 (force phone)
-        int mode = app.nimarkogram.messenger.NimarkoConfig.tabletMode;
-        if (mode != app.nimarkogram.messenger.NimarkoConfig.TABLET_AUTO) {
-            return mode == app.nimarkogram.messenger.NimarkoConfig.TABLET_ENABLE;
+        int mode = app.nebulagram.messenger.NebulaConfig.tabletMode;
+        if (mode != app.nebulagram.messenger.NebulaConfig.TABLET_AUTO) {
+            return mode == app.nebulagram.messenger.NebulaConfig.TABLET_ENABLE;
         }
         return ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet);
     }
@@ -3252,7 +3252,7 @@ public class AndroidUtilities {
     }
 
     public static int getPhotoSize(boolean highQuality) {
-        if (highQuality || app.nimarkogram.messenger.NimarkoConfig.largePhotos) {
+        if (highQuality || app.nebulagram.messenger.NebulaConfig.largePhotos) {
             if (highQualityPhotoSize == null) {
                 highQualityPhotoSize = 2560;
             }
@@ -3753,9 +3753,9 @@ public class AndroidUtilities {
         if (view == null) {
             return;
         }
-        // NimarkoGram: springAnimation is now an int enum. When user picks "Classic" (1)
+        // NebulaGram: springAnimation is now an int enum. When user picks "Classic" (1)
         // we skip the spring shake and fall back to a lightweight callback-only path.
-        if (!app.nimarkogram.messenger.NimarkoConfig.isSpringAnimationEnabled()) {
+        if (!app.nebulagram.messenger.NebulaConfig.isSpringAnimationEnabled()) {
             if (endCallback != null) endCallback.run();
             return;
         }
@@ -3915,7 +3915,7 @@ public class AndroidUtilities {
         }
         File storageDir = null;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "NimarkoGram");
+            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "NebulaGram");
             if (!storageDir.mkdirs()) {
                 if (!storageDir.exists()) {
                     if (BuildVars.LOGS_ENABLED) {
@@ -4571,15 +4571,15 @@ public class AndroidUtilities {
 
     public static boolean openForView(MessageObject message, Activity activity, Theme.ResourcesProvider resourcesProvider, boolean restrict) {
         try {
-            if (app.nimarkogram.messenger.plugins.PluginsController.isPlugin(message)) {
+            if (app.nebulagram.messenger.plugins.PluginsController.isPlugin(message)) {
                 org.telegram.ui.ActionBar.BaseFragment fragment = org.telegram.ui.LaunchActivity.getLastFragment();
                 if (fragment != null) {
-                    app.nimarkogram.messenger.plugins.PluginsController.getInstance().showInstallDialog(fragment, message);
+                    app.nebulagram.messenger.plugins.PluginsController.getInstance().showInstallDialog(fragment, message);
                     return true;
                 }
             }
         } catch (Throwable t) {
-            FileLog.e("nimarko: plugin install dialog hook failed", t);
+            FileLog.e("nebula: plugin install dialog hook failed", t);
         }
         File f = null;
         if (message.messageOwner.attachPath != null && message.messageOwner.attachPath.length() != 0) {
@@ -4589,7 +4589,7 @@ public class AndroidUtilities {
             f = FileLoader.getInstance(message.currentAccount).getPathToMessage(message.messageOwner);
         }
         String mimeType = message.type == MessageObject.TYPE_FILE || message.type == MessageObject.TYPE_TEXT ? message.getMimeType() : null;
-        // NimarkoGram file-hook dispatch: a plugin that registered a handler for
+        // NebulaGram file-hook dispatch: a plugin that registered a handler for
         // this file's extension (base_plugin.add_file_hook) may intercept the open
         // (e.g. show it in a custom viewer). If a handler consumes it, skip the
         // default external-viewer open.
@@ -4604,7 +4604,7 @@ public class AndroidUtilities {
                 if (handled) return true;
             }
         } catch (Throwable t) {
-            FileLog.e("nimarko: file-hook dispatch failed", t);
+            FileLog.e("nebula: file-hook dispatch failed", t);
         }
         return openForView(f, message.getFileName(), mimeType, activity, resourcesProvider, restrict);
     }
@@ -6848,8 +6848,8 @@ public class AndroidUtilities {
     }
 
     public static void vibrateCursor(View view) {
-        // NimarkoGram: master disableVibration kill-switch.
-        if (app.nimarkogram.messenger.NimarkoConfig.disableVibration) return;
+        // NebulaGram: master disableVibration kill-switch.
+        if (app.nebulagram.messenger.NebulaConfig.disableVibration) return;
         try {
             if (view == null || view.getContext() == null) return;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
@@ -6859,27 +6859,27 @@ public class AndroidUtilities {
     }
 
     public static void vibrate(View view) {
-        // NimarkoGram: master disableVibration kill-switch.
-        if (app.nimarkogram.messenger.NimarkoConfig.disableVibration) return;
+        // NebulaGram: master disableVibration kill-switch.
+        if (app.nebulagram.messenger.NebulaConfig.disableVibration) return;
         try {
             if (view == null || view.getContext() == null) return;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
             if (!((Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE)).hasAmplitudeControl()) return;
-            // NimarkoGram: vibrateInChats picks the haptic pattern.
+            // NebulaGram: vibrateInChats picks the haptic pattern.
             int hapticType;
-            switch (app.nimarkogram.messenger.NimarkoConfig.vibrateInChats) {
-                case app.nimarkogram.messenger.NimarkoConfig.VIBRATE_DISABLE:
+            switch (app.nebulagram.messenger.NebulaConfig.vibrateInChats) {
+                case app.nebulagram.messenger.NebulaConfig.VIBRATE_DISABLE:
                     return; // user opted-out at this granularity
-                case app.nimarkogram.messenger.NimarkoConfig.VIBRATE_CLICK:
+                case app.nebulagram.messenger.NebulaConfig.VIBRATE_CLICK:
                     hapticType = HapticFeedbackConstants.VIRTUAL_KEY;
                     break;
-                case app.nimarkogram.messenger.NimarkoConfig.VIBRATE_WAVE:
+                case app.nebulagram.messenger.NebulaConfig.VIBRATE_WAVE:
                     hapticType = HapticFeedbackConstants.CONFIRM;
                     break;
-                case app.nimarkogram.messenger.NimarkoConfig.VIBRATE_LONG:
+                case app.nebulagram.messenger.NebulaConfig.VIBRATE_LONG:
                     hapticType = HapticFeedbackConstants.LONG_PRESS;
                     break;
-                case app.nimarkogram.messenger.NimarkoConfig.VIBRATE_KEYBOARD:
+                case app.nebulagram.messenger.NebulaConfig.VIBRATE_KEYBOARD:
                 default:
                     hapticType = HapticFeedbackConstants.KEYBOARD_TAP;
                     break;

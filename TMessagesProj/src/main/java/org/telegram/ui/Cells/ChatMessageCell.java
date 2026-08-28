@@ -263,8 +263,8 @@ import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 import me.vkryl.core.BitwiseUtils;
 
-import app.nimarkogram.messenger.chats.filters.MessagesFilterHelper;
-import app.nimarkogram.messenger.plugins.xposed.PluginHookBypassTarget;
+import app.nebulagram.messenger.chats.filters.MessagesFilterHelper;
+import app.nebulagram.messenger.plugins.xposed.PluginHookBypassTarget;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate,
         DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView,
@@ -1915,14 +1915,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private AnimatedFloat roundVideoPlayPipFloat = new AnimatedFloat(this, 200, CubicBezierInterpolator.EASE_OUT);
     private Paint roundVideoPipPaint;
 
-    // NimarkoGram online dot on group/supergroup sender avatars. AnimatedFloat is created once and reused
+    // NebulaGram online dot on group/supergroup sender avatars. AnimatedFloat is created once and reused
     // every frame (no per-frame alloc); it eases toward senderIsOnline and self-invalidates this cell while
     // the fade runs. Own paint (not the lazily-built Theme.dialogs_onlineCirclePaint, which can be null in a
     // chat opened without the dialog list).
     private final AnimatedFloat onlineIndicatorProgress = new AnimatedFloat(this, 150, CubicBezierInterpolator.EASE_OUT);
     private boolean onlineIndicatorInvalidateRetargeted;
     private boolean senderIsOnline;
-    // NimarkoGram PERF: isSenderOnline() hits native getCurrentTime()/onlinePrivacy every frame per visible
+    // NebulaGram PERF: isSenderOnline() hits native getCurrentTime()/onlinePrivacy every frame per visible
     // sender. Cache senderIsOnline and only recompute when stale (>1000ms) using SystemClock.elapsedRealtime()
     // (monotonic, not Date.now). 0 = never computed → force a recompute. Reset on bind so the cache cannot leak
     // a recycled cell's previous sender state.
@@ -2020,7 +2020,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         backgroundDrawable = new MessageBackgroundDrawable(this);
         avatarImage = new ImageReceiver();
         avatarImage.setAllowLoadingOnAttachedOnly(true);
-        avatarImage.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(42));
+        avatarImage.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(42));
         avatarDrawable = new AvatarDrawable();
         replyImageReceiver = new ImageReceiver(this);
         replyImageReceiver.setAllowLoadingOnAttachedOnly(true);
@@ -2160,7 +2160,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         commentAvatarImagesVisible = new boolean[3];
         for (int a = 0; a < commentAvatarImages.length; a++) {
             commentAvatarImages[a] = new ImageReceiver(this);
-            commentAvatarImages[a].setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(24));
+            commentAvatarImages[a].setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(24));
             commentAvatarDrawables[a] = new AvatarDrawable();
             commentAvatarDrawables[a].setTextSize(dp(18));
         }
@@ -2359,11 +2359,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
             if (event.getAction() == MotionEvent.ACTION_UP && nameStatusPressed) {
-                // NimarkoGram: intercept tap when the status slot is showing
-                // a nimarko/extera badge — render a bulletin with the badge
+                // NebulaGram: intercept tap when the status slot is showing
+                // a nebula/extera badge — render a bulletin with the badge
                 // text instead of the standard premium/emoji-status sheet.
-                if (currentNimarkoAuthorBadge != null) {
-                    showNimarkoAuthorBadgeBulletin(currentNimarkoAuthorBadge);
+                if (currentNebulaAuthorBadge != null) {
+                    showNebulaAuthorBadgeBulletin(currentNebulaAuthorBadge);
                     invalidateOutbounds();
                 } else if (delegate != null) {
                     if (currentUser != null) {
@@ -2382,9 +2382,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         return nameStatusPressed;
     }
 
-    // NimarkoGram: show a BulletinFactory emoji-bulletin for the badge.
+    // NebulaGram: show a BulletinFactory emoji-bulletin for the badge.
     // Mirrors the same flow used in ChatAvatarContainer / ProfileActivity.
-    private void showNimarkoAuthorBadgeBulletin(app.nimarkogram.messenger.api.dto.BadgeDTO badge) {
+    private void showNebulaAuthorBadgeBulletin(app.nebulagram.messenger.api.dto.BadgeDTO badge) {
         try {
             if (badge == null) return;
             CharSequence text = badge.getText();
@@ -6672,7 +6672,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         return currentUser;
     }
 
-    // NimarkoGram: true only for a real group/supergroup member avatar that is genuinely online — never
+    // NebulaGram: true only for a real group/supergroup member avatar that is genuinely online — never
     // channels, private chats, own messages, bots, support, or self. isChat = group/supergroup context;
     // isAvatarVisible already excludes own messages, channel posts (no per-message sender avatar) and
     // non-edge grouped cells. Online math mirrors DialogCell.isOnline().
@@ -6690,7 +6690,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         return u.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime();
     }
 
-    // NimarkoGram PERF: throttled cache wrapper around isSenderOnline(). Recomputes the (native-clock-backed)
+    // NebulaGram PERF: throttled cache wrapper around isSenderOnline(). Recomputes the (native-clock-backed)
     // online state at most once per ~1000ms; the fade is driven off the cached boolean. force=true (used on
     // bind) computes immediately so a freshly bound cell never shows a stale recycled value.
     private boolean recomputeSenderOnlineIfStale(boolean force) {
@@ -6702,7 +6702,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         return senderIsOnline;
     }
 
-    // NimarkoGram: drawn by ChatActivity right after it blits this cell's avatar, so we inherit the
+    // NebulaGram: drawn by ChatActivity right after it blits this cell's avatar, so we inherit the
     // parent-owned avatar Y. Geometry mirrors DialogCell's dot (outer dpf2(6) background cut-out + inner dpf2(4)
     // theme-colored accent, centered at right-dpf2(5)/bottom-dpf2(6)) mapped onto this cell's avatar rect via the
     // ImageReceiver. The reused AnimatedFloat
@@ -6718,7 +6718,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         // (lazily, once — getParent() is only valid while attached, and we are attached + drawing here).
         // Mirrors avatarImage.setParentView((View) getParent()) at line 6579. invalidate.run() fires alongside
         // the View-parent invalidate, so the whole list repaints every tick → smooth fade in AND out.
-        // NimarkoGram PERF #5 (KEPT as full invalidate, intentionally): the dot is painted by ChatActivity at a
+        // NebulaGram PERF #5 (KEPT as full invalidate, intentionally): the dot is painted by ChatActivity at a
         // parent-owned avatar Y (imageReceiver.setImageY(y - dp(44)) for the sticky/pinned-bottom avatar), which
         // can sit far from this cell's own position and moves every scroll frame. The covering rect is only known
         // at draw time inside ChatActivity.drawChild, not here at fade-tick time, so a narrowed
@@ -10081,10 +10081,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                     float maxHeight;
                     int maxWidth;
-                    // NimarkoGram: adjustable sticker size (Appearance → Stickers). Ported from exteraGram —
+                    // NebulaGram: adjustable sticker size (Appearance → Stickers). Ported from exteraGram —
                     // the base 0.4f/0.5f factor is shifted by (stickerSize - 14)/40 (tablet) or /30 (phone).
                     // stickerSize == 14 (default) keeps the exact vanilla factor, so this is a no-op until set.
-                    final float nmStickerFactor = (app.nimarkogram.messenger.NimarkoConfig.stickerSize - app.nimarkogram.messenger.NimarkoConfig.STICKER_SIZE_DEFAULT);
+                    final float nmStickerFactor = (app.nebulagram.messenger.NebulaConfig.stickerSize - app.nebulagram.messenger.NebulaConfig.STICKER_SIZE_DEFAULT);
                     if (AndroidUtilities.isTablet()) {
                         maxHeight = maxWidth = (int) (AndroidUtilities.getMinTabletSide() * (0.4f + nmStickerFactor / 40f));
                     } else {
@@ -10173,7 +10173,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     availableTimeWidth = photoWidth - dp(14);
                     backgroundWidth = photoWidth + dp(12);
 
-                    // NimarkoGram: round the corners of ALL stickers (small radius, ~5% of the smaller side).
+                    // NebulaGram: round the corners of ALL stickers (small radius, ~5% of the smaller side).
                     // Telegram normally leaves stickers square (radius 0); the rounded look on some packs (e.g.
                     // E_z_2) is baked into opaque/full-bleed artwork. Clipping every sticker to a rounded rect
                     // rounds those opaque ones uniformly, while transparent stickers are visually unaffected
@@ -10279,13 +10279,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         photoWidth -= dp(52);
                     }
 
-                    // NimarkoGram: photo/video and GIF size amplifiers (CG parity).
+                    // NebulaGram: photo/video and GIF size amplifiers (CG parity).
                     {
                         float mediaModifier;
                         if (messageObject.type == MessageObject.TYPE_GIF) {
-                            mediaModifier = app.nimarkogram.messenger.NimarkoConfig.slider_gifsAmplifier / 100f;
+                            mediaModifier = app.nebulagram.messenger.NebulaConfig.slider_gifsAmplifier / 100f;
                         } else {
-                            mediaModifier = app.nimarkogram.messenger.NimarkoConfig.slider_mediaAmplifier / 100f;
+                            mediaModifier = app.nebulagram.messenger.NebulaConfig.slider_mediaAmplifier / 100f;
                         }
                         photoWidth = (int) (photoWidth * mediaModifier);
                         photoHeight = (int) (photoHeight * mediaModifier);
@@ -11770,12 +11770,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
         updateFlagSecure();
 
-        // NimarkoGram C1: cells are recycled, but onlineIndicatorProgress is only written at draw time and is
+        // NebulaGram C1: cells are recycled, but onlineIndicatorProgress is only written at draw time and is
         // never reset on rebind. A recycled cell would otherwise animate the dot from the PREVIOUS sender's
         // 0/1 state, flashing a ~150ms phantom dot on the new avatar. Force-snap the fade to the new sender's
         // state on bind (no fade) so no phantom appears. force=true gives the snap a fresh, non-throttled value.
         // currentUser/currentChat/isChat/isAvatarVisible are all final at this point, so isSenderOnline() is valid.
-        if (app.nimarkogram.messenger.NimarkoConfig.onlineIndicatorInGroups) {
+        if (app.nebulagram.messenger.NebulaConfig.onlineIndicatorInGroups) {
             onlineIndicatorProgress.force(recomputeSenderOnlineIfStale(true) ? 1f : 0f);
         } else {
             onlineIndicatorProgress.force(0f);
@@ -12006,7 +12006,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
 
         int maxVote = 0;
-        if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+        if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
             try {
                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
@@ -12741,7 +12741,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         // ChatMessageCell.java replyPressed block (~11380).
         if (replyPressed) {
             org.telegram.messenger.UserConfig _ng_getUserConfig = org.telegram.messenger.UserConfig.getInstance(currentAccount);
-            app.nimarkogram.messenger.utils.chats.NimarkoChatHelper _ng_getChatsHelper = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.getInstance(currentAccount);
+            app.nebulagram.messenger.utils.chats.NebulaChatHelper _ng_getChatsHelper = app.nebulagram.messenger.utils.chats.NebulaChatHelper.getInstance(currentAccount);
             org.telegram.messenger.MessagesController _ng_getMessagesController = org.telegram.messenger.MessagesController.getInstance(currentAccount);
 
             if (currentMessageObject != null && currentMessageObject.replyMessageObject != null
@@ -13279,13 +13279,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (!hasLinkPreview) {
                 String timeString = AndroidUtilities.formatLongDuration((int) duration);
                 int w = (int) Math.ceil(Theme.chat_audioTimePaint.measureText(timeString));
-                // NimarkoGram: larger voice-message bubble (CG parity).
+                // NebulaGram: larger voice-message bubble (CG parity).
                 // Always cap to maxWidth (the chat-bubble bound) so the voice
                 // pill stays inside the bubble even on narrower devices /
                 // when share-button etc. shrink the available width. Previous
                 // version clamped only to screenLimit which is broader than
                 // the bubble cap and produced overflow.
-                if (app.nimarkogram.messenger.NimarkoConfig.largerVoiceMessagesLayout) {
+                if (app.nebulagram.messenger.NebulaConfig.largerVoiceMessagesLayout) {
                     int extra = 0;
                     if (duration >= 180) {
                         extra = dp(120);
@@ -16505,8 +16505,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             canvas.restore();
             Theme.chat_durationPaint.setAlpha(255);
         }
-        // NimarkoGram (CG parity): hide overlay video timestamp/duration label when flag is on.
-        boolean ngHideVideoTs = app.nimarkogram.messenger.NimarkoConfig.hideVideoTimestamp
+        // NebulaGram (CG parity): hide overlay video timestamp/duration label when flag is on.
+        boolean ngHideVideoTs = app.nebulagram.messenger.NebulaConfig.hideVideoTimestamp
                 && (documentAttachType == DOCUMENT_ATTACH_TYPE_VIDEO || documentAttachType == DOCUMENT_ATTACH_TYPE_GIF);
         if (videoInfoLayout != null && (!drawPhotoImage || photoImage.getVisible()) && imageBackgroundSideColor == 0 && !ngHideVideoTs) {
             int x;
@@ -17227,7 +17227,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
-    /** NimarkoGram: dim blocked messages when msgFilterTransparentMsg is enabled. */
+    /** NebulaGram: dim blocked messages when msgFilterTransparentMsg is enabled. */
     private boolean filteredMessageTransparent;
     private boolean filteredMessageCollapsed;
 
@@ -17237,9 +17237,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             filteredMessageCollapsed = false;
             return;
         }
-        final boolean needsTransparent = app.nimarkogram.messenger.NimarkoConfig.msgFilterTransparentMsg;
-        final boolean needsCollapse = app.nimarkogram.messenger.NimarkoConfig.isMsgFiltersCollapseAutomatically();
-        if (!app.nimarkogram.messenger.NimarkoConfig.isEnableMsgFilters()
+        final boolean needsTransparent = app.nebulagram.messenger.NebulaConfig.msgFilterTransparentMsg;
+        final boolean needsCollapse = app.nebulagram.messenger.NebulaConfig.isMsgFiltersCollapseAutomatically();
+        if (!app.nebulagram.messenger.NebulaConfig.isEnableMsgFilters()
                 || !needsTransparent && !needsCollapse) {
             filteredMessageTransparent = false;
             filteredMessageCollapsed = false;
@@ -17250,7 +17250,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         final boolean blocked = messageObject.shouldBlockMessage();
         filteredMessageTransparent = needsTransparent && blocked;
         filteredMessageCollapsed = needsCollapse
-                && app.nimarkogram.messenger.chats.filters.MessagesFilterHelper.INSTANCE
+                && app.nebulagram.messenger.chats.filters.MessagesFilterHelper.INSTANCE
                 .shouldCollapseMessage(messageObject, blocked);
     }
 
@@ -19158,9 +19158,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else if (currentMessageObject.isRepostPreview) {
             timeString = LocaleController.formatSmallDateChat(messageObject.messageOwner.date) + ", " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
         } else if (edited) {
-            // NimarkoGram: when showPencilIcon is enabled, swap the "edited" text for a real
+            // NebulaGram: when showPencilIcon is enabled, swap the "edited" text for a real
             // pencil drawable rendered through a ColoredImageSpan (parity with Cherrygram).
-            if (app.nimarkogram.messenger.NimarkoConfig.showPencilIcon) {
+            if (app.nebulagram.messenger.NebulaConfig.showPencilIcon) {
                 // NG FIX: prepend a leading char BEFORE the pencil span (parity with
                 // createForwardedString), so the ReplacementSpan never lands at buffer index 0 of an
                 // empty SpannableStringBuilder where SpannableStringBuilder.replace() can drop it.
@@ -19169,7 +19169,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 SpannableStringBuilder editedBuilder = new SpannableStringBuilder();
                 editedBuilder
                         .append(' ')
-                        .append(app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.getEditedSpan())
+                        .append(app.nebulagram.messenger.utils.chats.NebulaChatHelper.getEditedSpan())
                         .append(' ')
                         .append(LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000));
                 timeString = editedBuilder;
@@ -19189,7 +19189,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             timeString = "🚫 " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
         } else if (!currentMessageObject.isMusic() && messageObject.messageOwner.forwards > 0) {
             // NG: when message has forwards count > 0, swap the time string for a forwards-count badge (CG parity).
-            timeString = app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.createForwardedString(messageObject);
+            timeString = app.nebulagram.messenger.utils.chats.NebulaChatHelper.createForwardedString(messageObject);
         } else {
             timeString = LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
         }
@@ -19238,10 +19238,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
         timeTextWidth = timeWidth = (int) Math.ceil(Theme.chat_timePaint.measureText(currentTimeString, 0, currentTimeString == null ? 0 : currentTimeString.length()));
-        // NimarkoGram: account for the pencil drawable's intrinsic width when icon mode replaces "edited".
-        if (edited && app.nimarkogram.messenger.NimarkoConfig.showPencilIcon
-                && app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.editedDrawable != null) {
-            timeTextWidth = timeWidth += app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.editedDrawable.getIntrinsicWidth();
+        // NebulaGram: account for the pencil drawable's intrinsic width when icon mode replaces "edited".
+        if (edited && app.nebulagram.messenger.NebulaConfig.showPencilIcon
+                && app.nebulagram.messenger.utils.chats.NebulaChatHelper.editedDrawable != null) {
+            timeTextWidth = timeWidth += app.nebulagram.messenger.utils.chats.NebulaChatHelper.editedDrawable.getIntrinsicWidth();
         }
         // NG: account for the forwards-count drawable's intrinsic width when the forwarded-count badge replaces the time (CG parity, ChatMessageCell:17699-17701).
         // NG FIX: reserve the forwards width ONLY when the forwards badge is actually the chosen
@@ -19253,8 +19253,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 && !(currentMessageObject.isSaved && currentMessageObject.messageOwner.fwd_from != null && (currentMessageObject.messageOwner.fwd_from.date != 0 || currentMessageObject.messageOwner.fwd_from.saved_date != 0))
                 && !currentMessageObject.shouldBlockMessage()
                 && !messageObject.isMusic() && messageObject.messageOwner.forwards > 0
-                && app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.forwardsDrawable != null) {
-            timeTextWidth = timeWidth += app.nimarkogram.messenger.utils.chats.NimarkoChatHelper.forwardsDrawable.getIntrinsicWidth();
+                && app.nebulagram.messenger.utils.chats.NebulaChatHelper.forwardsDrawable != null) {
+            timeTextWidth = timeWidth += app.nebulagram.messenger.utils.chats.NebulaChatHelper.forwardsDrawable.getIntrinsicWidth();
         }
         if (currentMessageObject.scheduled && currentMessageObject.messageOwner.date == 0x7FFFFFFE || currentMessageObject.notime) {
             timeWidth -= dp(8);
@@ -19768,8 +19768,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else if (currentNameStatus instanceof Drawable) {
                     currentNameStatusDrawable.set((Drawable) currentNameStatus, false);
                 }
-                // NimarkoGram: particles on when this is a nimarko/extera badge.
-                currentNameStatusDrawable.setParticles(currentNimarkoAuthorBadge != null, false);
+                // NebulaGram: particles on when this is a nebula/extera badge.
+                currentNameStatusDrawable.setParticles(currentNebulaAuthorBadge != null, false);
             }
             if (currentNameEmojiStatusDrawable == null && currentNameBotVerificationId != 0) {
                 currentNameEmojiStatusDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(this, true, dp(18));
@@ -19866,9 +19866,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
 
                     forwardedNameWidth = getMaxNameWidth();
-                    // NimarkoGram (CG parity): replace the "Forwarded from" header with the
+                    // NebulaGram (CG parity): replace the "Forwarded from" header with the
                     // original date/time when msgForwardDate is on.
-                    if (app.nimarkogram.messenger.NimarkoConfig.msgForwardDate
+                    if (app.nebulagram.messenger.NebulaConfig.msgForwardDate
                             && !currentMessageObject.isSaved
                             && messageObject.messageOwner.fwd_from != null
                             && messageObject.messageOwner.fwd_from.date != 0) {
@@ -20200,19 +20200,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 // Reply previews are one-line text. Avoid bitmap LaTeX
                                 // rendering on the UI thread when there are no entity
                                 // offsets to preserve.
-                                quoteCs = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(mess);
+                                quoteCs = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(mess);
                             } else {
-                                quoteCs = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(
+                                quoteCs = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(
                                         quoteCs, textPaint.getTextSize(), maxWidth, true);
                             }
                         }
                         stringFinalText = (quoteCs instanceof SpannableStringBuilder) ? (SpannableStringBuilder) quoteCs : new SpannableStringBuilder(quoteCs);
                         stringFinalText = Emoji.replaceEmoji(stringFinalText, textPaint.getFontMetricsInt(), false);
                         if (messageObject.messageOwner.reply_to.quote_entities != null) {
-                            // NimarkoGram: reconstruct local premium emoji in the
+                            // NebulaGram: reconstruct local premium emoji in the
                             // raw quote entities before turning them into spans.
                             try {
-                                app.nimarkogram.messenger.utils.NimarkoLocalEmoji.parseCustomEmojis(
+                                app.nebulagram.messenger.utils.NebulaLocalEmoji.parseCustomEmojis(
                                         stringFinalText, messageObject.messageOwner.reply_to.quote_entities, 0);
                             } catch (Throwable ignored) {}
                             stringFinalText = MessageObject.replaceAnimatedEmoji(stringFinalText, messageObject.messageOwner.reply_to.quote_entities, textPaint.getFontMetricsInt(), true);
@@ -20243,9 +20243,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             if (messageObject.replyMessageObject.messageOwner == null
                                     || messageObject.replyMessageObject.messageOwner.entities == null
                                     || messageObject.replyMessageObject.messageOwner.entities.isEmpty()) {
-                                capReplyCs = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(capReply);
+                                capReplyCs = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(capReply);
                             } else {
-                                capReplyCs = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(
+                                capReplyCs = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(
                                         capReplyCs, textPaint.getTextSize(), maxWidth, true);
                             }
                         }
@@ -20274,9 +20274,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             if (messageObject.replyMessageObject.messageOwner == null
                                     || messageObject.replyMessageObject.messageOwner.entities == null
                                     || messageObject.replyMessageObject.messageOwner.entities.isEmpty()) {
-                                mess = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(mess.toString());
+                                mess = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(mess.toString());
                             } else {
-                                mess = app.nimarkogram.messenger.utils.NimarkoLatexHelper.processLatex(
+                                mess = app.nebulagram.messenger.utils.NebulaLatexHelper.processLatex(
                                         mess, textPaint.getTextSize(), maxWidth, true);
                             }
                         }
@@ -20474,7 +20474,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else if (messageObject.type == MessageObject.TYPE_ROUND_VIDEO) {
                     maxWidth += dp(13);
                 }
-                // NimarkoGram: for stickers/round video getMaxNameWidth() is
+                // NebulaGram: for stickers/round video getMaxNameWidth() is
                 // parent-width-minus-backgroundWidth math that can come out slightly
                 // NEGATIVE on some width combinations (seen -21 in the height-measure
                 // pass) — StaticLayout throws "Layout: -21 < 0". This branch sits
@@ -20572,14 +20572,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         return "DELETED";
     }
 
-    // NimarkoGram: cache the BadgeDTO that fed currentNameStatus this bind so
+    // NebulaGram: cache the BadgeDTO that fed currentNameStatus this bind so
     // the touch handler can show a bulletin + the draw path can enable
     // particles on swap drawable.
-    private app.nimarkogram.messenger.api.dto.BadgeDTO currentNimarkoAuthorBadge;
+    private app.nebulagram.messenger.api.dto.BadgeDTO currentNebulaAuthorBadge;
 
     private Object getAuthorStatus() {
-        currentNimarkoAuthorBadge = null;
-        if (app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) return null;
+        currentNebulaAuthorBadge = null;
+        if (app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) return null;
         if (currentUser != null) {
             Long emojiStatusId = UserObject.getEmojiStatusDocumentId(currentUser);
             if (emojiStatusId != null) {
@@ -20588,15 +20588,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
                 return emojiStatusId;
             }
-            // NimarkoGram: extera-style author badge — appears in place of
+            // NebulaGram: extera-style author badge — appears in place of
             // premium star when no emoji status is set. Returning the
             // badge's document id lets the existing emoji-status draw path
             // pick it up as if it were a regular emoji status.
             try {
-                app.nimarkogram.messenger.api.dto.BadgeDTO badge =
-                        app.nimarkogram.messenger.badges.BadgesController.getInstance().i((org.telegram.tgnet.TLObject) currentUser);
+                app.nebulagram.messenger.api.dto.BadgeDTO badge =
+                        app.nebulagram.messenger.badges.BadgesController.getInstance().i((org.telegram.tgnet.TLObject) currentUser);
                 if (badge != null && badge.getDocumentId() != 0L) {
-                    currentNimarkoAuthorBadge = badge;
+                    currentNebulaAuthorBadge = badge;
                     return Long.valueOf(badge.getDocumentId());
                 }
             } catch (Throwable ignored) {}
@@ -21145,8 +21145,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             drawOverlays(canvas);
         }
         if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isQuickReply() || currentMessageObject.isSendError())
-                // NimarkoGram: hide the timestamp overlay on sticker / animated emoji messages.
-                && (!currentMessageObject.isAnyKindOfSticker() || !app.nimarkogram.messenger.NimarkoConfig.hideStickerTime)) {
+                // NebulaGram: hide the timestamp overlay on sticker / animated emoji messages.
+                && (!currentMessageObject.isAnyKindOfSticker() || !app.nebulagram.messenger.NebulaConfig.hideStickerTime)) {
             drawTime(canvas, 1f, false);
         }
 
@@ -23678,7 +23678,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 // draw reply background
                 leftRad = bottomRad; // line redesign
                 replyLine.setLoading(loading);
-                replyLine.drawBackground(canvas, replySelectorRect, leftRad, rightRad, bottomRad, alpha, isReplyQuote, currentMessageObject.shouldDrawWithoutBackground() || !app.nimarkogram.messenger.NimarkoConfig.replyBackground);
+                replyLine.drawBackground(canvas, replySelectorRect, leftRad, rightRad, bottomRad, alpha, isReplyQuote, currentMessageObject.shouldDrawWithoutBackground() || !app.nebulagram.messenger.NebulaConfig.replyBackground);
 
                 if (replySelector == null) {
                     replySelector = Theme.createRadSelectorDrawable(replySelectorColor = rippleColor, 0, 0);
@@ -27473,8 +27473,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     @Override
     public boolean performAccessibilityAction(int action, Bundle arguments) {
-        if (action == R.id.acc_action_badge_info && currentNimarkoAuthorBadge != null) {
-            showNimarkoAuthorBadgeBulletin(currentNimarkoAuthorBadge);
+        if (action == R.id.acc_action_badge_info && currentNebulaAuthorBadge != null) {
+            showNebulaAuthorBadgeBulletin(currentNebulaAuthorBadge);
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
             return true;
         }
@@ -27579,8 +27579,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        if (currentNimarkoAuthorBadge != null) {
-            CharSequence badgeText = currentNimarkoAuthorBadge.getText();
+        if (currentNebulaAuthorBadge != null) {
+            CharSequence badgeText = currentNebulaAuthorBadge.getText();
             CharSequence label = TextUtils.isEmpty(badgeText)
                     ? getString(R.string.NM_ProfileBadge)
                     : getString(R.string.NM_ProfileBadge) + ": " + badgeText;
@@ -28061,9 +28061,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                     } else if (!TextUtils.isEmpty(currentMessageObject.messageText)) {
                         CharSequence messageText = currentMessageObject.messageText;
-                        // NimarkoGram: strip LaTeX delimiters for a cleaner accessibility preview.
+                        // NebulaGram: strip LaTeX delimiters for a cleaner accessibility preview.
                         if (messageText.toString().contains("$")) {
-                            messageText = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(messageText.toString());
+                            messageText = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(messageText.toString());
                         }
                         if (messageText instanceof Spanned) {
                             final Spanned spanned = (Spanned) messageText;

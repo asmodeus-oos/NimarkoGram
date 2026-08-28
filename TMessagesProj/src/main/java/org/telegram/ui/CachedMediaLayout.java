@@ -550,7 +550,7 @@ public class CachedMediaLayout extends FrameLayout implements NestedSizeNotifier
                         title = DialogObject.setDialogPhotoTitle(userCell.getImageView(), object);
                     }
                     userCell.dialogFileEntities = dialogFileEntities;
-                    userCell.getImageView().setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(38, object instanceof TLRPC.Chat && ((TLRPC.Chat) object).forum));
+                    userCell.getImageView().setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(38, object instanceof TLRPC.Chat && ((TLRPC.Chat) object).forum));
                     userCell.setTextAndValue(title, AndroidUtilities.formatFileSize(dialogFileEntities.totalSize), position < getItemCount() - 1);
                     userCell.setChecked(cacheModel.isSelected(dialogFileEntities.dialogId), animated);
                     break;

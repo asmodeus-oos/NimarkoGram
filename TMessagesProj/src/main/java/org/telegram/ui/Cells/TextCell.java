@@ -620,9 +620,9 @@ public class TextCell extends FrameLayout {
     }
 
     public void setColorfulIcon(int colorTop, int colorBottom, int resId) {
-        colorTop = app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(colorTop);
-        colorBottom = app.nimarkogram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(colorBottom);
-        final int foreground = app.nimarkogram.messenger.utils.ui.MonetHelper
+        colorTop = app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(colorTop);
+        colorBottom = app.nebulagram.messenger.utils.ui.MonetHelper.getSettingsIconBackgroundColor(colorBottom);
+        final int foreground = app.nebulagram.messenger.utils.ui.MonetHelper
                 .getSettingsIconForegroundColor(Color.WHITE);
 
         offsetFromImage = getOffsetFromImage(true);

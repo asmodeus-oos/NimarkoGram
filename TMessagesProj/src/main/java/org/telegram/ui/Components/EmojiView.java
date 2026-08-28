@@ -1564,9 +1564,9 @@ public class EmojiView extends FrameLayout implements
         this.shouldDrawBackground = shouldDrawBackground;
         this.fragment = fragment;
         this.allowAnimatedEmoji = needAnimatedEmoji;
-        // NimarkoGram: local premium emoji — unlock the premium custom-emoji
+        // NebulaGram: local premium emoji — unlock the premium custom-emoji
         // picker for non-premium accounts (they get smuggled on send).
-        if (app.nimarkogram.messenger.utils.NimarkoLocalEmoji.canUse(currentAccount)) {
+        if (app.nebulagram.messenger.utils.NebulaLocalEmoji.canUse(currentAccount)) {
             this.allowEmojisForNonPremium = true;
         }
         this.resourcesProvider = resourcesProvider;
@@ -2640,8 +2640,8 @@ public class EmojiView extends FrameLayout implements
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
                     backspacePressed = false;
                     if (!backspaceOnce) {
-                        // NimarkoGram: gate haptic feedback on "Disable vibration".
-                        if (delegate != null && delegate.onBackspace() && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                        // NebulaGram: gate haptic feedback on "Disable vibration".
+                        if (delegate != null && delegate.onBackspace() && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
                             try {
                                 backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                             } catch (Exception ignore) {}
@@ -2652,7 +2652,7 @@ public class EmojiView extends FrameLayout implements
                 return true;
             }
         };
-        backspaceButton.setHapticFeedbackEnabled(!app.nimarkogram.messenger.NimarkoConfig.disableVibration);
+        backspaceButton.setHapticFeedbackEnabled(!app.nebulagram.messenger.NebulaConfig.disableVibration);
         backspaceButton.setImageResource(R.drawable.smiles_tab_clear);
         backspaceButton.setColorFilter(new PorterDuffColorFilter(glassDesign ? getGlassIconColor(0.6f) : getThemedColor(Theme.key_chat_emojiPanelBackspace), PorterDuff.Mode.MULTIPLY));
         backspaceButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -5492,8 +5492,8 @@ public class EmojiView extends FrameLayout implements
             if (!backspacePressed) {
                 return;
             }
-            // NimarkoGram: gate haptic feedback on "Disable vibration".
-            if (delegate != null && delegate.onBackspace() && !app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+            // NebulaGram: gate haptic feedback on "Disable vibration".
+            if (delegate != null && delegate.onBackspace() && !app.nebulagram.messenger.NebulaConfig.disableVibration) {
                 try {
                     backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 } catch (Exception ignore) {}

@@ -20,7 +20,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.utils.DrawableUtils;
 import org.telegram.ui.ActionBar.Theme;
 
-import app.nimarkogram.messenger.NimarkoConfig;
+import app.nebulagram.messenger.NebulaConfig;
 
 public class CommunityArrowDrawable extends Drawable {
     private static final float INLINE_MAX_WIDTH_DP = 20f;
@@ -41,7 +41,7 @@ public class CommunityArrowDrawable extends Drawable {
     }
 
     private void ensureArrowDrawable() {
-        final int iconPack = NimarkoConfig.iconReplacement;
+        final int iconPack = NebulaConfig.iconReplacement;
         if (arrowDrawable != null
                 && loadedIconPack == iconPack
                 && loadedInline == inline) {
@@ -53,17 +53,17 @@ public class CommunityArrowDrawable extends Drawable {
         stockTelegramArrow = false;
         arrowRotationDegrees = 0f;
         switch (iconPack) {
-            case NimarkoConfig.ICON_REPLACE_LIQUID_GLASS:
+            case NebulaConfig.ICON_REPLACE_LIQUID_GLASS:
                 drawableId = R.drawable.arrow_more_liquid;
                 break;
-            case NimarkoConfig.ICON_REPLACE_PLUMPY:
+            case NebulaConfig.ICON_REPLACE_PLUMPY:
                 
                 drawableId = R.drawable.community_arrow_plumpy;
                 break;
-            case NimarkoConfig.ICON_REPLACE_SOLAR:
+            case NebulaConfig.ICON_REPLACE_SOLAR:
                 drawableId = R.drawable.arrow_more_solar;
                 break;
-            case NimarkoConfig.ICON_REPLACE_NONE:
+            case NebulaConfig.ICON_REPLACE_NONE:
             default:
                 if (inline) {
                     

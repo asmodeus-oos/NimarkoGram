@@ -6,7 +6,7 @@ import android.content.Context;
 import org.telegram.ui.ActionBar.Theme;
 
 @SuppressLint("ViewConstructor")
-public abstract class TranslateBeforeSendWrapper extends app.nimarkogram.messenger.components.TranslateBeforeSendWrapper {
+public abstract class TranslateBeforeSendWrapper extends app.nebulagram.messenger.components.TranslateBeforeSendWrapper {
     public TranslateBeforeSendWrapper(Context context, boolean top, boolean bottom,
                                       Theme.ResourcesProvider resourcesProvider) {
         super(context, top, bottom, resourcesProvider);

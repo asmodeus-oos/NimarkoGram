@@ -12,7 +12,7 @@ import zipfile
 REPO = pathlib.Path(__file__).resolve().parents[4]
 PIP = (
     REPO
-    / "TMessagesProj/src/main/java/app/nimarkogram/messenger/plugins/pip"
+    / "TMessagesProj/src/main/java/app/nebulagram/messenger/plugins/pip"
     / "PipController.java"
 )
 
@@ -524,7 +524,7 @@ class PipModuleLifecycleTest(unittest.TestCase):
         )
         namespace = {}
         exec(helper, namespace)
-        package_name = "_nimarko_mixed_namespace"
+        package_name = "_nebula_mixed_namespace"
         child_name = f"{package_name}.retired"
         previous_package = os.sys.modules.get(package_name, _MISSING)
         previous_child = os.sys.modules.get(child_name, _MISSING)
@@ -635,7 +635,7 @@ class PipModuleLifecycleTest(unittest.TestCase):
                     raise RuntimeError("injected namespace failure")
                 self.value = value
 
-        package_name = "_nimarko_mixed_rollback"
+        package_name = "_nebula_mixed_rollback"
         previous = os.sys.modules.get(package_name, _MISSING)
         before_path = list(os.sys.path)
         try:
@@ -1058,7 +1058,7 @@ class PipModuleLifecycleTest(unittest.TestCase):
         )
         namespace = {}
         exec(helper, namespace)
-        package_name = "_nimarko_pip_probe"
+        package_name = "_nebula_pip_probe"
         child_name = f"{package_name}.child"
         previous_package = os.sys.modules.get(package_name, _MISSING)
         previous_child = os.sys.modules.get(child_name, _MISSING)

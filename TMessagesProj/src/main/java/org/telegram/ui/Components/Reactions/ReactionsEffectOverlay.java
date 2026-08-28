@@ -759,8 +759,8 @@ public class ReactionsEffectOverlay {
     }
 
     public static void show(BaseFragment baseFragment, ReactionsContainerLayout reactionsLayout, View cell, View fromAnimationView, float x, float y, ReactionsLayoutInBubble.VisibleReaction visibleReaction, int currentAccount, int animationType) {
-        if (app.nimarkogram.messenger.NimarkoConfig.disableReactionAnim
-                || app.nimarkogram.messenger.NimarkoConfig.disableReactionsOverlay) {
+        if (app.nebulagram.messenger.NebulaConfig.disableReactionAnim
+                || app.nebulagram.messenger.NebulaConfig.disableReactionsOverlay) {
             return;
         }
         if (cell == null || visibleReaction == null || baseFragment == null || baseFragment.getParentActivity() == null) {
@@ -812,8 +812,8 @@ public class ReactionsEffectOverlay {
     }
 
     public static void startAnimation() {
-        if (app.nimarkogram.messenger.NimarkoConfig.disableReactionAnim
-                || app.nimarkogram.messenger.NimarkoConfig.disableReactionsOverlay) {
+        if (app.nebulagram.messenger.NebulaConfig.disableReactionAnim
+                || app.nebulagram.messenger.NebulaConfig.disableReactionsOverlay) {
             return;
         }
         if (currentOverlay != null) {

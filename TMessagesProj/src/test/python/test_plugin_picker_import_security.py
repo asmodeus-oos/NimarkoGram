@@ -4,9 +4,9 @@ import unittest
 REPO = pathlib.Path(__file__).resolve().parents[4]
 JAVA = REPO / 'TMessagesProj/src/main/java'
 ACTIVITY = JAVA / (
-    'app/nimarkogram/messenger/plugins/ui/PluginsActivity.java')
+    'app/nebulagram/messenger/plugins/ui/PluginsActivity.java')
 SHEET = JAVA / (
-    'app/nimarkogram/messenger/plugins/ui/components/'
+    'app/nebulagram/messenger/plugins/ui/components/'
     'InstallPluginBottomSheet.java')
 
 def source(path):

@@ -1,7 +1,7 @@
 """Main-thread and runtime ownership helpers for plugin UI SDK modules."""
 
-from app.nimarkogram.messenger.plugins.ui import PluginUiRegistry
-from app.nimarkogram.messenger.plugins.utils import PythonRunnable
+from app.nebulagram.messenger.plugins.ui import PluginUiRegistry
+from app.nebulagram.messenger.plugins.utils import PythonRunnable
 from org.telegram.messenger import AndroidUtilities
 
 from plugin_runtime import capture_callback_owner

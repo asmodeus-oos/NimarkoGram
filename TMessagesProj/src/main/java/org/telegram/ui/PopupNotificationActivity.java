@@ -475,7 +475,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         avatarContainer.setLayoutParams(layoutParams2);
 
         avatarImageView = new BackupImageView(this);
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(42));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(42));
         avatarContainer.addView(avatarImageView);
         layoutParams2 = (FrameLayout.LayoutParams) avatarImageView.getLayoutParams();
         layoutParams2.width = AndroidUtilities.dp(42);
@@ -934,7 +934,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     messageText.setTextSize(TypedValue.COMPLEX_UNIT_SP, SharedConfig.fontSize);
                     CharSequence popupText931 = messageObject.messageText;
                     if (popupText931 != null && popupText931.toString().contains("$")) {
-                        popupText931 = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(popupText931.toString());
+                        popupText931 = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(popupText931.toString());
                     }
                     messageText.setText(popupText931);
                 } else {
@@ -945,7 +945,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 messageText.setVisibility(View.GONE);
                 CharSequence popupText938 = messageObject.messageText;
                 if (popupText938 != null && popupText938.toString().contains("$")) {
-                    popupText938 = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(popupText938.toString());
+                    popupText938 = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(popupText938.toString());
                 }
                 messageText.setText(popupText938);
                 imageView.setVisibility(View.VISIBLE);
@@ -1021,7 +1021,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             messageText.setTextSize(TypedValue.COMPLEX_UNIT_SP, SharedConfig.fontSize);
             CharSequence popupText1010 = messageObject.messageText;
             if (popupText1010 != null && popupText1010.toString().contains("$")) {
-                popupText1010 = app.nimarkogram.messenger.utils.NimarkoLatexHelper.cleanForPreview(popupText1010.toString());
+                popupText1010 = app.nebulagram.messenger.utils.NebulaLatexHelper.cleanForPreview(popupText1010.toString());
             }
             messageText.setText(popupText1010);
         }

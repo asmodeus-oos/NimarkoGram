@@ -78,8 +78,8 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable botVerification;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable emojiStatus;
     
-    private AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable nimarkoBadgeEmoji;
-    private app.nimarkogram.messenger.api.dto.BadgeDTO currentNimarkoBadge;
+    private AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable nebulaBadgeEmoji;
+    private app.nebulagram.messenger.api.dto.BadgeDTO currentNebulaBadge;
     private ImageView closeView;
     protected Theme.ResourcesProvider resourcesProvider;
 
@@ -184,7 +184,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
                 return super.onTouchEvent(event);
             }
         };
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(48));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(48));
         addView(avatarImageView, LayoutHelper.createFrame(46, 46, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 7 + padding, 6, LocaleController.isRTL ? 7 + padding : 0, 0));
         setClipChildren(false);
 
@@ -486,7 +486,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
         nameTextView.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 30 : (66 + padding), 10, LocaleController.isRTL ? (66 + padding) : 30, 0));
         statusTextView.setTextSize(13);
         statusTextView.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 30 : (66 + padding), 32, LocaleController.isRTL ? (66 + padding) : 30, 0));
-        avatarImageView.setRoundRadius(app.nimarkogram.messenger.NimarkoConfig.getAvatarCorners(44));
+        avatarImageView.setRoundRadius(app.nebulagram.messenger.NebulaConfig.getAvatarCorners(44));
         avatarImageView.setLayoutParams(LayoutHelper.createFrame(44, 44, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 8 + padding, 6, LocaleController.isRTL ? 8 + padding : 0, 0));
         if (checkBox != null) {
             checkBox.setLayoutParams(LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 37 + padding, 32, LocaleController.isRTL ? 37 + padding : 0, 0));
@@ -674,7 +674,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             botVerification.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
             nameTextView.setLeftDrawable(botVerification);
         }
-        if (currentUser != null && MessagesController.getInstance(currentAccount).isPremiumUser(currentUser) && !MessagesController.getInstance(currentAccount).premiumFeaturesBlocked() && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses) {
+        if (currentUser != null && MessagesController.getInstance(currentAccount).isPremiumUser(currentUser) && !MessagesController.getInstance(currentAccount).premiumFeaturesBlocked() && !app.nebulagram.messenger.NebulaConfig.disablePremiumStatuses) {
             if (DialogObject.getEmojiStatusDocumentId(currentUser.emoji_status) != 0) {
                 emojiStatus.set(DialogObject.getEmojiStatusDocumentId(currentUser.emoji_status), false);
                 emojiStatus.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
@@ -700,7 +700,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             nameTextView.setRightDrawable(null);
             nameTextView.setRightDrawableTopPadding(0);
         }
-        applyNimarkoBadge(currentUser);
+        applyNebulaBadge(currentUser);
         if (currentStatus != null) {
             statusTextView.setTextColor(statusColor);
             CharSequence status = currentStatus;
@@ -723,7 +723,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
                 } else {
                     statusTextView.setTextColor(statusColor);
                     
-                    statusTextView.setText(app.nimarkogram.messenger.NimarkoConfig.oldTimeStyle
+                    statusTextView.setText(app.nebulagram.messenger.NebulaConfig.oldTimeStyle
                             ? LocaleController.formatUserStatus(currentAccount, currentUser)
                             : LocaleController.formatUserStatusIOS(currentAccount, currentUser));
                 }
@@ -745,7 +745,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
         }
 
         avatarImageView.setRoundRadius(isCommunity ? dp(46 * 20 / 72f) :
-                app.nimarkogram.messenger.NimarkoConfig.getAvatarCornersForChat(48, currentChat != null && currentChat.forum));
+                app.nebulagram.messenger.NebulaConfig.getAvatarCornersForChat(48, currentChat != null && currentChat.forum));
 
         nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
     }
@@ -814,9 +814,9 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
                 sb.append(status);
             }
         }
-        if (currentNimarkoBadge != null) {
+        if (currentNebulaBadge != null) {
             if (sb.length() > 0) sb.append(", ");
-            CharSequence badgeLabel = app.nimarkogram.messenger.badges.BadgeUi.accessibilityLabel(currentNimarkoBadge);
+            CharSequence badgeLabel = app.nebulagram.messenger.badges.BadgeUi.accessibilityLabel(currentNebulaBadge);
             sb.append(badgeLabel);
             info.addAction(new AccessibilityNodeInfo.AccessibilityAction(
                     R.id.acc_action_badge_info, badgeLabel));
@@ -828,8 +828,8 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
 
     @Override
     public boolean performAccessibilityAction(int action, Bundle arguments) {
-        if (action == R.id.acc_action_badge_info && currentNimarkoBadge != null) {
-            app.nimarkogram.messenger.badges.BadgeUi.showBulletin(currentAccount, currentNimarkoBadge);
+        if (action == R.id.acc_action_badge_info && currentNebulaBadge != null) {
+            app.nebulagram.messenger.badges.BadgeUi.showBulletin(currentAccount, currentNebulaBadge);
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
             return true;
         }
@@ -849,8 +849,8 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         emojiStatus.attach();
         botVerification.attach();
-        if (nimarkoBadgeEmoji != null) {
-            nimarkoBadgeEmoji.attach();
+        if (nebulaBadgeEmoji != null) {
+            nebulaBadgeEmoji.attach();
         }
     }
 
@@ -860,40 +860,40 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         emojiStatus.detach();
         botVerification.detach();
-        if (nimarkoBadgeEmoji != null) {
-            nimarkoBadgeEmoji.detach();
+        if (nebulaBadgeEmoji != null) {
+            nebulaBadgeEmoji.detach();
         }
         storyParams.onDetachFromWindow();
     }
 
-    private void applyNimarkoBadge(TLRPC.User user) {
-        currentNimarkoBadge = null;
+    private void applyNebulaBadge(TLRPC.User user) {
+        currentNebulaBadge = null;
         try {
-            app.nimarkogram.messenger.api.dto.BadgeDTO badge =
-                    app.nimarkogram.messenger.badges.BadgesController.getInstance().i(user);
+            app.nebulagram.messenger.api.dto.BadgeDTO badge =
+                    app.nebulagram.messenger.badges.BadgesController.getInstance().i(user);
             if (badge == null || badge.getDocumentId() == 0L) {
-                if (nimarkoBadgeEmoji != null) {
-                    nimarkoBadgeEmoji.set((Drawable) null, false);
+                if (nebulaBadgeEmoji != null) {
+                    nebulaBadgeEmoji.set((Drawable) null, false);
                     
-                    nimarkoBadgeEmoji.setParticles(false, false);
+                    nebulaBadgeEmoji.setParticles(false, false);
                 }
                 nameTextView.setRightDrawable2(null);
                 return;
             }
-            currentNimarkoBadge = badge;
-            if (nimarkoBadgeEmoji == null) {
-                nimarkoBadgeEmoji = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(nameTextView, dp(20));
+            currentNebulaBadge = badge;
+            if (nebulaBadgeEmoji == null) {
+                nebulaBadgeEmoji = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(nameTextView, dp(20));
                 if (isAttachedToWindow()) {
-                    nimarkoBadgeEmoji.attach();
+                    nebulaBadgeEmoji.attach();
                 }
             }
-            nimarkoBadgeEmoji.set(badge.getDocumentId(), false);
-            nimarkoBadgeEmoji.setParticles(true, false);
-            nimarkoBadgeEmoji.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
+            nebulaBadgeEmoji.set(badge.getDocumentId(), false);
+            nebulaBadgeEmoji.setParticles(true, false);
+            nebulaBadgeEmoji.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
             if (nameTextView.getRightDrawable() == null) {
-                nameTextView.setRightDrawable(nimarkoBadgeEmoji);
+                nameTextView.setRightDrawable(nebulaBadgeEmoji);
             } else {
-                nameTextView.setRightDrawable2(nimarkoBadgeEmoji);
+                nameTextView.setRightDrawable2(nebulaBadgeEmoji);
             }
             nameTextView.setRightDrawableTopPadding(-dp(0.5f));
         } catch (Throwable ignored) {}

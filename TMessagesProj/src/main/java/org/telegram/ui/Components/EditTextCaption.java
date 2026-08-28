@@ -897,7 +897,7 @@ public class EditTextCaption extends EditTextBoldCursor implements FloatingToolb
 
     @Override
     protected void onDraw(Canvas canvas) {
-        app.nimarkogram.messenger.textanim.NimarkoTextAnim.beforeEditorDraw(this);
+        app.nebulagram.messenger.textanim.NebulaTextAnim.beforeEditorDraw(this);
         try {
             final int saveCount = canvas.save();
             try {
@@ -930,7 +930,7 @@ public class EditTextCaption extends EditTextBoldCursor implements FloatingToolb
                 canvas.restoreToCount(saveCount);
             }
         } finally {
-            app.nimarkogram.messenger.textanim.NimarkoTextAnim.afterEditorDraw(this, canvas);
+            app.nebulagram.messenger.textanim.NebulaTextAnim.afterEditorDraw(this, canvas);
         }
     }
 
@@ -938,7 +938,7 @@ public class EditTextCaption extends EditTextBoldCursor implements FloatingToolb
     protected void onFocusChanged(
             boolean focused, int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
-        app.nimarkogram.messenger.textanim.NimarkoTextAnim.onEditorFocusChanged(
+        app.nebulagram.messenger.textanim.NebulaTextAnim.onEditorFocusChanged(
                 this, focused);
     }
 
@@ -947,14 +947,14 @@ public class EditTextCaption extends EditTextBoldCursor implements FloatingToolb
         try {
             return super.onTouchEvent(event);
         } finally {
-            app.nimarkogram.messenger.textanim.NimarkoTextAnim.onEditorTouch(this);
+            app.nebulagram.messenger.textanim.NebulaTextAnim.onEditorTouch(this);
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         try {
-            app.nimarkogram.messenger.textanim.NimarkoTextAnim.onEditorFocusChanged(
+            app.nebulagram.messenger.textanim.NebulaTextAnim.onEditorFocusChanged(
                     this, false);
         } finally {
             super.onDetachedFromWindow();
@@ -1141,7 +1141,7 @@ public class EditTextCaption extends EditTextBoldCursor implements FloatingToolb
     }
 
     // NG: ported from Cherrygram EditTextCaption.makeSelectedCode/Mention so
-    // NimarkoChatActivityHelper's OPTION_TEXT_CODE / OPTION_TEXT_MENTION can wire
+    // NebulaChatActivityHelper's OPTION_TEXT_CODE / OPTION_TEXT_MENTION can wire
     // through. Strings live under NM_CreateCode* / NM_CreateMention so locales
     // can override the English defaults (CG used CG_CreateCode* / CG_CreateMention).
     public void makeSelectedCode() {

@@ -1,7 +1,7 @@
 """
 extera_utils.metadata_parser — read a plugin's declared __metadata__.
 
-Delegates to NimarkoGram's ``utils.metadata_parser.get_metadata(path)`` which
+Delegates to NebulaGram's ``utils.metadata_parser.get_metadata(path)`` which
 parses the ``__version__`` / ``__name__`` / ``__author__`` / ... module-level
 constants out of a .py plugin file. The plugin path is resolved through the
 real PluginsController.
@@ -18,7 +18,7 @@ def _resolve_path(plugin):
     if not pid:
         return None
     try:
-        from app.nimarkogram.messenger.plugins import PluginsController
+        from app.nebulagram.messenger.plugins import PluginsController
         return PluginsController.getInstance().getPluginPath(pid)
     except Exception:
         return None

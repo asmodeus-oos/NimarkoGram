@@ -30,7 +30,7 @@ public final class XposedBridge {
             return true;
         }
         String reason = org.telegram.messenger.ApplicationLoader.getPineUnavailableReason();
-        FileLog.w("nimarko: Pine unavailable; hook ignored for "
+        FileLog.w("nebula: Pine unavailable; hook ignored for "
                 + describeMember(member)
                 + (reason == null ? "" : " (" + reason + ")"));
         return false;
@@ -38,23 +38,23 @@ public final class XposedBridge {
 
     public static XC_MethodHook.Unhook hookMethod(Member member, XC_MethodHook callback) {
         if (member == null) {
-            FileLog.w("nimarko: hookMethod(null) ignored");
+            FileLog.w("nebula: hookMethod(null) ignored");
             return null;
         }
         if (callback == null) {
-            FileLog.w("nimarko: hookMethod(callback=null) ignored for " + member);
+            FileLog.w("nebula: hookMethod(callback=null) ignored for " + member);
             return null;
         }
         if (!ensureHookBackend(member)) {
             return null;
         }
         try {
-            app.nimarkogram.messenger.plugins.xposed.PineAdapter adapter =
-                    new app.nimarkogram.messenger.plugins.xposed.PineAdapter(member, callback);
+            app.nebulagram.messenger.plugins.xposed.PineAdapter adapter =
+                    new app.nebulagram.messenger.plugins.xposed.PineAdapter(member, callback);
             
             Object pineHandle = top.canyie.pine.Pine.hook(member, adapter);
             if (pineHandle == null) {
-                FileLog.w("nimarko: Pine.hook returned null for " + describeMember(member)
+                FileLog.w("nebula: Pine.hook returned null for " + describeMember(member)
                         + " — hook NOT installed");
                 return null;
             }
@@ -70,7 +70,7 @@ public final class XposedBridge {
             } catch (Throwable inner) {
                 sig = String.valueOf(member);
             }
-            FileLog.e("nimarko: Pine.hook FAILED for " + sig
+            FileLog.e("nebula: Pine.hook FAILED for " + sig
                     + " — " + t.getClass().getSimpleName() + ": " + t.getMessage(), t);
             return null;
         }
@@ -215,7 +215,7 @@ public final class XposedBridge {
             org.lsposed.hiddenapibypass.HiddenApiBypass
                     .addHiddenApiExemptions("L");
         } catch (Throwable t) {
-            FileLog.w("nimarko: HiddenApiBypass failed: " + t);
+            FileLog.w("nebula: HiddenApiBypass failed: " + t);
         }
     }
 
@@ -226,13 +226,13 @@ public final class XposedBridge {
         if (android.os.Build.VERSION.SDK_INT
                 >= android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             
-            FileLog.w("nimarko: disableProfileSaver ignored on modern ART");
+            FileLog.w("nebula: disableProfileSaver ignored on modern ART");
             return;
         }
         try {
             top.canyie.pine.Pine.disableProfileSaver();
         } catch (Throwable t) {
-            FileLog.w("nimarko: disableProfileSaver failed: " + t);
+            FileLog.w("nebula: disableProfileSaver failed: " + t);
         }
     }
 }

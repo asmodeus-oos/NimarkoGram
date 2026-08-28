@@ -25,14 +25,14 @@ public class BadgeEntry {
         return new BadgeEntry(badge, status, canChangeBadge);
     }
 
-    public app.nimarkogram.messenger.badges.BadgeEntry toReal() {
-        return new app.nimarkogram.messenger.badges.BadgeEntry(
+    public app.nebulagram.messenger.badges.BadgeEntry toReal() {
+        return new app.nebulagram.messenger.badges.BadgeEntry(
                 badge != null ? badge.toReal() : null,
                 status != null ? status.toReal() : null,
                 canChangeBadge);
     }
 
-    public static BadgeEntry fromReal(app.nimarkogram.messenger.badges.BadgeEntry real) {
+    public static BadgeEntry fromReal(app.nebulagram.messenger.badges.BadgeEntry real) {
         if (real == null) return null;
         return new BadgeEntry(
                 BadgeDTO.fromReal(real.getBadge()),

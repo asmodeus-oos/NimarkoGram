@@ -100,7 +100,7 @@ public abstract class XC_MethodHook {
             try {
                 u.getClass().getMethod("unhook").invoke(u);
             } catch (Throwable t) {
-                org.telegram.messenger.FileLog.e("nimarko: Pine unhook failed for "
+                org.telegram.messenger.FileLog.e("nebula: Pine unhook failed for "
                         + hookMethod, t);
             } finally {
                 this.pineUnhook = null;

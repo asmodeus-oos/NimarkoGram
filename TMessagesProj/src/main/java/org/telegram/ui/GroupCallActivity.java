@@ -517,7 +517,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             return;
         }
         
-        if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+        if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
             try {
                 muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
@@ -4414,7 +4414,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         if (VoIPService.getSharedInstance() != null) {
                             VoIPService.getSharedInstance().setMicMute(true, true, false);
                             
-                            if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                            if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                                 try {
                                     muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 } catch (Exception ignored) {}
@@ -4598,7 +4598,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         updateMuteButton(MUTE_BUTTON_STATE_MUTE, true);
                         VoIPService.getSharedInstance().setMicMute(false, false, true);
                         
-                        if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                        if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                             try {
                                 muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                             } catch (Exception ignored) {}
@@ -4607,7 +4607,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         updateMuteButton(MUTE_BUTTON_STATE_UNMUTE, true);
                         VoIPService.getSharedInstance().setMicMute(true, false, true);
                         
-                        if (!app.nimarkogram.messenger.NimarkoConfig.disableVibration) {
+                        if (!app.nebulagram.messenger.NebulaConfig.disableVibration) {
                             try {
                                 muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                             } catch (Exception ignored) {}

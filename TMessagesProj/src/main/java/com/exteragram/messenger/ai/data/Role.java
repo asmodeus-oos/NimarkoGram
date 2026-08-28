@@ -1,6 +1,6 @@
 package com.exteragram.messenger.ai.data;
 
-public class Role extends app.nimarkogram.messenger.ai.data.Role {
+public class Role extends app.nebulagram.messenger.ai.data.Role {
 
     public static final Role USER = new Role("user", "");
     public static final Role ASSISTANT = new Role("assistant", "");
